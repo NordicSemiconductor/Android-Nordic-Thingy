@@ -22,7 +22,7 @@ Thingy can be flashed with custom firmware, just like any other development kit 
 Additionally, we provide an Android Library on JCenter for your Android development needs. These libraries are made exclusively for Thingy, to ensure that installation and mobile development are as smooth as possible!
 Learn more about Thingy at http://www.nordicsemi.com/thingy
 
-If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project on the Google Developer Console and enable URLShortener API and use the API key in your project.
+If you're setting up the Nordc Thingy example app project from GitHub, you will have to create your own project on the Google Developer Console and enable URLShortener API and use the API key in your project. If you do not do this, the URL shortening feature on the EddystoneURLCharacteristic will fail.
 
 ### Note:
 
