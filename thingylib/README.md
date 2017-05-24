@@ -1,10 +1,10 @@
 # Thingy Library for Android
 
-###About Project
+#### About Project
 
 Thingy Library for android aims to ease managing, exploring, programming and developing applications on the Thingy platform. This library can be included in your Android project to develop your own applications with the Thingy:52 device.
 
-####Requirements
+#### Requirements
 
 * An Android 4.3+ device.
 
