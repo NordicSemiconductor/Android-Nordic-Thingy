@@ -1,0 +1,563 @@
+<!--
+  ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification,
+  ~ are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this
+  ~    list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form, except as embedded into a Nordic
+  ~    Semiconductor ASA integrated circuit in a product or a software update for
+  ~    such product, must reproduce the above copyright notice, this list of
+  ~    conditions and the following disclaimer in the documentation and/or other
+  ~    materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+  ~    contributors may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ 4. This software, with or without modification, must only be used with a
+  ~    Nordic Semiconductor ASA integrated circuit.
+  ~
+  ~ 5. Any software provided in binary form under this license must not be reverse
+  ~    engineered, decompiled, modified and/or disassembled.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+  ~ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  ~ OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<resources xmlns:xliff="http://schemas.android.com/tools">
+    <string name="app_name">Nordic Thingy</string>
+    <string name="name">Thingy</string>
+    <string name="thingy_52">Thingy:52 </string>
+    <string name="action_about_thingy"><a href="https://www.nordicsemi.com/thingy">About Thingy:52</a></string>
+    <string name="action_about">About</string>
+    <string name="action_dfu">DFU</string>
+    <string name="environment_current_conditions_title">Current Conditions</string>
+    <string name="environment_service_title">Environment</string>
+
+    <string name="configuration">Configuration</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="no_ble">Device doesn\'t support BLE!</string>
+
+    <string name="scanner_title">Select device:</string>
+    <string name="scanner_empty">No device found</string>
+    <string name="scanner_action_scan">Scan</string>
+    <string name="scanner_action_cancel">Cancel</string>
+    <string name="not_available">n/a</string>
+    <string name="scanner_subtitle_not_bonded">AVAILABLE DEVICES:</string>
+    <string name="dev_name_info">Thingy name</string>
+    <string name="dev_name_info_summary">Give a name to your Thingy (optional)</string>
+    <string name="user_info">User information</string>
+    <string name="connect_thingy_summary">Click to find one</string>
+    <string name="user_info_hint">Name</string>
+    <string name="email_info">Email information</string>
+    <string name="email">Email</string>
+    <string name="device_name_hint">10 byte name</string>
+    <string name="initial_configuration">Initial Configuration</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_username">Name cannot be empty</string>
+    <string name="error_email">User email cannot be empty</string>
+    <string name="get_started">GET STARTED</string>
+    <string name="initial_setup_complete">Initial setup complete!</string>
+    <string name="action_add">Add Thingy</string>
+    <string name="no_thingy_connected">Not connected to a Thingy</string>
+    <string name="no_thingy_configured">No Thingy configured</string>
+    <string name="no_thingy_connected_step_one">Please follow step 1 to proceed</string>
+    <string name="connect_to_thingy">Connect to a Thingy</string>
+    <string name="location_info">Location</string>
+    <string name="location_summary">Share your location (optional)</string>
+    <string name="location_summary_details">By sharing your location other users may be able to see your Thingy device on a map with a location marker.</string>
+    <string name="share_location">Share Thingy location</string>
+    <string name="scan_thingy">Scan</string>
+    <string name="disconnect_connect">Disconnect and scan</string>
+    <string name="skip">Skip</string>
+    <string name="environment_settings">Environment settings</string>
+    <string name="environment_settings_cardview">ENVIRONMENT SETTINGS</string>
+    <string name="connectivity_state">State</string>
+    <string name="having_troubles">Having troubles?</string>
+    <string name="thing_url"><a href="https://www.nordicsemi.com/thingy">"https://www.nordicsemi.com/thingy"</a></string>
+    <string name="privacy_policy_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://www.nordicsemi.com/eng/About-us/Privacy-Policy"</a></string>
+    <string name="github_thingy_app_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://github.com/NordicSemiconductor/Android-Nordic-Thingy"</a></string>
+    <string name="github_thingy_lib_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://github.com/NordicSemiconductor/Android-Thingy-Library"</a></string>
+
+    <string name="environment_settings_title">Environment Settings</string>
+    <string name="thingy_location_marker_title">Marker Settings</string>
+
+    <string name="interval_temperature">Temperature interval</string>
+    <string name="interval_pressure">Pressure interval</string>
+    <string name="interval_humidity">Humidity interval</string>
+    <string name="interval_color_intensity">Color intensity interval</string>
+    <string name="air_quality_interval">Air quality interval</string>
+    <string name="time">Time</string>
+    <string name="frequency">Frequency</string>
+
+
+    <string name="interval_pedometer">Pedometer interval</string>
+    <string name="interval_temperature_compensation">Temp. compensation interval</string>
+    <string name="interval_compass">Compass interval</string>
+    <string name="interval_compass_compensation">Compass compensation interval</string>
+    <string name="interval_motion">Motion interval</string>
+    <string name="interval_wake_on_motion">Wake on motion</string>
+
+    <string name="motion_freq_hz">hz</string>
+    <string name="time_unit_ms">ms</string>
+    <string name="time_unit_s">s</string>
+    <string name="interval_ms">%d ms</string>
+    <string name="interval_s">%d s</string>
+    <string name="interval_hz">%d hz</string>
+    <string name="adv_interval_formula">x 0.625 ms =</string>
+    <string name="decimal_format_ms"> %.2f ms</string>
+    <string name="conn_interval_formula">x 1.25 ms = </string>
+    <string name="supervision_timeout_formula">x 10 ms = </string>
+    <string name="led_percentage">%d %%</string>
+
+    <string name="error_temp_interval">Temperature interval must be between 100-5000 milliseconds!</string>
+    <string name="error_pressure_interval">Pressure interval cannot be less than 50-5000 milliseconds!</string>
+    <string name="error_humidity_interval">Humidity interval cannot be less than 100-5000 milliseconds!</string>
+    <string name="error_color_intensity_interval">Color intensity interval cannot be less than 200-5000 milliseconds!</string>
+    <string name="error_color_interval">Color interval cannot be less than %d seconds!</string>
+    <string name="error_temp_interval_empty">Temperature interval cannot be empty!</string>
+    <string name="error_pressure_interval_empty">Pressure interval cannot be empty!</string>
+    <string name="error_color_intensity_interval_empty">Color intensity interval cannot be empty!</string>
+    <string name="error_humidity_interval_empty">Humidity interval cannot be empty!</string>
+    <string name="error_pedometer_interval_empty">Pedomter interval cannot be empty!</string>
+    <string name="error_compass_interval_empty">Compass interval cannot be empty!</string>
+    <string name="error_motion_interval_empty">Motion frequency cannot be empty!</string>
+    <string name="settings_basic_thingy">Thingy Settings</string>
+    <string name="settings_thingy_name">Thingy name</string>
+    <string name="settings_adv_param_char">Advertising parameters</string>
+    <string name="settings_appearance_char">Appearance</string>
+    <string name="settings_connection_param_char">Connection parameters</string>
+    <string name="settings_eddystone_url">Eddystone URL</string>
+    <string name="settings_cloud_token">Cloud token</string>
+    <string name="settings_fw_version">Firmware version</string>
+    <string name="settings_fw_version_title">Firmware Version</string>
+    <string name="settings_thingy_cloud">Cloud Settings</string>
+    <string name="settings_location">Location Settings</string>
+    <string name="settings_share_location">Share location</string>
+    <string name="settings_environment">Environment Settings</string>
+    <string name="settings_motion">Motion Settings</string>
+    <string name="coming_soon">Coming soon...</string>
+    <string name="gas_mode_one">1s</string>
+    <string name="gas_mode_two">10s</string>
+    <string name="gas_mode_three">60s</string>
+    <string name="barometer_mode">Barometer</string>
+    <string name="altimeter_mode">Altimeter</string>
+    <string name="appearance_hint">Appearance</string>
+    <string name="min_connection_params_hint">Min. connection interval</string>
+    <string name="max_connection_params_hint">Max. connection interval</string>
+    <string name="slave_latency_hint">Slave latency</string>
+    <string name="conn_sup_timeout_hint">Supervision timeout</string>
+    <string name="url_hint">URL</string>
+    <string name="ifttt_token_hint">100 Byte token</string>
+    <string name="error_ifttt_token_too_long">Cloud token must be between 1 - 100 bytes</string>
+    <string name="url_data_text">Url text</string>
+    <string name="error_empty_device_name">Thingy name cannot be empty!</string>
+    <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes!</string>
+    <string name="error_empty_min_conn_interval">Min. connection interval cannot be empty</string>
+    <string name="error_empty_max_conn_interval">Max. connection interval cannot be empty</string>
+    <string name="error_empty_slave_latency">Slave latency cannot be empty</string>
+    <string name="error_empty_supervision_timeout">Supervision timeout cannot be empty</string>
+    <string name="error_uint16">Value does not match UINT16</string>
+    <string name="error_uint8">Value does not match UINT8</string>
+    <string name="error_configuring_char">Unable to configure characteristic!</string>
+    <string name="error_invalid_conn_interval">Value must be within 7.5ms and 4000ms</string>
+    <string name="error_invalid_slave_latency">Value must be within 0 and 500</string>
+    <string name="error_invalid_supervision_timeout">Value must be within 100ms and 32000ms</string>
+    <string name="error_empty_cloud_token">Cloud token cannot be empty!</string>
+    <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes</string>
+    <string name="error_cloud_token_length">Cloud token must between 1-250 bytes</string>
+    <string name="error_cloud_token">Error, unable to write to cloud token characteristic</string>
+    <string name="cloud_token_settings">Cloud Token</string>
+    <string name="adv_interval">Advertisment interval</string>
+    <string name="adv_time_out">Advertisement timeout</string>
+    <string name="error_empty_adv_interval">Error, value cannot be empty</string>
+    <string name="error_adv_interval">Must be between 20ms and 10.24s</string>
+    <string name="error_empty_adv_timeout">Error, avalue cannot be empty</string>
+    <string name="error_adv_timeout">Value must be between 0s and 180 seconds</string>
+    <string name="adv_param_title">Advertising Interval Parameters</string>
+    <string name="thingy_name_title">Thingy Name</string>
+    <string name="appearance_title">Appearance</string>
+    <string name="connection_parameters_title">Connection Parameters</string>
+    <string name="physcial_web_url_title">Physcial Web URL</string>
+    <string name="temperature_interval_title">Temperature Interval</string>
+    <string name="temperature_compensation_interval_title">Temp. Compensation Interval</string>
+    <string name="pressure_interval_title">Pressure Interval</string>
+    <string name="humidity_interval_title">Humidity Interval</string>
+    <string name="color_intensity_interval_title">Color Intensity Interval</string>
+    <string name="gas_mode_title">Air quality Interval</string>
+    <string name="pressure_mode_title">Pressure Mode</string>
+    <string name="shortened_url">Shortened URL</string>
+    <string name="shorten_url">Shorten URL</string>
+    <string name="toolbar_environment">Weather Station</string>
+    <string name="ui_title">UI</string>
+    <string name="euler_title">3D</string>
+    <string name="quaternion_title">3D</string>
+    <string name="motion_title">Motion</string>
+    <string name="sound_title">Sound</string>
+    <string name="speaker_title">Speaker</string>
+    <string name="microphone_title">Microphone</string>
+    <string name="welcome_title">Welcome to Nordic Thingy</string>
+    <string name="welcome_summary">Capture and view sensor data</string>
+    <string name="continue_text">CONTINUE</string>
+    <string name="skip_text">SKIP</string>
+    <string name="graphs_title">Graphs</string>
+    <string name="title_orientation">Orientation</string>
+    <string name="portrait">Portrait</string>
+    <string name="orientation_state">State</string>
+    <string name="title_tap">Tap sensor</string>
+    <string name="title_pedometer">Step counter</string>
+    <string name="title_quaternion">Quaternion</string>
+    <string name="title_eular">Euler</string>
+    <string name="title_gravity_vector">Gravity Vector</string>
+    <string name="title_heading">Heading</string>
+    <string name="title_raw_data">Raw Data</string>
+    <string name="temperature_title">Temperature</string>
+    <string name="pressure_title">Pressure</string>
+    <string name="humidity_title">Humidity</string>
+    <string name="air_quality_title">Air quality</string>
+    <string name="eco2_title">Effective CO2</string>
+    <string name="tvoc_title">Total volatile organic compound</string>
+    <string name="tvoc_title_short">TVOC</string>
+    <string name="color_intensity_title">Color intensity</string>
+    <string name="msg_no_thingy_connected">Please connect to a Thingy first!</string>
+    <string name="settings">Settings</string>
+    <string name="duration">Duration</string>
+    <string name="steps">Steps</string>
+    <string name="quternion_z">Z</string>
+    <string name="quternion_y">Y</string>
+    <string name="quternion_x">X</string>
+    <string name="quternion_w">W</string>
+    <string name="gravity_vector_x">Gravity X</string>
+    <string name="gravity_vector_y">Gravity Y</string>
+    <string name="gravity_vector_z">Gravity Z</string>
+    <string name="accelerometer_x">Acceleration X</string>
+    <string name="accelerometer_y">Acceleration Y</string>
+    <string name="accelerometer_z">Acceleration Z</string>
+    <string name="gyroscope_x">Angular Vel. X</string>
+    <string name="gyroscope_y">Angular Vel. Y</string>
+    <string name="gyroscope_z">Angular Vel. Z</string>
+    <string name="compass_x">Field Strength X</string>
+    <string name="compass_y">Field Strength Y</string>
+    <string name="compass_z">Field Strength Z</string>
+    <string name="direction">Direction</string>
+    <string name="orientation">Orientation</string>
+    <string name="tap_count">Taps</string>
+    <string name="notifcations_off">Disable</string>
+    <string name="notifcations_on">Enable</string>
+    <string name="thingy_not_found">Unable to connect, Thingy not found!</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+
+
+    <string name="temperature_graph">Temperature (\u2103)</string>
+    <string name="pressure_graph">Pressure (hPa)</string>
+    <string name="humidity_graph">Humidity (%)</string>
+
+    <string name="color_picker_default_title">Select a Color</string>
+    <!-- Content description for a color square. -->
+    <string name="color_swatch_description">Color <xliff:g example="14" id="color_index">%1$d</xliff:g></string>
+    <!-- Content description for a selected color square. -->
+    <string name="color_swatch_description_selected">Color <xliff:g example="14" id="color_index">%1$d</xliff:g> selected</string>
+    <string name="set_color">Set Color</string>
+    <string name="led_title">LED Color</string>
+    <string name="button_title">Button</string>
+    <string name="map_title">Map</string>
+    <string name="cloud_title">Cloud</string>
+    <string name="latitude">lat</string>
+    <string name="longitude">lng</string>
+    <string name="title">title</string>
+    <string name="map_info">info</string>
+    <string name="info">Info</string>
+    <string name="step_one">1</string>
+    <string name="step_two">2</string>
+    <string name="step_three">3</string>
+    <string name="pressure">Pressure</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="pedometer_interval_title">Pedometer Interval</string>
+    <string name="compass_interval_title">Compass Interval</string>
+    <string name="compass_compensation_interval">Compass Compensation Interval</string>
+    <string name="motion_interval_title">Motion Interval</string>
+    <string name="motion_frequency_title">Motion Frequency</string>
+    <string name="wake_on_motion_title">Wake On Motion</string>
+    <string name="please_wait">Please wait</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="disabled">Disabled</string>
+
+    <string name="dfu_selection_title">Select DFU Mode</string>
+    <string name="dfu_selection_message">If you wish to flash your own application firmware to the Thingy select the custom firmware option.</string>
+    <string name="custom_fw">CUSTOM</string>
+    <string name="nordic_fw">NORDIC</string>
+    <string name="flash_nordic_fw_message">Upload latest Nordic firmware to Thingy</string>
+    <string name="custom_fw_message">Upload custom firmware to Thingy</string>
+    <string name="settings_dfu">Device Firmware Update</string>
+    <string name="dfu_title">Firmware Update</string>
+    <string name="custom_fw_msg">Custom Firmware</string>
+    <string name="dfu_example_files_created">Example HEX files were copied to /sdcard/Nordic Semiconductor.</string>
+    <string name="dfu_example_new_files_created">New example HEX files were copied to /sdcard/Nordic Semiconductor.</string>
+    <string name="dfu_scripts_created">DFU script files were copied to /sdcard/Nordic Semiconductor.</string>
+    <string name="dfu_permission_sd_text">Nordic Thingy would like to access firmware files that needs to be uploaded on to your Thingy:52 device.</string>
+    <string name="dfu_confirmation_dialog_title">Application Uploading</string>
+    <string name="dfu_upload_dialog_cancel_message">Are you sure to cancel upload?</string>
+    <string name="dfu_success">New application firmware has been transferred successfully</string>
+    <string name="dfu_aborted">Uploading of the new application firmware has been canceled.</string>
+    <string name="dfu_uploading_percentage_label">0%</string>
+    <string name="dfu_uploading_percentage">%d%%</string>
+    <string name="dfu_reconnecting">Reconnecting to Thingy...</string>
+    <string name="dfu_alert_no_file_selected">File not selected</string>
+    <string name="dfu_alert_no_filebrowser_title">File Browser not found</string>
+    <string name="dfu_alert_no_filebrowser_message">File browser application has not been found on your device. Would you like to download one?</string>
+    <string name="error_select_dfu_option">Please select a DFU option to proceed!</string>
+    <string name="dfu_bootloader_mode_message">Thingy is still in bootloader mode. Please restart the device to reconnect.</string>
+    <string name="dfu_start">Start</string>
+    <string name="dfu_abort">Abort</string>
+    <string name="dfu_fw_info">Firmware Info</string>
+    <string name="dfu_file_name">File name:</string>
+    <string name="dfu_file_type">Type:</string>
+    <string name="dfu_file_size">Size:</string>
+    <string name="dfu_file_version">Version:</string>
+    <string name="dfu_target">Target</string>
+    <string name="dfu_target_name">Name:</string>
+    <string name="dfu_status">Status</string>
+    <string name="dfu_step_one">Enabling bootloader</string>
+    <string name="dfu_step_two">Initializing DFU</string>
+    <string name="dfu_step_three">Uploading firmware</string>
+    <string name="dfu_step_completed">Completed</string>
+    <string name="kbps">kB/s</string>
+    <string-array name="dfu_app_file_browser">
+        <item>Drive</item>
+        <item>File Manager</item>
+        <item>Total Commander</item>
+        <item>Search for others</item>
+    </string-array>
+    <string-array name="dfu_app_file_browser_action">
+        <item>market://details?id=com.google.android.apps.docs</item>
+        <item>market://details?id=com.rhmsoft.fm</item>
+        <item>market://details?id=com.ghisler.android.TotalCommander</item>
+        <item>market://search?q=file manager</item>
+    </string-array>
+
+
+    <string name="action_delete">Delete</string>
+    <string name="environment_service_info">Environment Service Info</string>
+    <string name="motion_service_info">Motion Service Info</string>
+    <string name="ok">Ok</string>
+    <string name="celcius">%s℃</string>
+    <string name="hecto_pascal">%s hPa</string>
+    <string name="ppm">%d ppm</string>
+    <string name="ppb">%d ppb</string>
+    <string name="percentage_rh">%s RH</string>
+    <string name="error_interval_limit">Interval value must be between 100ms - 5000ms</string>
+    <string name="error_motion_interval_limit">Interval value must be between 1Hz - 200hz</string>
+    <string name="default_thingy_name">Thingy:52</string>
+
+    <string name="thingy_action_disconnect">Disconnect</string>
+    <string name="thingy_disconnected">%s disconnected!</string>
+    <string name="ble_turned_off">Please turn on bluetooth and reconnect to the device in order to keep receiving values from your Thingy</string>
+    <string name="thingy_notification_text">%s is still connected</string>
+    <string name="device_deleted">Thingy has been deleted!</string>
+    <string name="delete_thingy_title">Delete Thingy</string>
+    <string name="delete_thingy_message">Deleting this Thingy will remove all the saved configuration for this Thingy from the app. Do you wish to continue?</string>
+    <string name="cancel_initial_configuration_process_title">Cancel Initial Configuration</string>
+    <string name="cancel_initial_configuration_process_message">Cancelling the initial configuration process will not save this Thingy:52 in the app. Do you wish to continue?</string>
+    <string name="version">version %s</string>
+    <string name="info_git_hub">GitHub</string>
+
+    <string name="github_thingy_fw">Thingy:52</string>
+    <string name="github_thingy_android_app">Nordic Thingy for Android</string>
+    <string name="github_thingy_android_lib">Thingy:52 library for Android</string>
+    <string name="about_link"><a href="http://www.nordicsemi.com">www.nordicsemi.com</a></string>
+    <string name="action_facebook">Facebook</string>
+    <string name="action_twitter">Twitter</string>
+    <string name="action_linkedin">LinkedIn</string>
+    <string name="action_youtube">YouTube</string>
+    <string name="action_devzone">Developer Zone</string>
+    <string name="about_app_key">about_app</string>
+    <string name="about_text"><b>Nordic Thingy</b> is an application that lets you connect to Thingy:52 by Nordic.
+        This app supports visualising data obtained from the sensors on the Thingy:52.</string>
+    <string name="about_info">Info</string>
+    <string name="about_licenes">Open-source Licenses</string>
+    <string name="mpchart_license">MPAndroidChart</string>
+    <string name="mpchart_license_url">https://github.com/PhilJay/MPAndroidChart/blob/master/README.md#license</string>
+    <string name="rajawali_license">Rajawali</string>
+    <string name="rajawali_license_url">https://github.com/Rajawali/Rajawali/blob/master/LICENSE.txt</string>
+    <string name="error_confirm_location">Please check share Thingy location and press confirm!</string>
+    <string name="location_not_shared_message">Location for this Thingy will not be shared and will not be visible on the maps!</string>
+    <string name="error_skip_location">Please uncheck Share Thingy location and press skip!</string>
+
+    <string name="led_off">OFF</string>
+    <string name="led_constant">CONSTANT</string>
+    <string name="led_breathe">BREATHE</string>
+    <string name="led_oneshot">ONE SHOT</string>
+
+    <string name="button_state">Button state</string>
+    <string name="button_state_unknown">UNKNOWN</string>
+    <string name="button_state_pressed">PRESSED</string>
+    <string name="button_state_released">RELEASED</string>
+    <string name="north">NORTH</string>
+    <string name="north_east">N. EAST</string>
+    <string name="north_west">N. WEST</string>
+    <string name="south">SOUTH</string>
+    <string name="south_east">S. EAST</string>
+    <string name="south_west">S. WEST</string>
+    <string name="east">EAST</string>
+    <string name="west">WEST</string>
+    <string name="motion_default">0</string>
+    <string name="motion_default_duration">00:00:00</string>
+    <string name="motion_default_orientation">PORTRAIT</string>
+    <string name="motion_default_tap">TOP</string>
+    <string name="connectivity_error">Please ensure the phone is connected to the internet</string>
+    <string name="connectivity_error_skip_sign_in">Phone not connected to the internet, skipping sign in process</string>
+    <string name="marker_location_update_title">Location Data Unavailable</string>
+    <string name="marker_location_update_message">Location data for this thingy is not found. This will also add a location marker for this thingy on the Map.
+        Would you like to save the current location for this thingy as it\'s location?</string>
+    <string name="marker_title">Title</string>
+    <string name="marker_description">Description</string>
+    <string name="location_marker_title_empty">Marker title cannot be empty</string>
+    <string name="location_marker_description_empty">Marker description cannot be empty</string>
+    <string name="location_marker_added">A location marker for this Thingy has been added to the map.</string>
+    <string name="location_marker_removed">Location marker for this Thingy has been removed from the map</string>
+    <string name="update_custom_firmware">Custom FW</string>
+    <string name="dfu_rationale">DFU is currently in progress, aborting will rollback the firmware to the existing firmware version.
+        Aborting will also leave the Thingy in Bootloader mode and will have to be manually rebooted.
+        Press confirm to abort the process.</string>
+    <string name="location_error">Unable to add/update location for this thingy</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_out_summary">Clicking sign out will disconnect Thingy App from nRF Cloud and will no longer be able to share data captured from thingy.
+        \n\nReovking access will remove the permissions granted for this google account and delete data attached to the thingy app from the nRF Cloud.</string>
+    <string name="disconnect_google_account">Revoke Access</string>
+
+    <string name="mtu_warning">Please note that older or low end devices may encounter interruptions with audio streaming because of lower throughput.
+        If you notice interruptions during audio streaming you could try lowering the maximum connection interval from configuration but this may not work on all devices.
+        Due to bandwidth limitations a phone can only stream to one Thingy at a time.
+        \n\nStreaming formats:\nUP: 8-bit PCM with sample rate 8 KHz\nDOWN: ADPCM format, decoded to 16-bit PCM with sample rate 8 KHz\nOther options:\n- Frequency, volume and duration \n- Sample sounds"</string>
+    <string name="sound_permission_sd_text">Nordic Thingy would like to import/copy sample audio files which requires permission to access the external storage of this device.
+        These audio files would be used to stream over BLE to your Thingy:52 device. Would you like to proceed</string>
+    <string name="service_not_bound">ThingyProxyService is not bound to the activity!</string>
+    <string name="no_audio_selected">Please select an audio track to stream!</string>
+    <string name="warning_title">Warning</string>
+    <string name="audio_file_already_exists">Selected audio file already exists</string>
+    <string name="invalid_audio_file_format">Invalid audio format! Please select 8kHz 16bit PCM wav file</string>
+    <string name="audio_file_import_aborted">Audio file import has been cancelled</string>
+    <string name="already_streaming">Only one thingy can stream at one instance</string>
+    <string name="led_intensity">LED Intensity</string>
+    <string name="led_duration">Delay</string>
+    <string name="microphone_permission_text">Nordic Thingy would like to have access to the microphone to record voice/audio that could be played on your Thingy:52 device.
+        This application nor the Thingy:52 will record or save this data for any other purposes.</string>
+    <string name="state_connecting">Connecting...</string>
+    <string name="state_discovering_services">%s connected. Discovering services...</string>
+
+    <!--IFTTT-->
+    <string name="feature_control">Feature Control</string>
+    <string name="freature_info">Feature Info</string>
+    <string name="data_statistics">Data Statistics</string>
+    <string name="uploaded_title">Uploaded</string>
+    <string name="downloaded_title">Downloaded</string>
+    <string name="intro_ifttt">Step 1/6: IFTTT</string>
+    <string name="account_preparation">Step 2/6: Account Preparation</string>
+    <string name="maker_webhooks_service">Step 3/6: Maker Webhooks Service</string>
+    <string name="maker_webhooks_servic_key">Step 4/6: Obtaining Webhooks Key</string>
+    <string name="access_key_to_thingy">Step 5/6: Adding Access Key</string>
+    <string name="enable_cloud_features">Step 6/6: Enabling Cloud Features</string>
+    <string name="cloud_guide_title">Cloud Guide</string>
+    <string name="cloud_step1">Cloud services rely on IFTTT (IF THIS THEN THAT). This service allows to execute a task (like sending a text message, publishing on Facebook or many, many others) on an event received from a Thingy.</string>
+    <string name="cloud_step2">Go to <a href="https://ifttt.com">https://ifttt.com</a> and sign up for an account or just sign in if you already have one.</string>
+    <string name="cloud_step3">After signing in, tap services and search for Maker Webhooks. Click on Maker Webhooks to enable the service.</string>
+    <string name="cloud_step4">In order to get Webhooks service to work an access key is needed. Click on settings in Maker Webhooks and copy the url and open it in a new browser window. You should be able to see your access key here.</string>
+    <string name="cloud_step5">Copy the access key and paste it on to the Cloud Token in the thingy configuration service.</string>
+    <string name="cloud_step6">To use the cloud feature, navigate to cloud view and toggle the button. Pressing and releasing the physical button on the Thingy will display the duration it was pressed for and sends this data to the maker webhook. Data statistics shows the amount of data sent and received during these events</string>
+    <string name="website">Visit website</string>
+    <string name="privacy">Privacy policy</string>
+    <string name="thingy_guide_title">CANT\'T SEE YOUR THINGY:52?</string>
+    <string name="thingy_guide_step1">1. Make sure it\'s switched on.\nRemove the black rubber cover and toggle the switch.</string>
+    <string name="thingy_guide_step2">2. Make sure it\'s charged.\nConnect it to a PC or a charger using a micro USB cable .</string>
+    <string name="thingy_guide_step3">3. Make sure it\'s awake.\nPress the N logo at the top or shake the Thingy:52 to wake it up.</string>
+
+    <string name="start_stop_env_sensors">Tap here to start/stop sensors</string>
+    <string name="start_stop_motion_sensors">Tap here to start/stop sensors, some sensors might be turned off by default</string>
+    <string name="delete_device">Tap here to delete a device from the app</string>
+    <string name="connect_disconnect">Tap here to connect/disconnect from a Thingy:52</string>
+    <string name="discover_features">Tap to navigate to other services</string>
+    <string name="switch_menu">Tap here to switch menus</string>
+    <string name="thingy_fw_version_summary">Your Thingy firmware is up to date.</string>
+    <string name="disable_physical_web_url">Eddystone URL</string>
+    <string name="physical_web_disabled">Eddystone URL disabled</string>
+    <string name="error_empty_url_text">Please enter a value for URL</string>
+    <string name="error_empty_url">Unable to save empty URL</string>
+    <string name="error_shorten_empty_url">Unable to shorten empty URL</string>
+    <string name="url_shortener_message">Please enter a shortened URL or press use the URL shortener!</string>
+    <string name="start_talking_to_thingy">Tap here to talk to the Thingy:52 from your phone</string>
+    <string name="start_talking_from_thingy">Tap here to enable microphone on Thingy:52</string>
+    <string name="cloud_token_rationale">Please note that the IFTTT cloud token will be saved inside the application.</string>
+    <string name="action_ifttt_token">Add/Edit IFTTT token</string>
+    <string name="clear_token">Clear token</string>
+
+    <string-array name="gas_mode">
+        <item>1s interval</item>
+        <item>10s interval</item>
+        <item>60s interval</item>
+    </string-array>
+    <string-array name="pressure_mode">
+        <item>Barometer mode</item>
+        <item>Altimeter mode</item>
+    </string-array>
+
+    <string-array name="configuration_tab_title">
+        <item>Basic</item>
+        <item>Advanced</item>
+    </string-array>
+
+    <string-array name="sound_tab_title">
+        <item>Frequency</item>
+        <item>PCM</item>
+        <item>Samples</item>
+    </string-array>
+
+    <string-array name="graph_types">
+        <item>Temperature</item>
+        <item>Pressure</item>
+    </string-array>
+
+    <string-array name="url_types">
+        <item>https://www.</item>
+        <item>http://www.</item>
+        <item>https://</item>
+        <item>http://</item>
+    </string-array>
+
+    <string-array name="environment_services">
+        <item>Temperature</item>
+        <item>Pressure</item>
+    </string-array>
+
+    <plurals name="thingy_notification_text">
+        <item quantity="one">%s  is connected</item>
+        <item quantity="two">%d are connected</item>
+        <item quantity="few">%d are connected</item>
+        <item quantity="other">%d are connected</item>
+        <item quantity="many">%d are connected</item>
+    </plurals>
+
+    <plurals name="thingy_notification_text_nothing_connected">
+        <item quantity="one">%s  is disconnected</item>
+        <item quantity="two">%d are disconnected</item>
+        <item quantity="few">%d are disconnected</item>
+        <item quantity="other">%d are disconnected</item>
+        <item quantity="many">%d are disconnected</item>
+    </plurals>
+</resources>

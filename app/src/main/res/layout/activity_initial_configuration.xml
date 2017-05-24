@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification,
+  ~ are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this
+  ~    list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form, except as embedded into a Nordic
+  ~    Semiconductor ASA integrated circuit in a product or a software update for
+  ~    such product, must reproduce the above copyright notice, this list of
+  ~    conditions and the following disclaimer in the documentation and/or other
+  ~    materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+  ~    contributors may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ 4. This software, with or without modification, must only be used with a
+  ~    Nordic Semiconductor ASA integrated circuit.
+  ~
+  ~ 5. Any software provided in binary form under this license must not be reverse
+  ~    engineered, decompiled, modified and/or disassembled.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+  ~ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  ~ OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        style="@style/HeaderBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_image_height"
+            android:src="@drawable/ic_settings_title"
+            android:background="#8ae4fb"
+            android:scaleType="fitCenter" />
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:theme="@style/ActionBarThemeOverlay"
+            app:popupTheme="@style/ActionBarPopupThemeOverlay"
+            app:titleTextAppearance="@style/ActionBar.TitleText" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_below="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/setup_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="24dp"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/step_one"
+                            android:layout_width="@dimen/stepper_circle_width"
+                            android:layout_height="@dimen/stepper_circle_height"
+                            android:background="@drawable/ic_blue_bg"
+                            android:text="@string/step_one"
+                            android:gravity="center"
+                            android:textColor="@color/textColorWhite"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/step_one_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/step_one"
+                            android:layout_alignBaseline="@id/step_one"
+                            android:layout_marginLeft="12dp"
+                            android:text="@string/connect_to_thingy"
+                            android:textAppearance="@style/StepperTitleTextStyle" />
+
+                        <TextView
+                            android:id="@+id/step_one_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/step_one_title"
+                            android:text="@string/connect_thingy_summary"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="36dp"
+                            android:gravity="top" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="@dimen/stepper_circle_width"
+                            android:layout_height="match_parent">
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="wrap_content"
+                                android:background="@color/greyBg"
+                                android:layout_gravity="center_horizontal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/stepper_padding_left"
+                            android:paddingTop="@dimen/stepper_padding_top">
+
+                            <LinearLayout
+                                android:id="@+id/thingy_container"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <Button
+                                    android:id="@+id/confirm_thingy"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="48dp"
+                                    android:text="@string/scan_thingy"
+                                    style="@style/Base.Widget.AppCompat.Button.Colored" />
+                            </LinearLayout>
+
+                            <android.support.v4.widget.Space
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/stepper_padding_top">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/step_two"
+                            android:layout_width="@dimen/stepper_circle_width"
+                            android:layout_height="@dimen/stepper_circle_height"
+                            android:background="@drawable/ic_blue_bg"
+                            android:text="@string/step_two"
+                            android:gravity="center"
+                            android:textColor="@color/textColorWhite"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/step_two_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/step_two"
+                            android:layout_alignBaseline="@id/step_two"
+                            android:layout_marginLeft="12dp"
+                            android:text="@string/dev_name_info"
+                            android:textAppearance="@style/StepperTitleTextStyle" />
+
+                        <TextView
+                            android:id="@+id/step_two_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/step_two_title"
+                            android:text="@string/dev_name_info_summary"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="36dp"
+                            android:gravity="top" />
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="@dimen/stepper_circle_width"
+                            android:layout_height="match_parent">
+
+                            <View
+                                android:id="@+id/vertical_line"
+                                android:layout_width="1dp"
+                                android:layout_height="wrap_content"
+                                android:background="@color/greyBg"
+                                android:layout_gravity="center_horizontal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/stepper_padding_left"
+                            android:paddingTop="@dimen/stepper_padding_top">
+
+                            <LinearLayout
+                                android:id="@+id/device_name_container"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:id="@+id/device_name_layout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/device_name"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:hint="@string/device_name_hint"
+                                        android:maxLength="10"
+                                        android:inputType="textPersonName" />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <Button
+                                        android:id="@+id/confirm_device_name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="48dp"
+                                        android:text="@string/confirm"
+                                        style="@style/Widget.AppCompat.Button.Colored" />
+
+                                    <Button
+                                        android:id="@+id/skip_device_name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="48dp"
+                                        android:text="@string/skip"
+                                        style="@style/Widget.AppCompat.Button.Colored" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <android.support.v4.widget.Space
+                                android:id="@+id/space"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/setup_complete_container"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_bottom_setup_complete_container"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/initial_setup_complete" />
+
+                <Button
+                    android:layout_marginTop="@dimen/margin_setup_complete_button"
+                    android:id="@+id/get_started"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_started"
+                    style="@style/Widget.AppCompat.Button.Colored" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/margin_bottom_bg_title"
+        android:scaleType="center"
+        android:src="@drawable/background_title" />
+</RelativeLayout>

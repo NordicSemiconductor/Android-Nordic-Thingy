@@ -1,0 +1,378 @@
+/*
+ * Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form, except as embedded into a Nordic
+ *    Semiconductor ASA integrated circuit in a product or a software update for
+ *    such product, must reproduce the above copyright notice, this list of
+ *    conditions and the following disclaimer in the documentation and/or other
+ *    materials provided with the distribution.
+ *
+ * 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+ *    contributors may be used to endorse or promote products derived from this
+ *    software without specific prior written permission.
+ *
+ * 4. This software, with or without modification, must only be used with a
+ *    Nordic Semiconductor ASA integrated circuit.
+ *
+ * 5. Any software provided in binary form under this license must not be reverse
+ *    engineered, decompiled, modified and/or disassembled.
+ *
+ * THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+ * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+ * GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+package no.nordicsemi.android.nrfthingy.thingy;
+
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.NotificationCompat;
+import android.text.TextUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import no.nordicsemi.android.nrfthingy.MainActivity;
+import no.nordicsemi.android.nrfthingy.R;
+import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.thingylib.BaseThingyService;
+import no.nordicsemi.android.thingylib.ThingyConnection;
+
+import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
+
+public class ThingyService extends BaseThingyService {
+    private DatabaseHelper mDatabaseHelper;
+    private boolean mIsActivityFinishing = false;
+    private Map<BluetoothDevice, Integer> mLastSelectedAudioTrack;
+
+    public class ThingyBinder extends BaseThingyBinder {
+        //You can create your own functionality related to the application in side the binder here
+
+        private boolean mIsScanning;
+        private String mLastVisibleFragment = Utils.ENVIRONMENT_FRAGMENT;
+
+        /**
+         * Saves the activity state.
+         *
+         * @param activitFinishing if the activity is finishing or not
+         */
+        public final void setActivityFinishing(final boolean activitFinishing) {
+            mIsActivityFinishing = activitFinishing;
+        }
+
+        /**
+         * Returns the activity state.
+         *
+         */
+        public final boolean getActivityFinishing() {
+            return mIsActivityFinishing;
+        }
+
+        /**
+         * Saves the last visible fragment in the service
+         *
+         */
+        public final void setLastSelectedAudioTrack(final BluetoothDevice device, final int index) {
+            mLastSelectedAudioTrack.put(device, index);
+        }
+
+        public final int getLastSelectedAudioTrack(final BluetoothDevice device) {
+            if(mLastSelectedAudioTrack.containsKey(device)) {
+                return mLastSelectedAudioTrack.get(device);
+            }
+            return 0;
+        }
+
+        /**
+         * Saves the last visible fragment in the service
+         *
+         */
+        public final void setLastVisibleFragment(String lastVisibleFragment) {
+            mLastVisibleFragment = lastVisibleFragment;
+        }
+
+        /**
+         * Returns the last visible fragment in the service
+         *
+         */
+        public final String getLastVisibleFragment() {
+            return mLastVisibleFragment;
+        }
+
+        public boolean setScanningState(final boolean isScanning) {
+            return mIsScanning = isScanning;
+        }
+
+        public boolean getScanningState() {
+            return mIsScanning;
+        }
+
+        @Override
+        public ThingyConnection getThingyConnection(BluetoothDevice device) {
+            return mThingyConnections.get(device);
+        }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    //@Override
+    private Class<? extends Activity> getNotificationTarget() {
+        return MainActivity.class;
+    }
+
+
+    @Override
+    public void onDeviceConnected(final BluetoothDevice device, final int connectionState) {
+        if (!mBound) {
+        }
+    }
+
+    @Override
+    public void onDeviceDisconnected(final BluetoothDevice device, final int connectionState) {
+        super.onDeviceDisconnected(device, connectionState);
+        removeLastSelectedAudioTracks(device);
+        if (!mBound) {
+            cancelNotification(device);
+            createBackgroundNotification();
+        }
+    }
+
+    @Nullable
+    @Override
+    public ThingyBinder onBind(Intent intent) {
+        return new ThingyBinder();
+    }
+
+    @Override
+    protected void onRebind() {
+        cancelNotifications();
+    }
+
+    @Override
+    protected void onUnbind() {
+        if(mIsActivityFinishing) {
+            createBackgroundNotification();
+        }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mLastSelectedAudioTrack =  new HashMap<>();
+        mDatabaseHelper = new DatabaseHelper(getApplicationContext());
+        registerReceiver(mNotificationDisconnectReceiver, new IntentFilter(Utils.ACTION_DISCONNECT));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mNotificationDisconnectReceiver);
+    }
+
+    private BroadcastReceiver mNotificationDisconnectReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            switch (action) {
+                case Utils.ACTION_DISCONNECT:
+                    final BluetoothDevice device = intent.getExtras().getParcelable(Utils.EXTRA_DEVICE);
+                    if (device != null) {
+                        final ThingyConnection thingyConnection = mThingyConnections.get(device);
+                        if (thingyConnection != null) {
+                            thingyConnection.disconnect();
+                            if (mDevices.contains(device)) {
+                                mDevices.remove(device);
+                            }
+                        }
+                    }
+                    break;
+            }
+        }
+    };
+
+    /**
+     * Creates a Notifications for the devices that are currently connected.
+     */
+    private void createNotificationForConnectedDevice(final BluetoothDevice device, final String deviceName) {
+        final NotificationCompat.Builder builder = getNotificationBuilder();
+        builder.setColor(ContextCompat.getColor(getApplicationContext(), no.nordicsemi.android.thingylib.R.color.colorPrimaryDark));
+        builder.setGroup(Utils.THINGY_GROUP_ID).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
+        builder.setContentTitle(getString(R.string.thingy_notification_text, deviceName));
+
+        final Intent disconnect = new Intent(Utils.ACTION_DISCONNECT);
+        disconnect.putExtra(Utils.EXTRA_DEVICE, device);
+        final PendingIntent disconnectAction = PendingIntent.getBroadcast(this, Utils.DISCONNECT_REQ + device.hashCode(), disconnect, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.addAction(new NotificationCompat.Action(R.drawable.ic_thingy_white, getString(R.string.thingy_action_disconnect), disconnectAction));
+        builder.setSortKey(deviceName + device.getAddress()); // This will keep the same order of notification even after an action was clicked on one of them
+
+        final Notification notification = builder.build();
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+        nm.notify(device.getAddress(), Utils.NOTIFICATION_ID, notification);
+    }
+
+    /**
+     * Returns a notification builder
+     */
+    private NotificationCompat.Builder getNotificationBuilder() {
+        final Intent parentIntent = new Intent(this, getNotificationTarget()/*MainActivity.class*/);
+        parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
+        final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setContentIntent(pendingIntent).setAutoCancel(true);
+        builder.setSmallIcon(R.drawable.ic_thingy_white);
+        return builder;
+    }
+
+    /**
+     * Creates a summary notifcation for devices
+     */
+    private void createSummaryNotification() {
+        final NotificationCompat.Builder builder = getNotificationBuilder();
+        builder.setColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        builder.setShowWhen(false).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
+        builder.setGroup(Utils.THINGY_GROUP_ID).setGroupSummary(true);
+
+        final ArrayList<Thingy> managedDevices = mDatabaseHelper.getSavedDevices();
+        final ArrayList<BluetoothDevice> connectedDevices = mDevices;
+        if (connectedDevices != null && connectedDevices.isEmpty()) {
+            // No connected devices
+            final int numberOfManagedDevices = managedDevices.size();
+            if (numberOfManagedDevices == 1) {
+                final String name = managedDevices.get(0).getDeviceName();
+                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfManagedDevices, name));
+            } else {
+                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfManagedDevices, numberOfManagedDevices));
+            }
+        } else {
+            // There are some proximity tags connected
+            final int numberOfConnectedDevices = connectedDevices.size();
+            if (numberOfConnectedDevices == 1) {
+                final String name = getDeviceName(connectedDevices.get(0));
+                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text, numberOfConnectedDevices, name));
+            } else {
+                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text, numberOfConnectedDevices, numberOfConnectedDevices));
+            }
+            builder.setNumber(numberOfConnectedDevices);
+
+            // If there are some disconnected devices, also print them
+            final int numberOfDisconnectedDevices = managedDevices.size() - numberOfConnectedDevices;
+            if (numberOfDisconnectedDevices == 1) {
+                // Find the single disconnected device to get its name
+                for (final Thingy thingy : managedDevices) {
+                    if (!isConnected(thingy, connectedDevices)) {
+                        final String name = thingy.getDeviceName();
+                        builder.setContentText(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfDisconnectedDevices, name));
+                        break;
+                    }
+                }
+            } else if (numberOfConnectedDevices > 1) {
+                // If there are more, just write number of them
+                builder.setContentText(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfDisconnectedDevices, numberOfDisconnectedDevices));
+            }
+        }
+
+        final Notification notification = builder.build();
+        final NotificationManagerCompat nm = NotificationManagerCompat.from(this);
+        nm.notify(NOTIFICATION_ID, notification);
+    }
+
+    /**
+     * Checks if the device is among the connected devices list.
+     *
+     * @param thingy           device to be checked
+     * @param connectedDevices list of connected devices
+     */
+    private boolean isConnected(Thingy thingy, ArrayList<BluetoothDevice> connectedDevices) {
+        for (BluetoothDevice device : connectedDevices) {
+            if (thingy.getDeviceAddress().equals(device.getAddress())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the name of a device
+     */
+    private String getDeviceName(final BluetoothDevice device) {
+        if (device != null) {
+            final String deviceName = device.getName();
+            if (!TextUtils.isEmpty(deviceName)) {
+                return deviceName;
+            }
+        }
+        return getString(R.string.default_thingy_name);
+    }
+
+    /**
+     * Creates background notifications for devices
+     */
+    private void createBackgroundNotification() {
+        final ArrayList<BluetoothDevice> devices = mDevices;
+        for (int i = 0; i < devices.size(); i++) {
+            createNotificationForConnectedDevice(devices.get(i), getDeviceName(devices.get(i)));
+        }
+        createSummaryNotification();
+    }
+
+    /**
+     * Cancels the existing notification. If there is no active notification this method does nothing
+     */
+    private void cancelNotifications() {
+        final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(NOTIFICATION_ID);
+
+        final ArrayList<BluetoothDevice> devices = mDevices;
+        for (int i = 0; i < devices.size(); i++) {
+            nm.cancel(devices.get(i).getAddress(), NOTIFICATION_ID);
+        }
+    }
+
+    /**
+     * Cancels the existing notification for given device. If there is no active notification this method does nothing
+     *
+     * @param device of whose notification must be removed
+     */
+    private void cancelNotification(final BluetoothDevice device) {
+        final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(device.getAddress(), NOTIFICATION_ID);
+    }
+
+    private void removeLastSelectedAudioTracks(final BluetoothDevice device){
+        if(mLastSelectedAudioTrack.containsKey(device)) {
+            mLastSelectedAudioTrack.remove(device);
+        }
+    }
+}

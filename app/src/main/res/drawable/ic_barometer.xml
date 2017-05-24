@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification,
+  ~ are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this
+  ~    list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form, except as embedded into a Nordic
+  ~    Semiconductor ASA integrated circuit in a product or a software update for
+  ~    such product, must reproduce the above copyright notice, this list of
+  ~    conditions and the following disclaimer in the documentation and/or other
+  ~    materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+  ~    contributors may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ 4. This software, with or without modification, must only be used with a
+  ~    Nordic Semiconductor ASA integrated circuit.
+  ~
+  ~ 5. Any software provided in binary form under this license must not be reverse
+  ~    engineered, decompiled, modified and/or disassembled.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+  ~ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  ~ OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<vector android:alpha="0.60" android:height="24dp" android:viewportHeight="296.0"
+    android:viewportWidth="296.0" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#000000"
+        android:pathData="M133,0.7c-58.4,6.2 -107.9,46.6 -125.8,102.3 -5.3,16.6 -6.6,25.6 -6.6,45 0,19.4 1.3,28.4 6.6,45 14.6,45.5 50.3,81.3 95.8,95.8 63.9,20.4 132.6,-4.3 169.4,-61.1 10,-15.3 17.4,-33.8 21.2,-53.2 2.5,-12.5 2.5,-40.5 0,-53 -8.2,-41.5 -31.1,-75.3 -66.1,-98.1 -26.7,-17.4 -63,-26.1 -94.5,-22.7zM163.5,22.5c12,1.7 19,3.5 29.2,7.5 37.6,14.5 67.7,49.2 76.7,88.2 4.2,18.4 4.4,34.5 0.7,53.4 -9.8,50 -49.9,89.5 -100.6,99 -14,2.6 -33.6,2.5 -47.2,-0.4 -36.5,-7.8 -66.5,-29.6 -84.8,-61.7 -12.4,-21.8 -18.3,-49 -15.7,-72.6 1.5,-13 3.3,-21.2 6.8,-31.2 20,-55.5 77.4,-90.5 134.9,-82.2z" android:strokeColor="#00000000"/>
+    <path android:fillColor="#000000"
+        android:pathData="M145.2,56.7c-1.5,3 -2,7.4 -4.8,44.8 -2.5,34.4 -2.7,36.1 -5,38.8 -5.7,6.7 -5.2,15.8 1.1,22.1l3.4,3.4 1.7,17.9c1.9,21.2 2.9,24.8 6.4,24.8 3.5,0 4.5,-3.6 6.4,-24.8l1.7,-17.9 3.4,-3.4c6.3,-6.3 6.8,-15.4 1.1,-22.1 -2.2,-2.7 -2.5,-4.4 -4.5,-31.8 -2.7,-36.5 -4,-49.4 -5.2,-51.7 -1.2,-2.3 -4.6,-2.3 -5.7,-0.1z" android:strokeColor="#00000000"/>
+</vector>

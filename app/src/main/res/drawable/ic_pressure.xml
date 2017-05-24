@@ -1,0 +1,49 @@
+<!--
+  ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification,
+  ~ are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this
+  ~    list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form, except as embedded into a Nordic
+  ~    Semiconductor ASA integrated circuit in a product or a software update for
+  ~    such product, must reproduce the above copyright notice, this list of
+  ~    conditions and the following disclaimer in the documentation and/or other
+  ~    materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+  ~    contributors may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ 4. This software, with or without modification, must only be used with a
+  ~    Nordic Semiconductor ASA integrated circuit.
+  ~
+  ~ 5. Any software provided in binary form under this license must not be reverse
+  ~    engineered, decompiled, modified and/or disassembled.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+  ~ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  ~ OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<vector android:alpha="0.60" android:height="24dp"
+    android:viewportHeight="295.82" android:viewportWidth="295.82"
+    android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#010002" android:pathData="M158.12,137.51l-4.87,-65.43c-1.09,-14.69 -2.3,-17.18 -5.34,-17.18s-4.25,2.49 -5.34,17.18l-4.87,65.43c-3.92,3.05 -6.48,7.76 -6.48,13.11c0,6.24 3.47,11.62 8.55,14.48l2.57,28.44c1.21,13.38 2.7,15.64 5.57,15.64s4.37,-2.26 5.57,-15.64l2.57,-28.44c5.07,-2.86 8.55,-8.24 8.55,-14.48C164.6,145.28 162.04,140.57 158.12,137.51zM147.91,73.6l4.54,61.04c-1.45,-0.41 -2.95,-0.7 -4.54,-0.7s-3.08,0.29 -4.54,0.7L147.91,73.6zM148.07,193.06c-0.05,0.59 -0.11,1.14 -0.16,1.67c-0.05,-0.53 -0.11,-1.09 -0.16,-1.67l-2.35,-26c0.82,0.13 1.65,0.25 2.51,0.25s1.68,-0.13 2.51,-0.25L148.07,193.06z"/>
+    <path android:fillColor="#010002" android:pathData="M147.91,33.84c-62.9,0 -114.08,51.18 -114.08,114.07S85.01,261.98 147.91,261.98s114.08,-51.18 114.08,-114.07S210.81,33.84 147.91,33.84zM147.91,251.1c-56.9,0 -103.2,-46.29 -103.2,-103.19S91.01,44.72 147.91,44.72S251.11,91.01 251.11,147.91S204.81,251.1 147.91,251.1z"/>
+    <path android:fillColor="#010002" android:pathData="M147.91,0C66.35,0 0,66.35 0,147.91s66.35,147.91 147.91,147.91s147.91,-66.35 147.91,-147.91S229.47,0 147.91,0zM147.91,284.94c-75.57,0 -137.03,-61.47 -137.03,-137.03S72.35,10.88 147.91,10.88S284.94,72.35 284.94,147.91S223.47,284.94 147.91,284.94z"/>
+    <path android:fillColor="#010002" android:pathData="M93.87,95.98l3,-3c2.13,-2.13 1.56,-4.67 -1.27,-5.68l-7.13,-2.56c-2.82,-1.02 -4.23,0.43 -3.12,3.22l2.68,6.8C89.14,97.56 91.75,98.1 93.87,95.98z"/>
+    <path android:fillColor="#010002" android:pathData="M200.61,95.98c2.13,2.13 4.74,1.58 5.84,-1.21l2.69,-6.8c1.1,-2.8 -0.3,-4.24 -3.12,-3.22l-7.13,2.56c-2.82,1.02 -3.4,3.56 -1.27,5.68L200.61,95.98z"/>
+    <path android:fillColor="#010002" android:pathData="M94.54,199.66c-2.13,-2.13 -4.74,-1.58 -5.84,1.21l-2.68,6.8c-1.1,2.8 0.3,4.24 3.12,3.22l7.12,-2.56c2.83,-1.01 3.4,-3.56 1.27,-5.68L94.54,199.66z"/>
+    <path android:fillColor="#010002" android:pathData="M207.11,200.88c-1.1,-2.8 -3.72,-3.34 -5.84,-1.21l-2.99,2.99c-2.13,2.13 -1.55,4.67 1.27,5.68l7.12,2.56c2.83,1.01 4.23,-0.43 3.12,-3.22L207.11,200.88z"/>
+</vector>

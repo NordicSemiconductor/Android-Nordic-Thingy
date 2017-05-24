@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
+  ~ All rights reserved.
+  ~
+  ~ Redistribution and use in source and binary forms, with or without modification,
+  ~ are permitted provided that the following conditions are met:
+  ~
+  ~ 1. Redistributions of source code must retain the above copyright notice, this
+  ~    list of conditions and the following disclaimer.
+  ~
+  ~ 2. Redistributions in binary form, except as embedded into a Nordic
+  ~    Semiconductor ASA integrated circuit in a product or a software update for
+  ~    such product, must reproduce the above copyright notice, this list of
+  ~    conditions and the following disclaimer in the documentation and/or other
+  ~    materials provided with the distribution.
+  ~
+  ~ 3. Neither the name of Nordic Semiconductor ASA nor the names of its
+  ~    contributors may be used to endorse or promote products derived from this
+  ~    software without specific prior written permission.
+  ~
+  ~ 4. This software, with or without modification, must only be used with a
+  ~    Nordic Semiconductor ASA integrated circuit.
+  ~
+  ~ 5. Any software provided in binary form under this license must not be reverse
+  ~    engineered, decompiled, modified and/or disassembled.
+  ~
+  ~ THIS SOFTWARE IS PROVIDED BY NORDIC SEMICONDUCTOR ASA "AS IS" AND ANY EXPRESS
+  ~ OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  ~ OF MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  ~ DISCLAIMED. IN NO EVENT SHALL NORDIC SEMICONDUCTOR ASA OR CONTRIBUTORS BE
+  ~ LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  ~ CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+  ~ GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  ~ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+  ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+  ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:id="@+id/microphone_card">
+
+        <LinearLayout
+            android:id="@+id/microphone_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/microphone_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@android:color/white"
+                app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+                app:titleTextAppearance="@style/Cardview.TitleText"
+                app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
+
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/container_microphone_overlay"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginLeft="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="0dp">
+
+                    <ImageView
+                        android:id="@+id/microphoneOverlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.00"
+                        android:scaleType="center"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_device_bg_grey" />
+
+                    <ImageView
+                        android:id="@+id/microphone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_mic_white"
+                        android:scaleType="center"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_device_bg_blue" />
+
+                </RelativeLayout>
+
+                <no.nordicsemi.android.nrfthingy.widgets.VoiceVisualizer
+                    android:id="@+id/voice_visualizer"
+                    android:layout_width="0dp"
+                    android:layout_height="90dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/container_microphone_overlay"
+                    app:layout_constraintEnd_toStartOf="@id/thingy_container"
+                    app:layout_constraintLeft_toRightOf="@+id/container_microphone_overlay"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintRight_toLeftOf="@+id/thingy_container"
+                    android:layout_marginRight="8dp" />
+
+                <RelativeLayout
+                    android:id="@+id/thingy_container"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:gravity="center"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginRight="16dp"
+                    app:layout_constraintRight_toRightOf="parent">
+
+                    <ImageView
+                        android:id="@+id/thingyOverlay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:alpha="0.0"
+                        android:scaleType="center"
+                        android:background="@drawable/ic_device_bg_grey"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:id="@+id/thingy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_thingy_white"
+                        android:scaleType="center"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/ic_device_bg_blue" />
+                </RelativeLayout>
+
+            </android.support.constraint.ConstraintLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/cardview_horizontal_padding"
+        android:layout_marginLeft="@dimen/cardview_horizontal_padding"
+        android:layout_marginRight="@dimen/cardview_horizontal_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:id="@+id/piano_card_view">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/speaker_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:background="@android:color/white"
+                    app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:popupTheme="@style/ActionBarPopupThemeOverlay">
+
+                    <android.support.design.widget.TabLayout
+                        android:id="@+id/sliding_tabs"
+                        android:layout_width="350dp"
+                        android:layout_height="wrap_content"
+                        app:tabSelectedTextColor="@color/colorPrimary"
+                        app:tabTextColor="@color/textColorSecondary"
+                        app:tabIndicatorColor="@color/colorPrimary"
+                        app:tabIndicatorHeight="3dp"
+                        app:tabGravity="fill"
+                        app:tabMode="fixed"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+                </android.support.v7.widget.Toolbar>
+
+            </LinearLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="270dp" />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>
