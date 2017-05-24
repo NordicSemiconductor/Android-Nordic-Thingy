@@ -17,7 +17,7 @@ Use this app to connect your mobile device with Thingy and gain access to the fo
 * Play programmable tunes in frequency mode
 * Using the free Thingy app, update the firmware on your Thingy as soon as new firmware versions are released
 
-###For firmware and mobile developers:
+### For firmware and mobile developers:
 Thingy can be flashed with custom firmware, just like any other development kit from Nordic Semiconductor. The Thingy firmware package contains comprehensive documentation, so you can easily customize it to your own needs.
 Additionally, we provide an Android Library on JCenter for your Android development needs. These libraries are made exclusively for Thingy, to ensure that installation and mobile development are as smooth as possible!
 Learn more about Thingy at http://www.nordicsemi.com/thingy
