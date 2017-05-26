@@ -53,7 +53,7 @@ Follow the steps below to start using the Thingy Library in your own project
 1. Extend the **BaseThingyService** abstract class defined in the Thingy Library in your project. In addition extend the **BaseThingyBinder** in your **ThingyService** so that you can create your own functionality related to the application in side this Binder. 
 Don't forget to define the **ThingyService** in your *AndroidManifest.xml*.
 
-```java
+```
 package com.example.coolthingyproject;
 
 import no.nordicsemi.android.dfu.ThingyService;
@@ -76,11 +76,11 @@ public class ThingyService extends BaseThingyService {
 
 By extending the existing binder from the **BaseThingyService** as shown above you should be able to write your own functionality within the **ThingyBinder** and call these functionality by using the same binder. 
  
-2. In order to start using the ThingyLibrary make sure to create an instance of it by adding this line ```java ThingySdkManager.getInstance()``` inside your activities' ```java onCreate()```. 
+2. In order to start using the ThingyLibrary make sure to create an instance of it by adding this line ```ThingySdkManager.getInstance()``` inside your activities' ```onCreate()```. 
 This is an API interface to the Library and provides all the required helper methods to create your own Android application for Thingy:52.
-Just call this line ```java ThingySdkManager.getInstance()``` inside ```java onCreate()``` as shown below.
+Just call this line ```ThingySdkManager.getInstance()``` inside ```onCreate()``` as shown below.
 
-```java
+```
 package com.example.coolproject;
 
 import com.example.coolthingyproject.MyActivity;
@@ -97,12 +97,12 @@ public class MyActivity extends Activity {
 }
 ```
 
-3. Next is to make sure you bind to your service inside ```java onStart()``` and ```java onStop()``` methods in your activities by adding the following lines.
-Also make sure to implement the ```java ThingySdkManager.ServiceConnectionListener``` in your activity to get the service connection callbacks.
-The service binding is handled within the ThingySdkManager and ```java onServiceConnected``` will be called when the service is bound.
-Also as mentioned in step 1. you can get the service binder inside ```java onServiceConnected()``` as shown below to access your own functionality declared in the binder in ThingyService.
+3. Next is to make sure you bind to your service inside ```onStart()``` and ```onStop()``` methods in your activities by adding the following lines.
+Also make sure to implement the ```ThingySdkManager.ServiceConnectionListener``` in your activity to get the service connection callbacks.
+The service binding is handled within the ThingySdkManager and ```onServiceConnected``` will be called when the service is bound.
+Also as mentioned in step 1. you can get the service binder inside ```onServiceConnected()``` as shown below to access your own functionality declared in the binder in ThingyService.
 
-```java
+```
 package com.example.coolproject;
 
 import com.example.coolthingyproject.MyActivity;
@@ -140,10 +140,10 @@ public class MyActivity extends AppCompatActivity implements ServiceConnectionLi
 ```
 
 4. In order to get updates on from sensors you will have to implement ThingyListener. The service will send local broadcasts using LocalBroadcastManager. 
-You can register and unregister the broadcast receiver shown in the ```java onStart()``` and ```java onStop()``` methods. After binding to the service as mentioned in step 3 you can connect to the preferred Thingy:52 device. 
+You can register and unregister the broadcast receiver shown in the ```onStart()``` and ```onStop()``` methods. After binding to the service as mentioned in step 3 you can connect to the preferred Thingy:52 device. 
 Please note that you may have to scan for your Thingy:52 device before connecting.
 
-```java
+```
 private final ThingyListener mThingyListener = new ThingyListener() {
     @Override
     public void onDeviceConnected(BluetoothDevice device, int connectionState) {
