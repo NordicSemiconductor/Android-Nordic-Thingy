@@ -81,7 +81,7 @@ This is an API interface to the Library and provides all the required helper met
 Just call this line ```ThingySdkManager.getInstance()``` inside ```onCreate()``` as shown below.
 
 ```
-package com.example.coolproject;
+package com.example.coolthingyproject;
 
 import com.example.coolthingyproject.MyActivity;
 import android.app.Activity;
