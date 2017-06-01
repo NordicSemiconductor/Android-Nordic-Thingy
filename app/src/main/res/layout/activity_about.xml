@@ -163,7 +163,7 @@
 
                         <TextView
                             style="@style/PreferenceCategorySummary"
-                            android:text="@string/github_thingy_app_url"
+                            android:text="@string/github_thingy_fw_url"
                             android:autoLink="web"
                             android:linksClickable="true" />
                     </LinearLayout>
