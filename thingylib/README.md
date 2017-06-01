@@ -135,13 +135,13 @@ public class MyActivity extends AppCompatActivity implements ServiceConnectionLi
 ```
 
 4. The library will handle the connection, service discovery and reading all the characteristics for you. After binding to the service as mentioned in step 3 you can connect to the preferred Thingy:52 device.
- All you have to do is just call the following line ``` mThingySdkManager.connectToThingy(this, device, ThingyService.class);``` as shown on the 5th step once you receive the ```onServiceDiscoveryCompleted(BluetoothDevice device)```
-you can start to enable the notifications. 
+ All you have to do is just call the following line ``` mThingySdkManager.connectToThingy(this, device, ThingyService.class);``` inside ```onServiceConnected()```. 
+ 
+As shown on the 5th step once you receive the ```onServiceDiscoveryCompleted(BluetoothDevice device)``` you can start to enable the notifications. 
 
 Please note that you will have to scan for your Thingy:52 device before connecting and you can follow the example app on how to scan for a Thingy:52 device.
 
-5. In order to get updates on from sensors you will have to implement ThingyListener. The service will send local broadcasts using LocalBroadcastManager. 
-You can register and unregister the broadcast receivers as shown in the ```onStart()``` and ```onStop()``` methods. 
+5. After connecting to a Thingy, in order to get updates on from the sensors you will have to implement the ThingyListener. The service will send local broadcasts using LocalBroadcastManager. You can register and unregister the broadcast receivers as shown in the ```onStart()``` and ```onStop()``` methods. 
 
 ```
 private final ThingyListener mThingyListener = new ThingyListener() {
