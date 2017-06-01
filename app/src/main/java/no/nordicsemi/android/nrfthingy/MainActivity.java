@@ -91,6 +91,7 @@ import no.nordicsemi.android.nrfthingy.configuration.ConfirmThingyDeletionDialog
 import no.nordicsemi.android.nrfthingy.configuration.InitialConfigurationActivity;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.nrfthingy.dfu.DfuUpdateAvailableDialogFragment;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyAdapter;
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ConfirmThingyDeletionDialogFragment.ConfirmThingeeDeletionListener,
         ThingyAdapter.ActionListener,
         ThingySdkManager.ServiceConnectionListener,
-        PermissionRationaleDialogFragment.PermissionDialogListener {
+        PermissionRationaleDialogFragment.PermissionDialogListener, DfuUpdateAvailableDialogFragment.DfuUpdateAvailableListener {
 
     private static final int SCAN_DURATION = 15000;
     private NavigationView mNavigationView;
@@ -149,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Handler mProgressHandler = new Handler();
     private MediaPlayer mMediaPlayer;
     private boolean mIsScanning;
+    private String mFirmwareFileVersion;
 
     private ThingyService.ThingyBinder mBinder;
 
@@ -194,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     enableEnvironmentNotifications();
                     break;
             }
+            checkForFwUpdates();
         }
 
         @Override
@@ -226,12 +229,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (bluetoothDevice.equals(mDevice)) {
                 switch (buttonState) {
                     case 0:
-                        if(mMediaPlayer != null) {
+                        if (mMediaPlayer != null) {
                             mMediaPlayer.reset();
                         }
                         break;
                     case 1:
-                        mMediaPlayer = MediaPlayer.create(getApplicationContext(), RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        mMediaPlayer = MediaPlayer.create(MainActivity.this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
                         mMediaPlayer.setVolume(1.0f, 1.0f);
                         mMediaPlayer.start();
                         break;
@@ -246,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onTapValueChangedEvent(final BluetoothDevice bluetoothDevice, final int direction, final int count) {
 
         }
+
         @Override
         public void onOrientationValueChangedEvent(final BluetoothDevice bluetoothDevice, final int orientation) {
 
@@ -282,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte[] matrix) {
 
         }
 
@@ -302,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] data) {
+        public void onMicrophoneValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte[] data) {
 
         }
     };
@@ -427,12 +431,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onStop();
 
         if (!isFinishing()) {
-            if(mBinder != null) {
+            if (mBinder != null) {
                 mBinder.setActivityFinishing(false);
                 mBinder.setLastVisibleFragment(mFragmentTag);
             }
         } else {
-            if(mBinder != null) {
+            if (mBinder != null) {
                 mBinder.setActivityFinishing(true);
                 mBinder.setLastVisibleFragment(Utils.ENVIRONMENT_FRAGMENT);
             }
@@ -553,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
         }
-        //mDrawerLayout.closeDrawer(GravityCompat.START);
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -561,53 +565,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         }, 200);
         return true;
-    }
-
-    private void displayFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        switch (mFragmentTag) {
-            case Utils.ENVIRONMENT_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.ENVIRONMENT_FRAGMENT) == null) {
-                    clearFragments();
-                    mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
-                    EnvironmentServiceFragment environmentServiceFragment = EnvironmentServiceFragment.newInstance(mDevice);
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, environmentServiceFragment, mFragmentTag).commit();
-                }
-                break;
-            case Utils.UI_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.UI_FRAGMENT) == null) {
-                    clearFragments();
-                    mFragmentTag = Utils.UI_FRAGMENT;
-                    UiFragment uiFragment = UiFragment.newInstance(mDevice);
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, uiFragment, mFragmentTag).commit();//.addToBackStack(mFragmentTag).commit();
-                }
-                break;
-            case Utils.MOTION_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.MOTION_FRAGMENT) == null) {
-                    clearFragments();
-                    mFragmentTag = Utils.MOTION_FRAGMENT;
-                    MotionServiceFragment motionServiceFragment = MotionServiceFragment.newInstance(mDevice);
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, motionServiceFragment, mFragmentTag).commit();//.addToBackStack(ThingyUtils.MOTION_FRAGMENT).commit();
-                }
-                break;
-            case Utils.SOUND_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.SOUND_FRAGMENT) == null) {
-                    clearFragments();
-                    mFragmentTag = Utils.SOUND_FRAGMENT;
-                    SoundFragment soundFragment = SoundFragment.newInstance(mDevice);
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, soundFragment, mFragmentTag).commit();//.addToBackStack(ThingyUtils.MOTION_FRAGMENT).commit();
-                }
-                break;
-            case Utils.CLOUD_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.CLOUD_FRAGMENT) == null) {
-                    clearFragments();
-                    mFragmentTag = Utils.CLOUD_FRAGMENT;
-                    CloudFragment mapFragment = CloudFragment.newInstance(mDevice);
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment, mFragmentTag).commit();
-                }
-            default:
-                break;
-        }
     }
 
     private void performDeviceSelection(final MenuItem item) {
@@ -674,7 +631,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableEnvironmentNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
                     EnvironmentServiceFragment environmentServiceFragment = EnvironmentServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, environmentServiceFragment, mFragmentTag).commit();
@@ -689,7 +647,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableMotionNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.MOTION_FRAGMENT;
                     MotionServiceFragment motionServiceFragment = MotionServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, motionServiceFragment, mFragmentTag).commit();
@@ -704,7 +663,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableUiNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.UI_FRAGMENT;
                     UiFragment uiFragment = UiFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, uiFragment, mFragmentTag).commit();
@@ -717,7 +677,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
                         enableSoundNotifications(mDevice, true);
                     }
-                    clearFragments();
+
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.SOUND_FRAGMENT;
                     SoundFragment soundFragment = SoundFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, soundFragment, mFragmentTag).commit();
@@ -726,16 +688,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigation_cloud:
                 if (fragmentManager.findFragmentByTag(Utils.CLOUD_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
-                        mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
+                        mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()));
+                        mThingySdkManager.enablePressureNotifications(mDevice,  mDatabaseHelper.getPressureUploadState(mDevice.getAddress()));
+                        mThingySdkManager.enableHumidityNotifications(mDevice, false);
+                        mThingySdkManager.enableAirQualityNotifications(mDevice, false);
+                        mThingySdkManager.enableColorNotifications(mDevice, false);
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
-                        mThingySdkManager.enableUiNotifications(mDevice, false);
+                        mThingySdkManager.enableUiNotifications(mDevice, mDatabaseHelper.getButtonUploadState(mDevice.getAddress()));
                         mThingySdkManager.enableSoundNotifications(mDevice, false);
-                        enableNotificationsForCloudUpload();
-                        /*if(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress())) {
-                            enableNotificationsForCloudUpload();
-                        }*/
                     }
-                    clearFragments();
+
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.CLOUD_FRAGMENT;
                     CloudFragment mapFragment = CloudFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment, mFragmentTag).commit();
@@ -757,7 +721,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableEnvironmentNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
                     EnvironmentServiceFragment environmentServiceFragment = EnvironmentServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, environmentServiceFragment, mFragmentTag).commit();
@@ -772,7 +737,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableMotionNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.MOTION_FRAGMENT;
                     MotionServiceFragment motionServiceFragment = MotionServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, motionServiceFragment, mFragmentTag).commit();
@@ -787,7 +753,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         enableUiNotifications();
                     }
 
-                    clearFragments();
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.UI_FRAGMENT;
                     UiFragment uiFragment = UiFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, uiFragment, mFragmentTag).commit();
@@ -800,7 +767,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
                         enableSoundNotifications(mDevice, true);
                     }
-                    clearFragments();
+
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.SOUND_FRAGMENT;
                     SoundFragment soundFragment = SoundFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, soundFragment, mFragmentTag).commit();
@@ -809,16 +778,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case Utils.CLOUD_FRAGMENT:
                 if (fragmentManager.findFragmentByTag(Utils.CLOUD_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
-                        if(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress())) {
-                            mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
+                        if (mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress())) {
+                            mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()));
+                            mThingySdkManager.enablePressureNotifications(mDevice,  mDatabaseHelper.getPressureUploadState(mDevice.getAddress()));
+                            mThingySdkManager.enableHumidityNotifications(mDevice, false);
+                            mThingySdkManager.enableAirQualityNotifications(mDevice, false);
+                            mThingySdkManager.enableColorNotifications(mDevice, false);
                             mThingySdkManager.enableMotionNotifications(mDevice, false);
-                            mThingySdkManager.enableUiNotifications(mDevice, false);
+                            mThingySdkManager.enableUiNotifications(mDevice, mDatabaseHelper.getButtonUploadState(mDevice.getAddress()));
                             mThingySdkManager.enableSoundNotifications(mDevice, false);
-
-                            enableNotificationsForCloudUpload();
                         }
                     }
-                    clearFragments();
+
+                    final String fragmentTag = mFragmentTag;
+                    clearFragments(fragmentTag);
                     mFragmentTag = Utils.CLOUD_FRAGMENT;
                     CloudFragment mapFragment = CloudFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment, mFragmentTag).commit();
@@ -857,7 +830,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivityForResult(enableIntent, Utils.REQUEST_ENABLE_BT);
     }
 
-    private void connect(){
+    private void connect() {
         mThingySdkManager.connectToThingy(this, mDevice, ThingyService.class);
         final Thingy thingy = new Thingy(mDevice);
         mThingySdkManager.setSelectedDevice(mDevice);
@@ -943,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             total = i;
         }
 
-        if(thingyList.size() == 0) {
+        if (thingyList.size() == 0) {
             mHeaderTitleContainer.setVisibility(View.GONE);
         }
 
@@ -977,24 +950,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void selectDevice() {
-        final BluetoothDevice device = mDevice;
-        if (device != null) {
-            if (mDatabaseHelper.isExist(device.getAddress())) {
-                mNoThingyConnectedContainer.setVisibility(View.GONE);
-                if (mOldDevice != null && !device.equals(mOldDevice)) {
-                    clearFragments();
-                }
-                //displayFragment();
-                performFragmentNavigation();
-                invalidateOptionsMenu();
-                mOldDevice = device;
-            }
-        } else {
-            mNoThingyConnectedContainer.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void selectDeviceFromDb() {
         final BluetoothDevice device = mDevice;
         if (device != null) {
@@ -1018,6 +973,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    private void selectDevice() {
+        final BluetoothDevice device = mDevice;
+        if (device != null) {
+            if (mDatabaseHelper.isExist(device.getAddress())) {
+                mNoThingyConnectedContainer.setVisibility(View.GONE);
+                if (mOldDevice != null && !device.equals(mOldDevice)) {
+                    clearFragments();
+                }
+                //displayFragment();
+                performFragmentNavigation();
+                invalidateOptionsMenu();
+                mOldDevice = device;
+            }
+        } else {
+            mNoThingyConnectedContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
     private BluetoothDevice getBluetoothDevice(final String thingeeAddress) {
         final BluetoothManager bm = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         final BluetoothAdapter ba = bm.getAdapter();
@@ -1030,6 +1003,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void clearFragments() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final Fragment fragment = fragmentManager.findFragmentByTag(mFragmentTag);
+        if (fragment != null) {
+            fragmentManager.beginTransaction().remove(fragment).commitNow();
+        }
+    }
+
+    private void clearFragments(final String fragmentTag) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final Fragment fragment = fragmentManager.findFragmentByTag(fragmentTag);
         if (fragment != null) {
             fragmentManager.beginTransaction().remove(fragment).commitNow();
         }
@@ -1143,7 +1124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mNoThingyConnectedContainer.setVisibility(View.VISIBLE);
         } else {
             BluetoothDevice device = mThingySdkManager.getSelectedDevice();
-            if(mBinder != null) {
+            if (mBinder != null) {
                 mFragmentTag = mBinder.getLastVisibleFragment();
             } else {
                 mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
@@ -1199,8 +1180,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void updateConnectionProgressDialog(){
-        if(mBinder != null && mBinder.getScanningState()){
+    private void updateConnectionProgressDialog() {
+        if (mBinder != null && mBinder.getScanningState()) {
             showConnectionProgressDialog();
         }
     }
@@ -1344,15 +1325,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), flag, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER);
     }
 
-    public void enableSoundNotifications(final BluetoothDevice device, final boolean flag){
-        if(mThingySdkManager != null) {
+    public void enableSoundNotifications(final BluetoothDevice device, final boolean flag) {
+        if (mThingySdkManager != null) {
             mThingySdkManager.enableSpeakerStatusNotifications(device, flag);
         }
     }
 
     public void enableNotificationsForCloudUpload() {
         mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()));
-        mThingySdkManager.enablePressureNotifications(mDevice,mDatabaseHelper.getPressureUploadState(mDevice.getAddress()));
+        mThingySdkManager.enablePressureNotifications(mDevice, mDatabaseHelper.getPressureUploadState(mDevice.getAddress()));
         mThingySdkManager.enableButtonStateNotification(mDevice, mDatabaseHelper.getButtonUploadState(mDevice.getAddress()));
     }
 
@@ -1437,7 +1418,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Utils.showToast(this, getString(R.string.device_deleted));
     }
 
-    private boolean checkIfRequiredPermissionsGranted(){
+    private boolean checkIfRequiredPermissionsGranted() {
         if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
             if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
@@ -1451,8 +1432,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void prepareForScanning(){
-        if(checkIfRequiredPermissionsGranted()) {
+    private void prepareForScanning() {
+        if (checkIfRequiredPermissionsGranted()) {
             if (mBinder != null) {
                 mBinder.setScanningState(true);
                 showConnectionProgressDialog();
@@ -1470,7 +1451,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         scanner.startScan(filters, settings, mScanCallback);
         mIsScanning = true;
 
-        //Hanlder to stop scan after the duration time out
+        //Handler to stop scan after the duration time out
         mProgressHandler.postDelayed(mBleScannerTimeoutRunnable, SCAN_DURATION);
 
     }
@@ -1480,7 +1461,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void stopScan() {
         if (mIsScanning) {
-            if(mBinder != null) {
+            if (mBinder != null) {
                 mBinder.setScanningState(false);
             }
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
@@ -1496,7 +1477,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onScanResult(final int callbackType, final ScanResult result) {
             // do nothing
             final BluetoothDevice device = result.getDevice();
-            if(mDevice != null && device.equals(mDevice)) {
+            if (mDevice != null && device.equals(mDevice)) {
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -1587,7 +1568,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void OnCloudFragmetnListener(BluetoothDevice device) {
+    public void OnCloudFragmentListener(BluetoothDevice device) {
 
+    }
+
+    private boolean checkIfFirmwareUpdateAvailable() {
+        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
+
+        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+
+        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
+        final String[] resourceEntryNames = name.split("_");
+
+        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+
+        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                resourceEntryNames[resourceEntryNames.length - 1];
+
+        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void checkForFwUpdates() {
+        if (checkIfFirmwareUpdateAvailable()) {
+            DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, mFirmwareFileVersion);
+            fragment.show(getSupportFragmentManager(), null);
+            mFirmwareFileVersion = null;
+        }
+    }
+
+    @Override
+    public void onDfuRequested() {
+        Intent intent = new Intent(this, SecureDfuActivity.class);
+        intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
+        startActivity(intent);
     }
 }

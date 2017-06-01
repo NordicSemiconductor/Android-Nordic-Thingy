@@ -38,7 +38,6 @@
 
 package no.nordicsemi.android.nrfthingy.sound;
 
-import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -53,7 +52,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -70,7 +68,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,8 +83,8 @@ import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
-import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.nrfthingy.widgets.AudioFileRecyclerAdapter;
+import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class PcmModeFragment extends Fragment implements PermissionRationaleDialogFragment.PermissionDialogListener,
@@ -117,8 +114,8 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         public void onReceive(Context context, Intent intent) {
             final BluetoothDevice device = intent.getParcelableExtra(ThingyUtils.EXTRA_DEVICE);
             final String action = intent.getAction();
-            if (action.startsWith(ThingyUtils.ACTION_DEVICE_DISCONNECTED)){
-                if(device.equals(mDevice)) {
+            if (action.startsWith(ThingyUtils.ACTION_DEVICE_DISCONNECTED)) {
+                if (device.equals(mDevice)) {
                     mFabPlay.setImageResource(R.drawable.ic_play_white);
                     mIsPlaying = false;
                 }
@@ -129,7 +126,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 switch (mode) {
                     case ThingyUtils.PCM_MODE:
                         final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
-                        if(ThingyUtils.SPEAKER_STATUS_FINISHED == status) {
+                        if (ThingyUtils.SPEAKER_STATUS_FINISHED == status) {
                             mIsPlaying = false;
                             mFabPlay.setImageResource(R.drawable.ic_play_white);
                         }
@@ -180,14 +177,14 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         mFabPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Utils.isConnected(mDevice, mThingySdkManager.getConnectedDevices())) {
+                if (Utils.isConnected(mDevice, mThingySdkManager.getConnectedDevices())) {
                     if (!mIsPlaying) {
                         final File file = mAudioFileAdapter.getSelectedItem();
                         if (file != null) {
                             //parseFile(file);
                             //mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
-                            if(mThingySdkManager != null) {
-                                if(!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
+                            if (mThingySdkManager != null) {
+                                if (!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
                                     mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
                                     mFabPlay.setImageResource(R.drawable.ic_stop_white);
                                     mIsPlaying = true;
@@ -216,10 +213,10 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             }
         });
 
-        if(mThingySdkManager.isThingyStreamingAudio(mDevice)){
+        if (mThingySdkManager.isThingyStreamingAudio(mDevice)) {
             mFabPlay.setImageResource(R.drawable.ic_stop_white);
             mIsPlaying = true;
-            final int selectedAudioTrackPosition = ((ThingyService.ThingyBinder)(mThingySdkManager.getThingyBinder())).getLastSelectedAudioTrack(mDevice);
+            final int selectedAudioTrackPosition = ((ThingyService.ThingyBinder) (mThingySdkManager.getThingyBinder())).getLastSelectedAudioTrack(mDevice);
             mAudioFileAdapter.setSelectedItemPosition(selectedAudioTrackPosition);
         }
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mConnectionBroadcastReceiver, ThingyUtils.createSpeakerStatusChangeReceiver(mDevice.getAddress()));
@@ -229,7 +226,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     @Override
     public void onStart() {
         super.onStart();
-        if(mIsPlaying){
+        if (mIsPlaying) {
             mFabPlay.setImageResource(R.drawable.ic_stop_white);
         }
     }
@@ -249,8 +246,8 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mThingySdkManager.isThingyStreamingAudio(mDevice)){
-            ((ThingyService.ThingyBinder)(mThingySdkManager.getThingyBinder())).setLastSelectedAudioTrack(mDevice, mAudioFileAdapter.getSelectedItemPosition());
+        if (mThingySdkManager.isThingyStreamingAudio(mDevice)) {
+            ((ThingyService.ThingyBinder) (mThingySdkManager.getThingyBinder())).setLastSelectedAudioTrack(mDevice, mAudioFileAdapter.getSelectedItemPosition());
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mConnectionBroadcastReceiver);
     }
@@ -333,7 +330,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final Uri uri = args.getParcelable(Utils.EXTRA_URI);
-		/*
+        /*
 		 * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
 		 * all columns and than check which columns are present.
 		 */
@@ -351,7 +348,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             if (!TextUtils.isEmpty(fileName)) {
                 mFilePath = fileName;
                 file = new File(mFilePath);
-                if(FileHelper.copyAudioFilesToLocalAppStorage(getContext(), file.getPath(), fileName)) {
+                if (FileHelper.copyAudioFilesToLocalAppStorage(getContext(), file.getPath(), fileName)) {
                     mAudioFileAdapter.addFiles(file);
                     mAudioFileAdapter.notifyDataSetChanged();
                 } else {
@@ -365,7 +362,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 final MimeTypeMap mime = MimeTypeMap.getSingleton();
                 final String type = mime.getExtensionFromMimeType(cR.getType(mFileStreamUri));
                 Log.v("Tag", "stream: " + mFileStreamUri.toString());
-                if(type.equalsIgnoreCase("wav")) {
+                if (type.equalsIgnoreCase("wav")) {
                     if (FileHelper.copyAudioFilesToLocalAppStorage(getContext(), mFileStreamUri, fileName)) {
                         file = new File(String.valueOf(getContext().getFilesDir()), fileName);
                         mAudioFileAdapter.addFiles(file);
@@ -393,12 +390,12 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         mFileStreamUri = null;
     }
 
-    private void listFiles(){
+    private void listFiles() {
         FileHelper.copyAudioFiles(getActivity());
         final File root = new File(String.valueOf(getActivity().getFilesDir()));
-        File[] files  = root.listFiles();
-        for(File f : files){
-            if(f.getName().endsWith(".wav")){
+        File[] files = root.listFiles();
+        for (File f : files) {
+            if (f.getName().endsWith(".wav")) {
                 mAudioFileAdapter.addFiles(f);
             }
         }
@@ -409,7 +406,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     private void parseFile(final File file) {
         InputStream is = null;
         try {
-            if(!file.getPath().startsWith("content")) {
+            if (!file.getPath().startsWith("content")) {
                 is = new FileInputStream(file);
             } else {
                 Uri uri = Uri.parse(file.getPath());
@@ -430,8 +427,8 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 }
                 offset += length / 2;
             }
-            if(mThingySdkManager != null) {
-                if(!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
+            if (mThingySdkManager != null) {
+                if (!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
                     mThingySdkManager.playPcmSample(getActivity(), mDevice, output);
                     mFabPlay.setImageResource(R.drawable.ic_stop_white);
                     mIsPlaying = true;
@@ -442,7 +439,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         } catch (Exception e) {
             Utils.showToast(getActivity(), "Unable to stream audio");
         } finally {
-            if(is != null) {
+            if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {

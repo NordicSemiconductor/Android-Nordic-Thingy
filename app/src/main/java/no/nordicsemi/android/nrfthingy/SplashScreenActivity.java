@@ -49,7 +49,7 @@ import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
-public class SplashScreenActivity extends AppCompatActivity implements ThingySdkManager.ServiceConnectionListener  {
+public class SplashScreenActivity extends AppCompatActivity implements ThingySdkManager.ServiceConnectionListener {
 
     private static final int DURATION = 1000;
     private ThingySdkManager mThingySdkManager;

@@ -39,9 +39,6 @@
 package no.nordicsemi.android.nrfthingy.widgets;
 
 import android.content.Context;
-import android.graphics.Point;
-import android.os.Environment;
-import android.os.Handler;
 import android.view.MotionEvent;
 
 import org.rajawali3d.Object3D;
@@ -51,9 +48,6 @@ import org.rajawali3d.loader.LoaderOBJ;
 import org.rajawali3d.loader.ParsingException;
 import org.rajawali3d.math.Quaternion;
 import org.rajawali3d.renderer.RajawaliRenderer;
-import org.rajawali3d.util.exporter.AwdExporter;
-
-import java.io.File;
 
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
@@ -65,7 +59,7 @@ public class Renderer extends RajawaliRenderer {
 
     private Object3D mObjectModel;
 
-    private double x,y,z,w;
+    private double x, y, z, w;
 
     private boolean mIsConnected = false;
     private boolean mIsNotificationEnabled = false;

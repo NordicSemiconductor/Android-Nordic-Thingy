@@ -63,7 +63,6 @@ public class DfuRationaleDialogFragment extends DialogFragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +76,7 @@ public class DfuRationaleDialogFragment extends DialogFragment {
 
         final TextView mProgressText = (TextView) view.findViewById(R.id.dfu_rationale);
         mProgressText.setText(R.string.dfu_rationale);
-        alertDialogBuilder.setView(view).setPositiveButton(R.string.confirm, null).setNegativeButton(R.string.cancel, null).setNegativeButton(R.string.cancel, null);
+        alertDialogBuilder.setView(view).setPositiveButton(R.string.confirm, null).setNegativeButton(R.string.cancel, null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {

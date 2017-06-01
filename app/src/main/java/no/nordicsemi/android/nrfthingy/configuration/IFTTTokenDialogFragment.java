@@ -139,7 +139,7 @@ public class IFTTTokenDialogFragment extends DialogFragment {
         mSwitchClearToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     mCloudTokenView.setEnabled(false);
                     mCloudTokenView.setText("");
                 } else {
@@ -156,7 +156,7 @@ public class IFTTTokenDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(!mSwitchClearToken.isChecked()) {
+                if (!mSwitchClearToken.isChecked()) {
                     final String value = s.toString();
                     if (TextUtils.isDigitsOnly(value) || value.length() > 100) {
                         mCloudTokenLayout.setError(getString(R.string.error_ifttt_token_too_long));
@@ -180,7 +180,7 @@ public class IFTTTokenDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 final String token = mCloudTokenView.getText().toString().trim();
-                if(!mSwitchClearToken.isChecked()) {
+                if (!mSwitchClearToken.isChecked()) {
                     if (validateInput()) {
                         Utils.saveIFTTTTokenToPreferences(getContext(), token);
                         dismiss();
@@ -225,7 +225,7 @@ public class IFTTTokenDialogFragment extends DialogFragment {
     }
 
     private void updateUi() {
-        if(!Utils.getIFTTTToken(getContext()).isEmpty()) {
+        if (!Utils.getIFTTTToken(getContext()).isEmpty()) {
             mSwitchClearToken.setChecked(false);
             mCloudTokenView.setEnabled(true);
         } else {

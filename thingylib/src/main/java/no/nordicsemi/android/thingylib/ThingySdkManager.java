@@ -302,12 +302,12 @@ public class ThingySdkManager {
      * @param colorIntensityInterval in ms
      * @param gasMode as an interval in ms
      */
-    public boolean setEnvironmentCharacteristic(final BluetoothDevice device, final int temperatureInterval, final int pressureInterval, final int humidityInterval, final int colorIntensityInterval, final int gasMode) {
+    public boolean setEnvironmentConfigurationCharacteristic(final BluetoothDevice device, final int temperatureInterval, final int pressureInterval, final int humidityInterval, final int colorIntensityInterval, final int gasMode) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    return thingyConnection.setEnvironmentCharacteristic(temperatureInterval, pressureInterval, humidityInterval, colorIntensityInterval, gasMode);
+                    return thingyConnection.setEnvironmentConfigurationCharacteristic(temperatureInterval, pressureInterval, humidityInterval, colorIntensityInterval, gasMode);
                 }
             }
         }
@@ -439,8 +439,8 @@ public class ThingySdkManager {
      * Confgiures the advertising parameters for a particular thingy
      *
      * @param device bluetooth device
-     * @param advertisingInterval
-     * @param advertisingTimeout
+     * @param advertisingInterval in millisecond units
+     * @param advertisingTimeout in millisecond units
      */
     public boolean setAdvertisingParameters(final BluetoothDevice device, final int advertisingInterval, final int advertisingTimeout) {
         if (device != null)
@@ -457,7 +457,7 @@ public class ThingySdkManager {
      * Confgiures the advertising parameters for a particular thingy
      *
      * @param device bluetooth device
-     * @param advertisingInterval
+     * @param advertisingInterval in millisecond units
      */
     public boolean setAdvertisingIntervalUnits(final BluetoothDevice device, final int advertisingInterval) {
         if (device != null)
@@ -474,7 +474,7 @@ public class ThingySdkManager {
      * Confgiures the advertising parameters for a particular thingy
      *
      * @param device bluetooth device
-     * @param advertisingTimeout
+     * @param advertisingTimeout in millisecond units
      */
     public boolean setAdvertisingTimeoutUnits(final BluetoothDevice device, final int advertisingTimeout) {
         if (device != null)
@@ -772,7 +772,7 @@ public class ThingySdkManager {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    thingyConnection.setTemperatureNotifications(enable);
+                    thingyConnection.enableTemperatureNotifications(enable);
                 }
             }
         }
@@ -933,10 +933,31 @@ public class ThingySdkManager {
     }
 
     /**
+     * Configures the Motion configuration characteristic for a particular thingy
+     *
+     * @param pedometerInterval in ms
+     * @param temperatureCompensationInterval in ms
+     * @param magnetoMeterCompensationInterval in ms
+     * @param motionInterval in ms
+     * @param wakeOnMotion as an interval in ms
+     */
+    public boolean setMotionConfigurationCharacteristic(final BluetoothDevice device, final int pedometerInterval, final int temperatureCompensationInterval, final int magnetoMeterCompensationInterval, final int motionInterval, final int wakeOnMotion) {
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    return thingyConnection.setMotionConfigurationCharacteristic(pedometerInterval, temperatureCompensationInterval, magnetoMeterCompensationInterval, motionInterval, wakeOnMotion);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Configures the pedometer interval for thingy
      *
      * @param device bluetooth device
-     * @param interval
+     * @param interval in milliseconds
      */
     public boolean setPedometerInterval(final BluetoothDevice device, final int interval) {
         if (device != null) {
@@ -954,7 +975,7 @@ public class ThingySdkManager {
      * Configures the Temperature compensation interval for thingy
      *
      * @param device bluetooth device
-     * @param interval
+     * @param interval in milliseconds
      */
     public boolean setTemperatureCompensationInterval(final BluetoothDevice device, final int interval) {
         if (device != null) {
@@ -972,7 +993,7 @@ public class ThingySdkManager {
      * Configures the magnetometer compensation interval for thingy
      *
      * @param device bluetooth device
-     * @param interval
+     * @param interval in milliseconds
      */
     public boolean setMagnetometerCompensationInterval(final BluetoothDevice device, final int interval) {
         if (device != null) {
@@ -990,7 +1011,7 @@ public class ThingySdkManager {
      * Configures the motion processing frequency for thingy
      *
      * @param device bluetooth device
-     * @param interval
+     * @param interval in milliseconds
      */
     public boolean setMotionProcessingFrequency(final BluetoothDevice device, final int interval) {
         if (device != null) {
@@ -1008,14 +1029,14 @@ public class ThingySdkManager {
      * Configures the wake on motion mode for thingy
      *
      * @param device bluetooth device
-     * @param interval
+     * @param mode on/off where 1 is for on and 0 is off
      */
-    public boolean setWakeOnMotion(final BluetoothDevice device, final int interval) {
+    public boolean setWakeOnMotion(final BluetoothDevice device, final int mode) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    return thingyConnection.setWakeOnMotion(interval);
+                    return thingyConnection.setWakeOnMotion(mode);
                 }
             }
         }
@@ -1474,8 +1495,6 @@ public class ThingySdkManager {
         }
     }
 
-
-
     /**
      * Toggles Sound notifications for a particular thingy
      *
@@ -1751,6 +1770,7 @@ public class ThingySdkManager {
     /**
      * Checks if there is a thingy already streaming audio
      *
+     * @param bluetoothDevice to validated with
      */
     public boolean isAnotherThingyIsStreamingAudio(final BluetoothDevice bluetoothDevice) {
         List<BluetoothDevice> connectedDevices = mBinder.getConnectedDevices();
@@ -1768,6 +1788,7 @@ public class ThingySdkManager {
     /**
      * Checks if there is a thingy already streaming audio
      *
+     * @param device to validated with
      */
     public boolean isThingyStreamingAudio(final BluetoothDevice device) {
         final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
@@ -1813,8 +1834,8 @@ public class ThingySdkManager {
     /**
      * Start a dfu process with the nordic fw bundled in the thingy application.
      *
-     *  @param context
-     *  @param device
+     *  @param context of the activity or fragment
+     *  @param device to be updated
      *  @param fileType of the fw and zip file is used by default
      *
      */
@@ -1860,7 +1881,7 @@ public class ThingySdkManager {
     /**
      * Checks the DFU service is already in progress
      *
-     *  @param context
+     *  @param context of activity or fragment
      *
      */
     public boolean isDfuServiceRunning(final Context context) {

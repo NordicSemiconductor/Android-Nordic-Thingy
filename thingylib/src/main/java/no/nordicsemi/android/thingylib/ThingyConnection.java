@@ -139,6 +139,10 @@ public class ThingyConnection extends BluetoothGattCallback {
     private int mGreenIntensity = ThingyUtils.DEFAULT_GREEN_INTENSITY;
     private int mBlueIntensity = ThingyUtils.DEFAULT_BLUE_INTENSITY;
 
+    private int mCallibrationRIntensity;
+    private int mCallibrationGIntensity;
+    private int mCallibrationBIntensity;
+
     private int mLedColorIntensity = ThingyUtils.DEFAULT_LED_INTENSITY;
     private int mLedBreatheDelay = ThingyUtils.DEFAULT_BREATHE_INTERVAL;
     private int mButtonState = 0; // Button state is released by default
@@ -158,10 +162,6 @@ public class ThingyConnection extends BluetoothGattCallback {
     private LinkedHashMap<String, Integer> mHumidityData;
 
     private BluetoothGattService mThingyConfigurationService;
-    private BluetoothGattService mEnvironmentService;
-    private BluetoothGattService mUiService;
-    private BluetoothGattService mMotionService;
-    private BluetoothGattService mSoundService;
     private BluetoothGattService mButtonLessDfuService;
     private ThingyConnectionGattCallbacks mListener;
     private boolean mInitialServiceDiscoveryCompleted = false;
@@ -180,10 +180,9 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     private int mPacketCounter = 0;
     private AudioTrack mAudioTrack;
-    private boolean isMtuRequestSuccess = false;
     private boolean mStartPlaying;
 
-    public boolean getConnectionState(){
+    public boolean getConnectionState() {
         return isConnected;
     }
 
@@ -282,7 +281,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             Log.v(TAG, "Reading thingy config chars");
         }
 
-        mEnvironmentService = gatt.getService(ThingyUtils.THINGY_ENVIRONMENTAL_SERVICE);
+        final BluetoothGattService mEnvironmentService = gatt.getService(ThingyUtils.THINGY_ENVIRONMENTAL_SERVICE);
         if (mEnvironmentService != null) {
             mTemperatureCharacteristic = mEnvironmentService.getCharacteristic(ThingyUtils.TEMPERATURE_CHARACTERISTIC);
             mPressureCharacteristic = mEnvironmentService.getCharacteristic(ThingyUtils.PRESSURE_CHARACTERISTIC);
@@ -293,13 +292,13 @@ public class ThingyConnection extends BluetoothGattCallback {
             Log.v(TAG, "Reading environment config chars");
         }
 
-        mUiService = gatt.getService(ThingyUtils.THINGY_UI_SERVICE);
+        final BluetoothGattService mUiService = gatt.getService(ThingyUtils.THINGY_UI_SERVICE);
         if (mUiService != null) {
             mLedCharacteristic = mUiService.getCharacteristic(ThingyUtils.LED_CHARACTERISTIC);
             mButtonCharacteristic = mUiService.getCharacteristic(ThingyUtils.BUTTON_CHARACTERISTIC);
         }
 
-        mMotionService = gatt.getService(ThingyUtils.THINGY_MOTION_SERVICE);
+        final BluetoothGattService mMotionService = gatt.getService(ThingyUtils.THINGY_MOTION_SERVICE);
         if (mMotionService != null) {
             mMotionConfigurationCharacteristic = mMotionService.getCharacteristic(ThingyUtils.THINGY_MOTION_CONFIGURATION_CHARACTERISTIC);
             mTapCharacteristic = mMotionService.getCharacteristic(ThingyUtils.TAP_CHARACTERISTIC);
@@ -314,8 +313,8 @@ public class ThingyConnection extends BluetoothGattCallback {
             Log.v(TAG, "Reading motion config chars");
         }
 
-        mSoundService = gatt.getService(ThingyUtils.THINGY_SOUND_SERVICE);
-        if(mSoundService != null) {
+        final BluetoothGattService mSoundService = gatt.getService(ThingyUtils.THINGY_SOUND_SERVICE);
+        if (mSoundService != null) {
             mSoundConfigurationCharacteristic = mSoundService.getCharacteristic(ThingyUtils.THINGY_SOUND_CONFIG_CHARACTERISTIC);
             mSpeakerDataCharacteristic = mSoundService.getCharacteristic(ThingyUtils.THINGY_SPEAKER_DATA_CHARACTERISTIC);
             mSpeakerStatusCharacteristic = mSoundService.getCharacteristic(ThingyUtils.THINGY_SPEAKER_STATUS_CHARACTERISTIC);
@@ -346,7 +345,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             intent.putExtra(ThingyUtils.EXTRA_DATA, mTemperatureInt + "." + mTemperatureDec);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
-            ThingyUtils.removeOldDataForGraphs(mHumidityData);
+            ThingyUtils.removeOldDataForGraphs(mTemperatureData);
 
         } else if (characteristic.equals(mPressureCharacteristic)) {
             final int mPressureInt = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32, 0);
@@ -360,7 +359,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             intent.putExtra(ThingyUtils.EXTRA_DATA, mPressureInt + "." + mPressureDec);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
-            ThingyUtils.removeOldDataForGraphs(mHumidityData);
+            ThingyUtils.removeOldDataForGraphs(mPressureData);
         } else if (characteristic.equals(mHumidityCharacteristic)) {
             final int mHumidity = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
 
@@ -442,7 +441,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             final int mStepCount = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
             final int mDuration = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 4);
 
-            final Intent intent = new Intent(ThingyUtils.PEDOMETER_NOTIFICATION );
+            final Intent intent = new Intent(ThingyUtils.PEDOMETER_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA_STEP_COUNT, mStepCount);
             intent.putExtra(ThingyUtils.EXTRA_DATA_DURATION, ThingyUtils.TIME_FORMAT_PEDOMETER.format(mDuration));
@@ -482,7 +481,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             final float mPitch = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32, 4)) / (1 << 16);
             final float mYaw = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32, 8)) / (1 << 16);
 
-            final Intent intent = new Intent(ThingyUtils.EULER_NOTIFICATION );
+            final Intent intent = new Intent(ThingyUtils.EULER_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA_ROLL, mRoll);
             intent.putExtra(ThingyUtils.EXTRA_DATA_PITCH, mPitch);
@@ -490,8 +489,8 @@ public class ThingyConnection extends BluetoothGattCallback {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
         } else if (characteristic.equals(mRotationMatrixCharacteristic)) {
-            final byte [] attitudeInRotationMatrix = characteristic.getValue();
-            final Intent intent = new Intent(ThingyUtils.ROTATION_MATRIX_NOTIFICATION );
+            final byte[] attitudeInRotationMatrix = characteristic.getValue();
+            final Intent intent = new Intent(ThingyUtils.ROTATION_MATRIX_NOTIFICATION);
 
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA, attitudeInRotationMatrix);
@@ -500,7 +499,7 @@ public class ThingyConnection extends BluetoothGattCallback {
         } else if (characteristic.equals(mHeadingCharacteristic)) {
 
             final float mHeading = ((float) characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT32, 0)) / (1 << 16);
-            final Intent intent = new Intent(ThingyUtils.HEADING_NOTIFICATION );
+            final Intent intent = new Intent(ThingyUtils.HEADING_NOTIFICATION);
 
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA, Float.valueOf(String.format(Locale.US, "%.2f", mHeading)));
@@ -514,28 +513,28 @@ public class ThingyConnection extends BluetoothGattCallback {
             float mGravityVectorY = mByteBuffer.getFloat(4);
             float mGravityVectorZ = mByteBuffer.getFloat(8);
 
-            final Intent intent = new Intent(ThingyUtils.GRAVITY_NOTIFICATION );
+            final Intent intent = new Intent(ThingyUtils.GRAVITY_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA_GRAVITY_X, mGravityVectorX);
             intent.putExtra(ThingyUtils.EXTRA_DATA_GRAVITY_Y, mGravityVectorY);
             intent.putExtra(ThingyUtils.EXTRA_DATA_GRAVITY_Z, mGravityVectorZ);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
-        } else if (characteristic.equals(mSpeakerStatusCharacteristic)){
+        } else if (characteristic.equals(mSpeakerStatusCharacteristic)) {
             final int speakerStatus = mSpeakerStatusCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-            final Intent intent = new Intent(ThingyUtils.SPEAKER_STATUS_NOTITIFCATION );
+            final Intent intent = new Intent(ThingyUtils.SPEAKER_STATUS_NOTITIFCATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION, speakerStatus);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
-            switch (speakerStatus){
+            switch (speakerStatus) {
                 case ThingyUtils.SPEAKER_STATUS_FINISHED:
-                    if(mPlayPcmRequested){
+                    if (mPlayPcmRequested) {
                         mWait = false;
-                        if(mQueue.size() == 0){
+                        if (mQueue.size() == 0) {
                             broadcastAudioStreamComplete();
                         }
-                    } else if(mPlayVoiceInput){
+                    } else if (mPlayVoiceInput) {
                         mHandler.post(mProcessNextTask);
                     }
                     break;
@@ -547,7 +546,7 @@ public class ThingyConnection extends BluetoothGattCallback {
                     Log.v(TAG, "Buffer ready received");
                     mWait = false;
                     mBufferWarningReceived = false;
-                    if(mPlayVoiceInput) {
+                    if (mPlayVoiceInput) {
                         mHandler.post(mProcessNextTask);
                     }
                     break;
@@ -557,14 +556,14 @@ public class ThingyConnection extends BluetoothGattCallback {
                     break;
             }
         } else if (characteristic.equals(mMicrophoneCharacteristic)) {
-            if(mAdpcmDecoder != null) {
-                if(mMtu == ThingyUtils.MAX_MTU_SIZE_THINGY) { //Pre lollipop devices may not have the max mtu size hence the check
-                    final byte [] data = new byte [131];
-                    final byte [] tempData = characteristic.getValue();
+            if (mAdpcmDecoder != null) {
+                if (mMtu == ThingyUtils.MAX_MTU_SIZE_THINGY) { //Pre lollipop devices may not have the max mtu size hence the check
+                    final byte[] data = new byte[131];
+                    final byte[] tempData = characteristic.getValue();
                     System.arraycopy(tempData, 0, data, 0, 131);
                     mAdpcmDecoder.add(data);
                 } else {
-                    final byte [] data = characteristic.getValue();
+                    final byte[] data = characteristic.getValue();
                     mAdpcmDecoder.add(data);
                 }
 
@@ -608,11 +607,11 @@ public class ThingyConnection extends BluetoothGattCallback {
             mSpeakerMode = speakerMode;
             mMicrophoneMode = microphoneMode;
         } else if (mSpeakerDataCharacteristic != null && characteristic.equals(mSpeakerDataCharacteristic)) {
-            if(mPlayPcmRequested) {
-                if(!mStartPlaying){
+            if (mPlayPcmRequested) {
+                if (!mStartPlaying) {
                     handleAudioRequests();
                 } else {
-                    if(!mBufferWarningReceived) {
+                    if (!mBufferWarningReceived) {
                         mWait = false;
                     }
                 }
@@ -641,7 +640,7 @@ public class ThingyConnection extends BluetoothGattCallback {
         super.onDescriptorRead(gatt, descriptor, status);
         final BluetoothGattCharacteristic characteristic = descriptor.getCharacteristic();
 
-        if(characteristic.equals(mMicrophoneCharacteristic)) {
+        if (characteristic.equals(mMicrophoneCharacteristic)) {
             mLastCharacteristic = characteristic;
         }
 
@@ -717,7 +716,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * @param descriptor of whose characteristic notifications to be enabled
      */
     private boolean isNotificationsAlreadyEnabled(final BluetoothGattDescriptor descriptor) {
-        final byte [] data = descriptor.getValue();
+        final byte[] data = descriptor.getValue();
         final int notificationValue = data[0]; //Checking if notifications are enabled
         return notificationValue == 1;
     }
@@ -728,7 +727,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * @param enable notifications on/off
      */
     public final void enableEnvironmentNotifications(final boolean enable) {
-        setTemperatureNotifications(enable);
+        enableTemperatureNotifications(enable);
         enablePressureNotifications(enable);
         enableHumidityNotifications(enable);
         enableAirQualityNotifications(enable);
@@ -741,17 +740,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enabled notifications on/off
      */
-    /*package access*/ final void setTemperatureNotifications(final boolean enabled) {
+    /*package access*/
+    final void enableTemperatureNotifications(final boolean enabled) {
         if (mTemperatureCharacteristic != null) {
             final BluetoothGattDescriptor temperatureCharacteristicDescriptor = mTemperatureCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enabled) {
+            if (enabled) {
                 if (!isNotificationsAlreadyEnabled(temperatureCharacteristicDescriptor)) {
-                    byte[] data = enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, temperatureCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(temperatureCharacteristicDescriptor)) {
-                    byte[] data = enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, temperatureCharacteristicDescriptor, data);
                 }
             }
@@ -763,17 +763,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enablePressureNotifications(final boolean enable) {
+    /*package access*/
+    final void enablePressureNotifications(final boolean enable) {
         if (mPressureCharacteristic != null) {
             final BluetoothGattDescriptor pressureCharacteristicDescriptor = mPressureCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(pressureCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, pressureCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(pressureCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, pressureCharacteristicDescriptor, data);
                 }
             }
@@ -785,17 +786,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableHumidityNotifications(final boolean enable) {
+    /*package access*/
+    final void enableHumidityNotifications(final boolean enable) {
         if (mHumidityCharacteristic != null) {
             final BluetoothGattDescriptor humidityCharacteristicDescriptor = mHumidityCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(humidityCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, humidityCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(humidityCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, humidityCharacteristicDescriptor, data);
                 }
             }
@@ -807,17 +809,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableAirQualityNotifications(final boolean enable) {
+    /*package access*/
+    final void enableAirQualityNotifications(final boolean enable) {
         if (mAirQualityCharacteristic != null) {
             final BluetoothGattDescriptor airQualityDescriptor = mAirQualityCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(airQualityDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, airQualityDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(airQualityDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, airQualityDescriptor, data);
                 }
             }
@@ -829,17 +832,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableColorNotifications(final boolean enable) {
+    /*package access*/
+    final void enableColorNotifications(final boolean enable) {
         if (mColorCharacteristic != null) {
             final BluetoothGattDescriptor mColorCharacteristicDescriptor = mColorCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(mColorCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, mColorCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(mColorCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, mColorCharacteristicDescriptor, data);
                 }
             }
@@ -852,7 +856,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableMotionNotifications(final boolean enable) {
+    /*package access*/
+    final void enableMotionNotifications(final boolean enable) {
         enableTapNotifications(enable);
         enableOrientationNotifications(enable);
         enableQuaternionNotifications(enable);
@@ -866,9 +871,8 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Reads all the characteristics from the Thingy:52
-     *
      */
-    /*package access*/ final void readThingyCharacteristics() {
+    private final void readThingyCharacteristics() {
         if (mThingyConfigurationService != null) {
 
             if (mDeviceNameCharacteristic != null) {
@@ -910,7 +914,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             add(RequestType.READ_CHARACTERISTIC, mLedCharacteristic);
         }
 
-        if (mButtonCharacteristic != null){
+        if (mButtonCharacteristic != null) {
             add(RequestType.READ_DESCRIPTOR, mButtonCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
         }
 
@@ -930,7 +934,7 @@ public class ThingyConnection extends BluetoothGattCallback {
 
         add(RequestType.READ_CHARACTERISTIC, mSoundConfigurationCharacteristic);
         add(RequestType.READ_DESCRIPTOR, mSpeakerStatusCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
-        if(mMicrophoneCharacteristic != null) {
+        if (mMicrophoneCharacteristic != null) {
             add(RequestType.READ_DESCRIPTOR, mMicrophoneCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR));
         }
     }
@@ -940,7 +944,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param name device name
      */
-    /*package access*/ final void setDeviceName(final String name) {
+    /*package access*/
+    final void setDeviceName(final String name) {
         final byte[] data = name.getBytes();
         add(RequestType.WRITE_CHARACTERISTIC, mDeviceNameCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
     }
@@ -948,7 +953,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the device name for the specific thingy
      */
-    /*package access*/ final String getDeviceName() {
+    /*package access*/
+    final String getDeviceName() {
         if (mDeviceNameCharacteristic != null) {
             return mDeviceNameCharacteristic.getStringValue(0);
         }
@@ -969,8 +975,9 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the advertising interval for the particular thingy
      */
-    /*package access*/ final int getAdvertisingIntervalUnits(){
-        if(mAdvertisingIntervalUnits == -1) {
+    /*package access*/
+    final int getAdvertisingIntervalUnits() {
+        if (mAdvertisingIntervalUnits == -1) {
             readAdvertisingParameters();
         }
         return mAdvertisingIntervalUnits;
@@ -979,8 +986,9 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the advertising interval timeout for the particular thingy
      */
-    /*package access*/ final int getAdvertisingIntervalTimeoutUnits(){
-        if(mAdvertisingIntervalTimeoutUnits == -1) {
+    /*package access*/
+    final int getAdvertisingIntervalTimeoutUnits() {
+        if (mAdvertisingIntervalTimeoutUnits == -1) {
             readAdvertisingParameters();
         }
         return mAdvertisingIntervalTimeoutUnits;
@@ -990,9 +998,10 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Confgiures the advertising parameters for a particular thingy
      *
      * @param advertisingIntervalUnits advertising parameters
-     * @param advertisingTimeoutUnits advertising timeout
+     * @param advertisingTimeoutUnits  advertising timeout
      */
-    /*package access*/ final boolean setAdvertisingParameters(final int advertisingIntervalUnits, final int advertisingTimeoutUnits) {
+    /*package access*/
+    final boolean setAdvertisingParameters(final int advertisingIntervalUnits, final int advertisingTimeoutUnits) {
         if (mAdvertisingParamCharacteristic != null) {
             mAdvertisingIntervalUnits = advertisingIntervalUnits;
             mAdvertisingIntervalTimeoutUnits = advertisingTimeoutUnits;
@@ -1011,7 +1020,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param advertisingIntervalUnits advertising parameters
      */
-    /*package access*/ final boolean setAdvertisingIntervalUnits(final int advertisingIntervalUnits) {
+    /*package access*/
+    final boolean setAdvertisingIntervalUnits(final int advertisingIntervalUnits) {
         if (mAdvertisingParamCharacteristic != null) {
             mAdvertisingIntervalUnits = advertisingIntervalUnits;
             final byte[] data = new byte[3];
@@ -1029,7 +1039,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param advertisingTimeoutUnits advertising timeout
      */
-    /*package access*/ final boolean setAdvertisingTimeoutUnits(final int advertisingTimeoutUnits) {
+    /*package access*/
+    final boolean setAdvertisingTimeoutUnits(final int advertisingTimeoutUnits) {
         if (mAdvertisingParamCharacteristic != null) {
             mAdvertisingIntervalTimeoutUnits = advertisingTimeoutUnits;
             final byte[] data = new byte[3];
@@ -1044,13 +1055,14 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Confgiures the Connection parameters for a particular thingy
      *
-     * @param minConnectionIntervalUnits min connection interval
-     * @param maxConnectionIntervalUnits max connection interval
+     * @param minConnectionIntervalUnits   min connection interval
+     * @param maxConnectionIntervalUnits   max connection interval
      * @param slaveLatency
      * @param connectionSupervisionTimeout
      */
-    /*package access*/ final boolean setConnectionParameters(final int minConnectionIntervalUnits, final int maxConnectionIntervalUnits,
-                                                             final int slaveLatency, final int connectionSupervisionTimeout) {
+    /*package access*/
+    final boolean setConnectionParameters(final int minConnectionIntervalUnits, final int maxConnectionIntervalUnits,
+                                          final int slaveLatency, final int connectionSupervisionTimeout) {
         if (mConnectionParamCharacteristic != null) {
             mMinConnectionIntervalUnits = minConnectionIntervalUnits;
             mMaxConnectionIntervalUnits = maxConnectionIntervalUnits;
@@ -1078,7 +1090,7 @@ public class ThingyConnection extends BluetoothGattCallback {
         }
     }
 
-    /*package access*/ boolean setMinimumConnectionIntervalUnits(final int connectionIntervalUnits){
+    /*package access*/ boolean setMinimumConnectionIntervalUnits(final int connectionIntervalUnits) {
         if (mConnectionParamCharacteristic != null) {
             mMinConnectionIntervalUnits = connectionIntervalUnits;
 
@@ -1095,13 +1107,13 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /*package access*/ int getMinimumConnectionIntervalUnits() {
-        if(mMinConnectionIntervalUnits == -1) {
+        if (mMinConnectionIntervalUnits == -1) {
             readConnectionParamCharacteristicData();
         }
         return mMinConnectionIntervalUnits;
     }
 
-    /*package access*/ boolean setMaximumConnectionIntervalUnits(final int connectionIntervalUnits){
+    /*package access*/ boolean setMaximumConnectionIntervalUnits(final int connectionIntervalUnits) {
         if (mConnectionParamCharacteristic != null) {
             mMaxConnectionIntervalUnits = connectionIntervalUnits;
 
@@ -1118,13 +1130,13 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /*package access*/ int getMaximumConnectionIntervalUnits() {
-        if(mMaxConnectionIntervalUnits == -1) {
+        if (mMaxConnectionIntervalUnits == -1) {
             readConnectionParamCharacteristicData();
         }
         return mMaxConnectionIntervalUnits;
     }
 
-    /*package access*/ boolean setSlaveLatency(final int slaveLatency){
+    /*package access*/ boolean setSlaveLatency(final int slaveLatency) {
         if (mConnectionParamCharacteristic != null) {
             mSlaveLatency = slaveLatency;
 
@@ -1141,13 +1153,13 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /*package access*/ int getSlaveLatency() {
-        if(mSlaveLatency == -1) {
+        if (mSlaveLatency == -1) {
             readConnectionParamCharacteristicData();
         }
         return mSlaveLatency;
     }
 
-    /*package access*/ boolean setConnectionSupervisionTimeout(final int supervisionTimeoutUnits){
+    /*package access*/ boolean setConnectionSupervisionTimeout(final int supervisionTimeoutUnits) {
         if (mConnectionParamCharacteristic != null) {
             mConnectionSupervisionTimeoutUnits = supervisionTimeoutUnits;
 
@@ -1164,7 +1176,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /*package access*/ int getConnectionSupervisionTimeoutUnit() {
-        if(mConnectionSupervisionTimeoutUnits == -1) {
+        if (mConnectionSupervisionTimeoutUnits == -1) {
             readConnectionParamCharacteristicData();
         }
         return mConnectionSupervisionTimeoutUnits;
@@ -1173,10 +1185,11 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the Eddystone URL for a particular thingy
      */
-    /*package access*/ final String getEddystoneUrl() {
+    /*package access*/
+    final String getEddystoneUrl() {
         if (mEddystoneUrlCharacteristic != null) {
             final byte[] data = mEddystoneUrlCharacteristic.getValue();
-            if(data != null && data.length > 0) {
+            if (data != null && data.length > 0) {
                 return ThingyUtils.decodeUri(data, 0, data.length);
             } else {
                 return "";
@@ -1190,7 +1203,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param url eddystone url
      */
-    /*package access*/ final boolean setEddystoneUrl(final String url) {
+    /*package access*/
+    final boolean setEddystoneUrl(final String url) {
         if (mEddystoneUrlCharacteristic != null) {
             if (!URLUtil.isValidUrl(url)) {
                 Log.v(ThingyUtils.TAG, "Please enter a valid value for URL");
@@ -1203,7 +1217,7 @@ public class ThingyConnection extends BluetoothGattCallback {
                 return false;
             }
 
-            final byte [] data = ThingyUtils.encodeUri(url);
+            final byte[] data = ThingyUtils.encodeUri(url);
             add(RequestType.WRITE_CHARACTERISTIC, mEddystoneUrlCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             return true;
         }
@@ -1214,10 +1228,11 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Disables the Eddystone URL advertising on the thingy
      * writing zero bytes to this characteristic will disable this feature.
      */
-    /*package access*/ final boolean disableEddystoneUrl() {
+    /*package access*/
+    final boolean disableEddystoneUrl() {
         if (mEddystoneUrlCharacteristic != null) {
 
-            final byte [] data = new byte [0];
+            final byte[] data = new byte[0];
             add(RequestType.WRITE_CHARACTERISTIC, mEddystoneUrlCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             return true;
         }
@@ -1227,7 +1242,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Return cloud token
      */
-    /*package access*/ final String getCloudTokenData() {
+    /*package access*/
+    final String getCloudTokenData() {
         if (mCloudTokenCharacteristic != null) {
             return mCloudTokenCharacteristic.getStringValue(0);
         }
@@ -1237,7 +1253,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Return firmware version of thingy
      */
-    /*package access*/ final String getFirmwareVersion() {
+    /*package access*/
+    final String getFirmwareVersion() {
         if (mFirmwareVersionCharacteristic != null) {
             final String major = String.valueOf(mFirmwareVersionCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0));
             final String minor = String.valueOf(mFirmwareVersionCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1));
@@ -1252,14 +1269,15 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param cloudToken
      */
-    /*package access*/ final boolean setCloudToken(final String cloudToken) {
-        if(cloudToken.length() > ThingyUtils.CLOUD_TOKEN_LENGTH){
+    /*package access*/
+    final boolean setCloudToken(final String cloudToken) {
+        if (cloudToken.length() > ThingyUtils.CLOUD_TOKEN_LENGTH) {
             ThingyUtils.showToast(mContext, "Cloud token length cannot exceed 250 characters");
             return false;
         }
 
         if (mCloudTokenCharacteristic != null) {
-            final byte [] data = cloudToken.getBytes();
+            final byte[] data = cloudToken.getBytes();
             add(RequestType.WRITE_CHARACTERISTIC, mCloudTokenCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             return true;
         }
@@ -1267,28 +1285,28 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /**
-     * Configures the weather station characteristic for a particular thingy
+     * Configures the Environment configuration characteristic for a particular thingy
      *
-     * @param temperatureInterval in ms
-     * @param pressureInterval in ms
-     * @param humidityInterval in ms
+     * @param temperatureInterval    in ms
+     * @param pressureInterval       in ms
+     * @param humidityInterval       in ms
      * @param colorIntensityInterval in ms
-     * @param gasMode as an interval in ms
+     * @param gasMode                as an interval in ms
      */
-    /*package access*/ boolean setEnvironmentCharacteristic(final int temperatureInterval, final int pressureInterval, final int humidityInterval, final int colorIntensityInterval, final int gasMode) {
+    /*package access*/ boolean setEnvironmentConfigurationCharacteristic(final int temperatureInterval, final int pressureInterval, final int humidityInterval, final int colorIntensityInterval, final int gasMode) {
         if (mEnvironmentConfigurationCharacteristic != null) {
 
-            if((temperatureInterval < ThingyUtils.TEMP_MIN_INTERVAL || temperatureInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+            if (temperatureInterval < ThingyUtils.TEMP_MIN_INTERVAL || temperatureInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
                 Log.v(ThingyUtils.TAG, "Invalid temperature interval range");
                 return false;
             }
 
-            if((pressureInterval < ThingyUtils.PRESSURE_MIN_INTERVAL || pressureInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+            if (pressureInterval < ThingyUtils.PRESSURE_MIN_INTERVAL || pressureInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
                 Log.v(ThingyUtils.TAG, "Invalid pressure interval range");
                 return false;
             }
 
-            if((humidityInterval < ThingyUtils.PRESSURE_MIN_INTERVAL || humidityInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+            if (humidityInterval < ThingyUtils.PRESSURE_MIN_INTERVAL || humidityInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
                 Log.v(ThingyUtils.TAG, "Invalid pressure interval range");
                 return false;
             }
@@ -1298,20 +1316,42 @@ public class ThingyConnection extends BluetoothGattCallback {
                 return false;
             }
 
-            if((gasMode != ThingyUtils.GAS_MODE_1 && gasMode != ThingyUtils.GAS_MODE_2 && gasMode != ThingyUtils.GAS_MODE_3)){
+            if (gasMode != ThingyUtils.GAS_MODE_1 && gasMode != ThingyUtils.GAS_MODE_2 && gasMode != ThingyUtils.GAS_MODE_3) {
                 Log.v(ThingyUtils.TAG, "Invalid gas mode");
                 return false;
             }
 
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, temperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-            ThingyUtils.setValue(data, 2, pressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-            ThingyUtils.setValue(data, 4, humidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-            ThingyUtils.setValue(data, 6, colorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-            ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            mTemperatureInterval = temperatureInterval;
+            mPressureInterval = pressureInterval;
+            mHumidityInterval = humidityInterval;
+            mColorIntensityInterval = colorIntensityInterval;
+            mGasMode = gasMode;
+
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data =  new byte[12];
+                ThingyUtils.setValue(data, 0, temperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, pressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, humidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, colorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, temperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, pressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, humidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, colorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
 
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
+
             return true;
         }
 
@@ -1323,8 +1363,9 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setTemperatureInterval(final int interval) {
-        if((interval < ThingyUtils.TEMP_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setTemperatureInterval(final int interval) {
+        if (interval < ThingyUtils.TEMP_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
             Log.v(ThingyUtils.TAG, "Invalid temperature interval range");
             return false;
         }
@@ -1332,18 +1373,30 @@ public class ThingyConnection extends BluetoothGattCallback {
         if (mEnvironmentConfigurationCharacteristic != null) {
             mTemperatureInterval = interval;
 
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data = new byte[12];
+                ThingyUtils.setValue(data, 0, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
 
-            ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
             return true;
         }
         return false;
@@ -1354,8 +1407,9 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setPressureInterval(final int interval) {
-        if((interval < ThingyUtils.PRESSURE_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setPressureInterval(final int interval) {
+        if (interval < ThingyUtils.PRESSURE_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
             Log.v(ThingyUtils.TAG, "Invalid pressure interval range");
             return false;
         }
@@ -1363,18 +1417,30 @@ public class ThingyConnection extends BluetoothGattCallback {
         if (mEnvironmentConfigurationCharacteristic != null) {
             mPressureInterval = interval;
 
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data = new byte[12];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
 
-            ThingyUtils.setValue(data, 2, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
             return true;
         }
         return false;
@@ -1385,26 +1451,40 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setHumidityInterval(final int interval) {
-        if((interval < ThingyUtils.PRESSURE_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setHumidityInterval(final int interval) {
+        if (interval < ThingyUtils.PRESSURE_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
             Log.v(ThingyUtils.TAG, "Invalid pressure interval range");
             return false;
         }
 
         if (mEnvironmentConfigurationCharacteristic != null) {
             mHumidityInterval = interval;
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 4, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data = new byte[12];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1415,7 +1495,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setColorIntensityInterval(final int interval) {
+    /*package access*/
+    final boolean setColorIntensityInterval(final int interval) {
         if (interval < ThingyUtils.COLOR_INTENSITY_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
             Log.v(ThingyUtils.TAG, "Invalid color interval range");
             return false;
@@ -1423,18 +1504,30 @@ public class ThingyConnection extends BluetoothGattCallback {
 
         if (mEnvironmentConfigurationCharacteristic != null) {
             mColorIntensityInterval = interval;
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 6, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data = new byte[12];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, mGasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
             return true;
         }
         return false;
@@ -1445,26 +1538,42 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param gasMode
      */
-    /*package access*/ final boolean setGasMode(final int gasMode) {
-        if((gasMode != ThingyUtils.GAS_MODE_1 && gasMode != ThingyUtils.GAS_MODE_2 && gasMode != ThingyUtils.GAS_MODE_3)){
+    /*package access*/
+    final boolean setGasMode(final int gasMode) {
+        if (gasMode != ThingyUtils.GAS_MODE_1 && gasMode != ThingyUtils.GAS_MODE_2 && gasMode != ThingyUtils.GAS_MODE_3) {
             Log.v(ThingyUtils.TAG, "Invalid gas mode");
             return false;
         }
 
         if (mEnvironmentConfigurationCharacteristic != null) {
             mGasMode = gasMode;
-            final byte [] data = new byte[9];
-            ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            byte[] data;
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if(mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                data = new byte[12];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 9, mCallibrationRIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 10, mCallibrationGIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+                ThingyUtils.setValue(data, 11, mCallibrationBIntensity, BluetoothGattCharacteristic.FORMAT_UINT8);
+            } else {
+                data = new byte[9];
+                ThingyUtils.setValue(data, 0, mTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 2, mPressureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 4, mHumidityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+                ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
+            }
 
-            ThingyUtils.setValue(data, 6, mColorIntensityInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
-
-            ThingyUtils.setValue(data, 8, gasMode, BluetoothGattCharacteristic.FORMAT_UINT8);
             add(RequestType.WRITE_CHARACTERISTIC, mEnvironmentConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readEnvironmentConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1480,6 +1589,15 @@ public class ThingyConnection extends BluetoothGattCallback {
             mHumidityInterval = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 4);
             mColorIntensityInterval = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 6);
             mGasMode = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 8);
+
+            //Thingy pre-release fw contained only 9 bytes in the configuration characteristic
+            //Adding this check will make it compatible with all users who haven't updated from the pre-release fw
+            //If not writing to this characteristic will fail as the fw will accept 12 bytes
+            if (mEnvironmentConfigurationCharacteristic.getValue().length == 12) {
+                mCallibrationRIntensity = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 9);
+                mCallibrationGIntensity = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 10);
+                mCallibrationBIntensity = mEnvironmentConfigurationCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 11);
+            }
         }
     }
 
@@ -1487,7 +1605,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Reads the motion configuration characteristic for a particular thingy
      */
     private void readLedCharacteristic() {
-        if (mUiService != null) {
+        if (mLedCharacteristic != null) {
             final BluetoothGattCharacteristic characteristic = mLedCharacteristic;
             mLedMode = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
             switch (mLedMode) {
@@ -1507,7 +1625,7 @@ public class ThingyConnection extends BluetoothGattCallback {
                     mLedColorIntensity = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 2);
                     break;
                 case ThingyUtils.OFF:
-                    mLedColorIndex = 0;//characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
+                    mLedColorIndex = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
                     break;
                 default:
                     break;
@@ -1519,7 +1637,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Reads the motion configuration characteristic for a particular thingy
      */
     private void readButtonCharacteristic() {
-        if (mUiService != null) {
+        if (mButtonCharacteristic != null) {
             final BluetoothGattCharacteristic characteristic = mButtonCharacteristic;
             mButtonState = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
         }
@@ -1530,7 +1648,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @return mTemperatureData Map containing timestamps and temeprature as a K,V pair
      */
-    /*package access*/ final Map<String, String> getSavedTemperatureData() {
+    /*package access*/
+    final Map<String, String> getSavedTemperatureData() {
         return Collections.unmodifiableMap(new LinkedHashMap<>(mTemperatureData));
     }
 
@@ -1539,14 +1658,16 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @return mPressureData Map containing timestamps and pressure as a K,V pair
      */
-    /*package access*/ final Map<String, String> getSavedPressureData() {
+    /*package access*/
+    final Map<String, String> getSavedPressureData() {
         return Collections.unmodifiableMap(new LinkedHashMap<>(mPressureData));
     }
 
     /**
      * Clears the saved presssure data in the thingee connection
      */
-    /*package access*/ final void clearSavedPressureData() {
+    /*package access*/
+    final void clearSavedPressureData() {
         if (mPressureData != null)
             mPressureData.clear();
     }
@@ -1556,14 +1677,16 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @return mPressureData Map containing timestamps and pressure as a K,V pair
      */
-    /*package access*/ final Map<String, Integer> getSavedHumidityData() {
+    /*package access*/
+    final Map<String, Integer> getSavedHumidityData() {
         return Collections.unmodifiableMap(new LinkedHashMap<>(mHumidityData));
     }
 
     /**
      * Clears the saved humidity data in the thingee connection
      */
-    /*package access*/ final void clearSavedHumidityData() {
+    /*package access*/
+    final void clearSavedHumidityData() {
         if (mHumidityData != null)
             mHumidityData.clear();
     }
@@ -1571,7 +1694,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  temperature interval
      */
-    /*package access*/ final int getEnvironmentTemperatureInterval() {
+    /*package access*/
+    final int getEnvironmentTemperatureInterval() {
         if (mTemperatureInterval == -1) {
             readEnvironmentConfigurationCharacteristic();
         }
@@ -1581,7 +1705,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  pressure interval
      */
-    /*package access*/ final int getPressureInterval() {
+    /*package access*/
+    final int getPressureInterval() {
         if (mPressureInterval == -1) {
             readEnvironmentConfigurationCharacteristic();
         }
@@ -1591,7 +1716,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  humidity interval
      */
-    /*package access*/ final int getHumidityInterval() {
+    /*package access*/
+    final int getHumidityInterval() {
         if (mHumidityInterval == -1) {
             readEnvironmentConfigurationCharacteristic();
         }
@@ -1601,7 +1727,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  color intensity interval
      */
-    /*package access*/ final int getColorIntensityInterval() {
+    /*package access*/
+    final int getColorIntensityInterval() {
         if (mColorIntensityInterval == -1) {
             readEnvironmentConfigurationCharacteristic();
         }
@@ -1611,7 +1738,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  gas mode
      */
-    /*package access*/ final int getGasMode() {
+    /*package access*/
+    final int getGasMode() {
         if (mGasMode == 0) {
             readEnvironmentConfigurationCharacteristic();
         }
@@ -1633,12 +1761,73 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /**
+     * Configures the Motion configuration characteristic for a particular thingy
+     *
+     * @param pedometerInterval                in ms
+     * @param temperatureCompensationInterval  in ms
+     * @param magnetoMeterCompensationInterval in ms
+     * @param motionInterval                   in ms
+     * @param wakeOnMotion                     as an interval in ms
+     */
+    /*package access*/
+    final boolean setMotionConfigurationCharacteristic(final int pedometerInterval, final int temperatureCompensationInterval, final int magnetoMeterCompensationInterval, final int motionInterval, final int wakeOnMotion) {
+        if (mMotionConfigurationCharacteristic != null) {
+
+            if ((pedometerInterval < ThingyUtils.PEDOMETER_MIN_INTERVAL || pedometerInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
+                Log.v(ThingyUtils.TAG, "Invalid pedometer interval");
+                return false;
+            }
+
+            if ((temperatureCompensationInterval < ThingyUtils.TEMP_MIN_INTERVAL || temperatureCompensationInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
+                Log.v(ThingyUtils.TAG, "Invalid temperature compensation interval");
+                return false;
+            }
+
+            if ((magnetoMeterCompensationInterval < ThingyUtils.COMPASS_MIN_INTERVAL || magnetoMeterCompensationInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
+                Log.v(ThingyUtils.TAG, "Invalid magnetometer compensation interval");
+                return false;
+            }
+
+            if (motionInterval < ThingyUtils.MPU_FREQ_MIN_INTERVAL || motionInterval > ThingyUtils.MPU_FREQ_MAX_INTERVAL) {
+                Log.v(ThingyUtils.TAG, "Invalid motion processing frequency");
+                return false;
+            }
+
+            if (wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_ON && wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_OFF) {
+                Log.v(ThingyUtils.TAG, "Invalid mode for wake on motion");
+                return false;
+            }
+
+            mPedometerInterval = pedometerInterval;
+            mMotionTemperatureInterval = temperatureCompensationInterval;
+            mCompassInterval = magnetoMeterCompensationInterval;
+            mMotionIntervalFrequency = motionInterval;
+            mWakeOnMotion = wakeOnMotion > 0;
+
+            final byte[] data = new byte[9];
+
+            ThingyUtils.setValue(data, 0, pedometerInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            ThingyUtils.setValue(data, 2, temperatureCompensationInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            ThingyUtils.setValue(data, 4, magnetoMeterCompensationInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            ThingyUtils.setValue(data, 6, motionInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
+            ThingyUtils.setValue(data, 8, wakeOnMotion > 0 ? 1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
+            add(RequestType.WRITE_CHARACTERISTIC, mMotionConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
      * Configure the pedometer intervals
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setPedometerInterval(final int interval) {
-        if((interval < ThingyUtils.PEDOMETER_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setPedometerInterval(final int interval) {
+        if ((interval < ThingyUtils.PEDOMETER_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
             Log.v(ThingyUtils.TAG, "Invalid pedometer interval");
             return false;
         }
@@ -1655,10 +1844,10 @@ public class ThingyConnection extends BluetoothGattCallback {
 
             ThingyUtils.setValue(data, 6, mMotionIntervalFrequency, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 8, mWakeOnMotion ?  1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
+            ThingyUtils.setValue(data, 8, mWakeOnMotion ? 1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
 
             add(RequestType.WRITE_CHARACTERISTIC, mMotionConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readMotionConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1669,8 +1858,9 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setTemperatureCompensationInterval(final int interval) {
-        if((interval < ThingyUtils.TEMP_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setTemperatureCompensationInterval(final int interval) {
+        if ((interval < ThingyUtils.TEMP_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
             Log.v(ThingyUtils.TAG, "Invalid temperature compensation interval");
             return false;
         }
@@ -1687,10 +1877,10 @@ public class ThingyConnection extends BluetoothGattCallback {
 
             ThingyUtils.setValue(data, 6, mMotionIntervalFrequency, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 8, mWakeOnMotion ?  1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
+            ThingyUtils.setValue(data, 8, mWakeOnMotion ? 1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
 
             add(RequestType.WRITE_CHARACTERISTIC, mMotionConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readMotionConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1701,15 +1891,16 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setMagnetometerCompensationInterval(final int interval) {
-        if((interval < ThingyUtils.COMPASS_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)){
+    /*package access*/
+    final boolean setMagnetometerCompensationInterval(final int interval) {
+        if ((interval < ThingyUtils.COMPASS_MIN_INTERVAL || interval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
             Log.v(ThingyUtils.TAG, "Invalid magnetometer compensation interval");
             return false;
         }
 
         if (mMotionConfigurationCharacteristic != null) {
             mCompassInterval = interval;
-            final byte [] data = new byte[9];
+            final byte[] data = new byte[9];
             ThingyUtils.setValue(data, 0, mPedometerInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
             ThingyUtils.setValue(data, 2, mMotionTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
@@ -1718,9 +1909,9 @@ public class ThingyConnection extends BluetoothGattCallback {
 
             ThingyUtils.setValue(data, 6, mMotionIntervalFrequency, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 8, mWakeOnMotion ?  1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
+            ThingyUtils.setValue(data, 8, mWakeOnMotion ? 1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
             add(RequestType.WRITE_CHARACTERISTIC, mMotionConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readMotionConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1731,7 +1922,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param interval in ms
      */
-    /*package access*/ final boolean setMotionProcessingFrequency(final int interval) {
+    /*package access*/
+    final boolean setMotionProcessingFrequency(final int interval) {
         if (interval < ThingyUtils.MPU_FREQ_MIN_INTERVAL || interval > ThingyUtils.MPU_FREQ_MAX_INTERVAL) {
             Log.v(ThingyUtils.TAG, "Invalid motion processing frequency");
             return false;
@@ -1739,7 +1931,7 @@ public class ThingyConnection extends BluetoothGattCallback {
 
         if (mMotionConfigurationCharacteristic != null) {
             mMotionIntervalFrequency = interval;
-            final byte [] data = new byte[9];
+            final byte[] data = new byte[9];
             ThingyUtils.setValue(data, 0, mPedometerInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
             ThingyUtils.setValue(data, 2, mMotionTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
@@ -1748,9 +1940,9 @@ public class ThingyConnection extends BluetoothGattCallback {
 
             ThingyUtils.setValue(data, 6, interval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
-            ThingyUtils.setValue(data, 8, mWakeOnMotion ?  1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
+            ThingyUtils.setValue(data, 8, mWakeOnMotion ? 1 : 0, BluetoothGattCharacteristic.FORMAT_UINT8);
             add(RequestType.WRITE_CHARACTERISTIC, mMotionConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            readMotionConfigurationCharacteristic();
+
             return true;
         }
         return false;
@@ -1761,15 +1953,16 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param wakeOnMotion
      */
-    /*package access*/ final boolean setWakeOnMotion(final int wakeOnMotion) {
-        if(wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_ON && wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_OFF) {
+    /*package access*/
+    final boolean setWakeOnMotion(final int wakeOnMotion) {
+        if (wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_ON && wakeOnMotion != ThingyUtils.WAKE_ON_MOTION_OFF) {
             Log.v(ThingyUtils.TAG, "Invalid mode for wake on motion");
             return false;
         }
 
         if (mMotionConfigurationCharacteristic != null) {
-            mWakeOnMotion = wakeOnMotion > 0 ? true : false;
-            final byte [] data = new byte[9];
+            mWakeOnMotion = wakeOnMotion > 0;
+            final byte[] data = new byte[9];
             ThingyUtils.setValue(data, 0, mPedometerInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
 
             ThingyUtils.setValue(data, 2, mMotionTemperatureInterval, BluetoothGattCharacteristic.FORMAT_UINT16);
@@ -1789,7 +1982,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the  pedometer interval
      */
-    /*package access*/ final int getPedometerInterval() {
+    /*package access*/
+    final int getPedometerInterval() {
         if (mPedometerInterval > -1) {
             readMotionConfigurationCharacteristic();
         }
@@ -1799,7 +1993,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the temperature interval for the motion sensor
      */
-    /*package access*/ final int getMotionTemperatureInterval() {
+    /*package access*/
+    final int getMotionTemperatureInterval() {
         if (mMotionTemperatureInterval > -1) {
             readMotionConfigurationCharacteristic();
         }
@@ -1809,7 +2004,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the compass interval for the thingy
      */
-    /*package access*/ final int getCompassInterval() {
+    /*package access*/
+    final int getCompassInterval() {
         if (mCompassInterval > -1) {
             readMotionConfigurationCharacteristic();
         }
@@ -1819,7 +2015,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the motion interval for the thingy
      */
-    /*package access*/ final int getMotionInterval() {
+    /*package access*/
+    final int getMotionInterval() {
         if (mMotionIntervalFrequency > -1) {
             readMotionConfigurationCharacteristic();
         }
@@ -1829,7 +2026,8 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Returns the wake on motion state
      */
-    /*package access*/ final boolean getWakeOnMotionState() {
+    /*package access*/
+    final boolean getWakeOnMotionState() {
         readMotionConfigurationCharacteristic();
         return mWakeOnMotion;
     }
@@ -1839,17 +2037,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableOrientationNotifications(final boolean enable) {
+    /*package access*/
+    final void enableOrientationNotifications(final boolean enable) {
         if (mOrientationCharacteristic != null) {
             final BluetoothGattDescriptor orientationCharacteristicDescriptor = mOrientationCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(orientationCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, orientationCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(orientationCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, orientationCharacteristicDescriptor, data);
                 }
             }
@@ -1861,17 +2060,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableHeadingNotifications(final boolean enable) {
+    /*package access*/
+    final void enableHeadingNotifications(final boolean enable) {
         if (mHeadingCharacteristic != null) {
             final BluetoothGattDescriptor headingCharacteristicDescriptor = mHeadingCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(headingCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, headingCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(headingCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, headingCharacteristicDescriptor, data);
                 }
             }
@@ -1883,17 +2083,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableTapNotifications(final boolean enable) {
+    /*package access*/
+    final void enableTapNotifications(final boolean enable) {
         if (mTapCharacteristic != null) {
             final BluetoothGattDescriptor tapCharacteristicDescriptor = mTapCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(tapCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, tapCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(tapCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, tapCharacteristicDescriptor, data);
                 }
             }
@@ -1905,17 +2106,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableQuaternionNotifications(final boolean enable) {
+    /*package access*/
+    final void enableQuaternionNotifications(final boolean enable) {
         if (mQuaternionCharacteristic != null) {
             final BluetoothGattDescriptor mQuaternionCharacteristicDescriptor = mQuaternionCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(mQuaternionCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, mQuaternionCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(mQuaternionCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, mQuaternionCharacteristicDescriptor, data);
                 }
             }
@@ -1927,17 +2129,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enablePedometerNotifications(final boolean enable) {
+    /*package access*/
+    final void enablePedometerNotifications(final boolean enable) {
         if (mPedometerCharacteristic != null) {
             final BluetoothGattDescriptor pedometerCharacteriDescriptor = mPedometerCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(pedometerCharacteriDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, pedometerCharacteriDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(pedometerCharacteriDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, pedometerCharacteriDescriptor, data);
                 }
             }
@@ -1949,17 +2152,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableGravityVectorNotifications(final boolean enable) {
+    /*package access*/
+    final void enableGravityVectorNotifications(final boolean enable) {
         if (mGravityVectorCharacteristic != null) {
             final BluetoothGattDescriptor gravityVectorDescriptor = mGravityVectorCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(gravityVectorDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, gravityVectorDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(gravityVectorDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, gravityVectorDescriptor, data);
                 }
             }
@@ -1971,17 +2175,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableEulerNotifications(final boolean enable) {
+    /*package access*/
+    final void enableEulerNotifications(final boolean enable) {
         if (mEulerCharacteristic != null) {
             final BluetoothGattDescriptor eulerDescriptor = mEulerCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(eulerDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, eulerDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(eulerDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, eulerDescriptor, data);
                 }
             }
@@ -1993,17 +2198,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableRotationMatrixNotifications(final boolean enable) {
+    /*package access*/
+    final void enableRotationMatrixNotifications(final boolean enable) {
         if (mRotationMatrixCharacteristic != null) {
             final BluetoothGattDescriptor rotationMatrixDescriptor = mRotationMatrixCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(rotationMatrixDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, rotationMatrixDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(rotationMatrixDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, rotationMatrixDescriptor, data);
                 }
             }
@@ -2015,17 +2221,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableRawDataNotifications(final boolean enable) {
+    /*package access*/
+    final void enableRawDataNotifications(final boolean enable) {
         if (mRawDataCharacteristic != null) {
             final BluetoothGattDescriptor rawDataCharacteristicDescriptor = mRawDataCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(rawDataCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, rawDataCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(rawDataCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, rawDataCharacteristicDescriptor, data);
                 }
             }
@@ -2037,16 +2244,17 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableUiNotifications(final boolean enable) {
+    /*package access*/
+    final void enableUiNotifications(final boolean enable) {
         enableButtonStateNotification(enable);
     }
 
     /**
      * get LED mode
-     *
      */
-    /*package access*/ final int getLedMode() {
-        if(mLedMode == -1)
+    /*package access*/
+    final int getLedMode() {
+        if (mLedMode == -1)
             readLedCharacteristic();
         return mLedMode;
     }
@@ -2056,7 +2264,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param ledColor led mode
      */
-    /*package access*/ final void setLedMode(final byte[] ledColor) {
+    /*package access*/
+    final void setLedMode(final byte[] ledColor) {
         if (mLedCharacteristic != null) {
             add(RequestType.WRITE_CHARACTERISTIC, mLedCharacteristic, ledColor, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
         }
@@ -2067,7 +2276,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param ledConfiguration led color
      */
-    /*package access*/ final void setLedColor(final byte[] ledConfiguration) {
+    /*package access*/
+    final void setLedColor(final byte[] ledConfiguration) {
         if (mLedCharacteristic != null) {
             add(RequestType.WRITE_CHARACTERISTIC, mLedCharacteristic, ledConfiguration, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             readLedCharacteristic();
@@ -2077,18 +2287,18 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Set LED color
      *
-     * @param redIntensity for the led
+     * @param redIntensity   for the led
      * @param greenIntensity for the led
-     * @param blueIntensity for the led
-     *
+     * @param blueIntensity  for the led
      */
-    /*package access*/ final void setConstantLedMode(final int redIntensity, final int greenIntensity, final int blueIntensity) {
+    /*package access*/
+    final void setConstantLedMode(final int redIntensity, final int greenIntensity, final int blueIntensity) {
         if (mLedCharacteristic != null) {
-            final byte [] colorData = new byte[4];
+            final byte[] colorData = new byte[4];
             mLedMode = colorData[0] = ThingyUtils.CONSTANT;
-            mRedIntensity   = redIntensity;
+            mRedIntensity = redIntensity;
             mGreenIntensity = greenIntensity;
-            mBlueIntensity  = blueIntensity;
+            mBlueIntensity = blueIntensity;
             colorData[1] = (byte) mRedIntensity;
             colorData[2] = (byte) mGreenIntensity;
             colorData[3] = (byte) mBlueIntensity;
@@ -2101,9 +2311,10 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param colorIndex for the led
      */
-    /*package access*/ final void setBreatheLedMode(final int colorIndex, final int intensity, final int delay) {
+    /*package access*/
+    final void setBreatheLedMode(final int colorIndex, final int intensity, final int delay) {
         if (mLedCharacteristic != null) {
-            final byte [] colorData = new byte[5];
+            final byte[] colorData = new byte[5];
             mLedMode = colorData[0] = ThingyUtils.BREATHE;
             mLedColorIndex = colorData[1] = (byte) (colorIndex);
             mLedColorIntensity = colorData[2] = (byte) intensity;
@@ -2118,9 +2329,10 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param colorIndex for the led
      */
-    /*package access*/ final void setOneShotLedMode(final int colorIndex, final int intensity) {
+    /*package access*/
+    final void setOneShotLedMode(final int colorIndex, final int intensity) {
         if (mLedCharacteristic != null) {
-            final byte [] colorData = new byte[3];
+            final byte[] colorData = new byte[3];
             mLedMode = colorData[0] = ThingyUtils.ONE_SHOT;
             mLedColorIndex = colorData[1] = (byte) colorIndex;
             mLedColorIntensity = colorData[2] = (byte) intensity;
@@ -2130,28 +2342,29 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * turn off the LED
-     *
      */
-    /*package access*/ final void turnOffLed() {
+    /*package access*/
+    final void turnOffLed() {
         if (mLedCharacteristic != null) {
-            final byte [] colorData = new byte[1];
+            final byte[] colorData = new byte[1];
             mLedMode = colorData[0] = ThingyUtils.OFF;
             add(RequestType.WRITE_CHARACTERISTIC, mLedCharacteristic, colorData, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-            //readLedCharacteristic();
         }
     }
 
     /**
      * Get LED color index
      */
-    /*package access*/ final int getLedColorIndex() {
+    /*package access*/
+    final int getLedColorIndex() {
         return mLedColorIndex;
     }
 
     /**
      * Get LED color index
      */
-    /*package access*/ final int getLedRgbIntensity() {
+    /*package access*/
+    final int getLedRgbIntensity() {
         return Color.rgb(mRedIntensity, mGreenIntensity, mBlueIntensity);
     }
 
@@ -2160,7 +2373,8 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param ledConfiguration led color
      */
-    /*package access*/ final void setLedColorIntensity(final byte[] ledConfiguration) {
+    /*package access*/
+    final void setLedColorIntensity(final byte[] ledConfiguration) {
         if (mLedCharacteristic != null) {
             add(RequestType.WRITE_CHARACTERISTIC, mLedCharacteristic, ledConfiguration, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             readLedCharacteristic();
@@ -2170,14 +2384,16 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Get LED color intensity
      */
-    /*package access*/ final int getLedColorIntensity() {
+    /*package access*/
+    final int getLedColorIntensity() {
         return mLedColorIntensity;
     }
 
     /**
      * Get LED color breathe delay
      */
-    /*package access*/ final int getLedColorBreatheDelay() {
+    /*package access*/
+    final int getLedColorBreatheDelay() {
         return mLedBreatheDelay;
     }
 
@@ -2186,17 +2402,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableButtonStateNotification(final boolean enable) {
+    /*package access*/
+    final void enableButtonStateNotification(final boolean enable) {
         if (mButtonCharacteristic != null) {
             final BluetoothGattDescriptor buttonCharacteristicDescriptor = mButtonCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(buttonCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, buttonCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(buttonCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, buttonCharacteristicDescriptor, data);
                 }
             }
@@ -2204,12 +2421,13 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     /**
-     * Enable notifications for sound service
+     * Enable notifications in sound service for both Speaker status and microphone notifications
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableSoundNotifications(final boolean enable) {
-        if(!enable) {
+    /*package access*/
+    final void enableSoundNotifications(final boolean enable) {
+        if (!enable) {
             stopPcmSample();
             stopPlayingVoiceInput();
         }
@@ -2222,17 +2440,18 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param enable notifications on/off
      */
-    /*package access*/ final void enableSpeakerStatusNotifications(final boolean enable) {
+    /*package access*/
+    final void enableSpeakerStatusNotifications(final boolean enable) {
         if (mSpeakerStatusCharacteristic != null) {
             final BluetoothGattDescriptor speakerStatusCharacteristicDescriptor = mSpeakerStatusCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(speakerStatusCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, speakerStatusCharacteristicDescriptor, data);
                 }
             } else {
                 if (isNotificationsAlreadyEnabled(speakerStatusCharacteristicDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, speakerStatusCharacteristicDescriptor, data);
                 }
             }
@@ -2241,9 +2460,9 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Reads the sound service configuration characteristic for a particular thingy
-     *
      */
-    /*package access*/ final void readSoundConfigurationCharacteristic() {
+    /*package access*/
+    final void readSoundConfigurationCharacteristic() {
         if (mSoundConfigurationCharacteristic != null) {
             final BluetoothGattCharacteristic characteristic = mSoundConfigurationCharacteristic;
             mSpeakerMode = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
@@ -2256,23 +2475,23 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Play the requested sound sample on a particular thingy
      *
      * @param frequency to be played
-     * @param duration to be played for
-     * @param volume of the sound
-     *
+     * @param duration  to be played for
+     * @param volume    of the sound
      */
-    /*package access*/ final void playSoundFrequency( final int frequency, final int duration, final int volume){
+    /*package access*/
+    final void playSoundFrequency(final int frequency, final int duration, final int volume) {
         clearQueue();
         mPlayPcmRequested = false;
-        if(mSpeakerDataCharacteristic != null){
-            final byte [] data = new byte [5];
+        if (mSpeakerDataCharacteristic != null) {
+            final byte[] data = new byte[5];
             ThingyUtils.setValue(data, 0, frequency, BluetoothGattCharacteristic.FORMAT_UINT16);
             ThingyUtils.setValue(data, 2, duration, BluetoothGattCharacteristic.FORMAT_UINT16);
             ThingyUtils.setValue(data, 4, volume, BluetoothGattCharacteristic.FORMAT_UINT8);
-            if(mSpeakerMode == ThingyUtils.FREQUENCY_MODE) {
+            if (mSpeakerMode == ThingyUtils.FREQUENCY_MODE) {
                 add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
             } else {
                 mSpeakerMode = ThingyUtils.FREQUENCY_MODE;
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte [] {ThingyUtils.FREQUENCY_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.FREQUENCY_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
             }
         }
@@ -2280,33 +2499,35 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Play the requested sound sample on a particular thingy
-     * @param sample the requested sound sample
      *
+     * @param sample the requested sound sample
      */
-    /*package access*/ final void playSoundSample(final int sample){
+    /*package access*/
+    final void playSoundSample(final int sample) {
         clearQueue();
         mPlayPcmRequested = false;
-        if(mSpeakerDataCharacteristic != null){
-            if(mSpeakerMode == ThingyUtils.SAMPLE_MODE) {
-                add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, new byte [] {(byte) sample}, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+        if (mSpeakerDataCharacteristic != null) {
+            if (mSpeakerMode == ThingyUtils.SAMPLE_MODE) {
+                add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, new byte[]{(byte) sample}, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
             } else {
                 mSpeakerMode = ThingyUtils.SAMPLE_MODE;
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte [] {ThingyUtils.SAMPLE_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-                add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, new byte [] {(byte) sample}, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.SAMPLE_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, new byte[]{(byte) sample}, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
             }
         }
     }
 
     /**
      * Play the requested pcm sample on a particular thingy
-     * @param sample the requested pcm sample
      *
+     * @param sample the requested pcm sample
      */
-    /*package access*/ final void playPcmSample(final byte [] sample){
-        if(mSpeakerDataCharacteristic != null){
+    /*package access*/
+    final void playPcmSample(final byte[] sample) {
+        if (mSpeakerDataCharacteristic != null) {
             mPcmSample = sample;
-            if(mSpeakerMode != ThingyUtils.PCM_MODE) {
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte [] {ThingyUtils.PCM_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            if (mSpeakerMode != ThingyUtils.PCM_MODE) {
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.PCM_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 mPlayPcmRequested = true;
                 streamAudio(sample);
             } else {
@@ -2323,7 +2544,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     private boolean readAudioFile(final File file) {
         InputStream is = null;
         try {
-            if(!file.getPath().startsWith("content")) {
+            if (!file.getPath().startsWith("content")) {
                 is = new FileInputStream(file);
             } else {
                 Uri uri = Uri.parse(file.getPath());
@@ -2349,9 +2570,9 @@ public class ThingyConnection extends BluetoothGattCallback {
             return true;
         } catch (Exception e) {
             ThingyUtils.showToast(mContext, "Unable to stream audio");
-            return  false;
+            return false;
         } finally {
-            if(is != null) {
+            if (is != null) {
                 try {
                     is.close();
                 } catch (IOException e) {
@@ -2362,7 +2583,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     private void handleAudioRequests() {
-        if(mStartPlaying){
+        if (mStartPlaying) {
             return;
         }
         mStartPlaying = true;
@@ -2370,7 +2591,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             @Override
             public void run() {
 
-                if(mPlayPcmRequested) {
+                if (mPlayPcmRequested) {
                     while (mPacketCounter < mNumOfAudioChunks) {
                         if (!mWait && !mBufferWarningReceived) {
                             mWait = true;
@@ -2411,9 +2632,8 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * clear the request queue in case the user switches from pcm mode to frequency/sample mode while the audio track is streamingg
-     *
      */
-    private synchronized final void clearQueue(){
+    private synchronized final void clearQueue() {
         mWait = true;
         if (mPlayPcmRequested) {
             try {
@@ -2438,20 +2658,19 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Fills up the request queue to startHandlingAudioRequestPackets streaming audio packets
-     *
      */
-    private void streamAudio(final byte [] sample){
+    private void streamAudio(final byte[] sample) {
         int index = 0;
         int offset = 0;
         int length;
         int mChunkSize;
-        if(mMtu > ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP) {
+        if (mMtu > ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP) {
             mChunkSize = ThingyUtils.MAX_AUDIO_PACKET_SIZE;
         } else {
             mChunkSize = ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP;
         }
 
-        mNumOfAudioChunks = (int)Math.ceil((double)sample.length / mChunkSize);
+        mNumOfAudioChunks = (int) Math.ceil((double) sample.length / mChunkSize);
         while (index < mNumOfAudioChunks) {
             length = Math.min(mPcmSample.length - offset, mChunkSize);
             byte[] audio = new byte[length];
@@ -2464,25 +2683,24 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Play the requested pcm sample on a particular thingy
-     *
-     *
      */
-    /*package access*/ final void stopPcmSample(){
+    /*package access*/
+    final void stopPcmSample() {
         clearQueue();
         mPlayPcmRequested = false;
     }
 
     /**
      * Play the requested pcm sample on a particular thingy
-     * @param sample the requested pcm sample
      *
+     * @param sample the requested pcm sample
      */
-    public final void playVoiceInput(final byte [] sample){
-        if(mSpeakerDataCharacteristic != null){
+    public final void playVoiceInput(final byte[] sample) {
+        if (mSpeakerDataCharacteristic != null) {
             mPlayVoiceInput = true;
             mPcmSample = sample;
-            if(mSpeakerMode != ThingyUtils.PCM_MODE) {
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte [] {ThingyUtils.PCM_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            if (mSpeakerMode != ThingyUtils.PCM_MODE) {
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.PCM_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 streamAudio(sample);
             } else {
                 streamAudio(sample);
@@ -2492,10 +2710,10 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Play the requested pcm sample on a particular thingy
-     *
      */
-    /*package access*/ final void stopPlayingVoiceInput(){
-        if(mSpeakerDataCharacteristic != null){
+    /*package access*/
+    final void stopPlayingVoiceInput() {
+        if (mSpeakerDataCharacteristic != null) {
             clearQueue();
             mPlayVoiceInput = false;
         }
@@ -2505,12 +2723,12 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Requests the mtu to be changed to the desired max transmission unit
      */
-    private void requestMtu(){
-        if(mBluetoothGatt != null){
-            if(ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
-                if(mMtu != mtu) {
-                    isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
-                    if(!isMtuRequestSuccess) {
+    private void requestMtu() {
+        if (mBluetoothGatt != null) {
+            if (ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
+                if (mMtu != mtu) {
+                    boolean isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
+                    if (!isMtuRequestSuccess) {
                         Log.v(ThingyUtils.TAG, "MTU request failed");
                     }
                 }
@@ -2520,8 +2738,8 @@ public class ThingyConnection extends BluetoothGattCallback {
         }
     }
 
-    private void sendPcmBroadcast(final int status){
-        final Intent intent = new Intent(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION );
+    private void sendPcmBroadcast(final int status) {
+        final Intent intent = new Intent(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
         intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
         intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_MODE, mSpeakerMode);
         intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION, status);
@@ -2530,21 +2748,22 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Enable microphone on a particular thingy
-     * @param enable the requested pcm sample
      *
+     * @param enable the requested pcm sample
      */
-    /*package access*/ final void enableThingyMicrophoneNotifications(final boolean enable){
-        if(mMicrophoneCharacteristic != null){
+    /*package access*/
+    final void enableThingyMicrophoneNotifications(final boolean enable) {
+        if (mMicrophoneCharacteristic != null) {
             final BluetoothGattDescriptor microphoneDescriptor = mMicrophoneCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            if(enable) {
+            if (enable) {
                 if (!isNotificationsAlreadyEnabled(microphoneDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, microphoneDescriptor, data);
                 }
                 enableAdpcmMode(enable);
             } else {
                 if (isNotificationsAlreadyEnabled(microphoneDescriptor)) {
-                    byte[] data = enable ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
+                    byte[] data = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
                     add(RequestType.WRITE_DESCRIPTOR, microphoneDescriptor, data);
                 }
                 mEnableThingyMicrophone = enable;
@@ -2554,14 +2773,13 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Enable adpcm mode on the microphone on a particular thingy
-     *
      */
-    /*package access*/ final void enableAdpcmMode(final boolean enable){
-        if(mMicrophoneCharacteristic != null){
+    private final void enableAdpcmMode(final boolean enable) {
+        if (mMicrophoneCharacteristic != null) {
             mEnableThingyMicrophone = enable;
-            if(mMicrophoneMode != ThingyUtils.ADPCM_MODE) {
+            if (mMicrophoneMode != ThingyUtils.ADPCM_MODE) {
                 mMicrophoneMode = ThingyUtils.ADPCM_MODE;
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte [] {ThingyUtils.ADPCM_MODE, (byte) mSpeakerMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.ADPCM_MODE, (byte) mSpeakerMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
             }
 
             int bufferSize = AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -2575,8 +2793,8 @@ public class ThingyConnection extends BluetoothGattCallback {
                     if (mEnableThingyMicrophone && mAudioTrack != null) {
                         final int status = mAudioTrack.write(pcm, 0, pcm.length/*, AudioTrack.WRITE_NON_BLOCKING*/);
 
-                        if(status == AudioTrack.ERROR_INVALID_OPERATION || status == AudioTrack.ERROR_BAD_VALUE
-                                ||status == AudioTrack.ERROR_DEAD_OBJECT || status ==AudioTrack.ERROR) {
+                        if (status == AudioTrack.ERROR_INVALID_OPERATION || status == AudioTrack.ERROR_BAD_VALUE
+                                || status == AudioTrack.ERROR_DEAD_OBJECT || status == AudioTrack.ERROR) {
                             ThingyUtils.showToast(mContext, "Error: " + status);
                             mEnableThingyMicrophone = false;
                             mAudioTrack.stop();
@@ -2597,7 +2815,7 @@ public class ThingyConnection extends BluetoothGattCallback {
         }
     }
 
-    private void sendMicrophoneBroadcast(final byte [] data, final int status){
+    private void sendMicrophoneBroadcast(final byte[] data, final int status) {
         final Intent intent = new Intent(ThingyUtils.MICROPHONE_NOTITIFCATION);
         intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
         intent.putExtra(ThingyUtils.EXTRA_DATA_PCM, data);
@@ -2609,20 +2827,18 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Trigger bootloader mode
      */
-    /*package access*/ final void triggerBootLoaderMode() {
+    /*package access*/
+    final void triggerBootLoaderMode() {
         if (mDfuControlPointCharacteristic != null) {
             final BluetoothGattDescriptor dfuCharacteristicDescriptor = mDfuControlPointCharacteristic.getDescriptor(ThingyUtils.CLIENT_CHARACTERISTIC_CONFIGURATOIN_DESCRIPTOR);
-            add(RequestType.WRITE_DESCRIPTOR, dfuCharacteristicDescriptor, new byte [] {0x01, 0x00});
+            add(RequestType.WRITE_DESCRIPTOR, dfuCharacteristicDescriptor, new byte[]{0x01, 0x00});
         }
     }
 
-    /*package access*/ final boolean isInBootloaderMode() {
+    /*package access*/
+    final boolean isInBootloaderMode() {
         if (mButtonLessDfuService != null) {
-            if (mButtonLessDfuService.getCharacteristics().size() == 2) {
-                return true;
-            } else {
-                return false;
-            }
+            return mButtonLessDfuService.getCharacteristics().size() == 2;
         }
         return false;
     }
@@ -2631,7 +2847,6 @@ public class ThingyConnection extends BluetoothGattCallback {
      * Runnable used to push processing ble requests to the a ui thread.
      * This is due to samsung galaxy devices and huawei nexus 6P had a synchronizing issue
      * when process next was called from the same thread as the callbacks which was noticed during audio streaming
-     *
      */
     private Runnable mProcessNextTask = new Runnable() {
         @Override
@@ -2643,7 +2858,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * BluetoothGatt request types.
      */
-    public enum RequestType {
+    private enum RequestType {
         READ_CHARACTERISTIC,
         READ_DESCRIPTOR,
         WRITE_CHARACTERISTIC,
@@ -2652,7 +2867,8 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Add descriptor read requests
-     * @param type READ_DESCRIPTOR
+     *
+     * @param type       READ_DESCRIPTOR
      * @param descriptor descriptor to be read
      */
     private void add(RequestType type, BluetoothGattDescriptor descriptor) {
@@ -2662,9 +2878,10 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Add descriptor write requests
-     * @param type READ_DESCRIPTOR
+     *
+     * @param type       READ_DESCRIPTOR
      * @param descriptor descriptor to be read
-     * @param data to be written to the descriptor
+     * @param data       to be written to the descriptor
      */
     private void add(RequestType type, BluetoothGattDescriptor descriptor, byte[] data) {
         Request request = new Request(type, descriptor, data);
@@ -2673,10 +2890,11 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Add characteristic write requests
-     * @param type WRITE_CHARACTERISTIC
+     *
+     * @param type           WRITE_CHARACTERISTIC
      * @param characteristic to be written to
-     * @param data to be written to the characteristic
-     * @param writeType for the characteristic
+     * @param data           to be written to the characteristic
+     * @param writeType      for the characteristic
      */
     private void add(RequestType type, BluetoothGattCharacteristic characteristic, byte[] data, int writeType) {
         Request request = new Request(type, characteristic, data, writeType);
@@ -2685,7 +2903,8 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     /**
      * Add characteristic read requests
-     * @param type READ_DESCRIPTOR
+     *
+     * @param type           READ_DESCRIPTOR
      * @param characteristic to be read
      */
     private void add(RequestType type, BluetoothGattCharacteristic characteristic) {
@@ -2709,7 +2928,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             return;
         }
         //in case buffer warning is received during audio streaming the request will not be removed from the queue will be sent again
-        if(!mBufferWarningReceived) {
+        if (!mBufferWarningReceived) {
             mQueue.remove();
         }
 
@@ -2723,7 +2942,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * <br>
      * This object holds the parameters for calling BluetoothGatt methods (see startHandlingAudioRequestPackets());
      */
-    /*package access*/ final class Request {
+    private final class Request {
         final RequestType requestType;
         BluetoothGattCharacteristic characteristic;
         BluetoothGattDescriptor descriptor;

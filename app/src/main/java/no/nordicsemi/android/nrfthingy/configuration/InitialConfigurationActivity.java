@@ -81,6 +81,8 @@ import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.nrfthingy.dfu.DfuUpdateAvailableDialogFragment;
+import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingyListener;
@@ -91,7 +93,8 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 public class InitialConfigurationActivity extends AppCompatActivity implements ScannerFragmentListener,
         PermissionRationaleDialogFragment.PermissionDialogListener,
         ThingySdkManager.ServiceConnectionListener,
-        CancelInitialConfigurationDialogFragment.CancleInitialConfigurationListener {
+        CancelInitialConfigurationDialogFragment.CancleInitialConfigurationListener,
+        DfuUpdateAvailableDialogFragment.DfuUpdateAvailableListener {
 
     private static final int SCAN_DURATION = 15000;
     private LinearLayout mThingyInfoContainer;
@@ -118,6 +121,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private boolean mStepTwoComplete;
 
     private String mDeviceName;
+    private String mFirmwareFileVersion;
+
     private boolean mConfig;
     private BluetoothDevice mDevice;
 
@@ -153,6 +158,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             if (device.equals(mDevice)) {
                 mThingySdkManager.enableEnvironmentNotifications(device, true);
                 hideProgressDialog();
+
+                checkForFwUpdates();
             }
         }
 
@@ -222,7 +229,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -242,7 +249,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] data) {
+        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] data) {
 
         }
     };
@@ -411,8 +418,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onStop() {
         super.onStop();
 
-        if(!isFinishing()){
-            if(mScannerFragment != null && mScannerFragment.isVisible()){
+        if (!isFinishing()) {
+            if (mScannerFragment != null && mScannerFragment.isVisible()) {
                 mScannerFragment.dismiss();
             }
         }
@@ -473,7 +480,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         switch (requestCode) {
             case Utils.REQUEST_ENABLE_BT:
                 if (resultCode != RESULT_OK) {
-                    if(mScannerFragment != null && mScannerFragment.isVisible()){
+                    if (mScannerFragment != null && mScannerFragment.isVisible()) {
                         mScannerFragment.dismiss();
                     }
                     finish();
@@ -818,5 +825,44 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.setMessage(message);
         }
+    }
+
+    private boolean checkIfFirmwareUpdateAvailable() {
+        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
+
+        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
+        final String[] resourceEntryNames = name.split("_");
+
+        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+
+        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                resourceEntryNames[resourceEntryNames.length - 1];
+
+        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private void checkForFwUpdates() {
+        if (checkIfFirmwareUpdateAvailable()) {
+            DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, mFirmwareFileVersion);
+            fragment.show(getSupportFragmentManager(), null);
+            mFirmwareFileVersion = null;
+        }
+    }
+
+    @Override
+    public void onDfuRequested() {
+        Intent intent = new Intent(this, SecureDfuActivity.class);
+        intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
+        startActivity(intent);
     }
 }

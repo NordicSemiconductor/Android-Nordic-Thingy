@@ -80,6 +80,7 @@ public class PermissionRationaleDialogFragment extends DialogFragment implements
 
     public interface PermissionDialogListener {
         void onRequestPermission(final String permission, final int requestCode);
+
         void onCancellingPermissionRationale();
     }
 
@@ -102,7 +103,7 @@ public class PermissionRationaleDialogFragment extends DialogFragment implements
 
     @Override
     public void onClick(final DialogInterface dialogInterface, final int position) {
-        if(position == DialogInterface.BUTTON_POSITIVE) {
+        if (position == DialogInterface.BUTTON_POSITIVE) {
             Fragment fragment = getParentFragment();
             if (fragment != null) {
                 ((PermissionDialogListener) getParentFragment()).onRequestPermission(mPermission, mRequestCode);

@@ -149,12 +149,12 @@ public class Utils {
     public static final String EXTRA_DATA_FILE_NAME = "EXTRA_DATA_FILE_NAME";
     public static final String EXTRA_DATA_FILE_SIZE = "EXTRA_DATA_FILE_SIZE";
     public static final int SELECT_FILE_REQ = 1;
-    public  static final int SELECT_INIT_FILE_REQ = 2;
+    public static final int SELECT_INIT_FILE_REQ = 2;
     public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss:SSS");
 
     public static final String EXTRA_URI = "uri";
 
-    public static final String [] AUDIO_FILES = new String [] {"ievan_polkka.wav", "bensound_ukulele_8khz.wav", "evil_laugh_8khz.wav", "learning_computer_8khz.wav"};
+    public static final String[] AUDIO_FILES = new String[]{"ievan_polkka.wav", "bensound_ukulele_8khz.wav", "evil_laugh_8khz.wav", "learning_computer_8khz.wav"};
 
     /**
      * URI Scheme maps a byte code into the scheme and an optional scheme specific prefix.
@@ -487,7 +487,7 @@ public class Utils {
 
     public static boolean isConnected(BluetoothDevice thingyDevice, List<BluetoothDevice> connectedDevices) {
         for (BluetoothDevice device : connectedDevices) {
-            if(thingyDevice != null) {
+            if (thingyDevice != null) {
                 if (thingyDevice.getAddress().equals(device.getAddress())) {
                     return true;
                 }
@@ -516,7 +516,7 @@ public class Utils {
         int unit = si ? 1000 : 1024;
         if (bytes < unit) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format(Locale.US, "%.1f %sB", bytes / Math.pow(unit, exp), pre);
     }
 
@@ -527,11 +527,11 @@ public class Utils {
         return bytes / Math.pow(unit, exp);
     }
 
-    public static String getUnits(long bytes, boolean si){
+    public static String getUnits(long bytes, boolean si) {
         int unit = si ? 1000 : 1024;
         if (bytes < unit) return " B";
         int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp-1) + (si ? "" : "i");
+        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format(Locale.US, "%.1f %sB", pre);
     }
 
@@ -543,29 +543,28 @@ public class Utils {
         return activeNetwork != null && activeNetwork.isConnected();
     }
 
-
-    public static boolean checkIfSequenceIsCompleted(final Context context, final String key){
+    public static boolean checkIfSequenceIsCompleted(final Context context, final String key) {
         SharedPreferences sp = context.getSharedPreferences(key, Context.MODE_PRIVATE);
         return sp.getBoolean(key, false);
     }
 
-    public static boolean saveSequenceCompletion(final Context context, final String key){
+    public static boolean saveSequenceCompletion(final Context context, final String key) {
         SharedPreferences sp = context.getSharedPreferences(key, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(key, true);
         return editor.commit();
     }
 
-    public static boolean saveIFTTTTokenToPreferences(final Context context, final String token){
+    public static boolean saveIFTTTTokenToPreferences(final Context context, final String token) {
         final SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         final SharedPreferences.Editor editor = sp.edit();
         editor.putString(KEY_IFTTT_TOKEN, token);
         return editor.commit();
     }
 
-    public static String getIFTTTToken(final Context context){
+    public static String getIFTTTToken(final Context context) {
         final SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
-        return  sp.getString(KEY_IFTTT_TOKEN, "");
+        return sp.getString(KEY_IFTTT_TOKEN, "");
     }
 
 }

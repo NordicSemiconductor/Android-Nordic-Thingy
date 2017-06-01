@@ -153,7 +153,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         mSwitchPhysicalWeb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!isChecked) {
+                if (!isChecked) {
                     mEddystoneUrlView.setEnabled(false);
                     mEddystoneUrlTypesView.setEnabled(false);
                 } else {
@@ -174,7 +174,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
-                if(!Patterns.WEB_URL.matcher(url).matches()) {
+                if (!Patterns.WEB_URL.matcher(url).matches()) {
                     shortenUrl(url);
                 } else {
                     Utils.showToast(getActivity(), getString(R.string.error_empty_url_text));
@@ -187,7 +187,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if (mThingySdkManager != null) {
                     if (mSwitchPhysicalWeb.isChecked()) {
-                        if(validateInput()){
+                        if (validateInput()) {
                             if (mThingySdkManager.setEddystoneUrl(mDevice, getValueFromView())) {
                                 dismiss();
                                 ((ThingeeBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
@@ -234,7 +234,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             mEddystoneUrlTypesView.setSelection(3);
             mEddystoneUrlView.setText(url);
         } else {
-            if(mUrl != null && mUrl.length() == 0) {
+            if (mUrl != null && mUrl.length() == 0) {
                 mSwitchPhysicalWeb.setChecked(false);
             }
         }
@@ -323,17 +323,17 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         }).start();
     }
 
-    private void handleJsonResponse(final IOException ex){
-        final String  response = ((GoogleJsonResponseException) ex).getContent();
-        if(!response.isEmpty()) {
+    private void handleJsonResponse(final IOException ex) {
+        final String response = ((GoogleJsonResponseException) ex).getContent();
+        if (!response.isEmpty()) {
             try {
                 final JSONObject jsonResponse = new JSONObject(response);
-                if(jsonResponse.has("code")) {
-                    if(jsonResponse.getInt("code") == 400) {
+                if (jsonResponse.has("code")) {
+                    if (jsonResponse.getInt("code") == 400) {
                         final JSONArray errorArray = jsonResponse.getJSONArray("errors");
-                        for(int i = 0; i < errorArray.length() ; i++) {
+                        for (int i = 0; i < errorArray.length(); i++) {
                             final JSONObject obj = (JSONObject) errorArray.get(i);
-                            if(obj.has("message")) {
+                            if (obj.has("message")) {
                                 final String message = obj.getString("message");
                                 getActivity().runOnUiThread(new Runnable() {
                                     @Override

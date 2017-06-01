@@ -323,7 +323,7 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
         final int colorIntensityInterval = Integer.parseInt(mColorIntensityIntervalView.getText().toString().trim());
 
         final int gasMode = mGasModeView.getSelectedItemPosition() + 1;
-        mThingySdkManager.setEnvironmentCharacteristic(mDevice, temperatureInterval, pressureInterval, humidityInterval, colorIntensityInterval, gasMode);
+        mThingySdkManager.setEnvironmentConfigurationCharacteristic(mDevice, temperatureInterval, pressureInterval, humidityInterval, colorIntensityInterval, gasMode);
     }
 
     private void updateUi() {

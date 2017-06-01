@@ -236,7 +236,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
         return true;
     }
 
-    private void configureThingy(){
+    private void configureThingy() {
         final int interval;
         if (mTemperatureContainer != null && mTemperatureContainer.getVisibility() == View.VISIBLE) {
 

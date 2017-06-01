@@ -43,14 +43,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseContract.ThingyDbColumns;
-import no.nordicsemi.android.nrfthingy.database.DatabaseContract.CloudDbColumns;
-import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 
 import java.util.ArrayList;
+
+import no.nordicsemi.android.nrfthingy.database.DatabaseContract.CloudDbColumns;
+import no.nordicsemi.android.nrfthingy.database.DatabaseContract.ThingyDbColumns;
+import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 
 public class DatabaseHelper {
 
@@ -128,7 +126,7 @@ public class DatabaseHelper {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            switch (oldVersion){
+            switch (oldVersion) {
                 case 1:
                     //Updgrading data base version from 1 to 2
                     //Creating the cloud entries table
@@ -259,7 +257,7 @@ public class DatabaseHelper {
         sqLiteDatabase.delete(ThingyDbColumns.TABLE_NAME, ThingyDbColumns.COLUMN_ADDRESS + "=?", new String[]{address});
     }
 
-    public boolean getTemperatureUploadState(final String address){
+    public boolean getTemperatureUploadState(final String address) {
         final Cursor cursor = sqLiteDatabase.query(CloudDbColumns.TABLE_NAME, new String[]{CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD}, CloudDbColumns.COLUMN_ADDRESS + "=?", new String[]{address}, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
@@ -271,7 +269,7 @@ public class DatabaseHelper {
         return false;
     }
 
-    public boolean getPressureUploadState(final String address){
+    public boolean getPressureUploadState(final String address) {
         final Cursor cursor = sqLiteDatabase.query(CloudDbColumns.TABLE_NAME, new String[]{CloudDbColumns.COLUMN_PRESSURE_UPLOAD}, CloudDbColumns.COLUMN_ADDRESS + "=?", new String[]{address}, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
@@ -283,7 +281,7 @@ public class DatabaseHelper {
         return false;
     }
 
-    public boolean getButtonUploadState(final String address){
+    public boolean getButtonUploadState(final String address) {
         final Cursor cursor = sqLiteDatabase.query(CloudDbColumns.TABLE_NAME, new String[]{CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD}, CloudDbColumns.COLUMN_ADDRESS + "=?", new String[]{address}, null, null, null, null);
         try {
             while (cursor.moveToNext()) {
@@ -298,7 +296,7 @@ public class DatabaseHelper {
     public void enableCloudNotifications(final String address, final boolean flag, final String columnName) {
         final ContentValues content = new ContentValues();
         content.put(columnName, flag ? 1 : 0);
-        if(sqLiteDatabase.update(CloudDbColumns.TABLE_NAME, content, CloudDbColumns.COLUMN_ADDRESS + "=?", new String[]{address}) == 0){
+        if (sqLiteDatabase.update(CloudDbColumns.TABLE_NAME, content, CloudDbColumns.COLUMN_ADDRESS + "=?", new String[]{address}) == 0) {
             insertDeviceRecordToCloudUploadTable(address, flag, columnName);
         }
     }

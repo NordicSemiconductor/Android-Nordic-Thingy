@@ -161,6 +161,11 @@
                             android:text="@string/github_thingy_fw"
                             style="@style/PreferenceCategory" />
 
+                        <TextView
+                            style="@style/PreferenceCategorySummary"
+                            android:text="@string/github_thingy_app_url"
+                            android:autoLink="web"
+                            android:linksClickable="true" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -194,39 +199,6 @@
                         <TextView
                             style="@style/PreferenceCategorySummary"
                             android:text="@string/github_thingy_app_url"
-                            android:autoLink="web"
-                            android:linksClickable="true" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/category_thingy_lib_github"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="@dimen/preference_category_height"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_nav_github"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/github_thingy_android_lib" />
-
-                        <TextView
-                            style="@style/PreferenceCategorySummary"
-                            android:text="@string/github_thingy_lib_url"
                             android:autoLink="web"
                             android:linksClickable="true" />
                     </LinearLayout>

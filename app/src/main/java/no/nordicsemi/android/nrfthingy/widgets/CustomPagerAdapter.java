@@ -89,15 +89,15 @@ public class CustomPagerAdapter extends PagerAdapter {
         return mContext.getString(customPagerEnum.getTitleResId());
     }
 
-    public View getCurrentView(final int key){
-        if(viewMap.containsKey(key)){
+    public View getCurrentView(final int key) {
+        if (viewMap.containsKey(key)) {
             return viewMap.get(key);
         }
         return null;
     }
 
     public void clearViews() {
-        if(viewMap != null) {
+        if (viewMap != null) {
             viewMap.clear();
         }
     }

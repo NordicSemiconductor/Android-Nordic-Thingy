@@ -39,15 +39,14 @@
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.widgets.CustomPagerAdapter;
@@ -80,23 +79,23 @@ public class CloudGuideActivity extends AppCompatActivity {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 switch (position) {
                     case 0:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null) {
                                 mCloudGuideAnimation.stop();
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 mPreviousPosition = position;
                             }
                         }
                         break;
                     case 1:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null) {
                                 mCloudGuideAnimation.stop();
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 imageView = (ImageView) view.findViewById(R.id.image);
                                 mCloudGuideAnimation = (AnimationDrawable) imageView.getDrawable();//Background();
                                 mCloudGuideAnimation.start();
@@ -105,13 +104,13 @@ public class CloudGuideActivity extends AppCompatActivity {
                         }
                         break;
                     case 2:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
                                 mCloudGuideAnimation.stop();
                                 mCloudGuideAnimation = null;
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 imageView = (ImageView) view.findViewById(R.id.image);
                                 mCloudGuideAnimation = (AnimationDrawable) imageView.getDrawable();//Background();
                                 mCloudGuideAnimation.start();
@@ -120,13 +119,13 @@ public class CloudGuideActivity extends AppCompatActivity {
                         }
                         break;
                     case 3:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
                                 mCloudGuideAnimation.stop();
                                 mCloudGuideAnimation = null;
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 imageView = (ImageView) view.findViewById(R.id.image);
                                 mCloudGuideAnimation = (AnimationDrawable) imageView.getDrawable();//Background();
                                 mCloudGuideAnimation.start();
@@ -135,13 +134,13 @@ public class CloudGuideActivity extends AppCompatActivity {
                         }
                         break;
                     case 4:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
                                 mCloudGuideAnimation.stop();
                                 mCloudGuideAnimation = null;
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 imageView = (ImageView) view.findViewById(R.id.image);
                                 mCloudGuideAnimation = (AnimationDrawable) imageView.getDrawable();//Background();
                                 mCloudGuideAnimation.start();
@@ -150,13 +149,13 @@ public class CloudGuideActivity extends AppCompatActivity {
                         }
                         break;
                     case 5:
-                        if(position != mPreviousPosition) {
-                            if(mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
+                        if (position != mPreviousPosition) {
+                            if (mCloudGuideAnimation != null && mCloudGuideAnimation.isRunning()) {
                                 mCloudGuideAnimation.stop();
                                 mCloudGuideAnimation = null;
                             }
                             view = mCustomPagerAdapter.getCurrentView(position);
-                            if(view != null) {
+                            if (view != null) {
                                 imageView = (ImageView) view.findViewById(R.id.image);
                                 mCloudGuideAnimation = (AnimationDrawable) imageView.getDrawable();//Background();
                                 mCloudGuideAnimation.start();
@@ -193,12 +192,12 @@ public class CloudGuideActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mCustomPagerAdapter != null) {
+        if (mCustomPagerAdapter != null) {
             mCustomPagerAdapter.clearViews();
             mCustomPagerAdapter.notifyDataSetChanged();
         }
 
-        if(mCloudGuideAnimation != null) {
+        if (mCloudGuideAnimation != null) {
             mCloudGuideAnimation.stop();
             mCloudGuideAnimation = null;
         }

@@ -1,6 +1,6 @@
 *.iml
 .gradle
-/.idea
+.idea
 /build
 /captures
 libs/

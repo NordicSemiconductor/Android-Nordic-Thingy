@@ -91,7 +91,7 @@
     <string name="thing_url"><a href="https://www.nordicsemi.com/thingy">"https://www.nordicsemi.com/thingy"</a></string>
     <string name="privacy_policy_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://www.nordicsemi.com/eng/About-us/Privacy-Policy"</a></string>
     <string name="github_thingy_app_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://github.com/NordicSemiconductor/Android-Nordic-Thingy"</a></string>
-    <string name="github_thingy_lib_url"><a href="https://www.nordicsemi.com/eng/About-us/Privacy-Policy">"https://github.com/NordicSemiconductor/Android-Thingy-Library"</a></string>
+    <string name="github_thingy_fw_url"><a href="https://github.com/NordicSemiconductor/Nordic-Thingy52-FW">"https://github.com/NordicSemiconductor/Nordic-Thingy52-FW"</a></string>
 
     <string name="environment_settings_title">Environment Settings</string>
     <string name="thingy_location_marker_title">Marker Settings</string>
@@ -192,7 +192,7 @@
     <string name="thingy_name_title">Thingy Name</string>
     <string name="appearance_title">Appearance</string>
     <string name="connection_parameters_title">Connection Parameters</string>
-    <string name="physcial_web_url_title">Physcial Web URL</string>
+    <string name="physcial_web_url_title">Eddystone Web URL</string>
     <string name="temperature_interval_title">Temperature Interval</string>
     <string name="temperature_compensation_interval_title">Temp. Compensation Interval</string>
     <string name="pressure_interval_title">Pressure Interval</string>
@@ -506,6 +506,13 @@
     <string name="cloud_token_rationale">Please note that the IFTTT cloud token will be saved inside the application.</string>
     <string name="action_ifttt_token">Add/Edit IFTTT token</string>
     <string name="clear_token">Clear token</string>
+    <string name="fw_update_available">There is a new Firmware update available for %1$s.
+        Updating is recommended as it ensures full compatibility with the Thingy app and includes all the latest features and bug fixes.
+        Would you like to update the firmware version to %2$s?</string>
+    <string name="later">Later</string>
+    <string name="dfu_complete_reconnecting">Device firmware update completed. Reconnecting to device. This may take up to a few seconds...</string>
+    <string name="dash">-</string>
+    <string name="ifttt_error">IFTTT Error</string>
 
     <string-array name="gas_mode">
         <item>1s interval</item>

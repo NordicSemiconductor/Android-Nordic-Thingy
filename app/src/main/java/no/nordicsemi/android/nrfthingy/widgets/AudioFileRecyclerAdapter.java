@@ -85,9 +85,9 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         customViewHolder.audioFileNameView.setText(file.getName());
         customViewHolder.relativeLayout.setTag(position);
 
-        if(mSelectedItemPosition == (int) customViewHolder.relativeLayout.getTag()){
+        if (mSelectedItemPosition == (int) customViewHolder.relativeLayout.getTag()) {
             customViewHolder.audioRadioButton.setChecked(true);
-            if(lastCheckedRadioButton != null && lastCheckedRadioButton != customViewHolder.audioRadioButton) {
+            if (lastCheckedRadioButton != null && lastCheckedRadioButton != customViewHolder.audioRadioButton) {
                 lastCheckedRadioButton.setChecked(false);
             }
             lastCheckedRadioButton = customViewHolder.audioRadioButton;
@@ -117,8 +117,8 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         return mSelectedItemPosition;
     }
 
-    public boolean addFiles(final File audioFile){
-        if(!mAudioFileDisplayNameList.contains(audioFile.getName())) {
+    public boolean addFiles(final File audioFile) {
+        if (!mAudioFileDisplayNameList.contains(audioFile.getName())) {
             mAudioFileList.add(audioFile);
             mAudioFileDisplayNameList.add(audioFile.getName());
             return true;
@@ -126,8 +126,8 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         return false;
     }
 
-    public boolean addFiles(final File audioFile, final String mediaDisplayName){
-        if(!mAudioFileDisplayNameList.contains(mediaDisplayName)) {
+    public boolean addFiles(final File audioFile, final String mediaDisplayName) {
+        if (!mAudioFileDisplayNameList.contains(mediaDisplayName)) {
             mAudioFileList.add(audioFile);
             mAudioFileDisplayNameList.add(mediaDisplayName);
             return true;
@@ -135,21 +135,20 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         return false;
     }
 
-    private void setSelection(CustomViewHolder viewHolder, int position){
+    private void setSelection(CustomViewHolder viewHolder, int position) {
 
     }
 
     /**
      * Enabled by default
-     *
      */
 
-    public void enableOnClick(final boolean flag){
+    public void enableOnClick(final boolean flag) {
         mOnClickEnabled = flag;
     }
 
     public File getSelectedItem() {
-        if(mSelectedItemPosition > -1){
+        if (mSelectedItemPosition > -1) {
             return mAudioFileList.get(mSelectedItemPosition);
         }
 

@@ -36,60 +36,96 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package no.nordicsemi.android.nrfthingy.configuration;
+package no.nordicsemi.android.nrfthingy.dfu;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 
 import no.nordicsemi.android.nrfthingy.R;
+import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 
-public class CancelInitialConfigurationDialogFragment extends DialogFragment {
+public class DfuUpdateAvailableDialogFragment extends DialogFragment {
+    private static final String FW_FILE_VERSION = "FW_FILE_VERSION";
+    private DfuUpdateAvailableListener mListener;
+    private String mFwFileVersion;
+    private BluetoothDevice mDevice;
+    private DatabaseHelper mDatabaseHelper;
 
-
-    public interface CancleInitialConfigurationListener {
-        void cancleInitialConfiguration();
+    public interface DfuUpdateAvailableListener {
+        void onDfuRequested();
     }
 
-    public CancelInitialConfigurationDialogFragment newInstance(final BluetoothDevice device) {
-        CancelInitialConfigurationDialogFragment confirmThingyDeletionDialogFragment = new CancelInitialConfigurationDialogFragment();
-        return confirmThingyDeletionDialogFragment;
+    public static DfuUpdateAvailableDialogFragment newInstance(final BluetoothDevice device, final String fwFileVersion) {
+        DfuUpdateAvailableDialogFragment fragment = new DfuUpdateAvailableDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Utils.CURRENT_DEVICE, device);
+        bundle.putString(FW_FILE_VERSION, fwFileVersion);
+        fragment.setArguments(bundle);
+        return fragment;
     }
+
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
+            mFwFileVersion = getArguments().getString(FW_FILE_VERSION);
+        }
+        mDatabaseHelper = new DatabaseHelper(getContext());
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.cancel_initial_configuration_process_title));
-        alertDialogBuilder.setMessage(getString(R.string.cancel_initial_configuration_process_message));
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setTitle(R.string.dfu_title);
+
+        String deviceName = mDatabaseHelper.getDeviceName(mDevice.getAddress());
+        if (deviceName.isEmpty()) {
+            deviceName = mDevice.getName();
+        }
+
+        alertDialogBuilder.setMessage(getString(R.string.fw_update_available, deviceName, mFwFileVersion));
+
+        alertDialogBuilder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mListener.onDfuRequested();
+            }
+        }).setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dismiss();
-                ((CancleInitialConfigurationListener) getActivity()).cancleInitialConfiguration();
-            }
-        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
             }
         });
         final AlertDialog alertDialog = alertDialogBuilder.show();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.setCancelable(false);
         return alertDialog;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mListener = (DfuUpdateAvailableListener) context;
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+
 }

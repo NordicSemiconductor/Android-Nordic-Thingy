@@ -40,8 +40,6 @@ package no.nordicsemi.android.nrfthingy;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -81,15 +79,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import no.nordicsemi.android.thingylib.ThingySdkManager;
-import no.nordicsemi.android.nrfthingy.widgets.ChartMarker;
-import no.nordicsemi.android.nrfthingy.widgets.Renderer;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.nrfthingy.widgets.Renderer;
 import no.nordicsemi.android.thingylib.ThingyListener;
 import no.nordicsemi.android.thingylib.ThingyListenerHelper;
+import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class MotionServiceFragment extends Fragment implements ScannerFragmentListener {
@@ -149,7 +146,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 mIsConnected = true;
                 if (Utils.checkIfVersionIsAboveJellyBean()) {
                     mRenderer.setConnectionState(true);
-                    if(mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)){
+                    if (mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
                         mRenderer.setNotificationEnabled(true);
                     }
                 }
@@ -241,7 +238,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         @Override
         public void onQuaternionValueChangedEvent(BluetoothDevice bluetoothDevice, float w, float x, float y, float z) {
-            if(mIsFragmentAttached) {
+            if (mIsFragmentAttached) {
                 if (mGlSurfaceView != null) {
                     mRenderer.setQuaternions(x, y, z, w);
                 }
@@ -276,7 +273,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -327,7 +324,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte [] data) {
+        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte[] data) {
 
         }
     };
@@ -386,7 +383,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             mRenderer = new Renderer(getActivity());
             mGlSurfaceView.setSurfaceRenderer(mRenderer);
             mRenderer.setConnectionState(mIsConnected);
-            if(mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)){
+            if (mDatabaseHelper.getNotificationsState(mDevice.getAddress(), DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
                 mRenderer.setNotificationEnabled(true);
             }
         }
@@ -823,8 +820,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER);
     }
 
-    private void loadFeatureDiscoverySequence(){
-        if(!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_MOTION_TUTORIAL)){
+    private void loadFeatureDiscoverySequence() {
+        if (!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_MOTION_TUTORIAL)) {
 
             final SpannableString desc = new SpannableString(getString(R.string.start_stop_motion_sensors));
 

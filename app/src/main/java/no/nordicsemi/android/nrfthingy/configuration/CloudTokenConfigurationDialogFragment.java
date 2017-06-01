@@ -112,7 +112,7 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 final String value = s.toString();
-                if(TextUtils.isDigitsOnly(value) || value.length() > 250) {
+                if (TextUtils.isDigitsOnly(value) || value.length() > 250) {
                     mCloudTokenLayout.setError(getString(R.string.error_cloud_token_length));
                 } else {
                     mCloudTokenLayout.setError(null);

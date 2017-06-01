@@ -72,7 +72,7 @@ public class MessageDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             alertDialogBuilder.setIcon(R.drawable.ic_warning_grey);
             alertDialogBuilder.setTitle(getArguments().getString(Utils.EXTRA_DATA_TITLE));
             alertDialogBuilder.setMessage(getArguments().getString(Utils.EXTRA_DATA));

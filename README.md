@@ -17,12 +17,12 @@ Use this app to connect your mobile device with Thingy and gain access to the fo
 * Play programmable tunes in frequency mode
 * Using the free Thingy app, update the firmware on your Thingy as soon as new firmware versions are released
 
-### For firmware and mobile developers:
+###For firmware and mobile developers:
 Thingy can be flashed with custom firmware, just like any other development kit from Nordic Semiconductor. The Thingy firmware package contains comprehensive documentation, so you can easily customize it to your own needs.
 Additionally, we provide an Android Library on JCenter for your Android development needs. These libraries are made exclusively for Thingy, to ensure that installation and mobile development are as smooth as possible!
 Learn more about Thingy at http://www.nordicsemi.com/thingy
 
-If you're setting up the Nordc Thingy example app project from GitHub, you will have to create your own project on the Google Developer Console and enable URLShortener API and use the API key in your project. If you do not do this, the URL shortening feature on the EddystoneURLCharacteristic will fail.
+If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project on the Google Developer Console and enable URLShortener API and use the API key in your project.
 
 ### Note:
 

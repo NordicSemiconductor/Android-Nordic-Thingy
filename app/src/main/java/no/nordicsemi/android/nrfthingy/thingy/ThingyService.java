@@ -88,7 +88,6 @@ public class ThingyService extends BaseThingyService {
 
         /**
          * Returns the activity state.
-         *
          */
         public final boolean getActivityFinishing() {
             return mIsActivityFinishing;
@@ -96,14 +95,13 @@ public class ThingyService extends BaseThingyService {
 
         /**
          * Saves the last visible fragment in the service
-         *
          */
         public final void setLastSelectedAudioTrack(final BluetoothDevice device, final int index) {
             mLastSelectedAudioTrack.put(device, index);
         }
 
         public final int getLastSelectedAudioTrack(final BluetoothDevice device) {
-            if(mLastSelectedAudioTrack.containsKey(device)) {
+            if (mLastSelectedAudioTrack.containsKey(device)) {
                 return mLastSelectedAudioTrack.get(device);
             }
             return 0;
@@ -111,7 +109,6 @@ public class ThingyService extends BaseThingyService {
 
         /**
          * Saves the last visible fragment in the service
-         *
          */
         public final void setLastVisibleFragment(String lastVisibleFragment) {
             mLastVisibleFragment = lastVisibleFragment;
@@ -119,7 +116,6 @@ public class ThingyService extends BaseThingyService {
 
         /**
          * Returns the last visible fragment in the service
-         *
          */
         public final String getLastVisibleFragment() {
             return mLastVisibleFragment;
@@ -179,7 +175,7 @@ public class ThingyService extends BaseThingyService {
 
     @Override
     protected void onUnbind() {
-        if(mIsActivityFinishing) {
+        if (mIsActivityFinishing) {
             createBackgroundNotification();
         }
     }
@@ -187,7 +183,7 @@ public class ThingyService extends BaseThingyService {
     @Override
     public void onCreate() {
         super.onCreate();
-        mLastSelectedAudioTrack =  new HashMap<>();
+        mLastSelectedAudioTrack = new HashMap<>();
         mDatabaseHelper = new DatabaseHelper(getApplicationContext());
         registerReceiver(mNotificationDisconnectReceiver, new IntentFilter(Utils.ACTION_DISCONNECT));
     }
@@ -370,8 +366,8 @@ public class ThingyService extends BaseThingyService {
         nm.cancel(device.getAddress(), NOTIFICATION_ID);
     }
 
-    private void removeLastSelectedAudioTracks(final BluetoothDevice device){
-        if(mLastSelectedAudioTrack.containsKey(device)) {
+    private void removeLastSelectedAudioTracks(final BluetoothDevice device) {
+        if (mLastSelectedAudioTrack.containsKey(device)) {
             mLastSelectedAudioTrack.remove(device);
         }
     }

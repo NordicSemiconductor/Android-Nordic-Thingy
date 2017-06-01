@@ -42,18 +42,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
 import no.nordicsemi.android.nrfthingy.R;
-import no.nordicsemi.android.nrfthingy.common.Utils;
 
 
 public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callback {
@@ -114,16 +108,15 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
         isDrawing = false;
     }
 
-    public void stopDrawing(){
+    public void stopDrawing() {
         isDrawing = false;
     }
-    
+
     /**
      * Copies the byte array to a float buffer where each odd cell is a X point value and even cell is Y value. X range is from 0 to view width and Y from 0 to height. The PCM value 0 is located on
      * height/2. After the buffer is ready it swaps the buffer for drawing thread.
      *
-     * @param pcm
-     *            the decoded PCM byte array where each sample is defined by 2 bytes
+     * @param pcm the decoded PCM byte array where each sample is defined by 2 bytes
      */
     public void draw(final byte[] pcm) {
         if (mCurrentBuffer == null) // Surface not created yet or destroyed (orientation changes)
@@ -150,12 +143,12 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
         // Swap the buffer
         mCurrentBuffer = mCurrentBuffer == mPointsBuffer ? mPointsBuffer2 : mPointsBuffer;
 
-        if(!isDrawing) {
+        if (!isDrawing) {
             isDrawing = true;
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while(isDrawing) {
+                    while (isDrawing) {
                         mCanvas = mHolder.lockCanvas();
                         if (mCanvas != null) {
                             doDraw(mCanvas);
@@ -170,10 +163,9 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
     /**
      * This method clears the view and draws the data points on the surface's canvas.
      *
-     * @param canvas
-     *            the canvas to draw on
+     * @param canvas the canvas to draw on
      */
-	/* package */void doDraw(final Canvas canvas) {
+    /* package */void doDraw(final Canvas canvas) {
         // Draw white background
         canvas.drawColor(Color.WHITE);
 

@@ -183,7 +183,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                     if (ThingyUtils.MIN_CONN_INTERVAL <= maxConnectionInterval && ThingyUtils.MAX_CONN_INTERVAL >= maxConnectionInterval) {
                         final int slaveLatency = Integer.parseInt(mSlaveLatencyView.getText().toString().trim());
                         final int supervisionTimeoutUnits = Integer.parseInt(mSupervisionTimeoutView.getText().toString().trim());
-                        if(ThingyUtils.validateMaxConnectionInterval(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
+                        if (ThingyUtils.validateMaxConnectionInterval(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mMaxConnectionIntervalLayout.setError(null);
                         } else {
                             mSlaveLatencyLayout.setError("Invalid value");
@@ -211,7 +211,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                     if (slaveLatency >= ThingyUtils.MIN_SLAVE_LATENCY && slaveLatency <= ThingyUtils.MAX_SLAVE_LATENCY) {
                         final int maxConnIntervalUnits = Integer.parseInt(mMaxConnectionIntervalView.getText().toString().trim());
                         final int supervisionTimeoutUnits = Integer.parseInt(mSupervisionTimeoutView.getText().toString().trim());
-                        if(ThingyUtils.validateSlaveLatency(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
+                        if (ThingyUtils.validateSlaveLatency(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mSlaveLatencyLayout.setError(null);
                         } else {
                             mSlaveLatencyLayout.setError("Invalid value");
@@ -246,7 +246,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                     if (supervisionTimeoutUnits >= ThingyUtils.MIN_SUPERVISION_TIMEOUT && supervisionTimeoutUnits <= ThingyUtils.MAX_SUPERVISION_TIMEOUT) {
                         final int slaveLatency = Integer.parseInt(mSlaveLatencyView.getText().toString().trim());
                         final int maxConnIntervalUnits = Integer.parseInt(mMaxConnectionIntervalView.getText().toString().trim());
-                        if(ThingyUtils.validateSupervisionTimeout(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
+                        if (ThingyUtils.validateSupervisionTimeout(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mSupervisionTimeoutLayout.setError(null);
                         } else {
                             mSlaveLatencyLayout.setError("Invalid value");
@@ -380,7 +380,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if (ThingyUtils.MIN_SLAVE_LATENCY  > i * 10 || ThingyUtils.MAX_SLAVE_LATENCY < i) {
+            if (ThingyUtils.MIN_SLAVE_LATENCY > i * 10 || ThingyUtils.MAX_SLAVE_LATENCY < i) {
                 mSlaveLatencyLayout.setError(getString(R.string.error_invalid_slave_latency));
                 return false;
             }
@@ -403,7 +403,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if (ThingyUtils.MIN_SUPERVISION_TIMEOUT  > i * 10 || ThingyUtils.MAX_SUPERVISION_TIMEOUT < i * 10) {
+            if (ThingyUtils.MIN_SUPERVISION_TIMEOUT > i * 10 || ThingyUtils.MAX_SUPERVISION_TIMEOUT < i * 10) {
                 mSupervisionTimeoutLayout.setError(getString(R.string.error_invalid_supervision_timeout));
                 return false;
             }

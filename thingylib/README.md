@@ -22,12 +22,7 @@ The Thingy Library is compatible as such with Android Studio IDE. If you are usi
 
 #### Android Studio
 
-The easiest way to include the library to your project is to add the line to your build.gradle file. And that's it.
-
-```compile 'no.nordicsemi.android:thingylib:[Version]'``` 
-
-
-However, if you want to modify the code to your needs you have to clone the project and add it as follows:
+Follow the steps below to include the library to your project.
 
 1. Clone the project into your projects root, for example to *AndroidstudioProjects*.
 2. Add the **thingylib** module to your project:
@@ -35,7 +30,7 @@ However, if you want to modify the code to your needs you have to clone the proj
     ```
     include ':thingylib'
     ```
-    2. Open Project Structure -> Modules -> app -> Dependencies tab and add thingylib module dependency.
+    2. Open Project Structure -> Modules -> app -> Dependencies tab and add **thingylib** module dependency.
 
 #### Eclipse
 
@@ -139,9 +134,14 @@ public class MyActivity extends AppCompatActivity implements ServiceConnectionLi
 }
 ```
 
-4. In order to get updates on from sensors you will have to implement ThingyListener. The service will send local broadcasts using LocalBroadcastManager. 
-You can register and unregister the broadcast receiver shown in the ```onStart()``` and ```onStop()``` methods. After binding to the service as mentioned in step 3 you can connect to the preferred Thingy:52 device. 
-Please note that you may have to scan for your Thingy:52 device before connecting.
+4. The library will handle the connection, service discovery and reading all the characteristics for you. After binding to the service as mentioned in step 3 you can connect to the preferred Thingy:52 device.
+ All you have to do is just call the following line ``` mThingySdkManager.connectToThingy(this, device, ThingyService.class);``` as shown on the 5th step once you receive the ```onServiceDiscoveryCompleted(BluetoothDevice device)```
+you can start to enable the notifications. 
+
+Please note that you will have to scan for your Thingy:52 device before connecting and you can follow the example app on how to scan for a Thingy:52 device.
+
+5. In order to get updates on from sensors you will have to implement ThingyListener. The service will send local broadcasts using LocalBroadcastManager. 
+You can register and unregister the broadcast receivers as shown in the ```onStart()``` and ```onStop()``` methods. 
 
 ```
 private final ThingyListener mThingyListener = new ThingyListener() {

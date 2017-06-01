@@ -39,6 +39,7 @@
 package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.app.Dialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,8 +51,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
+import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class FirmwareVersionDialogFragment extends DialogFragment {
+
+    private BluetoothDevice mDevice;
+    private ThingySdkManager mThingySdkManager;
+    private String mFirmwareFileVersion;
+    private boolean isFirmwareUpdateDate = false;
 
     public interface FimrwareVersionDialogFragmentListener {
         public void onUpdateFirmwareClickListener();
@@ -61,14 +70,21 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
     }
 
 
-    public static FirmwareVersionDialogFragment newInstance() {
+    public static FirmwareVersionDialogFragment newInstance(final BluetoothDevice device) {
         FirmwareVersionDialogFragment fragment = new FirmwareVersionDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(Utils.CURRENT_DEVICE, device);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
+        }
+        mThingySdkManager = ThingySdkManager.getInstance();
     }
 
     @NonNull
@@ -79,14 +95,38 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_firmware_version, null);
 
         final TextView fwVersion = (TextView) view.findViewById(R.id.fw_version);
-        fwVersion.setText(R.string.thingy_fw_version_summary);
+        isFirmwareUpdateDate = checkIfFirmwareUpdateAvailable();
+        if (isFirmwareUpdateDate) {
 
-        alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.ok), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((FimrwareVersionDialogFragmentListener)getParentFragment()).onUpdateFirmwareClickListener();
+            final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+            String deviceName = databaseHelper.getDeviceName(mDevice.getAddress());
+            if (deviceName.isEmpty()) {
+                deviceName = mDevice.getName();
             }
-        });
+
+            fwVersion.setText(getString(R.string.fw_update_available, deviceName, mFirmwareFileVersion));
+            alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                }
+            }).setNegativeButton(getString(R.string.later), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                }
+            });
+        } else {
+            fwVersion.setText(R.string.thingy_fw_version_summary);
+            alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.ok), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                }
+            });
+        }
+
+
         return alertDialogBuilder.create();
     }
 
@@ -98,5 +138,30 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
     @Override
     public void onStop() {
         super.onStop();
+    }
+
+
+    private boolean checkIfFirmwareUpdateAvailable() {
+        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
+
+        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
+        final String[] resourceEntryNames = name.split("_");
+
+        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+
+        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                resourceEntryNames[resourceEntryNames.length - 1];
+
+        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
+            return true;
+        }
+
+        return false;
     }
 }

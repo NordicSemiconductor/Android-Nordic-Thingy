@@ -39,10 +39,8 @@
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.io.File;
@@ -50,8 +48,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import no.nordicsemi.android.nrfthingy.R;
 
 public class FileHelper {
     private static final String TAG = "FileHelper";
@@ -67,10 +63,10 @@ public class FileHelper {
 
         File audioFile;
         String audioFileName;
-        for(int i = 0; i < Utils.AUDIO_FILES.length; i++){
+        for (int i = 0; i < Utils.AUDIO_FILES.length; i++) {
             audioFileName = Utils.AUDIO_FILES[i];
             audioFile = new File(root, audioFileName);
-            if(!audioFile.exists()){
+            if (!audioFile.exists()) {
                 copyRawAudioResource(context, context.getResources().getIdentifier(audioFileName.replace(".wav", ""), "raw", context.getPackageName()), audioFile);
             }
         }
@@ -85,7 +81,7 @@ public class FileHelper {
 
         File audioFile;
         audioFile = new File(root, audioFileName);
-        if(!audioFile.exists()) {
+        if (!audioFile.exists()) {
             copyExternalAudioFile(context, uri, audioFile);
             return true;
         }
@@ -100,7 +96,7 @@ public class FileHelper {
         final File root = new File(Environment.getExternalStorageDirectory(), NORDIC_FOLDER);
 
         File audioFile = new File(root, audioFileName);
-        if(!audioFile.exists()){
+        if (!audioFile.exists()) {
             copyExternalAudioFile(context, path, audioFile);
             return true;
         }
@@ -162,9 +158,9 @@ public class FileHelper {
     /**
      * Copies the file from res/raw with given id to given destination file. If dest does not exist it will be created.
      *
-     * @param context  activity context
-     * @param uri the uri
-     * @param dest the destination file
+     * @param context activity context
+     * @param uri     the uri
+     * @param dest    the destination file
      */
     private static void copyExternalAudioFile(final Context context, final Uri uri, final File dest) {
         try {
@@ -189,9 +185,9 @@ public class FileHelper {
     /**
      * Copies the file from res/raw with given id to given destination file. If dest does not exist it will be created.
      *
-     * @param context  activity context
-     * @param path the uri
-     * @param dest the destination file
+     * @param context activity context
+     * @param path    the uri
+     * @param dest    the destination file
      */
     private static void copyExternalAudioFile(final Context context, final String path, final File dest) {
         try {

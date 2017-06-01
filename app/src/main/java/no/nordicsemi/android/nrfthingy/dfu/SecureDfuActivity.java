@@ -44,8 +44,6 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -97,8 +95,6 @@ import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
-import no.nordicsemi.android.thingylib.dfu.DfuService;
-import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
@@ -107,6 +103,8 @@ import no.nordicsemi.android.support.v18.scanner.ScanResult;
 import no.nordicsemi.android.support.v18.scanner.ScanSettings;
 import no.nordicsemi.android.thingylib.ThingyListener;
 import no.nordicsemi.android.thingylib.ThingyListenerHelper;
+import no.nordicsemi.android.thingylib.ThingySdkManager;
+import no.nordicsemi.android.thingylib.dfu.DfuService;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class SecureDfuActivity extends AppCompatActivity implements
@@ -174,7 +172,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
-            if(mStartDfu) {
+            if (mStartDfu) {
                 String targetName = mDatabaseHelper.getDeviceName(device.getAddress());
                 if (targetName.isEmpty()) {
                     targetName = device.getName();
@@ -192,7 +190,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         @Override
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
-            if(mOnDfuCompleted) {
+            if (mOnDfuCompleted) {
                 hideProgressDialog();
                 mOnDfuCompleted = false;
                 final String mFragmentTag = mBinder.getLastVisibleFragment();
@@ -202,7 +200,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                     enableUiNotifications();
                 } else if (mFragmentTag.equals(Utils.SOUND_FRAGMENT)) {
                     enableSoundNotifications(device, true);
-                } else if(mFragmentTag.equals(Utils.CLOUD_FRAGMENT)){
+                } else if (mFragmentTag.equals(Utils.CLOUD_FRAGMENT)) {
                     enableNotificationsForCloudUpload();
                 } else {
                     enableEnvironmentNotifications();
@@ -276,7 +274,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -296,7 +294,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte [] data) {
+        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte[] data) {
 
         }
     };
@@ -348,8 +346,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mFabStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mIsNordicFw || mFileStreamUri != null){
-                    if(!mThingySdkManager.isDfuServiceRunning(getBaseContext())){
+                if (mIsNordicFw || mFileStreamUri != null) {
+                    if (!mThingySdkManager.isDfuServiceRunning(getBaseContext())) {
                         resetUi();
                         mStartDfu = true;
                         checkBootLoaderMode();
@@ -358,7 +356,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                         fragment.show(getSupportFragmentManager(), null);
                     }
                 } else {
-                    if(!mIsNordicFw){
+                    if (!mIsNordicFw) {
                         Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
                     }
                 }
@@ -403,7 +401,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mNordicFirmware.setTextColor(ContextCompat.getColor(SecureDfuActivity.this, R.color.textColorWhite));
                 mCustomFirmware.setTextColor(ContextCompat.getColor(SecureDfuActivity.this, R.color.greyBg));
                 mCustomFirmware.setBackgroundColor(Color.WHITE);
-                mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_0_0);
+                mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0);
                 mFileNameView.setText(mFileName);
                 mFileStreamUri = null;
             }
@@ -411,7 +409,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         if (getIntent().getExtras() != null) {
             mDevice = getIntent().getExtras().getParcelable(Utils.EXTRA_DEVICE);
-            if(mDevice != null && mThingySdkManager.isConnected(mDevice)) {
+            if (mDevice != null && mThingySdkManager.isConnected(mDevice)) {
                 final String name = mDatabaseHelper.getDeviceName(mDevice.getAddress());
                 if (!name.isEmpty()) {
                     mTargetName = name;
@@ -449,14 +447,14 @@ public class SecureDfuActivity extends AppCompatActivity implements
             if (TextUtils.isEmpty(mFilePath)) {
                 InputStream is = null;
                 try {
-                    mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_0_0);
-                    is = getResources().openRawResource(R.raw.thingy_dfu_pkg_app_v1_0_0);
+                    mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0);
+                    is = getResources().openRawResource(R.raw.thingy_dfu_pkg_app_v1_1_0);
                     int size = is.available();
                     mFileSize = String.valueOf(Utils.humanReadableByteCount(size, true));
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    if(is != null) {
+                    if (is != null) {
                         try {
                             is.close();
                         } catch (IOException e) {
@@ -476,7 +474,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mDfuTargetNameView.setText(mTargetName);
         mFabStartStop.setEnabled(true);
 
-        if(!mIsNordicFw){
+        if (!mIsNordicFw) {
             mCustomFirmware.setBackgroundColor(ContextCompat.getColor(SecureDfuActivity.this, R.color.greyBg));
             mCustomFirmware.setTextColor(ContextCompat.getColor(SecureDfuActivity.this, R.color.textColorWhite));
             mNordicFirmware.setBackgroundColor(Color.WHITE);
@@ -553,7 +551,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     protected void onStop() {
         super.onStop();
-        if(!isFinishing()){
+        if (!isFinishing()) {
             mScanHandler.removeCallbacks(runnable);
         }
         ThingyListenerHelper.unregisterThingyListener(this, mThingyListener);
@@ -570,7 +568,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-        if(mThingySdkManager.isDfuServiceRunning(getBaseContext())) {
+        if (mThingySdkManager.isDfuServiceRunning(getBaseContext())) {
             DfuRationaleDialogFragment fragment = DfuRationaleDialogFragment.newInstance();
             fragment.show(getSupportFragmentManager(), null);
         } else {
@@ -694,7 +692,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         startActivityForResult(enableIntent, Utils.REQUEST_ENABLE_BT);
     }
 
-    private void importCustomFirmwareFiles(){
+    private void importCustomFirmwareFiles() {
         openFileChooser();
     }
 
@@ -762,11 +760,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 public void run() {
                     mThingySdkManager.connectToThingy(getApplicationContext(), device, ThingyService.class);
                 }
-            }, 5000);
+            }, 30000 /*allowing some time for the thingy to boot up for the app to start reconnecting as Samsung devices seemed to take a long time to reconnect*/);
         }
     }
 
-    private boolean checkIfRequiredPermissionsGranted(){
+    private boolean checkIfRequiredPermissionsGranted() {
         if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
             if (ActivityCompat.checkSelfPermission(SecureDfuActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
@@ -804,7 +802,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
             mIsScanning = false;
         }
     }
-
 
 
     final Runnable mBleScannerTimeoutRunnable = new Runnable() {
@@ -857,8 +854,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
 
     private void initiateDfu(final BluetoothDevice device) {
-        if(!mIsNordicFw) {
-            if(mFilePath == null && mFileStreamUri == null) {
+        if (!mIsNordicFw) {
+            if (mFilePath == null && mFileStreamUri == null) {
                 Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
                 return;
             }
@@ -867,13 +864,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mCustomFirmware.setEnabled(false);
         mFabStartStop.setImageResource(R.drawable.ic_close_white);
         mStartDfu = true;
-        if(mIsNordicFw) {
-            mThingySdkManager.startDFUWithNordicFW(this, device, R.raw.thingy_dfu_pkg_app_v1_0_0, mFileType);
+        if (mIsNordicFw) {
+            mThingySdkManager.startDFUWithNordicFW(this, device, R.raw.thingy_dfu_pkg_app_v1_1_0, mFileType);
         } else {
             mThingySdkManager.startDFUWithCustomFW(this, device, mFileType, mFilePath, mFileStreamUri);
         }
-            /*mFilePath = null;
-            mFileStreamUri = null;*/
         mEnabledBootloaderAlpha = 1.0f;
         mEnableBootloaderMsg.setAlpha(mEnabledBootloaderAlpha);
     }
@@ -881,7 +876,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final Uri uri = args.getParcelable(Utils.EXTRA_URI);
-		/*
+        /*
 		 * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
 		 * all columns and than check which columns are present.
 		 */
@@ -902,12 +897,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mFilePath = filePath;
             }
             final String fileName = data.getString(data.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME));
-            if(!fileName.isEmpty()){
+            if (!fileName.isEmpty()) {
                 mFileName = fileName;
                 mFileNameView.setText(mFileName);
             }
             final String size = data.getString(data.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
-            if(!size.isEmpty()){
+            if (!size.isEmpty()) {
                 mFileSize = Utils.humanReadableByteCount(Long.parseLong(size), true);
                 mFileSizeView.setText(mFileSize);
             }
@@ -925,7 +920,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     @Override
     public void onServiceConnected() {
-        mBinder = ((ThingyService.ThingyBinder)mThingySdkManager.getThingyBinder());
+        mBinder = ((ThingyService.ThingyBinder) mThingySdkManager.getThingyBinder());
 
     }
 
@@ -968,9 +963,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
                     // if this activity is still open and upload process was completed, cancel the notification
                     final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     manager.cancel(DfuService.NOTIFICATION_ID);
-                    //reconnectToDevice(Utils.decrementAddress(deviceAddress));
                 }
-            }, 800); //Increased from 200 to 500 to allow thingy to write all the default settings to nvm
+            }, 1000); //Increased from 200 to 500 to allow thingy to write all the default settings to nvm
         }
 
         @Override
@@ -992,7 +986,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
             mDfuSpeed.setText(String.valueOf(Float.valueOf(String.format(Locale.US, "%.2f", avgSpeed))));
             mProgressBar.setIndeterminate(false);
-            if(mInitializingDfuView.getAlpha() < 1.0f){
+            if (mInitializingDfuView.getAlpha() < 1.0f) {
                 mInitDfuAlpha = 1.0f;
                 mInitializingDfuView.setAlpha(mInitDfuAlpha);
             }
@@ -1001,7 +995,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mUploadingFwMsg.setAlpha(1.0f);
             }
 
-            if(mDfuSpeedUnit.getAlpha() < 1.0f ) {
+            if (mDfuSpeedUnit.getAlpha() < 1.0f) {
                 mDfuSpeed.setAlpha(mUploadingFwAlpha);
                 mDfuSpeedUnit.setAlpha(mUploadingFwAlpha);
             }
@@ -1075,16 +1069,16 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private void showConnectionProgressDialog() {
-        if(mProgressDialog == null) {
+        if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
         }
         mProgressDialog.setTitle(getString(no.nordicsemi.android.thingylib.R.string.please_wait));
-        mProgressDialog.setMessage("Connecting...");
+        mProgressDialog.setMessage(getString(R.string.dfu_complete_reconnecting));
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setCanceledOnTouchOutside(false);
 
-        mScanHandler.postDelayed(runnable, 30000);
+        mScanHandler.postDelayed(runnable, 40000);
         mProgressDialog.show();
     }
 
@@ -1106,14 +1100,14 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     @Override
     public void onDeviceSelected(BluetoothDevice device, String name) {
-        if(!mIsNordicFw) {
-            if(mFilePath == null && mFileStreamUri == null) {
+        if (!mIsNordicFw) {
+            if (mFilePath == null && mFileStreamUri == null) {
                 Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
                 return;
             }
         }
         mDevice = device;
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             name = mDatabaseHelper.getDeviceName(device.getAddress());
         }
         mTargetName = name;
@@ -1124,12 +1118,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     @Override
     public void onNothingSelected() {
-        if(!mFabStartStop.isEnabled()){
+        if (!mFabStartStop.isEnabled()) {
             mFabStartStop.setEnabled(true);
         }
     }
 
-    private void resetUi(){
+    private void resetUi() {
         final float initialAlpha = 0.2f;
         mEnabledBootloaderAlpha = initialAlpha;
         mEnableBootloaderView.setAlpha(initialAlpha);
@@ -1301,7 +1295,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     public void enableNotificationsForCloudUpload() {
         mThingySdkManager.enableTemperatureNotifications(mDevice, true);
-        mThingySdkManager.enablePressureNotifications(mDevice,true);
+        mThingySdkManager.enablePressureNotifications(mDevice, true);
         mThingySdkManager.enableButtonStateNotification(mDevice, true);
     }
 }

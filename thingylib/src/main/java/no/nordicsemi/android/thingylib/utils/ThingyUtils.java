@@ -245,6 +245,10 @@ public class ThingyUtils {
     public static final int DEFAULT_GREEN_INTENSITY                                             = 255;
     public static final int DEFAULT_BLUE_INTENSITY                                              = 255;
 
+    public static final int DEFAULT_RED_CALIBRATION_INTENSITY                                   = 103;
+    public static final int DEFAULT_GREEN_CALIBRATION_INTENSITY                                 = 78;
+    public static final int DEFAULT_BLUE_CALIBRATION_INTENSITY                                  = 29;
+
     public static final int DEFAULT_BREATHE_INTERVAL                                            = 3500;
     public static final int DEFAULT_MINIMUM_BREATHE_INTERVAL                                    = 1; //ms
     public static final int DEFAULT_MAXIMUM_BREATHE_INTERVAL                                    = 10000; //ms

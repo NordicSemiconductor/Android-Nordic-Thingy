@@ -127,7 +127,7 @@ public class ScannerFragment extends DialogFragment {
         final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_scanner_device_selection, null);
         final ListView listview = (ListView) dialogView.findViewById(android.R.id.list);
 
-        troubleshootView  = (LinearLayout) dialogView.findViewById(R.id.troubleshoot_guide);
+        troubleshootView = (LinearLayout) dialogView.findViewById(R.id.troubleshoot_guide);
 
         listview.setEmptyView(dialogView.findViewById(android.R.id.empty));
         listview.setAdapter(mAdapter = new DeviceListAdapter());
@@ -246,7 +246,7 @@ public class ScannerFragment extends DialogFragment {
 
         @Override
         public void onBatchScanResults(final List<ScanResult> results) {
-            if(results.size() > 0 && troubleshootView.getVisibility() == View.VISIBLE){
+            if (results.size() > 0 && troubleshootView.getVisibility() == View.VISIBLE) {
                 troubleshootView.setVisibility(View.GONE);
             }
             mAdapter.update(results);

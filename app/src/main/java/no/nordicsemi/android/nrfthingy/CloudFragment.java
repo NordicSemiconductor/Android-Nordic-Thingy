@@ -44,6 +44,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.renderscript.ScriptGroup;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -54,11 +55,16 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -66,13 +72,14 @@ import java.net.URL;
 import java.text.DecimalFormat;
 
 import no.nordicsemi.android.nrfthingy.common.CloudGuideActivity;
+import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.configuration.IFTTTokenDialogFragment;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract.CloudDbColumns;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
-import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.ThingyListener;
 import no.nordicsemi.android.thingylib.ThingyListenerHelper;
+import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.IFTTTokenDialogFragmentListener {
@@ -123,7 +130,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         @Override
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
-            if(device.equals(mDevice)) {
+            if (device.equals(mDevice)) {
                 updateUi();
             }
         }
@@ -133,7 +140,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             if (mIsFragmentAttached) {
                 final String temp = (temperature) + "\u2103";
                 mTemperatureView.setText(temp);
-                if(mDatabaseHelper.getTemperatureUploadState(bluetoothDevice.getAddress())) {
+                if (mDatabaseHelper.getTemperatureUploadState(bluetoothDevice.getAddress())) {
                     uploadData(TEMPERATURE_UPDATE_EVENT, createTemperatureJson(temperature));
                 }
             }
@@ -141,9 +148,9 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         @Override
         public void onPressureValueChangedEvent(BluetoothDevice bluetoothDevice, final String pressure) {
-            if(mIsFragmentAttached) {
+            if (mIsFragmentAttached) {
                 mPressureView.setText(getString(R.string.hecto_pascal, pressure));
-                if(mDatabaseHelper.getPressureUploadState(bluetoothDevice.getAddress())) {
+                if (mDatabaseHelper.getPressureUploadState(bluetoothDevice.getAddress())) {
                     uploadData(PRESSURE_UPDATE_EVENT, createPressureJson(pressure));
                 }
             }
@@ -163,7 +170,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         @Override
         public void onButtonStateChangedEvent(BluetoothDevice bluetoothDevice, int buttonState) {
-            if(mIsFragmentAttached) {
+            if (mIsFragmentAttached) {
                 switch (buttonState) {
                     case ThingyUtils.BUTTON_STATE_PRESSED:
                         mButtonPressedTime = System.currentTimeMillis();
@@ -171,9 +178,9 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                         break;
                     case ThingyUtils.BUTTON_STATE_RELEASED:
                         mButtonReleasedTime = System.currentTimeMillis();
-                        final float duration = (float)(mButtonReleasedTime - mButtonPressedTime)/1000;
+                        final float duration = (float) (mButtonReleasedTime - mButtonPressedTime) / 1000;
                         mButtonStateView.setText(getString(R.string.button_state_released) + "(" + duration + " sec)");
-                        if(mDatabaseHelper.getButtonUploadState(bluetoothDevice.getAddress())) {
+                        if (mDatabaseHelper.getButtonUploadState(bluetoothDevice.getAddress())) {
                             uploadData(BUTTON_STATE_UPDATE_EVENT, createButtonStateJson(duration));
                         }
                         break;
@@ -222,7 +229,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -242,13 +249,13 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte [] data) {
+        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte[] data) {
 
         }
     };
 
     public interface CloudFragmentListener {
-        void OnCloudFragmetnListener(final BluetoothDevice device);
+        void OnCloudFragmentListener(final BluetoothDevice device);
     }
 
     public CloudFragment() {
@@ -321,21 +328,25 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         mTemperatureSwitch = (Switch) rootView.findViewById(R.id.switch_temperature);
         mPressureSwitch = (Switch) rootView.findViewById(R.id.switch_pressuure);
-        mButtonStateSwitch= (Switch) rootView.findViewById(R.id.switch_button);
+        mButtonStateSwitch = (Switch) rootView.findViewById(R.id.switch_button);
 
         mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty() ? true : false);
         mTemperatureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
+                    mTemperatureView.setText(R.string.dash);
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD);
+                    mThingySdkManager.enableTemperatureNotifications(mDevice, isChecked);
                     return;
                 }
                 final String iftttToken = Utils.getIFTTTToken(getContext());
-                if(iftttToken.isEmpty()) {
+                if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
                 } else {
-                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(),isChecked, CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD);
+                    mThingySdkManager.enableTemperatureNotifications(mDevice, isChecked);
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD);
                 }
             }
         });
@@ -345,14 +356,18 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
+                    mPressureView.setText(R.string.dash);
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_PRESSURE_UPLOAD);
+                    mThingySdkManager.enablePressureNotifications(mDevice, isChecked);
                     return;
                 }
                 final String iftttToken = Utils.getIFTTTToken(getContext());
-                if(iftttToken.isEmpty()) {
+                if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
                 } else {
-                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(),isChecked, CloudDbColumns.COLUMN_PRESSURE_UPLOAD);
+                    mThingySdkManager.enablePressureNotifications(mDevice, isChecked);
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_PRESSURE_UPLOAD);
                 }
             }
         });
@@ -362,20 +377,23 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked) {
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD);
+                    mThingySdkManager.enableButtonStateNotification(mDevice, isChecked);
                     return;
                 }
                 final String iftttToken = Utils.getIFTTTToken(getContext());
-                if(iftttToken.isEmpty()) {
+                if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
                 } else {
-                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(),isChecked, CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD);
+                    mThingySdkManager.enableButtonStateNotification(mDevice, isChecked);
+                    mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), isChecked, CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD);
                 }
             }
         });
 
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mUploadedSize = savedInstanceState.getLong("UPLOADED");
             mDownloadedSize = savedInstanceState.getLong("DOWNLOADED");
         }
@@ -432,10 +450,29 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     @Override
     public void onTokenChanged() {
         final String token = Utils.getIFTTTToken(getContext());
-        if(token.isEmpty()) {
+        if (token.isEmpty()) {
             mTemperatureSwitch.setChecked(false);
             mPressureSwitch.setChecked(false);
             mButtonStateSwitch.setChecked(false);
+            mCloudTokenView.setText(R.string.dash);
+        } else {
+
+            if(mTemperatureSwitch.isChecked()) {
+                mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), mTemperatureSwitch.isChecked(), CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD);
+                mThingySdkManager.enableTemperatureNotifications(mDevice, mTemperatureSwitch.isChecked());
+            }
+
+            if(mPressureSwitch.isChecked()) {
+                mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), mPressureSwitch.isChecked(), CloudDbColumns.COLUMN_PRESSURE_UPLOAD);
+                mThingySdkManager.enablePressureNotifications(mDevice, mPressureSwitch.isChecked());
+            }
+
+            if(mButtonStateSwitch.isChecked()) {
+                mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), mButtonStateSwitch.isChecked(), CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD);
+                mThingySdkManager.enableButtonStateNotification(mDevice, mButtonStateSwitch.isChecked());
+            }
+
+            mCloudTokenView.setText(token);
         }
     }
 
@@ -448,13 +485,16 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         mTemperatureIntervalView.setText((String.valueOf(temperatureInterval)));
         mPressureIntervalView.setText((String.valueOf(pressureInterval)));
         updateButtonState(buttonState);
-        mCloudTokenView.setText(mCloudToken);
+
+        if (!mCloudToken.isEmpty()) {
+            mCloudTokenView.setText(mCloudToken);
+        }
 
         mUploadedView.setText(Utils.humanReadableByteCount(mUploadedSize, true));
         mDownloadedView.setText(Utils.humanReadableByteCount(mDownloadedSize, true));
     }
 
-    private void updateButtonState(final int buttonState){
+    private void updateButtonState(final int buttonState) {
         switch (buttonState) {
             case ThingyUtils.BUTTON_STATE_RELEASED:
                 mButtonStateView.setText(R.string.button_state_released);
@@ -468,12 +508,12 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
     }
 
-    private void uploadData(final int eventType, final String jsonData){
+    private void uploadData(final int eventType, final String jsonData) {
         CloudTask cloudTask = new CloudTask(eventType, jsonData);
         cloudTask.execute();
     }
 
-    private String createTemperatureJson(final String value){
+    private String createTemperatureJson(final String value) {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("value1", mDatabaseHelper.getDeviceName(mDevice.getAddress()));
@@ -486,7 +526,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     }
 
-    private String createPressureJson(final String value){
+    private String createPressureJson(final String value) {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("value1", mDatabaseHelper.getDeviceName(mDevice.getAddress()));
@@ -499,7 +539,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     }
 
-    private String createButtonStateJson(final float duration){
+    private String createButtonStateJson(final float duration) {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("value1", mDatabaseHelper.getDeviceName(mDevice.getAddress()));
@@ -512,7 +552,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     }
 
-    private void writeStream(final OutputStream outputStream, final String jsonData){
+    private void writeStream(final OutputStream outputStream, final String jsonData) {
         try {
             outputStream.write(jsonData.getBytes());
             outputStream.flush();
@@ -532,6 +572,62 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void readStream(final InputStream inputStream) {
+        BufferedReader br = null;
+        try {
+            StringBuffer sb = new StringBuffer();
+            br = new BufferedReader(new InputStreamReader(inputStream));
+            String inputLine = "";
+            while ((inputLine = br.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            final String result = sb.toString();
+            final JSONObject resultJson = new JSONObject(result);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    handleErrors(resultJson);
+                }
+            });
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(br != null) {
+                    br.close();
+                }
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void handleErrors(final JSONObject resultJson) {
+        try {
+            if(resultJson.has("errors")) {
+                mTemperatureSwitch.setChecked(false);
+                mPressureSwitch.setChecked(false);
+                mButtonStateSwitch.setChecked(false);
+                final JSONArray errorArr = resultJson.getJSONArray("errors");
+                for(int i = 0; i < errorArr.length(); i++) {
+                    final JSONObject messageJson = errorArr.getJSONObject(i);
+                    if(messageJson.has("message")){
+                        final String errorMessage = messageJson.getString("message");
+                        MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.ifttt_error), errorMessage);
+                        fragment.show(getChildFragmentManager(), null);
+                        break;
+                    }
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -567,11 +663,14 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty("Content-Type","application/json");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.connect();
 
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 writeStream(out, json);
+
+                InputStream stream =  new BufferedInputStream(urlConnection.getErrorStream());
+                readStream(stream);
                 final String message = urlConnection.getResponseMessage();
                 mHandler.post(new Runnable() {
                     @Override
@@ -586,18 +685,10 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
-                if(urlConnection != null)
+                if (urlConnection != null)
                     urlConnection.disconnect();
             }
             return null;
-        }
-    }
-
-    private void displayCountTokenDialog(){
-        final String iftttToken = Utils.getIFTTTToken(getContext());
-        if(iftttToken.isEmpty()) {
-            IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
-            ifttTokenDialogFragment.show(getChildFragmentManager(), null);
         }
     }
 }

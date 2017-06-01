@@ -142,7 +142,7 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
             @Override
             public void onClick(View view) {
                 if (mThingySdkManager != null) {
-                    FirmwareVersionDialogFragment fragment = FirmwareVersionDialogFragment.newInstance();
+                    FirmwareVersionDialogFragment fragment = FirmwareVersionDialogFragment.newInstance(mDevice);
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -174,7 +174,7 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     @Override
     public void updatePhysicalWebUrl() {
         final String url = mThingySdkManager.getEddystoneUrl(mDevice);
-        if(url.isEmpty()){
+        if (url.isEmpty()) {
             mPhysicalWebUrlSummary.setText(R.string.physical_web_disabled);
         } else {
             mPhysicalWebUrlSummary.setText(url);

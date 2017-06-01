@@ -70,7 +70,7 @@ public class ThingyMicrophoneService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if(action.equals("STOP_RECORDING")) {
+            if (action.equals("STOP_RECORDING")) {
                 stopRecordingAudio(mDevice);
                 stopSelf();
             }
@@ -105,7 +105,7 @@ public class ThingyMicrophoneService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        IntentFilter filter =  new IntentFilter();
+        IntentFilter filter = new IntentFilter();
         filter.addAction("STOP_RECORDING");
         LocalBroadcastManager.getInstance(this).registerReceiver(mAudioBroadcastReceiver, filter);
         mThingySdkManager = ThingySdkManager.getInstance();

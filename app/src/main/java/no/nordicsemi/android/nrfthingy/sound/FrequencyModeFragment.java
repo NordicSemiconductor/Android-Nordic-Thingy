@@ -39,7 +39,6 @@
 package no.nordicsemi.android.nrfthingy.sound;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -153,7 +152,7 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
         int frequency;
         final int duration = 0xFFFF;
         final int volume = mSeekbar.getProgress();
-        switch (id){
+        switch (id) {
             case R.id.label_1:
                 frequency = 261;
                 return handleEvent(frequency, duration, volume, event, view);
@@ -196,8 +195,8 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
         return false;
     }
 
-    private boolean handleEvent(final int frequency, final int duration, final int volume, final MotionEvent event, final View view){
-        switch (event.getAction()){
+    private boolean handleEvent(final int frequency, final int duration, final int volume, final MotionEvent event, final View view) {
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mThingySdkManager.playSoundFrequency(getActivity(), mDevice, frequency, duration, volume);
                 view.setPressed(true);
@@ -207,7 +206,7 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
                 view.setPressed(false);
                 return true;
             default:
-                if(MotionEvent.ACTION_CANCEL == event.getActionMasked()) {
+                if (MotionEvent.ACTION_CANCEL == event.getActionMasked()) {
                     mThingySdkManager.playSoundFrequency(getActivity(), mDevice, frequency, 0, volume);
                     view.setPressed(false);
                     return true;

@@ -41,8 +41,6 @@ package no.nordicsemi.android.nrfthingy;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
@@ -252,7 +250,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] matrix) {
+        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -272,7 +270,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
 
         @Override
-        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, byte [] data) {
+        public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] data) {
 
         }
     };
@@ -486,13 +484,13 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         super.onSaveInstanceState(outState);
     }
 
-    private LinkedHashMap<String, Entry> saveGraphDataOnRotation(final LineChart lineChart){
+    private LinkedHashMap<String, Entry> saveGraphDataOnRotation(final LineChart lineChart) {
         LinkedHashMap<String, Entry> values = new LinkedHashMap<>();
         final LineData lineData = lineChart.getLineData();
         List<String> xValues = lineData.getXVals();
         ILineDataSet set = lineData.getDataSetByIndex(0);
 
-        for(int i = 0; i < xValues.size(); i++) {
+        for (int i = 0; i < xValues.size(); i++) {
             values.put(xValues.get(i), set.getEntryForIndex(i));
         }
         return values;
@@ -631,7 +629,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             mLineChartTemperature.getData().getXVals().clear();
             mLineChartTemperature.clearValues();
         }
-        mLineChartTemperature.setDescription("Time");
+        mLineChartTemperature.setDescription(getString(R.string.time));
         mLineChartTemperature.setTouchEnabled(true);
         mLineChartTemperature.setVisibleXRangeMinimum(5);
         // enable scaling and dragging
@@ -743,18 +741,18 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    private synchronized void handleTemperatureGraphUpdates(LineChart lineChart){
+    private synchronized void handleTemperatureGraphUpdates(LineChart lineChart) {
         final LineData lineData = lineChart.getData();
 
-        if(lineData.getXVals().size() > ThingyUtils.MAX_VISISBLE_GRAPH_ENTRIES) {
+        if (lineData.getXVals().size() > ThingyUtils.MAX_VISISBLE_GRAPH_ENTRIES) {
             ILineDataSet set = lineData.getDataSetByIndex(0);
             if (set != null) {
                 if (set.removeFirst()) {
                     lineData.removeXValue(0);
                     final List xValues = lineData.getXVals();
-                    for(int i = 0; i < xValues.size(); i ++) {
+                    for (int i = 0; i < xValues.size(); i++) {
                         Entry entry = set.getEntryForIndex(i);
-                        if(entry != null) {
+                        if (entry != null) {
                             entry.setXIndex(i);
                             entry.setVal(entry.getVal());
                         }
@@ -766,7 +764,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void preparePressureGraph() {
-        mLineChartPressure.setDescription("Time");
+        mLineChartPressure.setDescription(getString(R.string.time));
         mLineChartPressure.setTouchEnabled(true);
         mLineChartPressure.setVisibleXRangeMinimum(5);
         // enable scaling and dragging
@@ -874,7 +872,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void prepareHumidityGraph() {
-        mLineChartHumidity.setDescription("Time");
+        mLineChartHumidity.setDescription(getString(R.string.time));
         mLineChartHumidity.setTouchEnabled(true);
         mLineChartHumidity.setVisibleXRangeMinimum(5);
         // enable scaling and dragging
@@ -1036,15 +1034,25 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         float g_ratio = g / total;
         float b_ratio = b / total;
 
-        int r_8 = (int) (r_ratio * 255 * 3 * (a / 400));
+        int clear_at_black = 300;
+        int clear_at_white = 400;
+        int clear_diff = clear_at_white - clear_at_black;
+
+        float clear_normalized = (a - clear_at_black) / clear_diff;
+
+        if (clear_normalized < 0) {
+            clear_normalized = 0;
+        }
+
+        int r_8 = (int) (r_ratio * 255 * 3 * clear_normalized);
         if (r_8 > 255)
             r_8 = 255;
 
-        int g_8 = (int) (g_ratio * 255 * 3 * (a / 400));
+        int g_8 = (int) (g_ratio * 255 * 3 * clear_normalized);
         if (g_8 > 255)
             g_8 = 255;
 
-        int b_8 = (int) (b_ratio * 255 * 3 * (a / 400));
+        int b_8 = (int) (b_ratio * 255 * 3 * clear_normalized);
         if (b_8 > 255)
             b_8 = 255;
 
@@ -1053,8 +1061,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         return String.format("#%06X", (0xFFFFFF & color));
     }
 
-    private void loadFeatureDiscoverySequence(final Toolbar mainToolbar, final Toolbar environmentToolbar){
-        if(!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_ENV_TUTORIAL)){
+    private void loadFeatureDiscoverySequence(final Toolbar mainToolbar, final Toolbar environmentToolbar) {
+        if (!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_ENV_TUTORIAL)) {
 
             final SpannableString desc = new SpannableString(getString(R.string.start_stop_env_sensors));
 
