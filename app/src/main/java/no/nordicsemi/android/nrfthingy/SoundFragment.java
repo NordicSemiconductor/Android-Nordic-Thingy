@@ -369,10 +369,6 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             }
         });
 
-        if (mThingySdkManager.isThingyStreamingAudio(mDevice)) {
-            pager.setCurrentItem(1);
-        }
-
         if (savedInstanceState != null) {
             mStartPlayingAudio = savedInstanceState.getBoolean(AUDIO_PLAYING_STATE);
             mStartRecordingAudio = savedInstanceState.getBoolean(AUDIO_RECORDING_STATE);

@@ -638,7 +638,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         private final String json;
         private final int eventType;
 
-
         public CloudTask(final int eventType, final String json) {
             this.eventType = eventType;
             this.json = json;

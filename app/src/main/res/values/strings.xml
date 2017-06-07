@@ -483,7 +483,7 @@
     <string name="cloud_step6">To use the cloud feature, navigate to cloud view and toggle the button. Pressing and releasing the physical button on the Thingy will display the duration it was pressed for and sends this data to the maker webhook. Data statistics shows the amount of data sent and received during these events</string>
     <string name="website">Visit website</string>
     <string name="privacy">Privacy policy</string>
-    <string name="thingy_guide_title">CANT\'T SEE YOUR THINGY:52?</string>
+    <string name="thingy_guide_title">CAN\'T SEE YOUR THINGY:52?</string>
     <string name="thingy_guide_step1">1. Make sure it\'s switched on.\nRemove the black rubber cover and toggle the switch.</string>
     <string name="thingy_guide_step2">2. Make sure it\'s charged.\nConnect it to a PC or a charger using a micro USB cable .</string>
     <string name="thingy_guide_step3">3. Make sure it\'s awake.\nPress the N logo at the top or shake the Thingy:52 to wake it up.</string>
@@ -513,6 +513,10 @@
     <string name="dfu_complete_reconnecting">Device firmware update completed. Reconnecting to device. This may take up to a few seconds...</string>
     <string name="dash">-</string>
     <string name="ifttt_error">IFTTT Error</string>
+    <string name="one_connected">%s  is connected</string>
+    <string name="two_connected">%d are connected</string>
+    <string name="one_disconnected">%s  is disconnected</string>
+    <string name="two_disconnected">%d are disconnected</string>
 
     <string-array name="gas_mode">
         <item>1s interval</item>

@@ -267,18 +267,18 @@ public class ThingyService extends BaseThingyService {
             final int numberOfManagedDevices = managedDevices.size();
             if (numberOfManagedDevices == 1) {
                 final String name = managedDevices.get(0).getDeviceName();
-                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfManagedDevices, name));
+                builder.setContentTitle(getString(R.string.one_disconnected, name));
             } else {
-                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfManagedDevices, numberOfManagedDevices));
+                builder.setContentTitle(getString(R.string.two_disconnected, numberOfManagedDevices));
             }
         } else {
             // There are some proximity tags connected
             final int numberOfConnectedDevices = connectedDevices.size();
             if (numberOfConnectedDevices == 1) {
                 final String name = getDeviceName(connectedDevices.get(0));
-                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text, numberOfConnectedDevices, name));
+                builder.setContentTitle(getString(R.string.one_connected, name));
             } else {
-                builder.setContentTitle(getResources().getQuantityString(R.plurals.thingy_notification_text, numberOfConnectedDevices, numberOfConnectedDevices));
+                builder.setContentTitle(getString(R.string.two_connected, numberOfConnectedDevices));
             }
             builder.setNumber(numberOfConnectedDevices);
 

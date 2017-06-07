@@ -528,7 +528,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(Utils.NORDIC_FW, mOnDfuCompleted);
+        outState.putBoolean(Utils.NORDIC_FW, mIsNordicFw);
         outState.putInt(Utils.DATA_FILE_TYPE, mFileType);
         outState.putInt(Utils.DATA_FILE_TYPE_TMP, mFileTypeTemp);
         outState.putString(Utils.DATA_FILE_PATH, mFilePath);
@@ -561,6 +561,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        stopScan(); //Stopping scan on destroy
         mThingySdkManager.unbindService(this);
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
         hideProgressDialog();
