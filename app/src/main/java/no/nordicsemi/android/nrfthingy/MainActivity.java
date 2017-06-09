@@ -52,7 +52,9 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
@@ -148,12 +150,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProgressDialog mProgressDialog;
 
     private Handler mProgressHandler = new Handler();
-    private MediaPlayer mMediaPlayer;
     private boolean mIsScanning;
     private String mFirmwareFileVersion;
 
     private ThingyService.ThingyBinder mBinder;
 
+    private Ringtone mRingtone;
     private ThingyListener mThingyListener = new ThingyListener() {
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
@@ -229,14 +231,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (bluetoothDevice.equals(mDevice)) {
                 switch (buttonState) {
                     case 0:
-                        if (mMediaPlayer != null) {
-                            mMediaPlayer.reset();
+                        if(mRingtone != null) {
+                            if(mRingtone.isPlaying()) {
+                                mRingtone.stop();
+                            }
+                            mRingtone = null;
                         }
+
                         break;
                     case 1:
-                        mMediaPlayer = MediaPlayer.create(MainActivity.this, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-                        mMediaPlayer.setVolume(1.0f, 1.0f);
-                        mMediaPlayer.start();
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        if(notification != null) {
+                            mRingtone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                            if(mRingtone != null) {
+                                mRingtone.play();
+                            }
+                        }
                         break;
                     default:
                         break;
@@ -459,9 +469,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         hideProgressDialog();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.release();
-        }
         if (isFinishing()) {
             stopScan();
             ThingySdkManager.clearInstance();
@@ -1391,7 +1398,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Cancels the existing notification. If there is no active notification this method does nothing
+     * Cancels the existing mNotification. If there is no active mNotification this method does nothing
      */
     private void cancelNotifications() {
         final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);

@@ -753,15 +753,17 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private void reconnectToDevice(final String deviceAddress) {
-        final BluetoothDevice device = getBluetoothDevice(deviceAddress);
-        if (mThingySdkManager != null && mDeviceWasConnected) {
-            showConnectionProgressDialog();
-            mScanHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mThingySdkManager.connectToThingy(getApplicationContext(), device, ThingyService.class);
-                }
-            }, 30000 /*allowing some time for the thingy to boot up for the app to start reconnecting as Samsung devices seemed to take a long time to reconnect*/);
+        if(BluetoothAdapter.checkBluetoothAddress(deviceAddress)) {
+            final BluetoothDevice device = getBluetoothDevice(deviceAddress);
+            if (mThingySdkManager != null && mDeviceWasConnected) {
+                showConnectionProgressDialog();
+                mScanHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mThingySdkManager.connectToThingy(getApplicationContext(), device, ThingyService.class);
+                    }
+                }, 30000 /*allowing some time for the thingy to boot up for the app to start reconnecting as Samsung devices seemed to take a long time to reconnect*/);
+            }
         }
     }
 
@@ -1060,11 +1062,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
         Utils.showToast(this, "Upload failed: " + message);
     }
 
-    private BluetoothDevice getBluetoothDevice(final String thingeeAddress) {
+    private BluetoothDevice getBluetoothDevice(final String thingyAddress) {
         final BluetoothManager bm = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         final BluetoothAdapter ba = bm.getAdapter();
         if (ba != null && ba.isEnabled()) {
-            return ba.getRemoteDevice(thingeeAddress);
+            return ba.getRemoteDevice(thingyAddress);
         }
         return null; //ideally shouldn't go here
     }

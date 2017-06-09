@@ -500,16 +500,18 @@ public class Utils {
 
     public static String incrementAddress(final String address) {
         String macAddr = address.substring(0, address.length() - 2);
-        Long initalValue = Long.parseLong(address.substring(address.length() - 2, address.length()), 16);
-        initalValue = initalValue + 1;
-        return macAddr + Long.toHexString(initalValue).toUpperCase();
+        final String hex = address.substring(address.length() - 2, address.length());
+        int hexAsInt = Integer.parseInt(hex, 16);
+        hexAsInt++;
+        return macAddr + Integer.toHexString(hexAsInt).toUpperCase();
     }
 
     public static String decrementAddress(final String address) {
         String macAddr = address.substring(0, address.length() - 2);
-        Long initalValue = Long.parseLong(address.substring(address.length() - 2, address.length()), 16);
-        initalValue = initalValue - 1;
-        return macAddr + Long.toHexString(initalValue).toUpperCase();
+        final String hex = address.substring(address.length() - 2, address.length());
+        int hexAsInt = Integer.parseInt(hex, 16);
+        hexAsInt--;
+        return macAddr + Long.toHexString(hexAsInt).toUpperCase();
     }
 
     public static String humanReadableByteCount(long bytes, boolean si) {
