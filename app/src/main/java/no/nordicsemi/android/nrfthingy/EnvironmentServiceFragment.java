@@ -440,12 +440,12 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             @Override
             public void onClick(View v) {
                 if (mDevice != null) {
-                    final Thingy thingy = mDatabaseHelper.getSavedDevice(mDevice.getAddress());
-                    if (isConnected(thingy, mThingySdkManager.getConnectedDevices())) {
+                    if (mThingySdkManager.isConnected(mDevice)) {
                         EnvironmentServiceSettingsFragment fragment = EnvironmentServiceSettingsFragment.newInstance(mDevice);
                         fragment.show(getChildFragmentManager(), null);
                     } else {
-                        Utils.showToast(getActivity(), "Please connect to " + thingy.getDeviceName() + " before you proceed!");
+                        final String name = mDatabaseHelper.getDeviceName(mDevice.getAddress());
+                        Utils.showToast(getActivity(), getString(R.string.no_thingy_connected_configuration, name));
                     }
                 }
             }
@@ -535,15 +535,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     @Override
     public void onNothingSelected() {
 
-    }
-
-    private boolean isConnected(Thingy thingy, List<BluetoothDevice> connectedDevices) {
-        for (BluetoothDevice device : connectedDevices) {
-            if (thingy.getDeviceAddress().equals(device.getAddress())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

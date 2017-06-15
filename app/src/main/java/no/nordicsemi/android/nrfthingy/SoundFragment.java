@@ -65,6 +65,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
@@ -226,7 +227,7 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (action.startsWith(ThingyMicrophoneService.EXTRA_DATA_AUDIO_RECORD)) {
+            if (action.startsWith(Utils.EXTRA_DATA_AUDIO_RECORD)) {
                 final byte[] tempPcmData = intent.getExtras().getByteArray(ThingyUtils.EXTRA_DATA_PCM);
                 final int length = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA);
                 if (tempPcmData != null) {
@@ -234,6 +235,9 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
                         mVoiceVisualizer.draw(tempPcmData);
                     }
                 }
+            } else if (action.equals(Utils.ERROR_AUDIO_RECORD)) {
+                final String error = intent.getExtras().getString(Utils.EXTRA_DATA);
+                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -579,7 +583,8 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
 
     public static IntentFilter createAudioRecordIntentFilter(final String address) {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ThingyMicrophoneService.EXTRA_DATA_AUDIO_RECORD + address);
+        intentFilter.addAction(Utils.EXTRA_DATA_AUDIO_RECORD + address);
+        intentFilter.addAction(Utils.ERROR_AUDIO_RECORD);
         return intentFilter;
     }
 

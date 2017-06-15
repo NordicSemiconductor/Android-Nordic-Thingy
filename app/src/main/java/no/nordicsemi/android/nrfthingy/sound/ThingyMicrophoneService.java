@@ -59,7 +59,6 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class ThingyMicrophoneService extends IntentService {
-    public static final String EXTRA_DATA_AUDIO_RECORD = "EXTRA_DATA_AUDIO_RECORD";
     private static final int AUDIO_BUFFER = 512;
 
     private boolean mStartRecordingAudio = false;
@@ -70,7 +69,7 @@ public class ThingyMicrophoneService extends IntentService {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            if (action.equals("STOP_RECORDING")) {
+            if (action.equals(Utils.STOP_RECORDING)) {
                 stopRecordingAudio(mDevice);
                 stopSelf();
             }
@@ -106,7 +105,7 @@ public class ThingyMicrophoneService extends IntentService {
     public void onCreate() {
         super.onCreate();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("STOP_RECORDING");
+        filter.addAction(Utils.STOP_RECORDING);
         LocalBroadcastManager.getInstance(this).registerReceiver(mAudioBroadcastReceiver, filter);
         mThingySdkManager = ThingySdkManager.getInstance();
     }
@@ -122,34 +121,37 @@ public class ThingyMicrophoneService extends IntentService {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mAudioBroadcastReceiver);
     }
 
-    public boolean startRecordingAudio(final BluetoothDevice device) {
+    public void startRecordingAudio(final BluetoothDevice device) {
 
         if (mStartRecordingAudio) {
-            return false;
+            return;
         }
         mStartRecordingAudio = true;
 
         final ThingyConnection thingyConnection = mThingySdkManager.getThingyConnection(device);
         final AudioRecord audioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER);
-        audioRecorder.startRecording();
-        while (mStartRecordingAudio) {
-            byte audioData[] = new byte[AUDIO_BUFFER];
-            int status = audioRecorder.read(audioData, 0, AUDIO_BUFFER);
-            if (status == AudioRecord.ERROR_INVALID_OPERATION ||
-                    status == AudioRecord.ERROR_BAD_VALUE) {
-                break;
+        if(audioRecorder != null && audioRecorder.getState() != AudioRecord.STATE_UNINITIALIZED) {
+            audioRecorder.startRecording();
+            while (mStartRecordingAudio) {
+                byte audioData[] = new byte[AUDIO_BUFFER];
+                int status = audioRecorder.read(audioData, 0, AUDIO_BUFFER);
+                if (status == AudioRecord.ERROR_INVALID_OPERATION ||
+                        status == AudioRecord.ERROR_BAD_VALUE) {
+                    break;
+                }
+                try {
+                    thingyConnection.playVoiceInput(downSample(audioData));
+                    sendAudioRecordBroadcast(device, audioData, status);
+                } catch (Exception e) {
+                    break;
+                }
             }
-            try {
-                thingyConnection.playVoiceInput(downSample(audioData));
-                sendAudioRecordBroadcast(device, audioData, status);
-            } catch (Exception e) {
-                break;
-            }
-        }
 
-        audioRecorder.stop();
-        audioRecorder.release();
-        return true;
+            audioRecorder.stop();
+            audioRecorder.release();
+        } else {
+            sendAudioRecordErrorBroadcast(mDevice, audioRecorder.getState());
+        }
     }
 
     public boolean stopRecordingAudio(final BluetoothDevice device) {
@@ -169,10 +171,19 @@ public class ThingyMicrophoneService extends IntentService {
     }
 
     private void sendAudioRecordBroadcast(final BluetoothDevice device, final byte[] data, final int status) {
-        final Intent intent = new Intent(EXTRA_DATA_AUDIO_RECORD + device.getAddress());
+        final Intent intent = new Intent(Utils.EXTRA_DATA_AUDIO_RECORD + device.getAddress());
         intent.putExtra(ThingyUtils.EXTRA_DEVICE, device);
         intent.putExtra(ThingyUtils.EXTRA_DATA_PCM, data);
         intent.putExtra(ThingyUtils.EXTRA_DATA, status);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+
+
+    private void sendAudioRecordErrorBroadcast(final BluetoothDevice device, final int error) {
+        final Intent intent = new Intent(Utils.ERROR_AUDIO_RECORD + device.getAddress());
+        intent.putExtra(ThingyUtils.EXTRA_DEVICE, device);
+        intent.putExtra(ThingyUtils.EXTRA_DATA, error);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 }

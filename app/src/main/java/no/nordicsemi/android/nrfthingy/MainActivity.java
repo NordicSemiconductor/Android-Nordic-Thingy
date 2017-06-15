@@ -534,13 +534,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 performFragmentNavigation(item);
                 break;
             case R.id.configuration_menu:
-                final Thingy thingy = mDatabaseHelper.getSavedDevice(mDevice.getAddress());
                 if (mThingySdkManager.isConnected(mDevice)) {
                     Intent configurationIntent = new Intent(this, ConfigurationActivity.class);
                     configurationIntent.putExtra(Utils.CURRENT_DEVICE, mDevice);
                     startActivity(configurationIntent);
                 } else {
-                    showToast(this, "Please connect to " + thingy.getDeviceName() + " before you proceed!");
+                    showToast(this, getString(R.string.no_thingy_connected_configuration, mDatabaseHelper.getDeviceName(mDevice.getAddress())));
                 }
                 break;
             case Utils.GROUP_ID_SAVED_THINGIES:

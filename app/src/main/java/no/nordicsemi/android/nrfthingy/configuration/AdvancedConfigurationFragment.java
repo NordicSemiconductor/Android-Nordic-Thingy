@@ -49,7 +49,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
+import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class AdvancedConfigurationFragment extends Fragment implements ThingeeAdvancedSettingsChangeListener {
@@ -116,12 +118,18 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         final LinearLayout wakeOnMotion = (LinearLayout) rootView.findViewById(R.id.category_wake_on_motion);
         mWakeOnMotionSummary = (TextView) rootView.findViewById(R.id.category_wake_on_motion_summary);
 
+        final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+        final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());
+
         temperature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 0;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -130,9 +138,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         pressure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 1;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -141,9 +152,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         humidity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 2;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -152,9 +166,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         colorIntensity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 3;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -163,9 +180,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         gasMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 4;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -174,9 +194,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         pedometer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 0;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -185,9 +208,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         temperatureMotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 1;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -196,9 +222,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         compass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 2;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -207,9 +236,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         motion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 3;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -218,9 +250,12 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
         wakeOnMotion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 4;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }

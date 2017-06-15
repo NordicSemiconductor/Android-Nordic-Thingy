@@ -213,7 +213,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             }
         });
 
-        if (mThingySdkManager.isThingyStreamingAudio(mDevice)) {
+        if (mThingySdkManager != null && mThingySdkManager.isThingyStreamingAudio(mDevice)) {
             mFabPlay.setImageResource(R.drawable.ic_stop_white);
             mIsPlaying = true;
             final int selectedAudioTrackPosition = ((ThingyService.ThingyBinder) (mThingySdkManager.getThingyBinder())).getLastSelectedAudioTrack(mDevice);

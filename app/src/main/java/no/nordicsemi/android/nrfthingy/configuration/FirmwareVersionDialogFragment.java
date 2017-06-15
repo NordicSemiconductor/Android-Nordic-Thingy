@@ -142,24 +142,28 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
 
 
     private boolean checkIfFirmwareUpdateAvailable() {
-        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
+        final String version = mThingySdkManager.getFirmwareVersion(mDevice);
+        if(version != null && !version.isEmpty()) {
+            final String[] fwVersion = version.split("\\.");
+            if (fwVersion != null) {
+                final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+                final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+                final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
+                final String[] resourceEntryNames = name.split("_");
 
-        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
-        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
-        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
-        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
-        final String[] resourceEntryNames = name.split("_");
+                final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+                final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+                final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
 
-        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
-        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
-        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+                mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                        resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                        resourceEntryNames[resourceEntryNames.length - 1];
 
-        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
-                resourceEntryNames[resourceEntryNames.length - 2] + "." +
-                resourceEntryNames[resourceEntryNames.length - 1];
-
-        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
-            return true;
+                if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
+                    return true;
+                }
+            }
         }
 
         return false;

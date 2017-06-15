@@ -74,6 +74,8 @@ public class Utils {
 
     public static final String START_RECORDING = "START_RECORDING";
     public static final String STOP_RECORDING = "STOP_RECORDING";
+    public static final String EXTRA_DATA_AUDIO_RECORD = "EXTRA_DATA_AUDIO_RECORD";
+    public static final String ERROR_AUDIO_RECORD = "ERROR";
 
     public static final float CHART_LINE_WIDTH = 2.0f;
     public static final float CHART_VALUE_TEXT_SIZE = 6.5f;
@@ -503,7 +505,7 @@ public class Utils {
         final String hex = address.substring(address.length() - 2, address.length());
         int hexAsInt = Integer.parseInt(hex, 16);
         hexAsInt++;
-        return macAddr + Integer.toHexString(hexAsInt).toUpperCase();
+        return macAddr + Integer.toHexString(hexAsInt).toUpperCase(Locale.US);
     }
 
     public static String decrementAddress(final String address) {
@@ -511,7 +513,7 @@ public class Utils {
         final String hex = address.substring(address.length() - 2, address.length());
         int hexAsInt = Integer.parseInt(hex, 16);
         hexAsInt--;
-        return macAddr + Long.toHexString(hexAsInt).toUpperCase();
+        return macAddr + Long.toHexString(hexAsInt).toUpperCase(Locale.US);
     }
 
     public static String humanReadableByteCount(long bytes, boolean si) {

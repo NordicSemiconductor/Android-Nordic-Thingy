@@ -67,6 +67,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -320,6 +321,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secure_dfu);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         mDatabaseHelper = new DatabaseHelper(this);
         mThingySdkManager = ThingySdkManager.getInstance();
 

@@ -456,7 +456,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             mButtonStateSwitch.setChecked(false);
             mCloudTokenView.setText(R.string.dash);
         } else {
-
+            mCloudToken = token;
             if(mTemperatureSwitch.isChecked()) {
                 mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), mTemperatureSwitch.isChecked(), CloudDbColumns.COLUMN_TEMPERATURE_UPLOAD);
                 mThingySdkManager.enableTemperatureNotifications(mDevice, mTemperatureSwitch.isChecked());
@@ -471,7 +471,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                 mDatabaseHelper.enableCloudNotifications(mDevice.getAddress(), mButtonStateSwitch.isChecked(), CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD);
                 mThingySdkManager.enableButtonStateNotification(mDevice, mButtonStateSwitch.isChecked());
             }
-
             mCloudTokenView.setText(token);
         }
     }
@@ -580,7 +579,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         try {
             StringBuffer sb = new StringBuffer();
             br = new BufferedReader(new InputStreamReader(inputStream));
-            String inputLine = "";
+            String inputLine;
             while ((inputLine = br.readLine()) != null) {
                 sb.append(inputLine);
             }

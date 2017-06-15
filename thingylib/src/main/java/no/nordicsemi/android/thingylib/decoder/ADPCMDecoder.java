@@ -306,8 +306,9 @@ public class ADPCMDecoder {
 			/* Step 1 - get the delta value */
 			if (bufferStep) {
 				delta = inputBuffer & 0x0F;
+				in++;
 			} else {
-				inputBuffer = adpcm[in++];
+				inputBuffer = adpcm[in];
 				delta = (inputBuffer >> 4) & 0x0F;
 			}
 			bufferStep = !bufferStep;

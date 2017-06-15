@@ -1773,12 +1773,16 @@ public class ThingySdkManager {
      * @param bluetoothDevice to validated with
      */
     public boolean isAnotherThingyIsStreamingAudio(final BluetoothDevice bluetoothDevice) {
-        List<BluetoothDevice> connectedDevices = mBinder.getConnectedDevices();
-        for(BluetoothDevice device : connectedDevices) {
-            if(!bluetoothDevice.equals(device)) {
-                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
-                if (thingyConnection != null && thingyConnection.isAudioStreamingInProgress()) {
-                    return true;
+        if (bluetoothDevice != null) {
+            if (mBinder != null) {
+                List<BluetoothDevice> connectedDevices = mBinder.getConnectedDevices();
+                for (BluetoothDevice device : connectedDevices) {
+                    if (!bluetoothDevice.equals(device)) {
+                        final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                        if (thingyConnection != null && thingyConnection.isAudioStreamingInProgress()) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
@@ -1791,9 +1795,13 @@ public class ThingySdkManager {
      * @param device to validated with
      */
     public boolean isThingyStreamingAudio(final BluetoothDevice device) {
-        final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
-        if (thingyConnection != null && thingyConnection.isAudioStreamingInProgress()) {
-            return true;
+        if(device != null) {
+            if(mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null && thingyConnection.isAudioStreamingInProgress()) {
+                    return true;
+                }
+            }
         }
         return false;
     }

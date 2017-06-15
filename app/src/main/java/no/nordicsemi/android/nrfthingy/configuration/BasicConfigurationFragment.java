@@ -50,9 +50,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
+import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
+import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class BasicConfigurationFragment extends Fragment implements ThingeeBasicSettingsChangeListener, FirmwareVersionDialogFragment.FimrwareVersionDialogFragmentListener {
 
@@ -98,11 +101,17 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
         final LinearLayout firmwareVersion = (LinearLayout) rootView.findViewById(R.id.category_fw_version);
         mFirmwareVersionSummary = (TextView) rootView.findViewById(R.id.category_fw_version_summary);
 
+        final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+        final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());
+
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     ThingyNameConfigurationDialogFragment fragment = ThingyNameConfigurationDialogFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -111,8 +120,11 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
         advParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     AdvParamCharConfigurationDialogFragment fragment = AdvParamCharConfigurationDialogFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -121,8 +133,11 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
         connectionParams.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     ConnParamCharConfigurationDialogFragment fragment = ConnParamCharConfigurationDialogFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -131,8 +146,11 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
         eddystoneUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     EddystoneUrlConfigurationDialogFragment fragment = EddystoneUrlConfigurationDialogFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
@@ -141,8 +159,11 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
         firmwareVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mThingySdkManager != null) {
+                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     FirmwareVersionDialogFragment fragment = FirmwareVersionDialogFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
                     fragment.show(getChildFragmentManager(), null);
                 }
             }
