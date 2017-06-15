@@ -75,7 +75,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
-        app:elevation="6dp" />
+        app:elevation="8dp" />
 
     <ScrollView
         android:layout_below="@id/app_bar_layout"
