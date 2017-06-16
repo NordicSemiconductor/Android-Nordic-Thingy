@@ -189,16 +189,21 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
 
     @Override
     public void updateThingeeName() {
-        mNameSummary.setText(mThingySdkManager.getDeviceName(mDevice));
+        final String name  = mThingySdkManager.getDeviceName(mDevice);
+        if(name != null) {
+            mNameSummary.setText(name);
+        }
     }
 
     @Override
     public void updatePhysicalWebUrl() {
         final String url = mThingySdkManager.getEddystoneUrl(mDevice);
-        if (url.isEmpty()) {
-            mPhysicalWebUrlSummary.setText(R.string.physical_web_disabled);
-        } else {
-            mPhysicalWebUrlSummary.setText(url);
+        if(url != null) {
+            if (url.isEmpty()) {
+                mPhysicalWebUrlSummary.setText(R.string.physical_web_disabled);
+            } else {
+                mPhysicalWebUrlSummary.setText(url);
+            }
         }
     }
 
@@ -208,7 +213,10 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
 
     @Override
     public void updateFirmwareVersion() {
-        mFirmwareVersionSummary.setText(mThingySdkManager.getFirmwareVersion(mDevice));
+        final String firmwareVersion = mThingySdkManager.getFirmwareVersion(mDevice);
+        if(firmwareVersion != null) {
+            mFirmwareVersionSummary.setText(firmwareVersion);
+        }
     }
 
     @Override

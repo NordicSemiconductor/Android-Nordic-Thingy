@@ -469,8 +469,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         hideProgressDialog();
+        stopScan();
         if (isFinishing()) {
-            stopScan();
             ThingySdkManager.clearInstance();
         }
     }
@@ -1463,17 +1463,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Stop scan if user tap Cancel button
+     * Stop scan on rotation or on app closing.
+     * In case the stopScan is called inside onDestroy we have to check if the app is finishing as the mIsScanning flag becomes false on rotation
      */
     private void stopScan() {
         if (mIsScanning) {
             if (mBinder != null) {
                 mBinder.setScanningState(false);
             }
+            Log.v(Utils.TAG, "Stopping scan");
+            mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
-            mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             mIsScanning = false;
+        } else if(!isFinishing()) {
+            if (mBinder != null) {
+                mBinder.setScanningState(false);
+            }
+            Log.v(Utils.TAG, "Stopping scan on rotation");
+            mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
+            final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
+            scanner.stopScan(mScanCallback);
+            mIsScanning = false;
+
         }
     }
 
@@ -1579,25 +1591,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private boolean checkIfFirmwareUpdateAvailable() {
-        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
+        final String version = mThingySdkManager.getFirmwareVersion(mDevice);
+        if(version != null && !version.isEmpty()) {
+            final String[] fwVersion = version.split("\\.");
+            if (fwVersion != null) {
+                final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+                final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+                final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
 
-        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
-        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
-        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
+                final String[] resourceEntryNames = name.split("_");
 
-        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v1_1_0).replace("v", "");
-        final String[] resourceEntryNames = name.split("_");
+                final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+                final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+                final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
 
-        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
-        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
-        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+                mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                        resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                        resourceEntryNames[resourceEntryNames.length - 1];
 
-        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
-                resourceEntryNames[resourceEntryNames.length - 2] + "." +
-                resourceEntryNames[resourceEntryNames.length - 1];
-
-        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
-            return true;
+                if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
+                    return true;
+                }
+            }
         }
 
         return false;

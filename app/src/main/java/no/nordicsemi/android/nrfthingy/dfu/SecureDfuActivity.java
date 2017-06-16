@@ -785,6 +785,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private void startScan() {
+        Log.v(Utils.TAG, "Starting scan");
         final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
         final ScanSettings settings = new ScanSettings.Builder()
                 .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).setReportDelay(1000).setUseHardwareBatchingIfSupported(false).setUseHardwareFilteringIfSupported(false).build();
@@ -798,14 +799,23 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     /**
-     * Stop scan if user tap Cancel button
+     * Stop scan on rotation or on app closing
+     * In case the stopScan is called inside onDestroy we have to check if the app is finishing as the mIsScanning flag becomes false on rotation
      */
     private void stopScan() {
         if (mIsScanning) {
+            Log.v(Utils.TAG, "Stopping scan");
             mScanHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(scanCallback);
             mIsScanning = false;
+        } else if(!isFinishing()) {
+            Log.v(Utils.TAG, "Stopping scan on rotation");
+            mScanHandler.removeCallbacks(mBleScannerTimeoutRunnable);
+            final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
+            scanner.stopScan(scanCallback);
+            mIsScanning = false;
+
         }
     }
 
@@ -816,19 +826,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
             stopScan();
         }
     };
-
-
-    private boolean isConnected(final BluetoothDevice device) {
-        if (mThingySdkManager != null) {
-            final List<BluetoothDevice> connectedDevices = mThingySdkManager.getConnectedDevices();
-            for (BluetoothDevice dev : connectedDevices) {
-                if (device.getAddress().equals(dev.getAddress())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     private ScanCallback scanCallback = new ScanCallback() {
 
@@ -1083,6 +1080,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setCanceledOnTouchOutside(false);
+
 
         mScanHandler.postDelayed(runnable, 40000);
         mProgressDialog.show();

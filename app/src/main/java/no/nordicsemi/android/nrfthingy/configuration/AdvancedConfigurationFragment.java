@@ -298,55 +298,80 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
     @Override
     public void updateTemperatureInterval() {
-        mTemperatureIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getEnvironmentTemperatureInterval(mDevice)));
+        final int interval =  mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
+        if(interval > 0) {
+            mTemperatureIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updatePressureInterval() {
-        mPressureIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getPressureInterval(mDevice)));
-
+        final int interval =  mThingySdkManager.getPressureInterval(mDevice);
+        if(interval > 0) {
+            mPressureIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateHumidityInterval() {
-        mHumidityIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getHumidityInterval(mDevice)));
+        final int interval =  mThingySdkManager.getHumidityInterval(mDevice);
+        if(interval > 0) {
+            mHumidityIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateColorIntensityInterval() {
-        mColorIntensityIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getColorIntensityInterval(mDevice)));
+        final int interval = mThingySdkManager.getColorIntensityInterval(mDevice);
+        if (interval > 0) {
+            mColorIntensityIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateGasMode() {
         final int gasMode = mThingySdkManager.getGasMode(mDevice);
-        if (gasMode == 1) {
-            mGasModeSummary.setText(R.string.gas_mode_one);
-        } else if (gasMode == 2) {
-            mGasModeSummary.setText(R.string.gas_mode_two);
-        } else if (gasMode == 3) {
-            mGasModeSummary.setText(R.string.gas_mode_three);
+        if(gasMode > 0) {
+            if (gasMode == 1) {
+                mGasModeSummary.setText(R.string.gas_mode_one);
+            } else if (gasMode == 2) {
+                mGasModeSummary.setText(R.string.gas_mode_two);
+            } else if (gasMode == 3) {
+                mGasModeSummary.setText(R.string.gas_mode_three);
+            }
         }
     }
 
     @Override
     public void updatePedometerInterval() {
-        mPedometerIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getPedometerInterval(mDevice)));
+        final int interval =  mThingySdkManager.getPedometerInterval(mDevice);
+        if(interval > 0) {
+            mPedometerIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateMotionTemperatureInterval() {
-        mMotionTemperatureIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getMotionTemperatureInterval(mDevice)));
+        final int interval =  mThingySdkManager.getMotionTemperatureInterval(mDevice);
+        if(interval > 0) {
+            mMotionTemperatureIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateCompassInterval() {
-        mCompassIntervalSummary.setText(getString(R.string.interval_ms, mThingySdkManager.getCompassInterval(mDevice)));
+        final int interval = mThingySdkManager.getCompassInterval(mDevice);
+        if (interval > 0) {
+            mCompassIntervalSummary.setText(getString(R.string.interval_ms, interval));
+        }
     }
 
     @Override
     public void updateMotionInterval() {
-        mMotionIntervalSummary.setText(getString(R.string.interval_hz, mThingySdkManager.getMotionInterval(mDevice)));
+        final int interval = mThingySdkManager.getMotionInterval(mDevice);
+        if (interval > 0) {
+            mMotionIntervalSummary.setText(getString(R.string.interval_hz, interval));
+        }
     }
 
     @Override
