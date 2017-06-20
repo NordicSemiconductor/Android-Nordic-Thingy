@@ -70,7 +70,7 @@ public class ThingyMicrophoneService extends IntentService {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (action.equals(Utils.STOP_RECORDING)) {
-                stopRecordingAudio(mDevice);
+                stopRecordingAudio();
                 stopSelf();
             }
         }
@@ -131,9 +131,9 @@ public class ThingyMicrophoneService extends IntentService {
         final ThingyConnection thingyConnection = mThingySdkManager.getThingyConnection(device);
         final AudioRecord audioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER);
         if(audioRecorder != null && audioRecorder.getState() != AudioRecord.STATE_UNINITIALIZED) {
+            byte audioData[] = new byte[AUDIO_BUFFER];
             audioRecorder.startRecording();
             while (mStartRecordingAudio) {
-                byte audioData[] = new byte[AUDIO_BUFFER];
                 int status = audioRecorder.read(audioData, 0, AUDIO_BUFFER);
                 if (status == AudioRecord.ERROR_INVALID_OPERATION ||
                         status == AudioRecord.ERROR_BAD_VALUE) {
@@ -154,7 +154,7 @@ public class ThingyMicrophoneService extends IntentService {
         }
     }
 
-    public boolean stopRecordingAudio(final BluetoothDevice device) {
+    public boolean stopRecordingAudio() {
         mStartRecordingAudio = false;
         return true;
     }

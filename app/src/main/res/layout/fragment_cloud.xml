@@ -61,7 +61,6 @@
             android:layout_marginTop="@dimen/cardview_vertical_padding"
             card_view:cardCornerRadius="2dp">
 
-
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
