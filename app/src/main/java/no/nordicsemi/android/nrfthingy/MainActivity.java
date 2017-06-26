@@ -451,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 mBinder.setLastVisibleFragment(Utils.ENVIRONMENT_FRAGMENT);
             }
         }
+        stopScan();
         mThingySdkManager.unbindService(this);
         ThingyListenerHelper.unregisterThingyListener(this, mThingyListener);
         unregisterReceiver(mBleStateChangedReceiver);
@@ -469,7 +470,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onDestroy() {
         super.onDestroy();
         hideProgressDialog();
-        stopScan();
         if (isFinishing()) {
             ThingySdkManager.clearInstance();
         }

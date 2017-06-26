@@ -114,6 +114,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     private final Queue<Request> mQueue;
     private final Context mContext;
     private final Handler mHandler;
+    private final Handler mMtuHandler;
     private final BluetoothDevice mBluetoothDevice;
     private BluetoothGatt mBluetoothGatt;
 
@@ -197,6 +198,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     public ThingyConnection(final Context context, final BluetoothDevice bluetoothDevice) {
         this.mContext = context;
         this.mHandler = new Handler();
+        this.mMtuHandler = new Handler();
         this.mBluetoothDevice = bluetoothDevice;
         this.mQueue = new LinkedList<>();
         connect(bluetoothDevice);
@@ -650,13 +652,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             Intent intent = new Intent(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    requestMtu();
-                }
-            }, 1000);
+            requestMtu();
         }
 
         mHandler.post(mProcessNextTask);
@@ -2723,19 +2719,24 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Requests the mtu to be changed to the desired max transmission unit
      */
-    private void requestMtu() {
-        if (mBluetoothGatt != null) {
-            if (ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
-                if (mMtu != mtu) {
-                    boolean isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
-                    if (!isMtuRequestSuccess) {
-                        Log.v(ThingyUtils.TAG, "MTU request failed");
+    public void requestMtu() {
+        mMtuHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mBluetoothGatt != null) {
+                    if (ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
+                        if (mMtu != mtu) {
+                            boolean isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
+                            if (!isMtuRequestSuccess) {
+                                Log.v(ThingyUtils.TAG, "MTU request failed");
+                            }
+                        }
+                    } else {
+                        mMtu = ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP;
                     }
                 }
-            } else {
-                mMtu = ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP;
             }
-        }
+        }, 1000);
     }
 
     private void sendPcmBroadcast(final int status) {

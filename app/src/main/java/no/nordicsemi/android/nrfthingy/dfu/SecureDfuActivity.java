@@ -556,6 +556,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
         super.onStop();
         if (!isFinishing()) {
             mScanHandler.removeCallbacks(runnable);
+        } else {
+            stopScan();
         }
         ThingyListenerHelper.unregisterThingyListener(this, mThingyListener);
         unregisterReceiver(mBleStateChangedReceiver);
@@ -564,7 +566,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopScan(); //Stopping scan on destroy
         mThingySdkManager.unbindService(this);
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
         hideProgressDialog();
@@ -809,13 +810,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(scanCallback);
             mIsScanning = false;
-        } else if(!isFinishing()) {
-            Log.v(Utils.TAG, "Stopping scan on rotation");
-            mScanHandler.removeCallbacks(mBleScannerTimeoutRunnable);
-            final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
-            scanner.stopScan(scanCallback);
-            mIsScanning = false;
-
         }
     }
 

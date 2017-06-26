@@ -113,7 +113,8 @@ public class ScannerFragment extends DialogFragment {
 
     @Override
     public void onStop() {
-        stopScan();//Stop scan moved from onDestroyView to onStop
+        //Stop scan moved from onDestroyView to onStop
+        stopScan();
         super.onStop();
     }
 

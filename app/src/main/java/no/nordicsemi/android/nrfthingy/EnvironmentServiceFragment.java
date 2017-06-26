@@ -76,6 +76,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
@@ -154,7 +155,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             mTemperature = temperature;
             mTemperatureTimeStamp = ThingyUtils.TIME_FORMAT.format(System.currentTimeMillis());
             if (mIsFragmentAttached) {
-                mTemperatureView.setText((mTemperature) + "\u2103");
+                mTemperatureView.setText(String.format(Locale.US, "%s ℃", temperature));
                 handleTemperatureGraphUpdates(mLineChartTemperature);
                 addTemperatureEntry(mTemperatureTimeStamp, Float.valueOf(mTemperature));
             }
