@@ -133,8 +133,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         int mECO2;
         int mTVOC;
 
-        ThingyService.ThingyBinder binder;
-
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
             //Connectivity callbacks handled by main activity
@@ -155,7 +153,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             mTemperature = temperature;
             mTemperatureTimeStamp = ThingyUtils.TIME_FORMAT.format(System.currentTimeMillis());
             if (mIsFragmentAttached) {
-                mTemperatureView.setText(String.format(Locale.US, "%s ℃", temperature));
+                mTemperatureView.setText(String.format(Locale.US, getString(R.string.celcius), temperature));
                 handleTemperatureGraphUpdates(mLineChartTemperature);
                 addTemperatureEntry(mTemperatureTimeStamp, Float.valueOf(mTemperature));
             }
@@ -715,6 +713,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
             if (temperatureValue > leftAxis.getAxisMaximum()) {
                 leftAxis.setAxisMaxValue(leftAxis.getAxisMaximum() + 20f);
+            } else if(temperatureValue < leftAxis.getAxisMinimum()) {
+                leftAxis.setAxisMinValue(leftAxis.getAxisMinimum() - 20f);
             }
 
             mLineChartTemperature.notifyDataSetChanged();

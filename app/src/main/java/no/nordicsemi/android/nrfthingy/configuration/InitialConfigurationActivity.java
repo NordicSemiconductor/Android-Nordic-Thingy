@@ -51,8 +51,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
@@ -100,8 +103,10 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private LinearLayout mThingyInfoContainer;
     private LinearLayout mDeviceNameContainer;
     private LinearLayout mSetupCompleteContainer;
+    private LinearLayout mLocationServicesContainer;
 
     private TextInputEditText mDeviceInfo;
+    private TextView mEnableLocationServices;
 
     private Button mConfirmThingy;
     private Button mConfirmDeviceName;
@@ -134,6 +139,19 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private ProgressDialog mProgressDialog;
 
     private ScannerFragment mScannerFragment;
+
+    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final boolean enabled = isLocationEnabled();
+            if(enabled){
+                mLocationServicesContainer.setVisibility(View.GONE);
+            } else {
+                mLocationServicesContainer.setVisibility(View.VISIBLE);
+            }
+
+        }
+    };
 
     private ThingyListener mThingyListener = new ThingyListener() {
 
@@ -283,6 +301,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mThingyInfoContainer = (LinearLayout) findViewById(R.id.thingy_container);
         mDeviceNameContainer = (LinearLayout) findViewById(R.id.device_name_container);
         mSetupCompleteContainer = (LinearLayout) findViewById(R.id.setup_complete_container);
+        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
+        mEnableLocationServices = (TextView) findViewById(R.id.enable_location_services);
 
         mScrollView = (ScrollView) findViewById(R.id.scroll_view);
 
@@ -298,6 +318,14 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mStepOneSummary = (TextView) findViewById(R.id.step_one_summary);
         mView = findViewById(R.id.vertical_line);
         mSpace = (Space) findViewById(R.id.space);
+
+        mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
 
         mStepOne.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,14 +346,18 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             public void onClick(View v) {
                 if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
                     if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        if (isBleEnabled()) {
-                            final String title = mConfirmThingy.getText().toString().trim();
-                            if (title.contains("Disconnect")) {
-                                mThingySdkManager.disconnectFromThingy(mDevice);
-                                mConfirmThingy.setText(R.string.scan_thingy);
-                            }
-                            mScannerFragment.show(getSupportFragmentManager(), null);
-                        } else enableBle();
+                        if(isLocationEnabled()) {
+                            if (isBleEnabled()) {
+                                final String title = mConfirmThingy.getText().toString().trim();
+                                if (title.contains("Disconnect")) {
+                                    mThingySdkManager.disconnectFromThingy(mDevice);
+                                    mConfirmThingy.setText(R.string.scan_thingy);
+                                }
+                                mScannerFragment.show(getSupportFragmentManager(), null);
+                            } else enableBle();
+                        } else {
+                            Utils.showToast(InitialConfigurationActivity.this, getString(R.string.location_services_disabled));
+                        }
                     } else {
                         final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, Utils.REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
                         dialog.show(getSupportFragmentManager(), null);
@@ -395,11 +427,17 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                 animateStepTwo();
             }
         }
+
+        registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if(!isLocationEnabled()){
+            mLocationServicesContainer.setVisibility(View.VISIBLE);
+        }
+
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
         registerReceiver(mBleStateChangedReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
@@ -433,6 +471,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onDestroy() {
         super.onDestroy();
         hideProgressDialog();
+        unregisterReceiver(mLocationProviderChangedReceiver);
     }
 
     @Override
@@ -864,5 +903,22 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         Intent intent = new Intent(this, SecureDfuActivity.class);
         intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
         startActivity(intent);
+    }
+
+    /**
+     * Since Marshmallow location services must be enabled in order to scan.
+     * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmellow.
+     */
+    public boolean isLocationEnabled() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int locationMode = Settings.Secure.LOCATION_MODE_OFF;
+            try {
+                locationMode = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (final Settings.SettingNotFoundException e) {
+                // do nothing
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        }
+        return true;
     }
 }

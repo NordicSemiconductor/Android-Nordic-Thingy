@@ -55,13 +55,17 @@ import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
@@ -74,6 +78,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -116,6 +121,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         DfuRationaleDialogFragment.DfuRationaleFragmentListener {
 
     private static final int SCAN_DURATION = 15000;
+    private LinearLayout mLocationServicesContainer;
+
+    private TextView mEnableLocationServices;
     private TextView mNordicFirmware;
     private TextView mCustomFirmware;
     private TextView mFileNameView;
@@ -168,6 +176,20 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private boolean mOnDfuCompleted = false;
     private DatabaseHelper mDatabaseHelper;
     private ThingyService.ThingyBinder mBinder;
+
+
+    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final boolean enabled = isLocationEnabled();
+            if(enabled){
+                mLocationServicesContainer.setVisibility(View.GONE);
+            } else {
+                mLocationServicesContainer.setVisibility(View.VISIBLE);
+            }
+
+        }
+    };
 
     private ThingyListener mThingyListener = new ThingyListener() {
 
@@ -345,6 +367,16 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mDfuStatusToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_dfu_gray));
         mDfuStatusToolbar.setTitle(R.string.dfu_status);
 
+        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
+        mEnableLocationServices = (TextView) findViewById(R.id.enable_location_services);
+        mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
+
         mFabStartStop = (FloatingActionButton) findViewById(R.id.dfu_fab);
         mFabStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -469,6 +501,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
         setGUI();
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
+        registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
     }
 
     private void setGUI() {
@@ -512,6 +545,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
         if (!isBleEnabled()) {
             enableBle();
         }
+
+        if(!isLocationEnabled()){
+            mLocationServicesContainer.setVisibility(View.VISIBLE);
+        }
+
         mThingySdkManager.bindService(this, ThingyService.class);
         checkIfRequiredPermissionsGranted();
         registerReceiver(mBleStateChangedReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
@@ -569,6 +607,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mThingySdkManager.unbindService(this);
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
         hideProgressDialog();
+        unregisterReceiver(mLocationProviderChangedReceiver);
     }
 
     @Override
@@ -1295,5 +1334,22 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mThingySdkManager.enableTemperatureNotifications(mDevice, true);
         mThingySdkManager.enablePressureNotifications(mDevice, true);
         mThingySdkManager.enableButtonStateNotification(mDevice, true);
+    }
+
+    /**
+     * Since Marshmallow location services must be enabled in order to scan.
+     * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmellow.
+     */
+    public boolean isLocationEnabled() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int locationMode = Settings.Secure.LOCATION_MODE_OFF;
+            try {
+                locationMode = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (final Settings.SettingNotFoundException e) {
+                // do nothing
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        }
+        return true;
     }
 }

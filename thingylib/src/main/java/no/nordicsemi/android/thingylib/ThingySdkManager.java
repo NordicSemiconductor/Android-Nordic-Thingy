@@ -1495,6 +1495,17 @@ public class ThingySdkManager {
         }
     }
 
+    public void requestMtu(final BluetoothDevice device) {
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    thingyConnection.requestMtu();
+                }
+            }
+        }
+    }
+
     /**
      * Toggles Sound notifications for a particular thingy
      *

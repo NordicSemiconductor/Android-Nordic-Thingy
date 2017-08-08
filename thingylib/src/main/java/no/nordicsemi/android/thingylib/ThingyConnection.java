@@ -336,15 +336,14 @@ public class ThingyConnection extends BluetoothGattCallback {
         super.onCharacteristicChanged(gatt, characteristic);
         if (characteristic.equals(mTemperatureCharacteristic)) {
 
-            final int mTemperatureInt = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
+            final int mTemperatureInt = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 0);
             final int mTemperatureDec = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
-
             final String mTemperatureTimestamp = ThingyUtils.TIME_FORMAT.format(System.currentTimeMillis());
-            mTemperatureData.put(mTemperatureTimestamp, mTemperatureInt + "." + mTemperatureDec);
+            mTemperatureData.put(mTemperatureTimestamp, String.valueOf(mTemperatureInt) + "." + String.valueOf(mTemperatureDec));
 
             final Intent intent = new Intent(ThingyUtils.TEMPERATURE_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
-            intent.putExtra(ThingyUtils.EXTRA_DATA, mTemperatureInt + "." + mTemperatureDec);
+            intent.putExtra(ThingyUtils.EXTRA_DATA, String.valueOf(mTemperatureInt) + "." + String.valueOf(mTemperatureDec));
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
             ThingyUtils.removeOldDataForGraphs(mTemperatureData);
@@ -652,7 +651,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             Intent intent = new Intent(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-            requestMtu();
+            //requestMtu();
         }
 
         mHandler.post(mProcessNextTask);
@@ -661,8 +660,12 @@ public class ThingyConnection extends BluetoothGattCallback {
     @Override
     public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
         super.onMtuChanged(gatt, mtu, status);
-        Log.v(ThingyUtils.TAG, "onMtuChanged() " + mtu + " Status: " + status);
-        mMtu = mtu;
+        if(status == BluetoothGatt.GATT_SUCCESS ) {
+            Log.v(ThingyUtils.TAG, "onMtuChanged() " + mtu + " Status: " + status);
+            mMtu = mtu;
+        } else {
+            ThingyUtils.showToast(mContext, mContext.getString(R.string.mtu_failed, status));
+        }
     }
 
     /**

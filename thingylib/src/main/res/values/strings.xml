@@ -43,4 +43,5 @@
     <string name="no_thingy_connected">Not connected to a Thingy</string>
     <string name="no_thingy_configured">No Thingy configured</string>
     <string name="service_not_bound">ThingyProxyService is not bound to the activity!</string>
+    <string name="mtu_failed">MTU configuration failed with error %d</string>
 </resources>

@@ -1333,6 +1333,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void enableSoundNotifications(final BluetoothDevice device, final boolean flag) {
         if (mThingySdkManager != null) {
+            mThingySdkManager.requestMtu(device);
             mThingySdkManager.enableSpeakerStatusNotifications(device, flag);
         }
     }
