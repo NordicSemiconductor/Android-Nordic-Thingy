@@ -51,14 +51,17 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.PersistableBundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -86,6 +89,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import no.nordicsemi.android.nrfthingy.common.AboutActivity;
+import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.configuration.ConfigurationActivity;
@@ -124,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PermissionRationaleDialogFragment.PermissionDialogListener, DfuUpdateAvailableDialogFragment.DfuUpdateAvailableListener {
 
     private static final int SCAN_DURATION = 15000;
+    private LinearLayout mLocationServicesContainer;
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -156,6 +161,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ThingyService.ThingyBinder mBinder;
 
     private Ringtone mRingtone;
+
+    public MainActivity() {
+    }
+
     private ThingyListener mThingyListener = new ThingyListener() {
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
@@ -321,8 +330,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    public MainActivity() {
-    }
+
+    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final boolean enabled = isLocationEnabled();
+            if(enabled){
+                mLocationServicesContainer.setVisibility(View.GONE);
+            } else {
+                mLocationServicesContainer.setVisibility(View.VISIBLE);
+            }
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mThingySdkManager = ThingySdkManager.getInstance();
 
         mDatabaseHelper = new DatabaseHelper(this);
-
+        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
         mNoThingyConnectedContainer = (LinearLayout) findViewById(R.id.no_thingee_connected);
         final Button mConnectThingy = (Button) findViewById(R.id.connect_thingy);
         mNavigationView = (NavigationView) findViewById(R.id.navigation);
@@ -355,7 +375,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
 
         mConnectedBleDeviceList = new ArrayList<>();
-
+        final TextView enableLocationServices = (TextView) findViewById(R.id.enable_location_services);
+        enableLocationServices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        });
         mConnectThingy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -400,6 +427,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 enableSelection();
             }
         });
+
         createDrawerMenu();
     }
 
@@ -409,9 +437,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (!isBleEnabled()) {
             enableBle();
         }
+
+        if(!isLocationEnabled()) {
+            mLocationServicesContainer.setVisibility(View.VISIBLE);
+        } else {
+            mLocationServicesContainer.setVisibility(View.GONE);
+        }
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
         registerReceiver(mBleStateChangedReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+        registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
     }
 
     @Override
@@ -473,6 +508,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isFinishing()) {
             ThingySdkManager.clearInstance();
         }
+        unregisterReceiver(mLocationProviderChangedReceiver);
     }
 
     @Override
@@ -1441,10 +1477,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void prepareForScanning() {
         if (checkIfRequiredPermissionsGranted()) {
-            if (mBinder != null) {
-                mBinder.setScanningState(true);
-                showConnectionProgressDialog();
-                startScan();
+            if(isLocationEnabled()) {
+                if (mBinder != null) {
+                    mBinder.setScanningState(true);
+                    showConnectionProgressDialog();
+                    startScan();
+                }
+            } else {
+                final MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance(getString(R.string.location_services_title), getString(R.string.rationale_message_location));
+                messageDialogFragment.show(getSupportFragmentManager(), null);
             }
         }
     }
@@ -1633,5 +1674,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, SecureDfuActivity.class);
         intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
         startActivity(intent);
+    }
+
+    /**
+     * Since Marshmallow location services must be enabled in order to scan.
+     * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmellow.
+     */
+    public boolean isLocationEnabled() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int locationMode = Settings.Secure.LOCATION_MODE_OFF;
+            try {
+                locationMode = Settings.Secure.getInt(getContentResolver(), Settings.Secure.LOCATION_MODE);
+            } catch (final Settings.SettingNotFoundException e) {
+                // do nothing
+            }
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+        }
+        return true;
     }
 }

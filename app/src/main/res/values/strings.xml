@@ -488,7 +488,9 @@
     <string name="thingy_guide_step1">1. Make sure it\'s switched on.\nRemove the black rubber cover and toggle the switch.</string>
     <string name="thingy_guide_step2">2. Make sure it\'s charged.\nConnect it to a PC or a charger using a micro USB cable .</string>
     <string name="thingy_guide_step3">3. Make sure it\'s awake.\nPress the N logo at the top or shake the Thingy:52 to wake it up.</string>
+    <string name="thingy_guide_step4">4. Make sure location services in Android settings is enabled.</string>
     <string name="location_services_disabled">Location services disabled.</string>
+    <string name="location_services_title">Location services disabled.</string>
 
     <string name="start_stop_env_sensors">Tap here to start/stop sensors</string>
     <string name="start_stop_motion_sensors">Tap here to start/stop sensors, some sensors might be turned off by default</string>

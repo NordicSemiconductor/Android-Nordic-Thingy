@@ -66,4 +66,9 @@
         android:layout_height="wrap_content"
         android:text="@string/thingy_guide_step3"
         android:layout_marginTop="@dimen/activity_vertical_margin" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/thingy_guide_step4"
+        android:layout_marginTop="@dimen/activity_vertical_margin" />
 </LinearLayout>
