@@ -47,7 +47,7 @@ public interface ScannerFragmentListener {
      * @param device the selected device. May not be null.
      * @param name   the device name.
      */
-    public void onDeviceSelected(final BluetoothDevice device, final String name);
+    void onDeviceSelected(final BluetoothDevice device, final String name);
 
-    public void onNothingSelected();
+    void onNothingSelected();
 }

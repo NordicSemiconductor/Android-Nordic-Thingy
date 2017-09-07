@@ -63,7 +63,7 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
     private boolean isFirmwareUpdateDate = false;
 
     public interface FimrwareVersionDialogFragmentListener {
-        public void onUpdateFirmwareClickListener();
+        void onUpdateFirmwareClickListener();
     }
 
     public FirmwareVersionDialogFragment() {
@@ -94,7 +94,7 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.settings_fw_version_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_firmware_version, null);
 
-        final TextView fwVersion = (TextView) view.findViewById(R.id.fw_version);
+        final TextView fwVersion = view.findViewById(R.id.fw_version);
         isFirmwareUpdateDate = checkIfFirmwareUpdateAvailable();
         if (isFirmwareUpdateDate) {
 

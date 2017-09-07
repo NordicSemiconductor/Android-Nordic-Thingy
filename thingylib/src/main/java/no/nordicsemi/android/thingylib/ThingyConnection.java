@@ -651,7 +651,6 @@ public class ThingyConnection extends BluetoothGattCallback {
             Intent intent = new Intent(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-            //requestMtu();
         }
 
         mHandler.post(mProcessNextTask);

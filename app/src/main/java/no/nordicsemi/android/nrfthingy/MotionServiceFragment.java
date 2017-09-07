@@ -358,28 +358,28 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         View rootView = inflater.inflate(R.layout.fragment_motion, container, false);
         mThingySdkManager = ThingySdkManager.getInstance();
-        mMotionToolbar = (Toolbar) rootView.findViewById(R.id.card_toolbar_motion);
-        mGravityToolbar = (Toolbar) rootView.findViewById(R.id.card_toolbar_gravity);
+        mMotionToolbar = rootView.findViewById(R.id.card_toolbar_motion);
+        mGravityToolbar = rootView.findViewById(R.id.card_toolbar_gravity);
 
-        mTapCount = (TextView) rootView.findViewById(R.id.tap_count);
-        mTapDirection = (TextView) rootView.findViewById(R.id.tap_direction);
-        mOrientation = (TextView) rootView.findViewById(R.id.orientation);
-        mPedometerSteps = (TextView) rootView.findViewById(R.id.step_count);
-        mPedometerDuration = (TextView) rootView.findViewById(R.id.duration);
-        mHeading = (TextView) rootView.findViewById(R.id.heading);
-        mHeadingDirection = (TextView) rootView.findViewById(R.id.heading_direction);
+        mTapCount = rootView.findViewById(R.id.tap_count);
+        mTapDirection = rootView.findViewById(R.id.tap_direction);
+        mOrientation = rootView.findViewById(R.id.orientation);
+        mPedometerSteps = rootView.findViewById(R.id.step_count);
+        mPedometerDuration = rootView.findViewById(R.id.duration);
+        mHeading = rootView.findViewById(R.id.heading);
+        mHeadingDirection = rootView.findViewById(R.id.heading_direction);
 
         mOrientation.setText(ThingyUtils.PORTRAIT);
 
-        mHeadingImage = (ImageView) rootView.findViewById(R.id.heading_image);
-        mPortraitImage = (ImageView) rootView.findViewById(R.id.portrait_image);
+        mHeadingImage = rootView.findViewById(R.id.heading_image);
+        mPortraitImage = rootView.findViewById(R.id.portrait_image);
 
-        mLineChartGravityVector = (LineChart) rootView.findViewById(R.id.line_chart_gravity_vector);
+        mLineChartGravityVector = rootView.findViewById(R.id.line_chart_gravity_vector);
 
         mIsConnected = isConnected(mDevice);
         if (Utils.checkIfVersionIsAboveJellyBean()) {
-            mQuaternionToolbar = (Toolbar) rootView.findViewById(R.id.card_toolbar_euler);
-            mGlSurfaceView = (RajawaliSurfaceView) rootView.findViewById(R.id.rajwali_surface);
+            mQuaternionToolbar = rootView.findViewById(R.id.card_toolbar_euler);
+            mGlSurfaceView = rootView.findViewById(R.id.rajwali_surface);
             mRenderer = new Renderer(getActivity());
             mGlSurfaceView.setSurfaceRenderer(mRenderer);
             mRenderer.setConnectionState(mIsConnected);

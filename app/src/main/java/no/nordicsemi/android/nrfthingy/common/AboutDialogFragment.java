@@ -195,7 +195,7 @@ public class AboutDialogFragment extends DialogFragment {
         // Obtain version number
         try {
             final String versionName = getContext().getPackageManager().getPackageInfo(getContext().getPackageName(), 0).versionName;
-            final TextView version = (TextView) view.findViewById(R.id.version);
+            final TextView version = view.findViewById(R.id.version);
             version.setText(getContext().getString(R.string.version, versionName));
         } catch (final Exception e) {
             // do nothing

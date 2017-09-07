@@ -99,8 +99,8 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.cloud_token_settings));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_cloud_token, null);
 
-        mCloudTokenLayout = (TextInputLayout) view.findViewById(R.id.layout_cloud_token);
-        mCloudTokenView = (TextInputEditText) view.findViewById(R.id.cloud_token_view);
+        mCloudTokenLayout = view.findViewById(R.id.layout_cloud_token);
+        mCloudTokenView = view.findViewById(R.id.cloud_token_view);
         mCloudTokenView.setText(mCloudToken);
 
         mCloudTokenView.addTextChangedListener(new TextWatcher() {

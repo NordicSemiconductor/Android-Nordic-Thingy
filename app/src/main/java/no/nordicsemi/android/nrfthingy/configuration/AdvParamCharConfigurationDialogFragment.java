@@ -107,13 +107,13 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.adv_param_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_adv_param, null);
 
-        mAdvertisingIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_adv_interval);
-        mAdvertisingTimeoutLayout = (TextInputLayout) view.findViewById(R.id.layout_adv_timeout);
+        mAdvertisingIntervalLayout = view.findViewById(R.id.layout_adv_interval);
+        mAdvertisingTimeoutLayout = view.findViewById(R.id.layout_adv_timeout);
 
-        mAdvertisingIntervalView = (TextInputEditText) view.findViewById(R.id.adv_interval_view);
-        mAdvertisingTimeoutView = (TextInputEditText) view.findViewById(R.id.adv_timeout_view);
+        mAdvertisingIntervalView = view.findViewById(R.id.adv_interval_view);
+        mAdvertisingTimeoutView = view.findViewById(R.id.adv_timeout_view);
 
-        mTxtAdvInterval = (TextView) view.findViewById(R.id.adv_interval);
+        mTxtAdvInterval = view.findViewById(R.id.adv_interval);
 
         double advertisingInterval = mAdvIntervalTimeoutUnits * ThingyUtils.ADVERTISING_INTERVAL_UNIT;
         mAdvertisingIntervalView.setText(String.valueOf(mAdvIntervalTimeoutUnits));

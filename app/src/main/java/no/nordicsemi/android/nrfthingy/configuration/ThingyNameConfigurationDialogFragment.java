@@ -106,8 +106,8 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
 
-        mDeviceNameLayout = (TextInputLayout) view.findViewById(R.id.layout_device_name);
-        mDeviceNameView = (TextInputEditText) view.findViewById(R.id.device_name_view);
+        mDeviceNameLayout = view.findViewById(R.id.layout_device_name);
+        mDeviceNameView = view.findViewById(R.id.device_name_view);
         mDeviceNameView.setText(mDeviceName);
 
         mDeviceNameView.addTextChangedListener(new TextWatcher() {

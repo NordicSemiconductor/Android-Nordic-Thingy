@@ -114,19 +114,19 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.connection_parameters_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_conn_params, null);
 
-        mMinConnectionIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_min_connection_params);
-        mMaxConnectionIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_max_connection_params);
-        mSlaveLatencyLayout = (TextInputLayout) view.findViewById(R.id.layout_slave_latency);
-        mSupervisionTimeoutLayout = (TextInputLayout) view.findViewById(R.id.layout_conn_sup_timeout);
+        mMinConnectionIntervalLayout = view.findViewById(R.id.layout_min_connection_params);
+        mMaxConnectionIntervalLayout = view.findViewById(R.id.layout_max_connection_params);
+        mSlaveLatencyLayout = view.findViewById(R.id.layout_slave_latency);
+        mSupervisionTimeoutLayout = view.findViewById(R.id.layout_conn_sup_timeout);
 
-        mMinConnectionIntervalView = (TextInputEditText) view.findViewById(R.id.min_conn_int_view);
-        mMaxConnectionIntervalView = (TextInputEditText) view.findViewById(R.id.max_conn_int_view);
-        mSlaveLatencyView = (TextInputEditText) view.findViewById(R.id.slave_latency_view);
-        mSupervisionTimeoutView = (TextInputEditText) view.findViewById(R.id.conn_sup_timeout_view);
+        mMinConnectionIntervalView = view.findViewById(R.id.min_conn_int_view);
+        mMaxConnectionIntervalView = view.findViewById(R.id.max_conn_int_view);
+        mSlaveLatencyView = view.findViewById(R.id.slave_latency_view);
+        mSupervisionTimeoutView = view.findViewById(R.id.conn_sup_timeout_view);
 
-        mMinInterval = (TextView) view.findViewById(R.id.min_interval);
-        mMaxInterval = (TextView) view.findViewById(R.id.max_interval);
-        mConnSupervisionTimeout = (TextView) view.findViewById(R.id.supervision_timeout);
+        mMinInterval = view.findViewById(R.id.min_interval);
+        mMaxInterval = view.findViewById(R.id.max_interval);
+        mConnSupervisionTimeout = view.findViewById(R.id.supervision_timeout);
 
         alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();

@@ -177,7 +177,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private DatabaseHelper mDatabaseHelper;
     private ThingyService.ThingyBinder mBinder;
 
-
     private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
@@ -348,27 +347,27 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mDatabaseHelper = new DatabaseHelper(this);
         mThingySdkManager = ThingySdkManager.getInstance();
 
-        final Toolbar dfuToolbar = (Toolbar) findViewById(R.id.dfu_toolbar);
+        final Toolbar dfuToolbar = findViewById(R.id.dfu_toolbar);
         dfuToolbar.setTitle(R.string.dfu_title);
         setSupportActionBar(dfuToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Toolbar dfuFwInfoToolbar = (Toolbar) findViewById(R.id.dfu_fw_info_toolbar);
+        final Toolbar dfuFwInfoToolbar = findViewById(R.id.dfu_fw_info_toolbar);
         dfuFwInfoToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_format_list_bulleted));
         dfuFwInfoToolbar.setTitle(R.string.dfu_fw_info);
 
-        final Toolbar dfuTargetInfoToolbar = (Toolbar) findViewById(R.id.dfu_target_toolbar);
+        final Toolbar dfuTargetInfoToolbar = findViewById(R.id.dfu_target_toolbar);
         dfuTargetInfoToolbar.setLogo(R.drawable.ic_thingy_gray);
         dfuTargetInfoToolbar.setTitle(R.string.dfu_target);
 
-        mDfuSpeed = (TextView) findViewById(R.id.dfu_upload_speed);
-        mDfuSpeedUnit = (TextView) findViewById(R.id.dfu_speed_unit);
-        final Toolbar mDfuStatusToolbar = (Toolbar) findViewById(R.id.dfu_status_toolbar);
+        mDfuSpeed = findViewById(R.id.dfu_upload_speed);
+        mDfuSpeedUnit = findViewById(R.id.dfu_speed_unit);
+        final Toolbar mDfuStatusToolbar = findViewById(R.id.dfu_status_toolbar);
         mDfuStatusToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_dfu_gray));
         mDfuStatusToolbar.setTitle(R.string.dfu_status);
 
-        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
-        mEnableLocationServices = (TextView) findViewById(R.id.enable_location_services);
+        mLocationServicesContainer = findViewById(R.id.location_services_container);
+        mEnableLocationServices = findViewById(R.id.enable_location_services);
         mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -377,7 +376,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
             }
         });
 
-        mFabStartStop = (FloatingActionButton) findViewById(R.id.dfu_fab);
+        mFabStartStop = findViewById(R.id.dfu_fab);
         mFabStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -398,23 +397,23 @@ public class SecureDfuActivity extends AppCompatActivity implements
             }
         });
 
-        mNordicFirmware = (TextView) findViewById(R.id.nordic_fw);
-        mCustomFirmware = (TextView) findViewById(R.id.custom_fw);
-        mFileNameView = (TextView) findViewById(R.id.file_name);
-        mFileSizeView = (TextView) findViewById(R.id.file_size);
-        mDfuTargetNameView = (TextView) findViewById(R.id.dfu_target_name);
+        mNordicFirmware = findViewById(R.id.nordic_fw);
+        mCustomFirmware = findViewById(R.id.custom_fw);
+        mFileNameView = findViewById(R.id.file_name);
+        mFileSizeView = findViewById(R.id.file_size);
+        mDfuTargetNameView = findViewById(R.id.dfu_target_name);
 
-        mProgressBar = (ProgressBar) findViewById(R.id.dfu_status_bar);
+        mProgressBar = findViewById(R.id.dfu_status_bar);
 
-        mEnableBootloaderMsg = (TextView) findViewById(R.id.dfu_step_one);
-        mInitializingDfuMsg = (TextView) findViewById(R.id.dfu_step_two);
-        mUploadingFwMsg = (TextView) findViewById(R.id.dfu_step_three);
-        mDfuCompletedMsg = (TextView) findViewById(R.id.dfu_step_four);
+        mEnableBootloaderMsg = findViewById(R.id.dfu_step_one);
+        mInitializingDfuMsg = findViewById(R.id.dfu_step_two);
+        mUploadingFwMsg = findViewById(R.id.dfu_step_three);
+        mDfuCompletedMsg = findViewById(R.id.dfu_step_four);
 
-        mEnableBootloaderView = (ImageView) findViewById(R.id.dfu_step_one_img);
-        mInitializingDfuView = (ImageView) findViewById(R.id.dfu_step_two_img);
-        mUploadingFwView = (ImageView) findViewById(R.id.dfu_step_three_img);
-        mDfuCompletedView = (ImageView) findViewById(R.id.dfu_step_four_img);
+        mEnableBootloaderView = findViewById(R.id.dfu_step_one_img);
+        mInitializingDfuView = findViewById(R.id.dfu_step_two_img);
+        mUploadingFwView = findViewById(R.id.dfu_step_three_img);
+        mDfuCompletedView = findViewById(R.id.dfu_step_four_img);
 
         mCustomFirmware.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -750,7 +749,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         } else {
             // there is no any file browser app, let's try to download one
             final View customView = getLayoutInflater().inflate(R.layout.app_file_browser, null);
-            final ListView appsList = (ListView) customView.findViewById(android.R.id.list);
+            final ListView appsList = customView.findViewById(android.R.id.list);
             appsList.setAdapter(new FileBrowserAppsAdapter(this));
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);
@@ -1020,8 +1019,15 @@ public class SecureDfuActivity extends AppCompatActivity implements
         @Override
         public void onProgressChanged(final String deviceAddress, final int percent, final float speed, final float avgSpeed, final int currentPart, final int partsTotal) {
 
+            if (partsTotal > 1) {
+                mUploadingFwMsg.setText(getString(R.string.dfu_status_uploading_part, currentPart, partsTotal));
+            } else {
+                mUploadingFwMsg.setText(getString(R.string.dfu_status_uploading_part, currentPart, partsTotal));
+            }
+
             mDfuSpeed.setText(String.valueOf(Float.valueOf(String.format(Locale.US, "%.2f", avgSpeed))));
             mProgressBar.setIndeterminate(false);
+
             if (mInitializingDfuView.getAlpha() < 1.0f) {
                 mInitDfuAlpha = 1.0f;
                 mInitializingDfuView.setAlpha(mInitDfuAlpha);
@@ -1041,7 +1047,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mUploadingFwAlpha = alpha;
                 mUploadingFwView.setAlpha(alpha);
             }
-
             mProgressBar.setProgress(percent);
         }
 

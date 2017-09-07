@@ -96,7 +96,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     public View getView(int position, View convertView, ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View spinnerView = inflater.inflate(R.layout.custom_spinner, parent, false);
-        TextView main_text = (TextView) spinnerView.findViewById(R.id.tv_dropdown);
+        TextView main_text = spinnerView.findViewById(R.id.tv_dropdown);
         if (mThingyList.size() > 0)
             main_text.setText(mThingyList.get(position).getName());
         return spinnerView;
@@ -125,7 +125,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
         holder = new ViewHolder();
         LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
         view = inflater.inflate(R.layout.custom_drop_down_view, parent, false);
-        holder.label = (TextView) view.findViewById(R.id.dropdown_row);
+        holder.label = view.findViewById(R.id.dropdown_row);
         view.setTag(holder);
 
 
@@ -139,7 +139,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
 
         LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
         final View view = inflater.inflate(R.layout.custom_add_thingy, viewGroup, false);
-        final TextView add_thingee = (TextView) view.findViewById(R.id.add_thingee);
+        final TextView add_thingee = view.findViewById(R.id.add_thingee);
         add_thingee.setText(R.string.action_add);
         add_thingee.setOnClickListener(new View.OnClickListener() {
             @Override

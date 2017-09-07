@@ -82,7 +82,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
     //If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project
     //on the Google Developer Console and enable the URLShortener API and use the API key in your project.
-    private static final String URL_SHORTENER_API_KEY = "YOUR_API_KEY";
+    private static final String URL_SHORTENER_API_KEY = "AIzaSyBJJfoC2E0Z4D75mkKTUbBcaNk5F-F1CIU";
     private LinearLayout mShortUrlContainer;
 
     private Spinner mEddystoneUrlTypesView;
@@ -125,12 +125,12 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.physcial_web_url_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_eddystone_url, null);
 
-        mShortUrlContainer = (LinearLayout) view.findViewById(R.id.short_url_container);
-        mEddystonUrlLayout = (TextInputLayout) view.findViewById(R.id.layout_url_data);
-        mEddystoneUrlTypesView = (Spinner) view.findViewById(R.id.url_types);
-        mEddystoneUrlView = (TextInputEditText) view.findViewById(R.id.url_data_view);
-        mShortUrl = (TextView) view.findViewById(R.id.short_url);
-        mSwitchPhysicalWeb = (Switch) view.findViewById(R.id.switch_physical_web);
+        mShortUrlContainer = view.findViewById(R.id.short_url_container);
+        mEddystonUrlLayout = view.findViewById(R.id.layout_url_data);
+        mEddystoneUrlTypesView = view.findViewById(R.id.url_types);
+        mEddystoneUrlView = view.findViewById(R.id.url_data_view);
+        mShortUrl = view.findViewById(R.id.short_url);
+        mSwitchPhysicalWeb = view.findViewById(R.id.switch_physical_web);
 
         mEddystoneUrlView.addTextChangedListener(new TextWatcher() {
             @Override

@@ -63,7 +63,7 @@ public class CustomPagerAdapter extends PagerAdapter {
         CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
         LayoutInflater inflater = LayoutInflater.from(mContext);
         ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
-        ImageView imageView = (ImageView) layout.findViewById(R.id.image);
+        ImageView imageView = layout.findViewById(R.id.image);
         viewMap.put(position, imageView);
         collection.addView(layout);
         return layout;

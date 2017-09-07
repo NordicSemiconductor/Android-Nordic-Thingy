@@ -274,9 +274,9 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
         switch (mSettingsMode) {
             case 0:
                 alertDialog.setTitle(getString(R.string.pedometer_interval_title));
-                mPedometerContainer = (LinearLayout) view.findViewById(R.id.pedometer_container);
-                mPedometerIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_pedometer);
-                mPedometerIntervalView = (TextInputEditText) view.findViewById(R.id.interval_pedometer);
+                mPedometerContainer = view.findViewById(R.id.pedometer_container);
+                mPedometerIntervalLayout = view.findViewById(R.id.layout_pedometer);
+                mPedometerIntervalView = view.findViewById(R.id.interval_pedometer);
                 mPedometerContainer.setVisibility(View.VISIBLE);
                 mPedometerIntervalView.setText(mPedometerInterval);
 
@@ -309,9 +309,9 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 1:
                 alertDialog.setTitle(getString(R.string.temperature_compensation_interval_title));
-                mTemperatureContainer = (LinearLayout) view.findViewById(R.id.temperature_container);
-                mTemperatureIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_temperature);
-                mTemperatureIntervalView = (TextInputEditText) view.findViewById(R.id.interval_temperature);
+                mTemperatureContainer = view.findViewById(R.id.temperature_container);
+                mTemperatureIntervalLayout = view.findViewById(R.id.layout_temperature);
+                mTemperatureIntervalView = view.findViewById(R.id.interval_temperature);
                 mTemperatureContainer.setVisibility(View.VISIBLE);
                 mTemperatureIntervalView.setText(mMotionTemperatureInterval);
 
@@ -344,9 +344,9 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 2:
                 alertDialog.setTitle(getString(R.string.compass_compensation_interval));
-                mCompassContainer = (LinearLayout) view.findViewById(R.id.compass_container);
-                mCompassIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_compass);
-                mCompassIntervalView = (TextInputEditText) view.findViewById(R.id.interval_compass);
+                mCompassContainer = view.findViewById(R.id.compass_container);
+                mCompassIntervalLayout = view.findViewById(R.id.layout_compass);
+                mCompassIntervalView = view.findViewById(R.id.interval_compass);
                 mCompassContainer.setVisibility(View.VISIBLE);
                 mCompassIntervalView.setText(mCompassInterval);
 
@@ -379,9 +379,9 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 3:
                 alertDialog.setTitle(getString(R.string.motion_frequency_title));
-                mMotionContainer = (LinearLayout) view.findViewById(R.id.motion_container);
-                mMotionIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_motion);
-                mMotionIntervalView = (TextInputEditText) view.findViewById(R.id.interval_motion);
+                mMotionContainer = view.findViewById(R.id.motion_container);
+                mMotionIntervalLayout = view.findViewById(R.id.layout_motion);
+                mMotionIntervalView = view.findViewById(R.id.interval_motion);
                 mMotionContainer.setVisibility(View.VISIBLE);
                 mMotionIntervalView.setText(mMpuFrequency);
 
@@ -414,12 +414,12 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 4:
                 alertDialog.setTitle(getString(R.string.wake_on_motion_title));
-                mWakeOnMotionContainer = (LinearLayout) view.findViewById(R.id.motion_wake_container);
-                mWakeOnMotionView = (RadioGroup) view.findViewById(R.id.rg_motion_wake);
+                mWakeOnMotionContainer = view.findViewById(R.id.motion_wake_container);
+                mWakeOnMotionView = view.findViewById(R.id.rg_motion_wake);
                 mWakeOnMotionContainer.setVisibility(View.VISIBLE);
 
-                mOn = (RadioButton) view.findViewById(R.id.rb_motion_wake_on);
-                mOff = (RadioButton) view.findViewById(R.id.rb_motion_wake_off);
+                mOn = view.findViewById(R.id.rb_motion_wake_on);
+                mOff = view.findViewById(R.id.rb_motion_wake_off);
                 final int pMode = mWakeOnMotion;
                 if (pMode == 1) {
                     mOn.setChecked(true);

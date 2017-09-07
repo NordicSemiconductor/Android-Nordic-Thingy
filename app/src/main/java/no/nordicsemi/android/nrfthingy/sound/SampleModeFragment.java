@@ -85,15 +85,15 @@ public class SampleModeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_sample_mode, container, false);
-        final TextView sample1 = (TextView) rootView.findViewById(R.id.sound_sample_1);
-        final TextView sample2 = (TextView) rootView.findViewById(R.id.sound_sample_2);
-        final TextView sample3 = (TextView) rootView.findViewById(R.id.sound_sample_3);
-        final TextView sample4 = (TextView) rootView.findViewById(R.id.sound_sample_4);
-        final TextView sample5 = (TextView) rootView.findViewById(R.id.sound_sample_5);
-        final TextView sample6 = (TextView) rootView.findViewById(R.id.sound_sample_6);
-        final TextView sample7 = (TextView) rootView.findViewById(R.id.sound_sample_7);
-        final TextView sample8 = (TextView) rootView.findViewById(R.id.sound_sample_8);
-        final TextView sample9 = (TextView) rootView.findViewById(R.id.sound_sample_9);
+        final TextView sample1 = rootView.findViewById(R.id.sound_sample_1);
+        final TextView sample2 = rootView.findViewById(R.id.sound_sample_2);
+        final TextView sample3 = rootView.findViewById(R.id.sound_sample_3);
+        final TextView sample4 = rootView.findViewById(R.id.sound_sample_4);
+        final TextView sample5 = rootView.findViewById(R.id.sound_sample_5);
+        final TextView sample6 = rootView.findViewById(R.id.sound_sample_6);
+        final TextView sample7 = rootView.findViewById(R.id.sound_sample_7);
+        final TextView sample8 = rootView.findViewById(R.id.sound_sample_8);
+        final TextView sample9 = rootView.findViewById(R.id.sound_sample_9);
 
         sample1.setOnClickListener(new View.OnClickListener() {
             @Override

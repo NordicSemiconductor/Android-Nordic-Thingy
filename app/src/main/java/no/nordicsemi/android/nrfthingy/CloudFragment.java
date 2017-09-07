@@ -286,7 +286,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         View rootView = inflater.inflate(R.layout.fragment_cloud, container, false);
 
-        final Toolbar toolbarFeatureControl = (Toolbar) rootView.findViewById(R.id.card_toolbar_feature_control);
+        final Toolbar toolbarFeatureControl = rootView.findViewById(R.id.card_toolbar_feature_control);
         toolbarFeatureControl.setLogo(R.drawable.ic_remote);
         toolbarFeatureControl.setTitle(R.string.feature_control);
         toolbarFeatureControl.inflateMenu(R.menu.menu_cloud_info);
@@ -309,28 +309,28 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        final Toolbar toolbarFeatureInfo = (Toolbar) rootView.findViewById(R.id.card_toolbar_feature_info);
+        final Toolbar toolbarFeatureInfo = rootView.findViewById(R.id.card_toolbar_feature_info);
         toolbarFeatureInfo.setLogo(R.drawable.ic_info_grey);
         toolbarFeatureInfo.setTitle(R.string.freature_info);
 
-        final Toolbar toolbarDataStatistics = (Toolbar) rootView.findViewById(R.id.card_toolbar_data_statistics);
+        final Toolbar toolbarDataStatistics = rootView.findViewById(R.id.card_toolbar_data_statistics);
         toolbarDataStatistics.setLogo(R.drawable.ic_data_usage);
         toolbarDataStatistics.setTitle(R.string.data_statistics);
 
-        mTemperatureView = (TextView) rootView.findViewById(R.id.temperature);
-        mPressureView = (TextView) rootView.findViewById(R.id.pressure);
-        mButtonStateView = (TextView) rootView.findViewById(R.id.button_state);
-        mTemperatureIntervalView = (TextView) rootView.findViewById(R.id.temperature_interval);
-        mPressureIntervalView = (TextView) rootView.findViewById(R.id.pressure_interval);
-        mCloudTokenView = (TextView) rootView.findViewById(R.id.cloud_token);
-        mUploadedView = (TextView) rootView.findViewById(R.id.uploaded);
-        mDownloadedView = (TextView) rootView.findViewById(R.id.downloaded);
+        mTemperatureView = rootView.findViewById(R.id.temperature);
+        mPressureView = rootView.findViewById(R.id.pressure);
+        mButtonStateView = rootView.findViewById(R.id.button_state);
+        mTemperatureIntervalView = rootView.findViewById(R.id.temperature_interval);
+        mPressureIntervalView = rootView.findViewById(R.id.pressure_interval);
+        mCloudTokenView = rootView.findViewById(R.id.cloud_token);
+        mUploadedView = rootView.findViewById(R.id.uploaded);
+        mDownloadedView = rootView.findViewById(R.id.downloaded);
 
-        mTemperatureSwitch = (Switch) rootView.findViewById(R.id.switch_temperature);
-        mPressureSwitch = (Switch) rootView.findViewById(R.id.switch_pressuure);
-        mButtonStateSwitch = (Switch) rootView.findViewById(R.id.switch_button);
+        mTemperatureSwitch = rootView.findViewById(R.id.switch_temperature);
+        mPressureSwitch = rootView.findViewById(R.id.switch_pressuure);
+        mButtonStateSwitch = rootView.findViewById(R.id.switch_button);
 
-        mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty() ? true : false);
+        mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
         mTemperatureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -351,7 +351,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        mPressureSwitch.setChecked(mDatabaseHelper.getPressureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty() ? true : false);
+        mPressureSwitch.setChecked(mDatabaseHelper.getPressureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
         mPressureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -372,7 +372,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        mButtonStateSwitch.setChecked(mDatabaseHelper.getButtonUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty() ? true : false);
+        mButtonStateSwitch.setChecked(mDatabaseHelper.getButtonUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
         mButtonStateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

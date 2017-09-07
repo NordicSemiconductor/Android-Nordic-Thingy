@@ -469,6 +469,10 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
+    public static boolean checkIfVersionIsOreoOrAbove() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+
     public static boolean checkIfVersionIsNougatOrAbove() {
         return Build.VERSION.SDK_INT >= 25;
     }

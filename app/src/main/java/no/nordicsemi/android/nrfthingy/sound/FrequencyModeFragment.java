@@ -88,8 +88,8 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_frequency_mode, container, false);
-        mSeekbar = (SeekBar) rootView.findViewById(R.id.seek_bar_volume);
-        mVolume = (TextView) rootView.findViewById(R.id.frequency_volume);
+        mSeekbar = rootView.findViewById(R.id.seek_bar_volume);
+        mVolume = rootView.findViewById(R.id.frequency_volume);
         final View view1 = rootView.findViewById(R.id.label_1);
         final View view2 = rootView.findViewById(R.id.label_2);
         final View view3 = rootView.findViewById(R.id.label_3);

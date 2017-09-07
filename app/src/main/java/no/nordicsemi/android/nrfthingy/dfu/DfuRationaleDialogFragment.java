@@ -74,7 +74,7 @@ public class DfuRationaleDialogFragment extends DialogFragment {
         alertDialogBuilder.setTitle(R.string.dfu_title);
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_dfu_rationale, null);
 
-        final TextView mProgressText = (TextView) view.findViewById(R.id.dfu_rationale);
+        final TextView mProgressText = view.findViewById(R.id.dfu_rationale);
         mProgressText.setText(R.string.dfu_rationale);
         alertDialogBuilder.setView(view).setPositiveButton(R.string.confirm, null).setNegativeButton(R.string.cancel, null);
         final AlertDialog alertDialog = alertDialogBuilder.show();

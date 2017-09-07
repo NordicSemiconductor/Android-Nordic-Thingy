@@ -310,11 +310,11 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         mThingySdkManager = ThingySdkManager.getInstance();
 
         final View rootView = inflater.inflate(R.layout.fragment_environment, container, false);
-        final Toolbar toolbarEnvironment = (Toolbar) rootView.findViewById(R.id.environment_toolbar);
+        final Toolbar toolbarEnvironment = rootView.findViewById(R.id.environment_toolbar);
 
-        final Toolbar mToolbarTemperature = (Toolbar) rootView.findViewById(R.id.toolbar_temperature);
-        final Toolbar mToolbarPressure = (Toolbar) rootView.findViewById(R.id.toolbar_pressure);
-        final Toolbar mToolbarHumidity = (Toolbar) rootView.findViewById(R.id.toolbar_humidity);
+        final Toolbar mToolbarTemperature = rootView.findViewById(R.id.toolbar_temperature);
+        final Toolbar mToolbarPressure = rootView.findViewById(R.id.toolbar_pressure);
+        final Toolbar mToolbarHumidity = rootView.findViewById(R.id.toolbar_humidity);
 
         mToolbarTemperature.setLogo(R.drawable.ic_graph);
         mToolbarTemperature.setTitle(getString(R.string.temperature_title));
@@ -325,20 +325,20 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         mToolbarHumidity.setLogo(R.drawable.ic_humidity);
         mToolbarHumidity.setTitle(getString(R.string.humidity_title));
 
-        mTemperatureView = (TextView) rootView.findViewById(R.id.temperature);
-        mPressureView = (TextView) rootView.findViewById(R.id.pressure);
-        mHumidityView = (TextView) rootView.findViewById(R.id.humidity);
-        mCarbon = (TextView) rootView.findViewById(R.id.carbon);
-        mTvoc = (TextView) rootView.findViewById(R.id.tvoc);
-        mColorView = (TextView) rootView.findViewById(R.id.color);
-        mWeatherSettings = (TextView) rootView.findViewById(R.id.weather_settings);
+        mTemperatureView = rootView.findViewById(R.id.temperature);
+        mPressureView = rootView.findViewById(R.id.pressure);
+        mHumidityView = rootView.findViewById(R.id.humidity);
+        mCarbon = rootView.findViewById(R.id.carbon);
+        mTvoc = rootView.findViewById(R.id.tvoc);
+        mColorView = rootView.findViewById(R.id.color);
+        mWeatherSettings = rootView.findViewById(R.id.weather_settings);
 
-        mBlob = (ImageView) rootView.findViewById(R.id.blob);
+        mBlob = rootView.findViewById(R.id.blob);
         mShape = (GradientDrawable) mBlob.getDrawable();
 
-        mLineChartTemperature = (LineChart) rootView.findViewById(R.id.line_chart_temperature);
-        mLineChartPressure = (LineChart) rootView.findViewById(R.id.line_chart_pressure);
-        mLineChartHumidity = (LineChart) rootView.findViewById(R.id.line_chart_humidity);
+        mLineChartTemperature = rootView.findViewById(R.id.line_chart_temperature);
+        mLineChartPressure = rootView.findViewById(R.id.line_chart_pressure);
+        mLineChartHumidity = rootView.findViewById(R.id.line_chart_humidity);
         prepareTemperatureGraph();
         preparePressureGraph();
         prepareHumidityGraph();

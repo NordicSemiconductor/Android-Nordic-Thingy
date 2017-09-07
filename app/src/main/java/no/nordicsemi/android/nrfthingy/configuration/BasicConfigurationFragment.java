@@ -92,14 +92,14 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_basic_configuration, container, false);
-        final LinearLayout name = (LinearLayout) rootView.findViewById(R.id.category_device_name);
-        mNameSummary = (TextView) rootView.findViewById(R.id.category_device_name_summary);
-        final LinearLayout advParams = (LinearLayout) rootView.findViewById(R.id.category_adv_param_char);
-        final LinearLayout connectionParams = (LinearLayout) rootView.findViewById(R.id.category_connection_param_char);
-        final LinearLayout eddystoneUrl = (LinearLayout) rootView.findViewById(R.id.category_eddystone_url);
-        mPhysicalWebUrlSummary = (TextView) rootView.findViewById(R.id.category_eddystone_url_summary);
-        final LinearLayout firmwareVersion = (LinearLayout) rootView.findViewById(R.id.category_fw_version);
-        mFirmwareVersionSummary = (TextView) rootView.findViewById(R.id.category_fw_version_summary);
+        final LinearLayout name = rootView.findViewById(R.id.category_device_name);
+        mNameSummary = rootView.findViewById(R.id.category_device_name_summary);
+        final LinearLayout advParams = rootView.findViewById(R.id.category_adv_param_char);
+        final LinearLayout connectionParams = rootView.findViewById(R.id.category_connection_param_char);
+        final LinearLayout eddystoneUrl = rootView.findViewById(R.id.category_eddystone_url);
+        mPhysicalWebUrlSummary = rootView.findViewById(R.id.category_eddystone_url_summary);
+        final LinearLayout firmwareVersion = rootView.findViewById(R.id.category_fw_version);
+        mFirmwareVersionSummary = rootView.findViewById(R.id.category_fw_version_summary);
 
         final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());

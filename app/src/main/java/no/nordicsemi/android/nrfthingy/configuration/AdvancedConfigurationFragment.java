@@ -97,26 +97,26 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_advanced_configuration, container, false);
-        final LinearLayout temperature = (LinearLayout) rootView.findViewById(R.id.category_temp_interval);
-        mTemperatureIntervalSummary = (TextView) rootView.findViewById(R.id.category_temp_interval_summary);
-        final LinearLayout pressure = (LinearLayout) rootView.findViewById(R.id.category_pressure_interval);
-        mPressureIntervalSummary = (TextView) rootView.findViewById(R.id.category_pressure_interval_summary);
-        final LinearLayout humidity = (LinearLayout) rootView.findViewById(R.id.category_humidity_interval);
-        mHumidityIntervalSummary = (TextView) rootView.findViewById(R.id.category_humidity_interval_summary);
-        final LinearLayout colorIntensity = (LinearLayout) rootView.findViewById(R.id.category_color_intensity_interval);
-        mColorIntensityIntervalSummary = (TextView) rootView.findViewById(R.id.category_color_intensity_interval_summary);
-        final LinearLayout gasMode = (LinearLayout) rootView.findViewById(R.id.category_gas_mode);
-        mGasModeSummary = (TextView) rootView.findViewById(R.id.category_gas_mode_summary);
-        final LinearLayout pedometer = (LinearLayout) rootView.findViewById(R.id.category_pedometer_interval);
-        mPedometerIntervalSummary = (TextView) rootView.findViewById(R.id.category_pedometer_interval_summary);
-        final LinearLayout temperatureMotion = (LinearLayout) rootView.findViewById(R.id.category_motion_temperature_interval);
-        mMotionTemperatureIntervalSummary = (TextView) rootView.findViewById(R.id.category_motion_temperature_interval_summary);
-        final LinearLayout compass = (LinearLayout) rootView.findViewById(R.id.category_compass_interval);
-        mCompassIntervalSummary = (TextView) rootView.findViewById(R.id.category_compass_interval_summary);
-        final LinearLayout motion = (LinearLayout) rootView.findViewById(R.id.category_motion_interval);
-        mMotionIntervalSummary = (TextView) rootView.findViewById(R.id.category_motion_interval_summary);
-        final LinearLayout wakeOnMotion = (LinearLayout) rootView.findViewById(R.id.category_wake_on_motion);
-        mWakeOnMotionSummary = (TextView) rootView.findViewById(R.id.category_wake_on_motion_summary);
+        final LinearLayout temperature = rootView.findViewById(R.id.category_temp_interval);
+        mTemperatureIntervalSummary = rootView.findViewById(R.id.category_temp_interval_summary);
+        final LinearLayout pressure = rootView.findViewById(R.id.category_pressure_interval);
+        mPressureIntervalSummary = rootView.findViewById(R.id.category_pressure_interval_summary);
+        final LinearLayout humidity = rootView.findViewById(R.id.category_humidity_interval);
+        mHumidityIntervalSummary = rootView.findViewById(R.id.category_humidity_interval_summary);
+        final LinearLayout colorIntensity = rootView.findViewById(R.id.category_color_intensity_interval);
+        mColorIntensityIntervalSummary = rootView.findViewById(R.id.category_color_intensity_interval_summary);
+        final LinearLayout gasMode = rootView.findViewById(R.id.category_gas_mode);
+        mGasModeSummary = rootView.findViewById(R.id.category_gas_mode_summary);
+        final LinearLayout pedometer = rootView.findViewById(R.id.category_pedometer_interval);
+        mPedometerIntervalSummary = rootView.findViewById(R.id.category_pedometer_interval_summary);
+        final LinearLayout temperatureMotion = rootView.findViewById(R.id.category_motion_temperature_interval);
+        mMotionTemperatureIntervalSummary = rootView.findViewById(R.id.category_motion_temperature_interval_summary);
+        final LinearLayout compass = rootView.findViewById(R.id.category_compass_interval);
+        mCompassIntervalSummary = rootView.findViewById(R.id.category_compass_interval_summary);
+        final LinearLayout motion = rootView.findViewById(R.id.category_motion_interval);
+        mMotionIntervalSummary = rootView.findViewById(R.id.category_motion_interval_summary);
+        final LinearLayout wakeOnMotion = rootView.findViewById(R.id.category_wake_on_motion);
+        mWakeOnMotionSummary = rootView.findViewById(R.id.category_wake_on_motion_summary);
 
         final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());

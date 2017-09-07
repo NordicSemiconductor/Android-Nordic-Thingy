@@ -162,9 +162,9 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_pcm_mode, container, false);
-        mFabPlay = (FloatingActionButton) rootView.findViewById(R.id.fab_play);
-        mFabImport = (FloatingActionButton) rootView.findViewById(R.id.fab_import);
-        mAudioRecyclerView = (RecyclerView) rootView.findViewById(R.id.audio_recycler_view);
+        mFabPlay = rootView.findViewById(R.id.fab_play);
+        mFabImport = rootView.findViewById(R.id.fab_import);
+        mAudioRecyclerView = rootView.findViewById(R.id.audio_recycler_view);
         mAudioFileAdapter = new AudioFileRecyclerAdapter(getActivity());
         mAudioRecyclerView.setAdapter(mAudioFileAdapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -358,11 +358,11 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 final int index = data.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME);
                 fileName = data.getString(index);
                 Log.v("Tag", "filename: " + fileName);
-                final ContentResolver cR = getContext().getContentResolver();
+                final ContentResolver cR = getActivity().getContentResolver(); //possible null pointer fix
                 final MimeTypeMap mime = MimeTypeMap.getSingleton();
                 final String type = mime.getExtensionFromMimeType(cR.getType(mFileStreamUri));
                 Log.v("Tag", "stream: " + mFileStreamUri.toString());
-                if (type.equalsIgnoreCase("wav")) {
+                if (type != null && type.equalsIgnoreCase("wav")) {
                     if (FileHelper.copyAudioFilesToLocalAppStorage(getContext(), mFileStreamUri, fileName)) {
                         file = new File(String.valueOf(getContext().getFilesDir()), fileName);
                         mAudioFileAdapter.addFiles(file);
@@ -459,7 +459,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         } else {
             // there is no any file browser app, let's try to download one
             final View customView = getActivity().getLayoutInflater().inflate(R.layout.app_file_browser, null);
-            final ListView appsList = (ListView) customView.findViewById(android.R.id.list);
+            final ListView appsList = customView.findViewById(android.R.id.list);
             appsList.setAdapter(new FileBrowserAppsAdapter(getActivity()));
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);

@@ -290,9 +290,9 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
         switch (mSettingsMode) {
             case 0:
                 alertDialog.setTitle(getString(R.string.temperature_interval_title));
-                mTemperatureContainer = (LinearLayout) view.findViewById(R.id.temperature_container);
-                mTemperatureIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_temperature);
-                mTemperatureIntervalView = (TextInputEditText) view.findViewById(R.id.interval_temperature);
+                mTemperatureContainer = view.findViewById(R.id.temperature_container);
+                mTemperatureIntervalLayout = view.findViewById(R.id.layout_temperature);
+                mTemperatureIntervalView = view.findViewById(R.id.interval_temperature);
                 mTemperatureContainer.setVisibility(View.VISIBLE);
                 mTemperatureIntervalView.setText(mTemperatureInterval);
 
@@ -325,9 +325,9 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 break;
             case 1:
                 alertDialog.setTitle(getString(R.string.pressure_interval_title));
-                mPressureContainer = (LinearLayout) view.findViewById(R.id.pressure_container);
-                mPressureIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_pressure);
-                mPressureIntervalView = (TextInputEditText) view.findViewById(R.id.interval_pressure);
+                mPressureContainer = view.findViewById(R.id.pressure_container);
+                mPressureIntervalLayout = view.findViewById(R.id.layout_pressure);
+                mPressureIntervalView = view.findViewById(R.id.interval_pressure);
                 mPressureContainer.setVisibility(View.VISIBLE);
                 mPressureIntervalView.setText(mPressureInterval);
 
@@ -359,9 +359,9 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 break;
             case 2:
                 alertDialog.setTitle(getString(R.string.humidity_interval_title));
-                mHumidityContainer = (LinearLayout) view.findViewById(R.id.humidity_container);
-                mHumidityIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_humidity);
-                mHumidityIntervalView = (TextInputEditText) view.findViewById(R.id.interval_humidity);
+                mHumidityContainer = view.findViewById(R.id.humidity_container);
+                mHumidityIntervalLayout = view.findViewById(R.id.layout_humidity);
+                mHumidityIntervalView = view.findViewById(R.id.interval_humidity);
                 mHumidityContainer.setVisibility(View.VISIBLE);
                 mHumidityIntervalView.setText(mHumidityInterval);
 
@@ -393,9 +393,9 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 break;
             case 3:
                 alertDialog.setTitle(getString(R.string.color_intensity_interval_title));
-                mColorIntensityContainer = (LinearLayout) view.findViewById(R.id.color_intensity_container);
-                mColorIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_color_intensity);
-                mColorIntervalView = (TextInputEditText) view.findViewById(R.id.interval_color_intensity);
+                mColorIntensityContainer = view.findViewById(R.id.color_intensity_container);
+                mColorIntervalLayout = view.findViewById(R.id.layout_color_intensity);
+                mColorIntervalView = view.findViewById(R.id.interval_color_intensity);
                 mColorIntensityContainer.setVisibility(View.VISIBLE);
                 mColorIntervalView.setText(mColorInterval);
 
@@ -427,14 +427,14 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 break;
             case 4:
                 alertDialog.setTitle(getString(R.string.gas_mode_title));
-                mGasModeContainer = (LinearLayout) view.findViewById(R.id.gas_mode_container);
-                mGasModeView = (RadioGroup) view.findViewById(R.id.rg_gas_mode);
+                mGasModeContainer = view.findViewById(R.id.gas_mode_container);
+                mGasModeView = view.findViewById(R.id.rg_gas_mode);
                 mGasModeContainer.setVisibility(View.VISIBLE);
                 mGasModeView.check(Integer.parseInt(mGasMode));
 
-                mGasModeOne = (RadioButton) view.findViewById(R.id.rb_gas_one);
-                mGasModeTwo = (RadioButton) view.findViewById(R.id.rb_gas_two);
-                mGasModeThree = (RadioButton) view.findViewById(R.id.rb_gas_three);
+                mGasModeOne = view.findViewById(R.id.rb_gas_one);
+                mGasModeTwo = view.findViewById(R.id.rb_gas_two);
+                mGasModeThree = view.findViewById(R.id.rb_gas_three);
 
                 final int gMode = Integer.parseInt(mGasMode);
                 if (gMode == 1) {

@@ -40,6 +40,7 @@ package no.nordicsemi.android.nrfthingy.thingy;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
@@ -48,9 +49,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.NotificationCompat;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -67,9 +68,12 @@ import no.nordicsemi.android.thingylib.ThingyConnection;
 import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
 
 public class ThingyService extends BaseThingyService {
+    private static final String PRIMARY_CHANNEL = "PRIMARY_CHANNEL";
+    private static final String PRIMARY_CHANNEL_ID = "no.nordicsemi.android.nrfthingy";
     private DatabaseHelper mDatabaseHelper;
     private boolean mIsActivityFinishing = false;
     private Map<BluetoothDevice, Integer> mLastSelectedAudioTrack;
+    private NotificationChannel mNotificationChannel;
 
     public class ThingyBinder extends BaseThingyBinder {
         //You can create your own functionality related to the application in side the binder here
@@ -245,10 +249,24 @@ public class ThingyService extends BaseThingyService {
         // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
         final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setContentIntent(pendingIntent).setAutoCancel(true);
-        builder.setSmallIcon(R.drawable.ic_thingy_white);
-        return builder;
+        if(Utils.checkIfVersionIsOreoOrAbove()) {
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL);
+            builder.setContentIntent(pendingIntent).setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.ic_thingy_white);
+            if(mNotificationChannel == null) {
+                mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
+                builder.setChannelId(PRIMARY_CHANNEL_ID);
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.createNotificationChannel(mNotificationChannel);
+            }
+            return builder;
+        } else {
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+            builder.setContentIntent(pendingIntent).setAutoCancel(true);
+            builder.setSmallIcon(R.drawable.ic_thingy_white);
+            return builder;
+        }
     }
 
     /**

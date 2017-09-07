@@ -138,9 +138,9 @@ public class ScannerFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_scanner_device_selection, null);
-        final ListView listview = (ListView) dialogView.findViewById(android.R.id.list);
+        final ListView listview = dialogView.findViewById(android.R.id.list);
 
-        troubleshootView = (LinearLayout) dialogView.findViewById(R.id.troubleshoot_guide);
+        troubleshootView = dialogView.findViewById(R.id.troubleshoot_guide);
 
         listview.setEmptyView(dialogView.findViewById(android.R.id.empty));
         listview.setAdapter(mAdapter = new DeviceListAdapter());
@@ -160,7 +160,7 @@ public class ScannerFragment extends DialogFragment {
             }
         });
 
-        mScanButton = (Button) dialogView.findViewById(R.id.action_cancel);
+        mScanButton = dialogView.findViewById(R.id.action_cancel);
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

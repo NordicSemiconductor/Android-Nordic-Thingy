@@ -187,13 +187,13 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         mDatabaseHelper = new DatabaseHelper(this);
         mThingySdkManager = ThingySdkManager.getInstance();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Prepare the sliding tab layout and the view pager
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        final ViewPager pager = (ViewPager) findViewById(R.id.view_pager);
+        final TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+        final ViewPager pager = findViewById(R.id.view_pager);
 
         pager.setAdapter(new FragmentAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(pager);

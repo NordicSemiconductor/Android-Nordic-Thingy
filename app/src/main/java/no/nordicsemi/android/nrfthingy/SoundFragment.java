@@ -269,12 +269,12 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
 
         View rootView = inflater.inflate(R.layout.fragment_sound, container, false);
 
-        final Toolbar speakerToolbar = (Toolbar) rootView.findViewById(R.id.speaker_toolbar);
+        final Toolbar speakerToolbar = rootView.findViewById(R.id.speaker_toolbar);
         speakerToolbar.setLogo(R.drawable.ic_sound);
         speakerToolbar.setTitle(R.string.speaker_title);
         speakerToolbar.inflateMenu(R.menu.audio_warning);
 
-        final Toolbar microphoneToolbar = (Toolbar) rootView.findViewById(R.id.microphone_toolbar);
+        final Toolbar microphoneToolbar = rootView.findViewById(R.id.microphone_toolbar);
         microphoneToolbar.setLogo(R.drawable.ic_mic_grey);
         microphoneToolbar.setTitle(R.string.microphone_title);
         microphoneToolbar.inflateMenu(R.menu.audio_warning);
@@ -307,15 +307,15 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             }
         });
 
-        mMicrophone = (ImageView) rootView.findViewById(R.id.microphone);
-        mMicrophoneOverlay = (ImageView) rootView.findViewById(R.id.microphoneOverlay);
-        mThingy = (ImageView) rootView.findViewById(R.id.thingy);
-        mThingyOverlay = (ImageView) rootView.findViewById(R.id.thingyOverlay);
-        mVoiceVisualizer = (VoiceVisualizer) rootView.findViewById(R.id.voice_visualizer);
+        mMicrophone = rootView.findViewById(R.id.microphone);
+        mMicrophoneOverlay = rootView.findViewById(R.id.microphoneOverlay);
+        mThingy = rootView.findViewById(R.id.thingy);
+        mThingyOverlay = rootView.findViewById(R.id.thingyOverlay);
+        mVoiceVisualizer = rootView.findViewById(R.id.voice_visualizer);
 
         // Prepare the sliding tab layout and the view pager
-        final TabLayout mTabLayout = (TabLayout) rootView.findViewById(R.id.sliding_tabs);
-        final ViewPager pager = (ViewPager) rootView.findViewById(R.id.view_pager);
+        final TabLayout mTabLayout = rootView.findViewById(R.id.sliding_tabs);
+        final ViewPager pager = rootView.findViewById(R.id.view_pager);
         mFragmentAdapter = new FragmentAdapter(getChildFragmentManager());
         pager.setAdapter(mFragmentAdapter);
         mTabLayout.setupWithViewPager(pager);

@@ -349,22 +349,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mActivityToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActivityToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mActivityToolbar);
 
         mThingySdkManager = ThingySdkManager.getInstance();
 
         mDatabaseHelper = new DatabaseHelper(this);
-        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
-        mNoThingyConnectedContainer = (LinearLayout) findViewById(R.id.no_thingee_connected);
-        final Button mConnectThingy = (Button) findViewById(R.id.connect_thingy);
-        mNavigationView = (NavigationView) findViewById(R.id.navigation);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mLocationServicesContainer = findViewById(R.id.location_services_container);
+        mNoThingyConnectedContainer = findViewById(R.id.no_thingee_connected);
+        final Button mConnectThingy = findViewById(R.id.connect_thingy);
+        mNavigationView = findViewById(R.id.navigation);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         final View headerView = mNavigationView.getHeaderView(0);
-        mHeaderTitle = (TextView) headerView.findViewById(R.id.header_title);
-        mHeaderToggle = (ImageView) headerView.findViewById(R.id.header_toggle);
-        mHeaderTitleContainer = (LinearLayout) headerView.findViewById(R.id.header_title_container);
+        mHeaderTitle = headerView.findViewById(R.id.header_title);
+        mHeaderToggle = headerView.findViewById(R.id.header_toggle);
+        mHeaderTitleContainer = headerView.findViewById(R.id.header_title_container);
 
         // Ensure that Bluetooth exists
         if (!ensureBleExists())
@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mNavigationView.setNavigationItemSelectedListener(this);
 
         mConnectedBleDeviceList = new ArrayList<>();
-        final TextView enableLocationServices = (TextView) findViewById(R.id.enable_location_services);
+        final TextView enableLocationServices = findViewById(R.id.enable_location_services);
         enableLocationServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

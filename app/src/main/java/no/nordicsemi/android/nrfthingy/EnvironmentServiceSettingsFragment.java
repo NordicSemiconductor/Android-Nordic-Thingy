@@ -108,17 +108,17 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
         alertDialogBuilder.setTitle(getString(R.string.environment_settings_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_environment_settings, null);
 
-        mTemperatureIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_temperature);
-        mPressureIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_pressure);
-        mHumidityIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_humidity);
-        mColorIntensityIntervalLayout = (TextInputLayout) view.findViewById(R.id.layout_color_intensity);
+        mTemperatureIntervalLayout = view.findViewById(R.id.layout_temperature);
+        mPressureIntervalLayout = view.findViewById(R.id.layout_pressure);
+        mHumidityIntervalLayout = view.findViewById(R.id.layout_humidity);
+        mColorIntensityIntervalLayout = view.findViewById(R.id.layout_color_intensity);
 
-        mTemperatureIntervalView = (TextInputEditText) view.findViewById(R.id.interval_temperature);
-        mPressureIntervalView = (TextInputEditText) view.findViewById(R.id.interval_pressure);
-        mHumidityIntervalView = (TextInputEditText) view.findViewById(R.id.interval_humidity);
-        mColorIntensityIntervalView = (TextInputEditText) view.findViewById(R.id.interval_color_intensity);
+        mTemperatureIntervalView = view.findViewById(R.id.interval_temperature);
+        mPressureIntervalView = view.findViewById(R.id.interval_pressure);
+        mHumidityIntervalView = view.findViewById(R.id.interval_humidity);
+        mColorIntensityIntervalView = view.findViewById(R.id.interval_color_intensity);
 
-        mGasModeView = (Spinner) view.findViewById(R.id.spinner_gas_mode);
+        mGasModeView = view.findViewById(R.id.spinner_gas_mode);
 
         mTemperatureIntervalView.addTextChangedListener(new TextWatcher() {
             @Override

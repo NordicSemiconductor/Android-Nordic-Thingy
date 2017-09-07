@@ -97,7 +97,7 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
 
         final AlphaAnimation alpha = new AlphaAnimation(1, 0);
         alpha.setDuration(200);
-        final RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.relative_splash);
+        final RelativeLayout relativeLayout = findViewById(R.id.relative_splash);
         final Handler handler = new Handler();
         new Handler().postDelayed(new Runnable() {
             @Override

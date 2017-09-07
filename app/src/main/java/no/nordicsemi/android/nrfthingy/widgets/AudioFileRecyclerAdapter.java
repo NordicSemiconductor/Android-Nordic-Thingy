@@ -168,9 +168,9 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         public CustomViewHolder(View view) {
             super(view);
             view.setSelected(false);
-            relativeLayout = (LinearLayout) view.findViewById(R.id.audio_list_item_container);
-            audioFileNameView = (TextView) view.findViewById(R.id.audio_file_name);
-            audioRadioButton = (RadioButton) view.findViewById(R.id.rb_audio);
+            relativeLayout = view.findViewById(R.id.audio_list_item_container);
+            audioFileNameView = view.findViewById(R.id.audio_file_name);
+            audioRadioButton = view.findViewById(R.id.rb_audio);
         }
     }
 }

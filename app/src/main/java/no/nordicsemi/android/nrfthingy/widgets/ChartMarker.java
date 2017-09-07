@@ -59,7 +59,7 @@ public class ChartMarker extends MarkerView {
     public ChartMarker(Context context, int layoutResource) {
         super(context, layoutResource);
 
-        mMarkerValue = (TextView) getRootView().findViewById(R.id.marker_text);
+        mMarkerValue = getRootView().findViewById(R.id.marker_text);
     }
 
 

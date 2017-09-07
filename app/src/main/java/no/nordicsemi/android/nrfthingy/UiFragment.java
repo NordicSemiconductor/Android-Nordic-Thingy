@@ -272,48 +272,48 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
 
         View rootView = inflater.inflate(R.layout.fragment_ui, container, false);
 
-        final Toolbar toolbarLed = (Toolbar) rootView.findViewById(R.id.card_toolbar_led);
+        final Toolbar toolbarLed = rootView.findViewById(R.id.card_toolbar_led);
         toolbarLed.setLogo(R.drawable.ic_led);
         toolbarLed.setTitle(R.string.led_title);
 
-        final Toolbar toolbarButton = (Toolbar) rootView.findViewById(R.id.card_toolbar_button);
+        final Toolbar toolbarButton = rootView.findViewById(R.id.card_toolbar_button);
         toolbarButton.setLogo(R.drawable.ic_button);
         toolbarButton.setTitle(R.string.button_title);
 
-        mLedRgbColorContainer = (LinearLayout) rootView.findViewById(R.id.led_rgb_color_container);
-        mLedControllerContainer = (LinearLayout) rootView.findViewById(R.id.led_controler_container);
-        mRgbIntensityControllerContainer = (LinearLayout) rootView.findViewById(R.id.led_rgb_container);
-        mColorContainer = (ConstraintLayout) rootView.findViewById(R.id.led_color_container);
+        mLedRgbColorContainer = rootView.findViewById(R.id.led_rgb_color_container);
+        mLedControllerContainer = rootView.findViewById(R.id.led_controler_container);
+        mRgbIntensityControllerContainer = rootView.findViewById(R.id.led_rgb_container);
+        mColorContainer = rootView.findViewById(R.id.led_color_container);
 
-        mLedRgb = (ImageView) rootView.findViewById(R.id.img_led_rgb);
-        mLedRed = (ImageView) rootView.findViewById(R.id.img_led_red);
-        mLedGreen = (ImageView) rootView.findViewById(R.id.img_led_green);
-        mLedYellow = (ImageView) rootView.findViewById(R.id.img_led_yellow);
-        mLedBlue = (ImageView) rootView.findViewById(R.id.img_led_blue);
-        mLedPurple = (ImageView) rootView.findViewById(R.id.img_led_purple);
-        mLedCyan = (ImageView) rootView.findViewById(R.id.img_led_cyan);
-        mLedWhite = (ImageView) rootView.findViewById(R.id.img_led_white);
+        mLedRgb = rootView.findViewById(R.id.img_led_rgb);
+        mLedRed = rootView.findViewById(R.id.img_led_red);
+        mLedGreen = rootView.findViewById(R.id.img_led_green);
+        mLedYellow = rootView.findViewById(R.id.img_led_yellow);
+        mLedBlue = rootView.findViewById(R.id.img_led_blue);
+        mLedPurple = rootView.findViewById(R.id.img_led_purple);
+        mLedCyan = rootView.findViewById(R.id.img_led_cyan);
+        mLedWhite = rootView.findViewById(R.id.img_led_white);
 
         mSwatchSelected = ContextCompat.getDrawable(getContext(), R.drawable.ic_colorpicker_swatch_selected);
         mRgbDrawable = (GradientDrawable) mLedRgb.getDrawable();
 
-        mLedRgbView = (TextView) rootView.findViewById(R.id.led_rgb);
-        mRedIntensityView = (TextView) rootView.findViewById(R.id.red_val);
-        mGreenIntensityView = (TextView) rootView.findViewById(R.id.green_val);
-        mBlueIntensityView = (TextView) rootView.findViewById(R.id.blue_val);
-        mIntensity = (TextView) rootView.findViewById(R.id.intensity_percentage);
-        mDelay = (TextView) rootView.findViewById(R.id.delay_ms);
-        mButtonState = (TextView) rootView.findViewById(R.id.button_state);
-        mOneShot = (TextView) rootView.findViewById(R.id.one_shot);
-        mConstant = (TextView) rootView.findViewById(R.id.constant);
-        mBreathe = (TextView) rootView.findViewById(R.id.breathe);
-        mOff = (TextView) rootView.findViewById(R.id.off);
+        mLedRgbView = rootView.findViewById(R.id.led_rgb);
+        mRedIntensityView = rootView.findViewById(R.id.red_val);
+        mGreenIntensityView = rootView.findViewById(R.id.green_val);
+        mBlueIntensityView = rootView.findViewById(R.id.blue_val);
+        mIntensity = rootView.findViewById(R.id.intensity_percentage);
+        mDelay = rootView.findViewById(R.id.delay_ms);
+        mButtonState = rootView.findViewById(R.id.button_state);
+        mOneShot = rootView.findViewById(R.id.one_shot);
+        mConstant = rootView.findViewById(R.id.constant);
+        mBreathe = rootView.findViewById(R.id.breathe);
+        mOff = rootView.findViewById(R.id.off);
 
-        mRedIntensity = (SeekBar) rootView.findViewById(R.id.seek_bar_red);
-        mGreenIntensity = (SeekBar) rootView.findViewById(R.id.seek_bar_green);
-        mBlueIntensity = (SeekBar) rootView.findViewById(R.id.seek_bar_blue);
-        mLedIntensity = (SeekBar) rootView.findViewById(R.id.seek_bar_intensity);
-        mBreatheDelay = (SeekBar) rootView.findViewById(R.id.seek_bar_delay);
+        mRedIntensity = rootView.findViewById(R.id.seek_bar_red);
+        mGreenIntensity = rootView.findViewById(R.id.seek_bar_green);
+        mBlueIntensity = rootView.findViewById(R.id.seek_bar_blue);
+        mLedIntensity = rootView.findViewById(R.id.seek_bar_intensity);
+        mBreatheDelay = rootView.findViewById(R.id.seek_bar_delay);
 
         mIntensity.setText(getString(R.string.led_percentage, ThingyUtils.DEFAULT_LED_INTENSITY));
         mDelay.setText(getString(R.string.interval_ms, ThingyUtils.DEFAULT_BREATHE_INTERVAL));

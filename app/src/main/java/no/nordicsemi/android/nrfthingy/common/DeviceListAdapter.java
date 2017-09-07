@@ -159,10 +159,10 @@ public class DeviceListAdapter extends BaseAdapter {
                 if (view == null) {
                     view = inflater.inflate(R.layout.device_list_row, parent, false);
                     final ViewHolder holder = new ViewHolder();
-                    holder.name = (TextView) view.findViewById(R.id.name);
-                    holder.address = (TextView) view.findViewById(R.id.address);
-                    holder.thingy = (ImageView) view.findViewById(R.id.icon_view);
-                    holder.rssi = (ImageView) view.findViewById(R.id.rssi);
+                    holder.name = view.findViewById(R.id.name);
+                    holder.address = view.findViewById(R.id.address);
+                    holder.thingy = view.findViewById(R.id.icon_view);
+                    holder.rssi = view.findViewById(R.id.rssi);
                     view.setTag(holder);
                 }
 

@@ -283,7 +283,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
         mThingySdkManager = ThingySdkManager.getInstance();
 
-        final Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar mainToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mainToolbar);
         mainToolbar.setTitle(getString(R.string.initial_configuration));
 
@@ -298,26 +298,26 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mDatabaseHelper = new DatabaseHelper(this);
         mScannerFragment = ScannerFragment.getInstance(ThingyUtils.THINGY_BASE_UUID);
 
-        mThingyInfoContainer = (LinearLayout) findViewById(R.id.thingy_container);
-        mDeviceNameContainer = (LinearLayout) findViewById(R.id.device_name_container);
-        mSetupCompleteContainer = (LinearLayout) findViewById(R.id.setup_complete_container);
-        mLocationServicesContainer = (LinearLayout) findViewById(R.id.location_services_container);
-        mEnableLocationServices = (TextView) findViewById(R.id.enable_location_services);
+        mThingyInfoContainer = findViewById(R.id.thingy_container);
+        mDeviceNameContainer = findViewById(R.id.device_name_container);
+        mSetupCompleteContainer = findViewById(R.id.setup_complete_container);
+        mLocationServicesContainer = findViewById(R.id.location_services_container);
+        mEnableLocationServices = findViewById(R.id.enable_location_services);
 
-        mScrollView = (ScrollView) findViewById(R.id.scroll_view);
+        mScrollView = findViewById(R.id.scroll_view);
 
-        mDeviceInfo = (TextInputEditText) findViewById(R.id.device_name);
+        mDeviceInfo = findViewById(R.id.device_name);
 
-        mConfirmThingy = (Button) findViewById(R.id.confirm_thingy);
-        mConfirmDeviceName = (Button) findViewById(R.id.confirm_device_name);
-        mSkipDeviceName = (Button) findViewById(R.id.skip_device_name);
-        mGetStarted = (Button) findViewById(R.id.get_started);
+        mConfirmThingy = findViewById(R.id.confirm_thingy);
+        mConfirmDeviceName = findViewById(R.id.confirm_device_name);
+        mSkipDeviceName = findViewById(R.id.skip_device_name);
+        mGetStarted = findViewById(R.id.get_started);
 
-        mStepOne = (TextView) findViewById(R.id.step_one);
-        mStepTwo = (TextView) findViewById(R.id.step_two);
-        mStepOneSummary = (TextView) findViewById(R.id.step_one_summary);
+        mStepOne = findViewById(R.id.step_one);
+        mStepTwo = findViewById(R.id.step_two);
+        mStepOneSummary = findViewById(R.id.step_one_summary);
         mView = findViewById(R.id.vertical_line);
-        mSpace = (Space) findViewById(R.id.space);
+        mSpace = findViewById(R.id.space);
 
         mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -883,11 +883,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                 resourceEntryNames[resourceEntryNames.length - 2] + "." +
                 resourceEntryNames[resourceEntryNames.length - 1];
 
-        if (fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch) {
-            return true;
-        }
+        return fwFileVersionMajor > fwVersionMajor || fwFileVersionMinor > fwVersionMinor || fwFileVersionPatch > fwVersionPatch;
 
-        return false;
     }
 
     private void checkForFwUpdates() {

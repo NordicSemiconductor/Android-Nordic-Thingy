@@ -131,9 +131,9 @@ public class IFTTTokenDialogFragment extends DialogFragment {
         alertDialogBuilder.setMessage(R.string.cloud_token_rationale);
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_ifttt_token, null);
 
-        mSwitchClearToken = (Switch) view.findViewById(R.id.switch_clear_token);
-        mCloudTokenLayout = (TextInputLayout) view.findViewById(R.id.layout_cloud_token);
-        mCloudTokenView = (TextInputEditText) view.findViewById(R.id.cloud_token_view);
+        mSwitchClearToken = view.findViewById(R.id.switch_clear_token);
+        mCloudTokenLayout = view.findViewById(R.id.layout_cloud_token);
+        mCloudTokenView = view.findViewById(R.id.cloud_token_view);
         mCloudTokenView.setText(mCloudToken);
 
         mSwitchClearToken.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
