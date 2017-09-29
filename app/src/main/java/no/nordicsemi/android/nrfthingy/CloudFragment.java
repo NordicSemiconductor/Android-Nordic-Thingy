@@ -136,6 +136,11 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
 
         @Override
+        public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
+
+        }
+
+        @Override
         public void onTemperatureValueChangedEvent(BluetoothDevice bluetoothDevice, String temperature) {
             if (mIsFragmentAttached) {
                 final String temp = (temperature) + "\u2103";

@@ -37,148 +37,96 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:card_view="http://schemas.android.com/tools"
     android:background="@color/colorBackground">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar_layout"
-        style="@style/HeaderBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/dfu_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?actionBarSize"
-            app:theme="@style/ActionBarThemeOverlay"
-            app:popupTheme="@style/ActionBarPopupThemeOverlay"
-            app:titleTextAppearance="@style/ActionBar.TitleText"/>
-
-        <LinearLayout
-            android:id="@+id/location_services_container"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@color/colorNordicOrange"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                android:gravity="center_vertical"
-                android:text="@string/location_services_disabled"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
-
-            <TextView
-                android:id="@+id/enable_location_services"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textColor="@android:color/white"
-                android:gravity="center_vertical"
-                android:text="@string/enable"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
-
-        </LinearLayout>
-
-    </android.support.design.widget.AppBarLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/background_title"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="2dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/dfu_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_action_dfu_white"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/activity_horizontal_margin"
-        app:elevation="6dp" />
-
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/app_bar_layout">
+        xmlns:card_view="http://schemas.android.com/tools"
+        android:background="@color/colorBackground">
 
-        <RelativeLayout
-            android:id="@+id/target_container"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            style="@style/HeaderBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/dfu_target_view"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/dfu_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/cardview_horizontal_padding"
-                android:layout_marginRight="@dimen/cardview_horizontal_padding"
-                android:layout_marginTop="@dimen/cardview_action_padding"
-                card_view:cardCornerRadius="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.Toolbar
-                        android:id="@+id/dfu_target_toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?actionBarSize"
-                        android:background="@android:color/white"
-                        app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                        app:titleTextAppearance="@style/Cardview.TitleText"
-                        app:popupTheme="@style/ActionBarPopupThemeOverlay" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="@dimen/activity_vertical_margin"
-                        android:layout_marginRight="@dimen/activity_vertical_margin"
-                        android:layout_marginBottom="@dimen/activity_vertical_margin">
-                        <TextView
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/dfu_target_name"
-                            android:textStyle="bold"/>
-
-                        <TextView android:id="@+id/dfu_target_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                    </LinearLayout>
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
+                android:layout_height="?actionBarSize"
+                app:theme="@style/ActionBarThemeOverlay"
+                app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                app:titleTextAppearance="@style/ActionBar.TitleText"/>
 
             <LinearLayout
+                android:id="@+id/location_services_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_below="@id/dfu_target_view">
+                android:layout_height="36dp"
+                android:background="@color/colorNordicOrange"
+                android:visibility="gone">
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/firmware_info_view"
+                <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:text="@string/location_services_disabled"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+                <TextView
+                    android:id="@+id/enable_location_services"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@android:color/white"
+                    android:gravity="center_vertical"
+                    android:text="@string/enable"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/background_title"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="2dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout">
+
+            <LinearLayout
+                android:id="@+id/target_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/dfu_target_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/cardview_horizontal_padding"
+                    android:layout_marginRight="@dimen/cardview_horizontal_padding"
                     android:layout_marginTop="@dimen/cardview_action_padding"
-                    card_view:cardCornerRadius="2dp"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin">
+                    card_view:cardCornerRadius="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -186,7 +134,7 @@
                         android:orientation="vertical">
 
                         <android.support.v7.widget.Toolbar
-                            android:id="@+id/dfu_fw_info_toolbar"
+                            android:id="@+id/dfu_target_toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
@@ -197,294 +145,362 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"
+                            android:orientation="horizontal"
                             android:layout_marginLeft="@dimen/activity_vertical_margin"
                             android:layout_marginRight="@dimen/activity_vertical_margin"
                             android:layout_marginBottom="@dimen/activity_vertical_margin">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="80dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_name"
-                                    android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dfu_target_name"
+                                android:textStyle="bold"/>
 
-                                <TextView android:id="@+id/file_name"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="80dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_type"
-                                    android:gravity="left|center"
-                                    android:paddingTop="@dimen/activity_vertical_margin"
-                                    android:id="@+id/textView4"
-                                    android:textStyle="bold"/>
-
-                                <TextView android:id="@+id/file_type"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="Application"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal">
-                                <TextView
-                                    android:layout_width="80dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_size"
-                                    android:gravity="left|center"
-                                    android:paddingTop="@dimen/activity_vertical_margin"
-                                    android:textStyle="bold"/>
-
-                                <TextView android:id="@+id/file_size"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"/>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="horizontal"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="80dp"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_version"
-                                    android:gravity="left|center"
-                                    android:paddingTop="@dimen/activity_vertical_margin"
-                                    android:textStyle="bold"/>
-
-                                <TextView android:id="@+id/file_version"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="0.2.2"/>
-                            </LinearLayout>
+                            <TextView android:id="@+id/dfu_target_name"
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"/>
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.12"
-                            android:background="@android:color/black"/>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_margin="@dimen/cardview_action_padding">
-
-                            <TextView
-                                android:id="@+id/nordic_fw"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textStyle="bold"
-                                android:text="@string/nordic_fw"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="center"
-                                android:padding="@dimen/cardview_action_padding"
-                                android:background="@color/greyBg"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/textColorWhite"/>
-
-                            <TextView
-                                android:id="@+id/custom_fw"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:textStyle="bold"
-                                android:text="@string/custom_fw"
-                                android:layout_gravity="center_vertical"
-                                android:gravity="center"
-                                android:padding="@dimen/cardview_action_padding"
-                                android:background="?attr/selectableItemBackground"
-                                android:layout_toLeftOf="@id/nordic_fw"
-                                android:layout_marginRight="@dimen/cardview_action_padding"/>
-
-                        </RelativeLayout>
                     </LinearLayout>
 
                 </android.support.v7.widget.CardView>
 
-                <android.support.v4.widget.Space
-                    android:layout_width="@dimen/cardview_action_padding"
-                    android:layout_height="1dp" />
-                <android.support.v7.widget.CardView
-                    android:id="@+id/dfu_status_view"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/cardview_vertical_padding"
-                    android:layout_marginRight="@dimen/cardview_horizontal_padding"
-                    android:layout_marginBottom="@dimen/activity_vertical_margin"
-                    card_view:cardCornerRadius="2dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_below="@id/dfu_target_view">
 
-                        <android.support.v7.widget.Toolbar
-                            android:id="@+id/dfu_status_toolbar"
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/firmware_info_view"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/cardview_horizontal_padding"
+                        android:layout_marginTop="@dimen/cardview_action_padding"
+                        card_view:cardCornerRadius="2dp"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="?actionBarSize"
-                            android:background="@android:color/white"
-                            app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                            app:titleTextAppearance="@style/Cardview.TitleText"
-                            app:popupTheme="@style/ActionBarThemeOverlayCard"/>
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.Toolbar
+                                android:id="@+id/dfu_fw_info_toolbar"
+                                android:layout_width="match_parent"
+                                android:layout_height="?actionBarSize"
+                                android:background="@android:color/white"
+                                app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+                                app:titleTextAppearance="@style/Cardview.TitleText"
+                                app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                                android:layout_marginRight="@dimen/activity_vertical_margin"
+                                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="80dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/dfu_file_name"
+                                        android:textStyle="bold"/>
+
+                                    <TextView android:id="@+id/file_name"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="80dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/dfu_file_type"
+                                        android:gravity="left|center"
+                                        android:paddingTop="@dimen/activity_vertical_margin"
+                                        android:id="@+id/textView4"
+                                        android:textStyle="bold"/>
+
+                                    <TextView android:id="@+id/file_type"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:gravity="center_vertical"
+                                              android:text="Application"/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_width="80dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/dfu_file_size"
+                                        android:gravity="left|center"
+                                        android:paddingTop="@dimen/activity_vertical_margin"
+                                        android:textStyle="bold"/>
+
+                                    <TextView android:id="@+id/file_size"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:gravity="center_vertical"/>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="80dp"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/dfu_file_version"
+                                        android:gravity="left|center"
+                                        android:paddingTop="@dimen/activity_vertical_margin"
+                                        android:textStyle="bold"/>
+
+                                    <TextView android:id="@+id/file_version"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:gravity="center_vertical"
+                                              android:text="0.2.2"/>
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:alpha="0.12"
+                                android:background="@android:color/black"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/cardview_action_padding">
+
+                                <TextView
+                                    android:id="@+id/nordic_fw"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textStyle="bold"
+                                    android:text="@string/nordic_fw"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center"
+                                    android:padding="@dimen/cardview_action_padding"
+                                    android:background="@color/greyBg"
+                                    android:layout_alignParentRight="true"
+                                    android:textColor="@color/textColorWhite"/>
+
+                                <TextView
+                                    android:id="@+id/custom_fw"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textStyle="bold"
+                                    android:text="@string/custom_fw"
+                                    android:layout_gravity="center_vertical"
+                                    android:gravity="center"
+                                    android:padding="@dimen/cardview_action_padding"
+                                    android:background="?attr/selectableItemBackground"
+                                    android:layout_toLeftOf="@id/nordic_fw"
+                                    android:layout_marginRight="@dimen/cardview_action_padding"/>
+
+                            </RelativeLayout>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v4.widget.Space
+                        android:layout_width="@dimen/cardview_action_padding"
+                        android:layout_height="1dp" />
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/dfu_status_view"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/cardview_vertical_padding"
+                        android:layout_marginRight="@dimen/cardview_horizontal_padding"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        card_view:cardCornerRadius="2dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:layout_marginLeft="@dimen/activity_vertical_margin"
-                            android:layout_marginRight="@dimen/activity_vertical_margin">
+                            android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                            <android.support.v7.widget.Toolbar
+                                android:id="@+id/dfu_status_toolbar"
+                                android:layout_width="match_parent"
+                                android:layout_height="?actionBarSize"
+                                android:background="@android:color/white"
+                                app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+                                app:titleTextAppearance="@style/Cardview.TitleText"
+                                app:popupTheme="@style/ActionBarThemeOverlayCard"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:layout_marginLeft="@dimen/activity_vertical_margin"
+                                android:layout_marginRight="@dimen/activity_vertical_margin">
 
-                                <ImageView android:id="@+id/dfu_step_one_img"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
-                                    android:layout_gravity="center_vertical"
-                                    android:alpha="0.20"/>
-
-                                <TextView android:id="@+id/dfu_step_one"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_one"
-                                    android:alpha="0.20"/>
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <android.support.v4.widget.Space android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding"/>
+                                    <ImageView android:id="@+id/dfu_step_one_img"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               app:srcCompat="@drawable/ic_done_grey"
+                                               android:layout_gravity="center_vertical"
+                                               android:alpha="0.20"/>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                    <TextView android:id="@+id/dfu_step_one"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="center_vertical"
+                                              android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                                              android:text="@string/dfu_step_one"
+                                              android:alpha="0.20"/>
+                                </LinearLayout>
 
-                                <ImageView android:id="@+id/dfu_step_two_img"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
-                                    android:layout_gravity="center_vertical"
-                                    android:alpha="0.20"/>
+                                <android.support.v4.widget.Space android:layout_width="match_parent"
+                                                                 android:layout_height="@dimen/cardview_action_padding"/>
 
-                                <TextView android:id="@+id/dfu_step_two"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_two"
-                                    android:alpha="0.20"/>
-                            </LinearLayout>
+                                    android:orientation="horizontal">
 
-                            <android.support.v4.widget.Space android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding"
-                                android:id="@+id/space2" />
+                                    <ImageView android:id="@+id/dfu_step_two_img"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               app:srcCompat="@drawable/ic_done_grey"
+                                               android:layout_gravity="center_vertical"
+                                               android:alpha="0.20"/>
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                    <TextView android:id="@+id/dfu_step_two"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="center_vertical"
+                                              android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                                              android:text="@string/dfu_step_two"
+                                              android:alpha="0.20"/>
+                                </LinearLayout>
 
-                                <ImageView android:id="@+id/dfu_step_three_img"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_alignParentLeft="true"
-                                    android:alpha="0.20"/>
+                                <android.support.v4.widget.Space android:layout_width="match_parent"
+                                                                 android:layout_height="@dimen/cardview_action_padding"
+                                                                 android:id="@+id/space2" />
 
-                                <TextView
-                                    android:id="@+id/dfu_speed_unit"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="right"
-                                    android:paddingLeft="4dp"
-                                    android:text="@string/kbps"
-                                    android:layout_alignParentRight="true"
-                                    android:alpha="0.20"/>
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
 
-                                <TextView android:id="@+id/dfu_step_three"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="@string/dfu_step_three"
-                                    android:layout_toRightOf="@id/dfu_step_three_img"
-                                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:alpha="0.20"/>
+                                    <ImageView android:id="@+id/dfu_step_three_img"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               app:srcCompat="@drawable/ic_done_grey"
+                                               android:layout_gravity="center_vertical"
+                                               android:layout_alignParentLeft="true"
+                                               android:alpha="0.20"/>
 
-                                <ProgressBar
-                                    android:id="@+id/dfu_status_bar"
+                                    <TextView
+                                        android:id="@+id/dfu_speed_unit"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:gravity="right"
+                                        android:paddingLeft="4dp"
+                                        android:text="@string/kbps"
+                                        android:layout_alignParentRight="true"
+                                        android:alpha="0.20"/>
+
+                                    <TextView android:id="@+id/dfu_step_three"
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content"
+                                              android:text="@string/dfu_step_three"
+                                              android:layout_toRightOf="@id/dfu_step_three_img"
+                                              android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                                              android:alpha="0.20"/>
+
+                                    <ProgressBar
+                                        android:id="@+id/dfu_status_bar"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/dfu_step_three"
+                                        android:layout_alignLeft="@id/dfu_step_three"
+                                        style="@style/DfuProgressBar"
+                                        android:max="100"/>
+
+                                    <TextView android:id="@+id/dfu_upload_speed"
+                                              android:layout_width="wrap_content"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="center_vertical"
+                                              android:layout_toLeftOf="@id/dfu_speed_unit"/>
+
+                                </RelativeLayout>
+
+                                <android.support.v4.widget.Space android:layout_width="match_parent"
+                                                                 android:layout_height="@dimen/cardview_action_padding" />
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/dfu_step_three"
-                                    android:layout_alignLeft="@id/dfu_step_three"
-                                    style="@style/DfuProgressBar"
-                                    android:max="100"/>
+                                    android:orientation="horizontal">
 
-                                <TextView android:id="@+id/dfu_upload_speed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_toLeftOf="@id/dfu_speed_unit"/>
+                                    <ImageView android:id="@+id/dfu_step_four_img"
+                                               android:layout_width="wrap_content"
+                                               android:layout_height="wrap_content"
+                                               app:srcCompat="@drawable/ic_done_grey"
+                                               android:layout_gravity="center_vertical"
+                                               android:alpha="0.20"/>
 
-                            </RelativeLayout>
+                                    <TextView android:id="@+id/dfu_step_four"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="wrap_content"
+                                              android:layout_gravity="center_vertical"
+                                              android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                                              android:text="@string/dfu_step_completed"
+                                              android:alpha="0.20"/>
 
-                            <android.support.v4.widget.Space android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding" />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="@dimen/activity_vertical_margin">
-
-                                <ImageView android:id="@+id/dfu_step_four_img"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
-                                    android:layout_gravity="center_vertical"
-                                    android:alpha="0.20"/>
-
-                                <TextView android:id="@+id/dfu_step_four"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_completed"
-                                    android:alpha="0.20"/>
+                                </LinearLayout>
 
                             </LinearLayout>
                         </LinearLayout>
+                    </android.support.v7.widget.CardView>
 
-                    </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </LinearLayout>
 
             </LinearLayout>
 
-        </RelativeLayout>
-
-    </ScrollView>
-</RelativeLayout>
+        </ScrollView>
+    </RelativeLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/dfu_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_action_dfu_white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        app:elevation="6dp"
+        app:layout_anchor="@id/container"
+        app:layout_anchorGravity="bottom|right|end"/>
+</android.support.design.widget.CoordinatorLayout>

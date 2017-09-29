@@ -82,7 +82,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
     //If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project
     //on the Google Developer Console and enable the URLShortener API and use the API key in your project.
-    private static final String URL_SHORTENER_API_KEY = "AIzaSyBJJfoC2E0Z4D75mkKTUbBcaNk5F-F1CIU";
+    private static final String URL_SHORTENER_API_KEY = "URL_SHORTENER_API_KEY";
     private LinearLayout mShortUrlContainer;
 
     private Spinner mEddystoneUrlTypesView;

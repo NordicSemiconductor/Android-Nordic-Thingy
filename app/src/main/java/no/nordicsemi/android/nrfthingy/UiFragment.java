@@ -140,6 +140,11 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         }
 
         @Override
+        public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
+
+        }
+
+        @Override
         public void onTemperatureValueChangedEvent(BluetoothDevice bluetoothDevice, String temperature) {
         }
 
@@ -490,8 +495,8 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     if (progress < ThingyUtils.DEFAULT_MINIMUM_BREATHE_INTERVAL) {
-                        seekBar.setProgress(1);
-                        mDelay.setText(getString(R.string.interval_ms, 1));
+                        seekBar.setProgress(ThingyUtils.DEFAULT_MINIMUM_BREATHE_INTERVAL);
+                        mDelay.setText(getString(R.string.interval_ms, ThingyUtils.DEFAULT_MINIMUM_BREATHE_INTERVAL));
                     } else {
                         mDelay.setText(getString(R.string.interval_ms, progress));
                     }
@@ -713,7 +718,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                         break;
                 }
             } else {
-                Utils.showToast(getActivity(), "Please connect to " + thingy.getDeviceName() + " before you proceed!");
+                Utils.showToast(getActivity(), "Please configureThingy to " + thingy.getDeviceName() + " before you proceed!");
             }
         }
     }
@@ -738,7 +743,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                 updateLedConstantModeUI();
 
             } else {
-                Utils.showToast(getActivity(), "Please connect to " + thingy.getDeviceName() + " before you proceed!");
+                Utils.showToast(getActivity(), "Please configureThingy to " + thingy.getDeviceName() + " before you proceed!");
             }
         }
     }
@@ -828,7 +833,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                         break;
                 }
             } else {
-                Utils.showToast(getActivity(), "Please connect to " + thingy.getDeviceName() + " before you proceed!");
+                Utils.showToast(getActivity(), "Please configureThingy to " + thingy.getDeviceName() + " before you proceed!");
             }
 
         }

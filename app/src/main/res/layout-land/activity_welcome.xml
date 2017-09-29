@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/welcome_summary"
-                android:id="@+id/textView2"
+                android:id="@+id/add_thingy_summary"
                 android:layout_below="@+id/textView"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="8dp"

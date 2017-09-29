@@ -41,6 +41,7 @@ package no.nordicsemi.android.nrfthingy.thingy;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
@@ -66,20 +67,27 @@ import no.nordicsemi.android.thingylib.BaseThingyService;
 import no.nordicsemi.android.thingylib.ThingyConnection;
 
 import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
+import static no.nordicsemi.android.nrfthingy.common.Utils.THINGY_GROUP_ID;
 
 public class ThingyService extends BaseThingyService {
-    private static final String PRIMARY_CHANNEL = "PRIMARY_CHANNEL";
+    private static final String PRIMARY_GROUP = "Thingy:52 Connectivity Summary";
+    private static final String PRIMARY_GROUP_ID = "no.nordicsemi.android.nrfthingy";
+    private static final String PRIMARY_CHANNEL = "Thingy:52 Connectivity Status";
     private static final String PRIMARY_CHANNEL_ID = "no.nordicsemi.android.nrfthingy";
     private DatabaseHelper mDatabaseHelper;
     private boolean mIsActivityFinishing = false;
     private Map<BluetoothDevice, Integer> mLastSelectedAudioTrack;
+    private NotificationManager mNotificationManager;
+    private NotificationChannelGroup mNotificationChannelGroup;
     private NotificationChannel mNotificationChannel;
 
     public class ThingyBinder extends BaseThingyBinder {
         //You can create your own functionality related to the application in side the binder here
-
+        private static final int SCANNING = 1;
+        private static final int CONNECTING = 2;
         private boolean mIsScanning;
         private String mLastVisibleFragment = Utils.ENVIRONMENT_FRAGMENT;
+        private int mState;
 
         /**
          * Saves the activity state.
@@ -125,11 +133,11 @@ public class ThingyService extends BaseThingyService {
             return mLastVisibleFragment;
         }
 
-        public boolean setScanningState(final boolean isScanning) {
-            return mIsScanning = isScanning;
+        public void setScanningState(final boolean isScanning) {
+            mIsScanning = isScanning;
         }
 
-        public boolean getScanningState() {
+        public boolean isScanningState() {
             return mIsScanning;
         }
 
@@ -187,6 +195,7 @@ public class ThingyService extends BaseThingyService {
     @Override
     public void onCreate() {
         super.onCreate();
+        createNotificationPrerequisites();
         mLastSelectedAudioTrack = new HashMap<>();
         mDatabaseHelper = new DatabaseHelper(getApplicationContext());
         registerReceiver(mNotificationDisconnectReceiver, new IntentFilter(Utils.ACTION_DISCONNECT));
@@ -219,13 +228,29 @@ public class ThingyService extends BaseThingyService {
         }
     };
 
+    private void createNotificationPrerequisites(){
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Utils.checkIfVersionIsOreoOrAbove()) {
+            if(mNotificationChannelGroup == null) {
+                mNotificationChannelGroup = new NotificationChannelGroup(PRIMARY_GROUP_ID, PRIMARY_GROUP);
+            }
+            if(mNotificationChannel == null) {
+                mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
+            }
+            /*mNotificationChannel.setGroup(PRIMARY_GROUP_ID);
+            mNotificationManager.createNotificationChannelGroup(mNotificationChannelGroup);*/
+            mNotificationManager.createNotificationChannel(mNotificationChannel);
+        }
+    }
+
     /**
      * Creates a Notifications for the devices that are currently connected.
      */
     private void createNotificationForConnectedDevice(final BluetoothDevice device, final String deviceName) {
-        final NotificationCompat.Builder builder = getNotificationBuilder();
+        final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
         builder.setColor(ContextCompat.getColor(getApplicationContext(), no.nordicsemi.android.thingylib.R.color.colorPrimaryDark));
-        builder.setGroup(Utils.THINGY_GROUP_ID).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
+        builder.setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
+        builder.setGroup(PRIMARY_GROUP_ID).setGroupSummary(true);
         builder.setContentTitle(getString(R.string.thingy_notification_text, deviceName));
 
         final Intent disconnect = new Intent(Utils.ACTION_DISCONNECT);
@@ -235,14 +260,30 @@ public class ThingyService extends BaseThingyService {
         builder.setSortKey(deviceName + device.getAddress()); // This will keep the same order of notification even after an action was clicked on one of them
 
         final Notification notification = builder.build();
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(this);
-        nm.notify(device.getAddress(), Utils.NOTIFICATION_ID, notification);
+        mNotificationManager.notify(device.getAddress(), Utils.NOTIFICATION_ID, notification);
     }
 
     /**
      * Returns a notification builder
      */
-    private NotificationCompat.Builder getNotificationBuilder() {
+    private NotificationCompat.Builder getBackgroundNotificationBuilder() {
+        final Intent parentIntent = new Intent(this, getNotificationTarget());
+        parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
+        final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL);
+        builder.setContentIntent(pendingIntent).setAutoCancel(true);
+        builder.setSmallIcon(R.drawable.ic_thingy_white);
+        builder.setChannelId(PRIMARY_CHANNEL_ID);
+        return builder;
+    }
+
+    /**
+     * Returns a notification builder
+     */
+    private NotificationCompat.Builder getSummaryNotifcationBuilder() {
         final Intent parentIntent = new Intent(this, getNotificationTarget()/*MainActivity.class*/);
         parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -273,7 +314,7 @@ public class ThingyService extends BaseThingyService {
      * Creates a summary notifcation for devices
      */
     private void createSummaryNotification() {
-        final NotificationCompat.Builder builder = getNotificationBuilder();
+        final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
         builder.setColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         builder.setShowWhen(false).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
         builder.setGroup(Utils.THINGY_GROUP_ID).setGroupSummary(true);
@@ -358,7 +399,6 @@ public class ThingyService extends BaseThingyService {
         for (int i = 0; i < devices.size(); i++) {
             createNotificationForConnectedDevice(devices.get(i), getDeviceName(devices.get(i)));
         }
-        createSummaryNotification();
     }
 
     /**

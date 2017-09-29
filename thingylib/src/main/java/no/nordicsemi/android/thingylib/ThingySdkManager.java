@@ -224,6 +224,23 @@ public class ThingySdkManager {
         return false;
     }
 
+    /**
+     * Returns if the initial service discovery for the connected device is completed
+     *
+     * @param device Bluetoot device
+     *
+     */
+    public boolean hasInitialServiceDiscoverCompleted(final BluetoothDevice device) {
+        if(device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if(thingyConnection != null) {
+                    return thingyConnection.hasInitialServiceDiscoverCompleted();
+                }
+            }
+        }
+        return false;
+    }
 
 
     /**
@@ -285,7 +302,7 @@ public class ThingySdkManager {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    return thingyConnection.getDeviceName();
+                    return thingyConnection.readDeviceName();
                 }
             }
         }
@@ -740,6 +757,42 @@ public class ThingySdkManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Enable battery level notifcations for thingy
+     *
+     * @param device bluetooth device
+     * @param flag   notification state on/off
+     */
+    public void enableBatteryLevelNotifcations(final BluetoothDevice device, final boolean flag) {
+        if (device != null) {
+            Log.v(ThingyUtils.TAG, "BINDER: " + mBinder);
+            if (mBinder != null) {
+                //mBinder.enableEnvironmentNotifications(device, flag);
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    thingyConnection.enableBatteryLevelNotifcations(flag);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the battery level of Thingy
+     *
+     * @param device bluetooth device
+     */
+    public int getBatteryLevel(final BluetoothDevice device) {
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    return thingyConnection.getBatteryLevel();
+                }
+            }
+        }
+        return -1;
     }
 
     /**
@@ -1817,20 +1870,33 @@ public class ThingySdkManager {
         return false;
     }
 
+
+    public boolean checkIfDfuWithoutBondSharingIsSupported(final BluetoothDevice device) {
+        if (device != null) {
+            if (mBinder != null) {
+                final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
+                if (thingyConnection != null) {
+                    return thingyConnection.checkIfDfuWithoutBondSharingIsSupported();
+                }
+            }
+        }
+        return false;
+    }
     /**
      * Trigger boot loader mode on the thingy to initiate DFU
      *
      * @param device bluetooth device
      */
-    public void triggerBootLoaderMode(final BluetoothDevice device) {
+    public boolean triggerBootLoaderMode(final BluetoothDevice device) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    thingyConnection.triggerBootLoaderMode();
+                    return thingyConnection.triggerBootLoaderMode();
                 }
             }
         }
+        return false;
     }
 
     /**

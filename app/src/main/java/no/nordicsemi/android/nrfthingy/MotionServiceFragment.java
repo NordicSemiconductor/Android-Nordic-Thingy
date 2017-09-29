@@ -154,6 +154,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
         @Override
+        public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
+
+        }
+
+        @Override
         public void onTemperatureValueChangedEvent(BluetoothDevice bluetoothDevice, String temperature) {
         }
 

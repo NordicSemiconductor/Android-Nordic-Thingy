@@ -79,6 +79,9 @@ public class ThingyUtils {
     public static final UUID CLOUD_TOKEN_CHARACTERISTIC_UUID                                    = new UUID(0xEF6801069B354933L, 0x9B1052FFA9740042L);
     public static final UUID FIRMWARE_VERSION_CHARACERISTIC_UUID                                = new UUID(0xEF6801079B354933L, 0x9B1052FFA9740042L);
 
+    public static final UUID BATTERY_SERVICE                                                    = UUID.fromString("0000180F-0000-1000-8000-00805f9b34fb");
+    public static final UUID BATTERY_SERVICE_CHARACTERISTIC                                     = UUID.fromString("00002A19-0000-1000-8000-00805f9b34fb");
+
     public static final UUID THINGY_ENVIRONMENTAL_SERVICE                                       = new UUID(0xEF6802009B354933L, 0x9B1052FFA9740042L);
     public static final UUID TEMPERATURE_CHARACTERISTIC                                         = new UUID(0xEF6802019B354933L, 0x9B1052FFA9740042L);
     public static final UUID PRESSURE_CHARACTERISTIC                                            = new UUID(0xEF6802029B354933L, 0x9B1052FFA9740042L);
@@ -114,7 +117,8 @@ public class ThingyUtils {
     public final static ParcelUuid PARCEL_SECURE_DFU_SERVICE                                    = ParcelUuid.fromString("0000FE59-0000-1000-8000-00805F9B34FB");
     public final static UUID SECURE_DFU_SERVICE                                                 = UUID.fromString("0000FE59-0000-1000-8000-00805F9B34FB");
     public static final UUID THINGY_BUTTONLESS_DFU_SERVICE                                      = new UUID(0x8E400001F3154F60l, 0x9FB8838830DAEA50L);
-    public static final UUID DFU_CONTROL_POINT_CHARACTERISTIC                                   = new UUID(0x8EC90001F3154F60l, 0x9FB8838830DAEA50L);
+    public static final UUID DFU_DEFAULT_CONTROL_POINT_CHARACTERISTIC                           = new UUID(0x8EC90001F3154F60l, 0x9FB8838830DAEA50L);
+    public static final UUID DFU_CONTROL_POINT_CHARACTERISTIC_WITHOUT_BOND_SHARING              = new UUID(0x8EC90003F3154F60l, 0x9FB8838830DAEA50L);
 
     public static final String ACTION_DEVICE_CONNECTED                                          = "ACTION_DEVICE_CONNECTED_";
     public static final String ACTION_DEVICE_DISCONNECTED                                       = "ACTION_DEVICE_DISCONNECTED_";
@@ -134,6 +138,8 @@ public class ThingyUtils {
     public static final String EXTRA_DEVICE                                                     = "EXTRA_DEVICE";
     public static final String EXTRA_DEVICE_NAME                                                = "EXTRA_DEVICE_NAME";
     public static final String EXTRA_DEVICE_ADDRESS                                             = "EXTRA_DEVICE_ADDRESS";
+
+    public static final String BATTERY_LEVEL_NOTIFICATION                                       = "BATTERY_LEVEL_NOTIFICATION_";
 
     public static final String TEMPERATURE_NOTIFICATION                                         = "TEMPERATURE_NOTIFICATION_";
     public static final String PRESSURE_NOTIFICATION                                            = "PRESSURE_NOTIFICATION_";
@@ -208,11 +214,6 @@ public class ThingyUtils {
     public static final String EXTRA_DATA_MICROPHONE_NOTITIFCATION                              = "EXTRA_DATA_MICROPHONE_NOTITIFCATION";
     public static final String EXTRA_DATA_PCM                                                   = "EXTRA_DATA_PCM";
 
-    public static final String ACTION_MQTT_CLIENT_CONNECTING                                    = "ACTION_MQTT_CLIENT_CONNECTING";
-    public static final String ACTION_MQTT_CLIENT_RECONNECTING                                  = "ACTION_MQTT_CLIENT_RECONNECTING";
-    public static final String ACTION_MQTT_CLIENT_CONNECTED                                     = "ACTION_MQTT_CLIENT_CONNECTED";
-    public static final String ACTION_MQTT_CLIENT_DISCONNECTED                                  = "ACTION_MQTT_CLIENT_DISCONNECTED";
-
     public static final String INITIAL_CONFIG_FROM_ACTIVITY                                     = "INITIAL_CONFIG_FROM_ACTIVITY";
 
     public static final int SAMPLE_1                                                            = 0;
@@ -250,7 +251,7 @@ public class ThingyUtils {
     public static final int DEFAULT_BLUE_CALIBRATION_INTENSITY                                  = 29;
 
     public static final int DEFAULT_BREATHE_INTERVAL                                            = 3500;
-    public static final int DEFAULT_MINIMUM_BREATHE_INTERVAL                                    = 1; //ms
+    public static final int DEFAULT_MINIMUM_BREATHE_INTERVAL                                    = 50; //ms
     public static final int DEFAULT_MAXIMUM_BREATHE_INTERVAL                                    = 10000; //ms
 
     public static final int DEFAULT_LED_INTENSITY                                               = 20;
@@ -314,6 +315,7 @@ public class ThingyUtils {
     public static final int MAX_AUDIO_PACKET_SIZE                                               = 160; //
 
     //Notification Intervals in ms
+    public static final int ENVIRONMENT_NOTIFICATION_MAX_INTERVAL                               = 60000;
     public static final int NOTIFICATION_MAX_INTERVAL                                           = 5000;
     public static final int TEMP_MIN_INTERVAL                                                   = 100;
     public static final int PRESSURE_MIN_INTERVAL                                               = 50;
@@ -321,7 +323,7 @@ public class ThingyUtils {
     public static final int COLOR_INTENSITY_MIN_INTERVAL                                        = 200;
     public static final int PEDOMETER_MIN_INTERVAL                                              = 100;
     public static final int COMPASS_MIN_INTERVAL                                                = 100;
-    public static final int MPU_FREQ_MIN_INTERVAL                                               = 1; //hz
+    public static final int MPU_FREQ_MIN_INTERVAL                                               = 5; //hz
     public static final int MPU_FREQ_MAX_INTERVAL                                               = 200; //hz
 
     public static final int GAS_MODE_1                                                          = 1;
@@ -392,15 +394,6 @@ public class ThingyUtils {
         intentFilter.addAction(ACTION_SERVICE_DISCOVERY_COMPLETED);
         intentFilter.addAction(ACTION_DEVICE_DISCONNECTED);
         intentFilter.addAction(EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
-        return intentFilter;
-    }
-
-    public static IntentFilter makeMqttManagerIntentFilter() {
-        final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_MQTT_CLIENT_CONNECTING);
-        intentFilter.addAction(ACTION_MQTT_CLIENT_RECONNECTING);
-        intentFilter.addAction(ACTION_MQTT_CLIENT_CONNECTED);
-        intentFilter.addAction(ACTION_MQTT_CLIENT_DISCONNECTED);
         return intentFilter;
     }
 

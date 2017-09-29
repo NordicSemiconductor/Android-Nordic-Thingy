@@ -38,9 +38,13 @@
 
 package no.nordicsemi.android.nrfthingy;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcF;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -50,6 +54,10 @@ import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.configuration.InitialConfigurationActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
+
+    private NfcAdapter mNfcAdapter;
+    private PendingIntent mNfcPendingIntent;
+    private IntentFilter[] mIntentFiltersArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,5 +81,35 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             });
         }
+        loadNfcAdapter();
     }
+
+    private void loadNfcAdapter() {
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if(mNfcAdapter != null) {
+            mNfcPendingIntent = PendingIntent.getActivity(
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            ndef.addDataScheme("vnd.android.nfc");
+            ndef.addDataAuthority("ext", null);
+            mIntentFiltersArray = new IntentFilter[] {ndef };
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][] { new String[] { NfcF.class.getName() } });
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mNfcAdapter != null) {
+            mNfcAdapter.disableForegroundDispatch(this);
+        }
+    }
+
 }

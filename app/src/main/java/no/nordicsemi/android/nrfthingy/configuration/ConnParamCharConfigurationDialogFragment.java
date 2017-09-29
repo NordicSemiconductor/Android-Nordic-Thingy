@@ -186,7 +186,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                         if (ThingyUtils.validateMaxConnectionInterval(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mMaxConnectionIntervalLayout.setError(null);
                         } else {
-                            mSlaveLatencyLayout.setError("Invalid value");
+                            mMaxConnectionIntervalLayout.setError(getString(R.string.invalid_value));
                         }
                     } else {
                         mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
@@ -214,7 +214,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                         if (ThingyUtils.validateSlaveLatency(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mSlaveLatencyLayout.setError(null);
                         } else {
-                            mSlaveLatencyLayout.setError("Invalid value");
+                            mSlaveLatencyLayout.setError(getString(R.string.invalid_value));
                         }
                     } else {
                         mSlaveLatencyLayout.setError(getString(R.string.error_invalid_slave_latency));
@@ -244,12 +244,21 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                     final int superVisionTimeOut = supervisionTimeoutUnits * 10;
                     mConnSupervisionTimeout.setText(getString(R.string.interval_ms, superVisionTimeOut));
                     if (supervisionTimeoutUnits >= ThingyUtils.MIN_SUPERVISION_TIMEOUT && supervisionTimeoutUnits <= ThingyUtils.MAX_SUPERVISION_TIMEOUT) {
-                        final int slaveLatency = Integer.parseInt(mSlaveLatencyView.getText().toString().trim());
-                        final int maxConnIntervalUnits = Integer.parseInt(mMaxConnectionIntervalView.getText().toString().trim());
+                        final String sLatency = mSlaveLatencyView.getText().toString().trim();
+                        if(sLatency.isEmpty()) {
+                            return;
+                        }
+                        final int slaveLatency = Integer.parseInt(sLatency);
+
+                        final String mConnInterval = mMaxConnectionIntervalView.getText().toString().trim();
+                        if(mConnInterval.isEmpty()){
+                            return;
+                        }
+                        final int maxConnIntervalUnits = Integer.parseInt(mConnInterval);
                         if (ThingyUtils.validateSupervisionTimeout(slaveLatency, maxConnIntervalUnits, supervisionTimeoutUnits)) {
                             mSupervisionTimeoutLayout.setError(null);
                         } else {
-                            mSlaveLatencyLayout.setError("Invalid value");
+                            mSupervisionTimeoutLayout.setError(getString(R.string.invalid_value));
                         }
                     } else {
                         mSupervisionTimeoutLayout.setError(getString(R.string.error_invalid_supervision_timeout));
@@ -319,6 +328,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
         final String minConInterval = mMinConnectionIntervalView.getText().toString().trim();
         if (minConInterval.isEmpty()) {
             mMinConnectionIntervalLayout.setError(getString(R.string.error_empty_min_conn_interval));
+            return false;
         } else {
             boolean valid;
             int i = 0;
@@ -333,7 +343,12 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if (ThingyUtils.MIN_CONN_INTERVAL >= i * ThingyUtils.CONN_INT_UNIT && ThingyUtils.MAX_CONN_INTERVAL <= i * ThingyUtils.CONN_INT_UNIT) {
+            if (i < ThingyUtils.MIN_CONN_VALUE) {
+                mMinConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
+                return false;
+            }
+
+            if(i > ThingyUtils.MAX_CONN_VALUE){
                 mMinConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
                 return false;
             }
@@ -342,6 +357,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
         final String maxConInterval = mMaxConnectionIntervalView.getText().toString().trim();
         if (maxConInterval.isEmpty()) {
             mMaxConnectionIntervalLayout.setError(getString(R.string.error_empty_max_conn_interval));
+            return false;
         } else {
             boolean valid;
             int i = 0;
@@ -356,16 +372,28 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if (ThingyUtils.MIN_CONN_INTERVAL >= i * ThingyUtils.CONN_INT_UNIT && ThingyUtils.MAX_CONN_INTERVAL <= i * ThingyUtils.CONN_INT_UNIT) {
+
+            if (i < ThingyUtils.MIN_CONN_VALUE) {
                 mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
                 return false;
             }
+
+            if(i > ThingyUtils.MAX_CONN_VALUE){
+                mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
+                return false;
+            }
+
+            /*if (ThingyUtils.MIN_CONN_INTERVAL >= i * ThingyUtils.CONN_INT_UNIT && ThingyUtils.MAX_CONN_INTERVAL <= i * ThingyUtils.CONN_INT_UNIT) {
+                mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
+                return false;
+            }*/
 
         }
 
         final String slaveLatency = mSlaveLatencyView.getText().toString().trim();
         if (slaveLatency.isEmpty()) {
             mSlaveLatencyLayout.setError(getString(R.string.error_empty_slave_latency));
+            return false;
         } else {
             boolean valid;
             int i = 0;
@@ -389,6 +417,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
         final String supervisionTimeout = mSupervisionTimeoutView.getText().toString().trim();
         if (supervisionTimeout.isEmpty()) {
             mSupervisionTimeoutView.setError(getString(R.string.error_empty_supervision_timeout));
+            return false;
         } else {
             boolean valid;
             int i = 0;

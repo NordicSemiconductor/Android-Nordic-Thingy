@@ -60,7 +60,7 @@
     <string name="dev_name_info">Thingy name</string>
     <string name="dev_name_info_summary">Give a name to your Thingy (optional)</string>
     <string name="user_info">User information</string>
-    <string name="connect_thingy_summary">Click to find one</string>
+    <string name="connect_thingy_summary">Click to scan or touch Thingy:52 with the back of your smart phone to connect via NFC</string>
     <string name="user_info_hint">Name</string>
     <string name="email_info">Email information</string>
     <string name="email">Email</string>
@@ -74,6 +74,7 @@
     <string name="initial_setup_complete">Initial setup complete!</string>
     <string name="action_add">Add Thingy</string>
     <string name="no_thingy_connected_configuration">Please reconnect to %s to view the configuration</string>
+    <string name="thingy_already_connected">Already connected to %s</string>
     <string name="no_thingy_connected">Not connected to a Thingy</string>
     <string name="no_thingy_configured">No Thingy configured</string>
     <string name="no_thingy_connected_step_one">Please follow step 1 to proceed</string>
@@ -125,10 +126,10 @@
     <string name="supervision_timeout_formula">x 10 ms = </string>
     <string name="led_percentage">%d %%</string>
 
-    <string name="error_temp_interval">Temperature interval must be between 100-5000 milliseconds!</string>
-    <string name="error_pressure_interval">Pressure interval cannot be less than 50-5000 milliseconds!</string>
-    <string name="error_humidity_interval">Humidity interval cannot be less than 100-5000 milliseconds!</string>
-    <string name="error_color_intensity_interval">Color intensity interval cannot be less than 200-5000 milliseconds!</string>
+    <string name="error_temp_interval">Interval must be between 100-60000 milliseconds!</string>
+    <string name="error_pressure_interval">Interval cannot be less than 50-60000 milliseconds!</string>
+    <string name="error_humidity_interval">Interval cannot be less than 100-60000 milliseconds!</string>
+    <string name="error_color_intensity_interval">Interval cannot be less than 200-60000 milliseconds!</string>
     <string name="error_color_interval">Color interval cannot be less than %d seconds!</string>
     <string name="error_temp_interval_empty">Temperature interval cannot be empty!</string>
     <string name="error_pressure_interval_empty">Pressure interval cannot be empty!</string>
@@ -339,6 +340,7 @@
     <string name="dfu_step_two">Initializing DFU</string>
     <string name="dfu_step_three">Uploading firmware</string>
     <string name="dfu_step_completed">Completed</string>
+    <string name="dfu_step_reconnecting">Reconnecting</string>
     <string name="kbps">kB/s</string>
     <string-array name="dfu_app_file_browser">
         <item>Drive</item>
@@ -364,7 +366,7 @@
     <string name="ppb">%d ppb</string>
     <string name="percentage_rh">%s RH</string>
     <string name="error_interval_limit">Interval value must be between 100ms - 5000ms</string>
-    <string name="error_motion_interval_limit">Interval value must be between 1Hz - 200hz</string>
+    <string name="error_motion_interval_limit">Interval value must be between 5Hz - 200hz</string>
     <string name="default_thingy_name">Thingy:52</string>
 
     <string name="thingy_action_disconnect">Disconnect</string>
@@ -492,6 +494,7 @@
     <string name="location_services_disabled">Location services disabled.</string>
     <string name="location_services_title">Location services disabled.</string>
 
+    <string name="start_stop_dfu_update">Tap here to start DFU</string>
     <string name="start_stop_env_sensors">Tap here to start/stop sensors</string>
     <string name="start_stop_motion_sensors">Tap here to start/stop sensors, some sensors might be turned off by default</string>
     <string name="delete_device">Tap here to delete a device from the app</string>
@@ -521,7 +524,33 @@
     <string name="two_connected">%d are connected</string>
     <string name="one_disconnected">%s  is disconnected</string>
     <string name="two_disconnected">%d are disconnected</string>
-    <string name="enable">Enable</string>
+    <string name="enable">ENABLE</string>
+    <string name="nfc_tag_connecting">NFC tag found, connecting to device...</string>
+    <string name="nfc_tag_dialog_title">NFC Tag found</string>
+    <string name="nfc_tag_dialog_summary">A new Thingy:52 containing a NFC Tag was found. Would you like to connect to this device?</string>
+    <string name="enable_nfc_tag_dialog_title">Enable NFC</string>
+    <string name="enable_nfc_tag_dialog_summary">Nordic Thingy:52 firmware version 2.0 contains "Touch to Connect" using NFC.
+        In order to make use of this feature your smart phone\'s NFC feature has to be enabled. Would you like to proceed?</string>
+    <string name="status_connected_to_device">Status: Connected to : %s</string>
+    <string name="dfu_bootloader_push_error">Unable to push the device to bootloader mode</string>
+
+    <string name="add_thingy_summary">Click to add a new Thingy:52</string>
+    <string name="add_thingy_nfc_summary">Click to add a new Thingy:52 or touch Thingy:52 with the back of your smart phone to connect via NFC</string>
+    <string name="do_not_ask_again">Do not ask again</string>
+    <string name="nfc_disabled">NFC disabled</string>
+    <string name="enable_nfc">Enable NFC</string>
+    <string name="more">MORE</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="dfu_restarting">Restring DFU</string>
+    <string name="extended_error_restarting_dfu">Extended error, restarting DFU with application firmware</string>
+    <string name="battery_level_percent">%d%%</string>
+    <string name="eroor_adding_multiple_devices_over_nfc">Unable to configure multiple Thingy:52 devices at the same time</string>
+    <string name="never_show_nfc_warning">Do not display NFC disabled message again</string>
+    <string name="dismiss_nfc_warning_title">Dismiss NFC warning</string>
+    <string name="thingy_already_added">%s is already configured</string>
+    <string name="invalid_value">Invalid value</string>
+    <string name="error_reading_nfc_tag">Error reading NFC tag</string>
+    <string name="error_nfc_tag">Error reading tag, tap the thingy again.</string>
 
     <string-array name="gas_mode">
         <item>1s interval</item>

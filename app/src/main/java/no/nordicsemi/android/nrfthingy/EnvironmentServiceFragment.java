@@ -93,7 +93,6 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 public class EnvironmentServiceFragment extends Fragment implements ScannerFragmentListener, EnvironmentServiceSettingsFragment.EnvironmentServiceSettingsFragmentListener {
 
     private static final int REQUEST_ENABLE_BT = 1021;
-
     private TextView mTemperatureView;
     private TextView mPressureView;
     private TextView mHumidityView;
@@ -146,6 +145,11 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         @Override
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
             //Connectivity callbacks handled by main activity
+        }
+
+        @Override
+        public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
+
         }
 
         @Override

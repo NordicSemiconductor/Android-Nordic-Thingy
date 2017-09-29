@@ -46,18 +46,21 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 import no.nordicsemi.android.nrfthingy.common.Utils;
+import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class SplashScreenActivity extends AppCompatActivity implements ThingySdkManager.ServiceConnectionListener {
-
+    private static final String TAG = "SplashScreenActivity";
     private static final int DURATION = 1000;
     private ThingySdkManager mThingySdkManager;
+    private DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mThingySdkManager = ThingySdkManager.getInstance();
+        mDatabaseHelper = new DatabaseHelper(this);
 
         if (Utils.isAppInitialisedBefore(this)) {
             setContentView(R.layout.activity_splash_screen);
@@ -66,7 +69,6 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
 
     @Override
     public void onBackPressed() {
-        //super.onBackPressed();
     }
 
     @Override
@@ -93,26 +95,20 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
     }
 
     private void startCorrespondingActivity(final Class<? extends AppCompatActivity> activityClass) {
-        //setContentView(R.layout.activity_splash_screen);
-
         final AlphaAnimation alpha = new AlphaAnimation(1, 0);
         alpha.setDuration(200);
         final RelativeLayout relativeLayout = findViewById(R.id.relative_splash);
         final Handler handler = new Handler();
-        new Handler().postDelayed(new Runnable() {
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 relativeLayout.setAnimation(alpha);
             }
         }, 700);
-
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this, activityClass);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                finish();
+                goToNextActivity(activityClass);
             }
         }, DURATION);
     }
@@ -120,5 +116,12 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
     @Override
     public void onServiceConnected() {
         animateSplashScreen();
+    }
+
+    private void goToNextActivity(final Class<? extends AppCompatActivity> activityClass) {
+        final Intent newIntent = new Intent(SplashScreenActivity.this, activityClass);
+        newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        startActivity(newIntent);
+        finish();
     }
 }

@@ -86,6 +86,45 @@
                 android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/nfc_container"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:background="@color/colorPrimaryDark"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:text="@string/nfc_disabled"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:id="@+id/enable_nfc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:text="@string/enable"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:id="@+id/dismiss_nfc"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:gravity="center_vertical"
+                android:text="@string/more"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+
+        </LinearLayout>
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView
@@ -167,9 +206,10 @@
                             android:paddingTop="@dimen/stepper_padding_top">
                             <LinearLayout
                                 android:id="@+id/thingy_container"
-                                android:orientation="vertical"
+                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
+
                                 <Button
                                     android:id="@+id/confirm_thingy"
                                     android:layout_width="wrap_content"

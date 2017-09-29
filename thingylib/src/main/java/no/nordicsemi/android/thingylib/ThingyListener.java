@@ -52,6 +52,8 @@ public interface ThingyListener  {
 
     void onServiceDiscoveryCompleted(BluetoothDevice device);
 
+    void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel);
+
     void onTemperatureValueChangedEvent(final BluetoothDevice bluetoothDevice, final String temperature);
 
     void onPressureValueChangedEvent(final BluetoothDevice bluetoothDevice, final String pressure);

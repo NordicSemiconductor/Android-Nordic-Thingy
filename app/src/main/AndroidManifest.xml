@@ -37,17 +37,20 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="no.nordicsemi.android.nrfthingy">
+          package="no.nordicsemi.android.nrfthingy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.NFC" />
 
-    <uses-feature
-        android:name="android.hardware.bluetooth_le"
-        android:required="true" />
+    <uses-feature android:name="android.hardware.bluetooth_le"
+                  android:required="true" />
+
+    <uses-feature android:name="android.hardware.nfc"
+                  android:required="false" />
 
     <application
         android:name="android.support.multidex.MultiDexApplication"
@@ -76,7 +79,8 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.TranslucentStatusBar" />
+            android:theme="@style/AppTheme.TranslucentStatusBar">
+        </activity>
         <activity
             android:name=".configuration.ConfigurationActivity"
             android:label="Configuration"

@@ -127,6 +127,16 @@ public class ThingyListenerHelper {
                     break;
                 case ThingyUtils.ACTION_DATA_RECEIVED:
                     break;
+                case ThingyUtils.BATTERY_LEVEL_NOTIFICATION:
+                    final int batteryLevel = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA);
+                    if(globalListener != null) {
+                        globalListener.onBatteryLevelChanged(device, batteryLevel);
+                    }
+
+                    if(thingyListener != null) {
+                        thingyListener.onBatteryLevelChanged(device, batteryLevel);
+                    }
+                    break;
                 case ThingyUtils.TEMPERATURE_NOTIFICATION:
                     final String temperature = intent.getExtras().getString(ThingyUtils.EXTRA_DATA);
                     if(globalListener != null) {
@@ -343,6 +353,7 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.ACTION_DEVICE_DISCONNECTED);
             intentFilter.addAction(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED);
             intentFilter.addAction(ThingyUtils.EXTRA_DEVICE);
+            intentFilter.addAction(ThingyUtils.BATTERY_LEVEL_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.TEMPERATURE_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.PRESSURE_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.HUMIDITY_NOTIFICATION);
@@ -380,6 +391,7 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.ACTION_DEVICE_DISCONNECTED);
             intentFilter.addAction(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED);
             intentFilter.addAction(ThingyUtils.EXTRA_DEVICE);
+            intentFilter.addAction(ThingyUtils.BATTERY_LEVEL_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.TEMPERATURE_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.PRESSURE_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.HUMIDITY_NOTIFICATION);

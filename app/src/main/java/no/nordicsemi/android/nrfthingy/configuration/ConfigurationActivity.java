@@ -39,7 +39,12 @@
 package no.nordicsemi.android.nrfthingy.configuration;
 
 
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
+import android.nfc.tech.NfcF;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -63,9 +68,13 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
     private DatabaseHelper mDatabaseHelper;
+    private NfcAdapter mNfcAdapter;
+    private PendingIntent mNfcPendingIntent;
+    private IntentFilter[] mIntentFiltersArray;
 
 
     private ThingyListener mThingyListener = new ThingyListener() {
+
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
 
@@ -78,6 +87,11 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
 
         @Override
         public void onServiceDiscoveryCompleted(BluetoothDevice device) {
+
+        }
+
+        @Override
+        public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
 
         }
 
@@ -211,6 +225,7 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
             public void onPageScrollStateChanged(int state) {
             }
         });
+        loadNfcAdapter();
     }
 
     @Override
@@ -218,6 +233,22 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         super.onStart();
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][] { new String[] { NfcF.class.getName() } });
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mNfcAdapter != null) {
+            mNfcAdapter.disableForegroundDispatch(this);
+        }
     }
 
     @Override
@@ -273,6 +304,18 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         @Override
         public CharSequence getPageTitle(int position) {
             return getResources().getStringArray(R.array.configuration_tab_title)[position];
+        }
+    }
+
+    private void loadNfcAdapter() {
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+        if(mNfcAdapter != null) {
+            mNfcPendingIntent = PendingIntent.getActivity(
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            ndef.addDataScheme("vnd.android.nfc");
+            ndef.addDataAuthority("ext", null);
+            mIntentFiltersArray = new IntentFilter[] {ndef };
         }
     }
 }

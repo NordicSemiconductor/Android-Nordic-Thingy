@@ -180,7 +180,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 return false;
             } else {
                 final int tempIntervalValue = Integer.parseInt(tempInterval);
-                if (tempIntervalValue < ThingyUtils.TEMP_MIN_INTERVAL || tempIntervalValue > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                if (tempIntervalValue < ThingyUtils.TEMP_MIN_INTERVAL || tempIntervalValue > ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                     mTemperatureIntervalLayout.setError(getString(R.string.error_temp_interval));
                     return false;
                 }
@@ -195,7 +195,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 return false;
             } else {
                 final int pressureIntervalValue = Integer.parseInt(pressureInterval);
-                if (pressureIntervalValue < ThingyUtils.PRESSURE_MIN_INTERVAL || pressureIntervalValue > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                if (pressureIntervalValue < ThingyUtils.PRESSURE_MIN_INTERVAL || pressureIntervalValue > ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                     mPressureIntervalLayout.setError(getString(R.string.error_pressure_interval));
                     return false;
                 }
@@ -210,7 +210,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 return false;
             } else {
                 final int humidityIntervalValue = Integer.parseInt(humidityInterval);
-                if (humidityIntervalValue < ThingyUtils.HUMIDITY_MIN_INTERVAL || humidityIntervalValue > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                if (humidityIntervalValue < ThingyUtils.HUMIDITY_MIN_INTERVAL || humidityIntervalValue > ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                     mHumidityIntervalLayout.setError(getString(R.string.error_humidity_interval));
                     return false;
                 }
@@ -225,7 +225,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 return false;
             } else {
                 final int colorIntervalValue = Integer.parseInt(colorInterval);
-                if (colorIntervalValue < ThingyUtils.COLOR_INTENSITY_MIN_INTERVAL || colorIntervalValue > ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                if (colorIntervalValue < ThingyUtils.COLOR_INTENSITY_MIN_INTERVAL || colorIntervalValue > ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                     mColorIntervalLayout.setError(getString(R.string.error_color_intensity_interval));
                     return false;
                 }
@@ -309,7 +309,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                             return;
                         }
                         int value = Integer.parseInt(s.toString());
-                        if (value >= ThingyUtils.TEMP_MIN_INTERVAL && value <= ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                        if (value >= ThingyUtils.TEMP_MIN_INTERVAL && value <= ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                             mTemperatureIntervalLayout.setError(null);
                         } else {
                             mTemperatureIntervalLayout.setError(getString(R.string.error_temp_interval));
@@ -344,7 +344,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                             return;
                         }
                         int value = Integer.parseInt(s.toString());
-                        if (value >= ThingyUtils.PRESSURE_MIN_INTERVAL && value <= ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                        if (value >= ThingyUtils.PRESSURE_MIN_INTERVAL && value <= ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                             mPressureIntervalLayout.setError(null);
                         } else {
                             mPressureIntervalLayout.setError(getString(R.string.error_pressure_interval));
@@ -378,7 +378,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                             return;
                         }
                         int value = Integer.parseInt(s.toString());
-                        if (value >= ThingyUtils.HUMIDITY_MIN_INTERVAL && value <= ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                        if (value >= ThingyUtils.HUMIDITY_MIN_INTERVAL && value <= ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                             mHumidityIntervalLayout.setError(null);
                         } else {
                             mHumidityIntervalLayout.setError(getString(R.string.error_humidity_interval));
@@ -412,7 +412,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                             return;
                         }
                         int value = Integer.parseInt(s.toString());
-                        if (value >= ThingyUtils.COLOR_INTENSITY_MIN_INTERVAL && value <= ThingyUtils.NOTIFICATION_MAX_INTERVAL) {
+                        if (value >= ThingyUtils.COLOR_INTENSITY_MIN_INTERVAL && value <= ThingyUtils.ENVIRONMENT_NOTIFICATION_MAX_INTERVAL) {
                             mColorIntervalLayout.setError(null);
                         } else {
                             mColorIntervalLayout.setError(getString(R.string.error_color_intensity_interval));
