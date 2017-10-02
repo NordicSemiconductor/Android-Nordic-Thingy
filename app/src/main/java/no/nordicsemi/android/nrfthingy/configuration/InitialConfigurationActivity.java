@@ -1238,14 +1238,18 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                                 if (!mDatabaseHelper.isExist(address)) {
                                     if (isBleEnabled()) {
                                         final BluetoothDevice device = getBluetoothDevice(this, address);
-                                        if(!isConnected(device, mThingySdkManager.getConnectedDevices())) {
-                                            if (mDatabaseHelper.getLastSelected(address)) {
-                                                prepareForScanning(device.getAddress());
+                                        if(device != null) {
+                                            if (!isConnected(device, mThingySdkManager.getConnectedDevices())) {
+                                                if (mDatabaseHelper.getLastSelected(address)) {
+                                                    prepareForScanning(device.getAddress());
+                                                } else {
+                                                    mDatabaseHelper.setLastSelected(address, true);
+                                                }
                                             } else {
-                                                mDatabaseHelper.setLastSelected(address, true);
+                                                Utils.showToast(this, getString(R.string.thingy_already_connected, device.getName()));
                                             }
                                         } else {
-                                            Utils.showToast(this, getString(R.string.thingy_already_connected, device.getName()));
+                                            Utils.showToast(this, getString(R.string.error_nfc_tag));
                                         }
                                     }
                                 } else {

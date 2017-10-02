@@ -550,7 +550,7 @@
     <string name="thingy_already_added">%s is already configured</string>
     <string name="invalid_value">Invalid value</string>
     <string name="error_reading_nfc_tag">Error reading NFC tag</string>
-    <string name="error_nfc_tag">Error reading tag, tap the thingy again.</string>
+    <string name="error_nfc_tag">Error reading tag, tap the thingy:52 again.</string>
 
     <string-array name="gas_mode">
         <item>1s interval</item>
