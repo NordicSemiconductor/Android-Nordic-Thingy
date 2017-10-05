@@ -1640,9 +1640,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (mIsScanning) {
             Log.v(Utils.TAG, "Stopping scan");
-            mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
+            mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             mIsScanning = false;
         }
     }
@@ -1657,6 +1657,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
             mIsScanning = false;
+        } else {
+
         }
     }
 
@@ -1741,6 +1743,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void run() {
             stopScan();
+            hideProgressDialog();
         }
     };
 

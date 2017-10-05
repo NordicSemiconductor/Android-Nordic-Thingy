@@ -535,7 +535,7 @@
     <string name="dfu_bootloader_push_error">Unable to push the device to bootloader mode</string>
 
     <string name="add_thingy_summary">Click to add a new Thingy:52</string>
-    <string name="add_thingy_nfc_summary">Click to add a new Thingy:52 or touch Thingy:52 with the back of your smart phone to connect via NFC</string>
+    <string name="add_thingy_nfc_summary">Click to add a new Thingy:52 or touch Thingy:52 with the back of your smart phone to connect via NFC (FW version 2.0 onwards)</string>
     <string name="do_not_ask_again">Do not ask again</string>
     <string name="nfc_disabled">NFC disabled</string>
     <string name="enable_nfc">Enable NFC</string>

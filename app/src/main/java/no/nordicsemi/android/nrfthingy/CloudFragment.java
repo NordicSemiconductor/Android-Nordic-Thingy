@@ -70,6 +70,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Locale;
 
 import no.nordicsemi.android.nrfthingy.common.CloudGuideActivity;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
@@ -547,7 +548,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("value1", mDatabaseHelper.getDeviceName(mDevice.getAddress()));
-            jsonObject.put("value2", TIME_FORMAT.format(duration));
+            jsonObject.put("value2", String.valueOf(duration));
             jsonObject.put("value3", "seconds");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -665,6 +666,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                 }
 
                 urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
                 urlConnection.setDoOutput(true);
                 urlConnection.setRequestProperty("Content-Type", "application/json");
                 urlConnection.connect();
@@ -672,8 +674,13 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 writeStream(out, json);
 
-                InputStream stream =  new BufferedInputStream(urlConnection.getErrorStream());
-                readStream(stream);
+                final int reponseCode = urlConnection.getResponseCode();
+                //Check for the reposnse code before reading the error stream, if not causes an exception with stream closed as there may not be an error
+                if(reponseCode != HttpURLConnection.HTTP_OK) {
+                    InputStream stream = new BufferedInputStream(urlConnection.getErrorStream());
+                    readStream(stream);
+                }
+
                 final String message = urlConnection.getResponseMessage();
                 mHandler.post(new Runnable() {
                     @Override

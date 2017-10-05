@@ -834,6 +834,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private void startScan() {
+        if(mIsScanning) {
+            return;
+        }
         Log.v(Utils.TAG, "Starting scan");
         final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
         final ScanSettings settings = new ScanSettings.Builder()
@@ -854,9 +857,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private void stopScan() {
         if (mIsScanning) {
             Log.v(Utils.TAG, "Stopping scan");
-            mScanHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(scanCallback);
+            mScanHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             mIsScanning = false;
         }
     }
