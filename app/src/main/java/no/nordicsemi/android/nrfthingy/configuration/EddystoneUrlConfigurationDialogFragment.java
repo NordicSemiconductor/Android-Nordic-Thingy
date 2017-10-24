@@ -41,6 +41,7 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,7 +53,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,17 +62,20 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.extensions.android.json.AndroidJsonFactory;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.services.urlshortener.Urlshortener;
-import com.google.api.services.urlshortener.model.Url;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -82,7 +85,6 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
     //If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project
     //on the Google Developer Console and enable the URLShortener API and use the API key in your project.
-    private static final String URL_SHORTENER_API_KEY = "URL_SHORTENER_API_KEY";
     private LinearLayout mShortUrlContainer;
 
     private Spinner mEddystoneUrlTypesView;
@@ -95,7 +97,6 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
-
     public EddystoneUrlConfigurationDialogFragment() {
 
     }
@@ -174,8 +175,9 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
-                if (!Patterns.WEB_URL.matcher(url).matches()) {
+                if (Patterns.WEB_URL.matcher(url).matches()) {
                     shortenUrl(url);
+                    //shortenUrl(url);
                 } else {
                     Utils.showToast(getActivity(), getString(R.string.error_empty_url_text));
                 }
@@ -292,20 +294,40 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         return urlText;
     }
 
-    private void shortenUrl(final String longUrl) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Urlshortener.Builder builder = new Urlshortener.Builder(AndroidHttp.newCompatibleTransport(), AndroidJsonFactory.getDefaultInstance(), null)
-                            .setApplicationName(getString(R.string.app_name));
-                    Urlshortener urlshortener = builder.build();
-                    com.google.api.services.urlshortener.model.Url url = new Url();
-                    url.setLongUrl(longUrl);
-                    Urlshortener.Url.Insert insertUrl = urlshortener.url().insert(url);
-                    insertUrl.setKey(URL_SHORTENER_API_KEY);
-                    url = insertUrl.execute();
-                    final String newUrl = url.getId();
+    private void shortenUrl(final String longUrl){
+        String jsonBody = "{'longUrl':'" + longUrl + "'}";
+        CloudTask task = new CloudTask(jsonBody);
+        task.execute();
+    }
+
+    private void handleJsonResponse(final String response) {
+        if (!response.isEmpty()) {
+            try {
+                final JSONObject jsonResponse = new JSONObject(response);
+                if (jsonResponse.has("error")) {
+                    final JSONObject errorObject = jsonResponse.getJSONObject("error");
+                    final JSONArray errorArray = errorObject.getJSONArray("errors");
+                    for(int i = 0; i < errorArray.length(); i++){
+                        final JSONObject error = errorArray.getJSONObject(i);
+                        final String errorMessage;
+                        if(error.has("reason") && error.has("message")){
+                            final String reason = "Reason: " + error.getString("reason");
+                            final String message =  "Message: " + error.getString("message");
+                            errorMessage = message + " " + reason;
+                        } else {
+                            errorMessage = "Unknown error";
+                        }
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Utils.showToast(getActivity(), errorMessage);
+                            }
+                        });
+                        break;
+                    }
+                } else {
+                    final String newUrl = jsonResponse.getString("id");
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -315,43 +337,99 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                             mShortUrl.setText(urlAttachment);
                         }
                     });
-                } catch (IOException ex) {
-                    handleJsonResponse(ex);
-                    Log.v(Utils.TAG, ex.getMessage());
-                }
-            }
-        }).start();
-    }
-
-    private void handleJsonResponse(final IOException ex) {
-        final String response = ((GoogleJsonResponseException) ex).getContent();
-        if (!response.isEmpty()) {
-            try {
-                final JSONObject jsonResponse = new JSONObject(response);
-                if (jsonResponse.has("code")) {
-                    if (jsonResponse.getInt("code") == 400) {
-                        final JSONArray errorArray = jsonResponse.getJSONArray("errors");
-                        for (int i = 0; i < errorArray.length(); i++) {
-                            final JSONObject obj = (JSONObject) errorArray.get(i);
-                            if (obj.has("message")) {
-                                final String message = obj.getString("message");
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Utils.showToast(getActivity(), message + ". Check the URL and try again");
-                                    }
-                                });
-                                break;
-                            }
-                        }
-
-                    } else {
-                        Utils.showToast(getActivity(), "Unknown error");
-                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void writeStream(final OutputStream outputStream, final String jsonData) {
+        try {
+            outputStream.write(jsonData.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void readStream(final InputStream inputStream) {
+        BufferedReader br = null;
+        try {
+            StringBuffer sb = new StringBuffer();
+            br = new BufferedReader(new InputStreamReader(inputStream));
+            String inputLine;
+            while ((inputLine = br.readLine()) != null) {
+                sb.append(inputLine);
+            }
+            final String result = sb.toString();
+            handleJsonResponse(result);
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(br != null) {
+                    br.close();
+                }
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class CloudTask extends AsyncTask<Void, Void, Void> {
+
+        private static final String URL_SHORTENER_API_KEY = "URL_SHORTENER_API_KEY";
+        private static final String URL = "https://www.googleapis.com/urlshortener/v1/url?key=" + URL_SHORTENER_API_KEY;
+        private final String json;
+
+        public CloudTask(final String json) {
+            this.json = json;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpURLConnection urlConnection = null;
+
+            try {
+                java.net.URL url = new URL(URL);
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+                urlConnection.connect();
+
+                OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
+                writeStream(out, json);
+
+                final int reponseCode = urlConnection.getResponseCode();
+                //Check for the reposnse code before reading the error stream, if not causes an exception with stream closed as there may not be an error
+                if(reponseCode !=  HttpURLConnection.HTTP_OK){
+                    readStream(new BufferedInputStream(urlConnection.getErrorStream()));
+                } else {
+                    readStream(new BufferedInputStream(urlConnection.getInputStream()));
+                }
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (urlConnection != null)
+                    urlConnection.disconnect();
+            }
+            return null;
         }
     }
 }

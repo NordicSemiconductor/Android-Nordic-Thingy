@@ -1928,6 +1928,11 @@ public class ThingySdkManager {
         final DfuServiceInitiator starter = new DfuServiceInitiator(device.getAddress())
                 .setDeviceName(device.getName())
                 .setKeepBond(false);
+
+        if(ThingyUtils.checkIfVersionIsOreoOrAbove()){
+            starter.createDfuNotificationChannel(context);
+        }
+
         // Init packet is required by Bootloader/DFU from SDK 7.0+ if HEX or BIN file is given above.
         // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
         if (fileType == DfuService.TYPE_AUTO) {
@@ -1952,6 +1957,10 @@ public class ThingySdkManager {
         final DfuServiceInitiator starter = new DfuServiceInitiator(device.getAddress())
                 .setDeviceName(device.getName())
                 .setKeepBond(false);
+
+        if(ThingyUtils.checkIfVersionIsOreoOrAbove()){
+            starter.createDfuNotificationChannel(context);
+        }
         // Init packet is required by Bootloader/DFU from SDK 7.0+ if HEX or BIN file is given above.
         // In case of a ZIP file, the init packet (a DAT file) must be included inside the ZIP file.
         if (fileType == DfuService.TYPE_AUTO) {

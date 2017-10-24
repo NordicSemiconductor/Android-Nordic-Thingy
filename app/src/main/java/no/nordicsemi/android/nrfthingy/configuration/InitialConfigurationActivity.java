@@ -89,6 +89,7 @@ import java.util.List;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.EnableNFCDialogFragment;
+import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.ProgressDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragment;
@@ -206,6 +207,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             if (device.equals(mDevice)) {
                 mStepOneSummary.setText(R.string.connect_thingy_summary);
                 Utils.showToast(InitialConfigurationActivity.this, getString(R.string.thingy_disconnected, device.getName()));
+                hideProgressDialog();
             }
         }
 
@@ -477,6 +479,11 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             mStepOneComplete = savedInstanceState.getBoolean("Step1", false);
             mStepTwoComplete = savedInstanceState.getBoolean("Step2", false);
             mAddressNfc = savedInstanceState.getString("ADDRESS_FOR_NFC");
+            if(mProgressDialog != null){
+                if(savedInstanceState.getBoolean("IS_SCANNING")) {
+                    startScan();
+                }
+            }
 
             if (mStepOneComplete) {
                 mStepOneSummary.setText(getString(R.string.status_connected_to_device, mDevice.getName()));
@@ -543,11 +550,15 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onStop() {
         super.onStop();
 
-        /*if (!isFinishing()) {
-            if (mScannerFragment != null && mScannerFragment.isAdded()) {
-                mScannerFragment.dismiss();
+        if(mIsScanning){
+            if(mBinder != null){
+                mBinder.setScanningState(true);
+                mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
+                final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
+                scanner.stopScan(mScanCallback);
+                mIsScanning = false;
             }
-        }*/
+        }
 
         mThingySdkManager.unbindService(this);
         ThingyListenerHelper.unregisterThingyListener(this, mThingyListener);
@@ -557,7 +568,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        hideProgressDialog();
         unregisterReceiver(mLocationProviderChangedReceiver);
         unregisterReceiver(mNfcAdapterStateChangedReceiver);
     }
@@ -585,6 +595,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         outState.putBoolean("Step1", mStepOneComplete);
         outState.putBoolean("Step2", mStepTwoComplete);
         outState.putString("ADDRESS_FOR_NFC", mAddressNfc);
+        outState.putBoolean("IS_SCANNING", mIsScanning);
     }
 
     private void handleOnBackPressed() {
@@ -969,7 +980,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
         final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
         final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
-        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_0_0).replace("v", "");
+        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
         final String[] resourceEntryNames = name.split("_");
 
         final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);

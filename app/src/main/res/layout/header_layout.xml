@@ -90,8 +90,9 @@
             android:id="@+id/battery_level_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_battery_20"
-            android:layout_gravity="center_vertical|end" />
+            app:srcCompat="@drawable/ic_battery_100"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/header_toggle"

@@ -2736,7 +2736,7 @@ public class ThingyConnection extends BluetoothGattCallback {
         mNumOfAudioChunks = (int) Math.ceil((double) sample.length / mChunkSize);
         while (index < mNumOfAudioChunks) {
             length = Math.min(mPcmSample.length - offset, mChunkSize);
-            byte[] audio = new byte[length];
+            final byte[] audio = new byte[length];
             System.arraycopy(mPcmSample, offset, audio, 0, length);
             add(RequestType.WRITE_CHARACTERISTIC, mSpeakerDataCharacteristic, audio, BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
             index++;

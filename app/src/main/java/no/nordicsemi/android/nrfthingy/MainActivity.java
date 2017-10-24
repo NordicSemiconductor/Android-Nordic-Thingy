@@ -225,7 +225,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onBatteryLevelChanged(final BluetoothDevice bluetoothDevice, final int batteryLevel) {
             Log.v(ThingyUtils.TAG, "Battery Level: " + batteryLevel + "  address: " + bluetoothDevice.getAddress() + " name: " + mDatabaseHelper.getDeviceName(bluetoothDevice.getAddress()));
             if(bluetoothDevice.equals(mThingySdkManager.getSelectedDevice())) {
-                updateBatteryLevel(batteryLevel);
+                if(mIsDrawerOpened) {
+                    updateBatteryLevel(batteryLevel);
+                }
             }
         }
 
@@ -465,16 +467,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 // Disable the Hamburger icon animation
                 super.onDrawerSlide(drawerView, 0);
-                if(mThingySdkManager.isConnected(mDevice)){
-                    updateBatteryLevel(mThingySdkManager.getBatteryLevel(mDevice));
-                } else {
-                    updateBatteryLevelVisibility(View.GONE);
+                if(slideOffset == 1) {
+                    if (mThingySdkManager.isConnected(mDevice)) {
+                        updateBatteryLevel(mThingySdkManager.getBatteryLevel(mDevice));
+                    } else {
+                        updateBatteryLevelVisibility(View.GONE);
+                    }
                 }
+
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                mIsDrawerOpened = true;
+
             }
 
             @Override
@@ -595,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        hideProgressDialog();
+
         if (isFinishing()) {
             ThingySdkManager.clearInstance();
         }
@@ -1657,8 +1664,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
             mIsScanning = false;
-        } else {
-
         }
     }
 
@@ -1789,7 +1794,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
                 final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
 
-                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_0_0).replace("v", "");
+                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
                 final String[] resourceEntryNames = name.split("_");
 
                 final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
@@ -1981,17 +1986,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private Drawable getBatteryLevelDrawable(int batteryLevel){
-        if(batteryLevel >= 0 &&  batteryLevel == 20) {
+        if(batteryLevel >= 0 &&  batteryLevel <= 20) {
             return mBatteryLevel20;
         } else if(batteryLevel > 20 &&  batteryLevel <= 30) {
             return mBatteryLevel30;
-        } else if(batteryLevel == 50) {
+        } else if(batteryLevel > 30 &&  batteryLevel <= 50) {
             return mBatteryLevel50;
-        } else if(batteryLevel == 60 || (batteryLevel > 50 &&  batteryLevel <= 60)) {
+        } else if(batteryLevel > 50 &&  batteryLevel <= 60) {
             return mBatteryLevel60;
-        } else if(batteryLevel == 80 || (batteryLevel > 60 &&  batteryLevel <= 80)) {
+        } else if(batteryLevel > 60 &&  batteryLevel <= 80) {
             return mBatteryLevel80;
-        }  else if(batteryLevel == 90 || (batteryLevel > 90 &&  batteryLevel <= 99)) {
+        }  else if(batteryLevel > 80 && batteryLevel <= 99) {
             return mBatteryLevel90;
         } else {
             return mBatteryLevel100;

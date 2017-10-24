@@ -663,6 +663,9 @@ public class ThingyUtils {
     public static boolean checkIfVersionIsLollipopOrAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
     }
+    public static boolean checkIfVersionIsOreoOrAbove() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
 
     public static boolean validateSlaveLatency(final int slaveLatency, final int maxConIntervalUnits, final int supervisionTimeoutUnits){
         final double maxConInterval = maxConIntervalUnits;

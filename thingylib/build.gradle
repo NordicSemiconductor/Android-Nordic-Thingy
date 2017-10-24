@@ -2,13 +2,13 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 26
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -22,8 +22,8 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:26.0.2'
-    compile 'no.nordicsemi.android:dfu:1.4.2'
+    compile 'com.android.support:support-core-utils:26.1.0'
+    compile 'no.nordicsemi.android:dfu:1.5.1'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
