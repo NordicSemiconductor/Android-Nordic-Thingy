@@ -172,6 +172,7 @@ public class Utils {
     public static final String EXTRA_URI = "uri";
 
     public static final String[] AUDIO_FILES = new String[]{"ievan_polkka.wav", "bensound_ukulele_8khz.wav", "evil_laugh_8khz.wav", "learning_computer_8khz.wav"};
+    public static final String NFC_WARNING = "NFC_WARNING";
 
     /**
      * URI Scheme maps a byte code into the scheme and an optional scheme specific prefix.
@@ -210,7 +211,6 @@ public class Utils {
             put((byte) 13, ".gov");
         }
     };
-    public static final String NFC_WARNING = "NFC_WARNING";
 
     public static int setValue(final byte[] dest, int offset, int value, int formatType) {
         int len = offset + getTypeLen(formatType);
