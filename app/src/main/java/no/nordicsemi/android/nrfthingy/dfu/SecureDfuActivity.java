@@ -1140,15 +1140,14 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mCustomFirmware.setEnabled(true);
         mFabStartStop.setImageResource(R.drawable.ic_action_dfu_white);
         mProgressBar.setIndeterminate(false);
+        mDfuCompletedAlpha = 1.0f;
         if(dfuCompleted) {
             mUploadingFwAlpha = 1.0f;
-            mDfuCompletedAlpha = 1.0f;
             mDfuCompletedMsg.setText(R.string.dfu_step_completed);
             mDfuCompletedView.setImageResource(R.drawable.ic_done_grey);
         } else {
             mUploadingFwAlpha = 0.2f;
-            mDfuCompletedAlpha = 0.2f;
-            mDfuCompletedView.setImageResource(R.drawable.ic_close_black);
+            mDfuCompletedView.setImageResource(R.drawable.ic_close_red);
         }
 
         mDfuCompletedMsg.setAlpha(mDfuCompletedAlpha);
@@ -1178,7 +1177,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mDfuCompletedMsg.setAlpha(1.0f);
         mDfuCompletedMsg.setText(error);
         mDfuCompletedView.setAlpha(1.0f);
-        mDfuCompletedView.setImageResource(R.drawable.ic_close_black);
+        mDfuCompletedView.setImageResource(R.drawable.ic_close_red);
         mFabStartStop.setImageResource(R.drawable.ic_action_dfu_white);
         Utils.showToast(this, getString(R.string.dfu_aborted));
     }

@@ -67,7 +67,6 @@ import no.nordicsemi.android.thingylib.BaseThingyService;
 import no.nordicsemi.android.thingylib.ThingyConnection;
 
 import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
-import static no.nordicsemi.android.nrfthingy.common.Utils.THINGY_GROUP_ID;
 
 public class ThingyService extends BaseThingyService {
     private static final String PRIMARY_GROUP = "Thingy:52 Connectivity Summary";
@@ -78,7 +77,6 @@ public class ThingyService extends BaseThingyService {
     private boolean mIsActivityFinishing = false;
     private Map<BluetoothDevice, Integer> mLastSelectedAudioTrack;
     private NotificationManager mNotificationManager;
-    private NotificationChannelGroup mNotificationChannelGroup;
     private NotificationChannel mNotificationChannel;
 
     public class ThingyBinder extends BaseThingyBinder {
@@ -160,18 +158,17 @@ public class ThingyService extends BaseThingyService {
 
     @Override
     public void onDeviceConnected(final BluetoothDevice device, final int connectionState) {
-        if (!mBound) {
-        }
+        createBackgroundNotification();
+        /*if (!mBound) {
+        }*/
     }
 
     @Override
     public void onDeviceDisconnected(final BluetoothDevice device, final int connectionState) {
         super.onDeviceDisconnected(device, connectionState);
         removeLastSelectedAudioTracks(device);
-        if (!mBound) {
-            cancelNotification(device);
-            createBackgroundNotification();
-        }
+        cancelNotification(device);
+        createBackgroundNotification();
     }
 
     @Nullable
@@ -183,19 +180,26 @@ public class ThingyService extends BaseThingyService {
     @Override
     protected void onRebind() {
         cancelNotifications();
+        createBackgroundNotification();
     }
 
     @Override
     protected void onUnbind() {
         if (mIsActivityFinishing) {
-            createBackgroundNotification();
+            final ArrayList<BluetoothDevice> devices = mDevices;
+            if(devices != null && devices.size() == 0){
+                stopForegroundThingyService();
+                return;
+            }
         }
+        createBackgroundNotification();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationPrerequisites();
+        startForeground(NOTIFICATION_ID, createForegroundNotification());
         mLastSelectedAudioTrack = new HashMap<>();
         mDatabaseHelper = new DatabaseHelper(getApplicationContext());
         registerReceiver(mNotificationDisconnectReceiver, new IntentFilter(Utils.ACTION_DISCONNECT));
@@ -205,6 +209,17 @@ public class ThingyService extends BaseThingyService {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mNotificationDisconnectReceiver);
+    }
+
+    @Override
+    public void onTaskRemoved(final Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        stopForegroundThingyService();
+    }
+
+    private void stopForegroundThingyService(){
+        stopForeground(true);
+        stopSelf();
     }
 
     private BroadcastReceiver mNotificationDisconnectReceiver = new BroadcastReceiver() {
@@ -231,16 +246,22 @@ public class ThingyService extends BaseThingyService {
     private void createNotificationPrerequisites(){
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if(Utils.checkIfVersionIsOreoOrAbove()) {
-            if(mNotificationChannelGroup == null) {
-                mNotificationChannelGroup = new NotificationChannelGroup(PRIMARY_GROUP_ID, PRIMARY_GROUP);
-            }
             if(mNotificationChannel == null) {
                 mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
             }
-            /*mNotificationChannel.setGroup(PRIMARY_GROUP_ID);
-            mNotificationManager.createNotificationChannelGroup(mNotificationChannelGroup);*/
             mNotificationManager.createNotificationChannel(mNotificationChannel);
         }
+    }
+
+    /**
+     * Creates a Notifications for the devices that are currently connected.
+     */
+    private Notification createForegroundNotification() {
+        final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
+        builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+        builder.setContentTitle(("Tap to launch Nordic Thingy."));
+
+        return builder.build();
     }
 
     /**
@@ -396,6 +417,7 @@ public class ThingyService extends BaseThingyService {
      */
     private void createBackgroundNotification() {
         final ArrayList<BluetoothDevice> devices = mDevices;
+
         for (int i = 0; i < devices.size(); i++) {
             createNotificationForConnectedDevice(devices.get(i), getDeviceName(devices.get(i)));
         }

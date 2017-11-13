@@ -576,7 +576,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onStop() {
         super.onStop();
 
-
         if (mBinder != null) {
             final boolean isFinishing = isFinishing();
             mBinder.setActivityFinishing(isFinishing);
@@ -586,6 +585,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         stopScanOnRotation();
         mThingySdkManager.unbindService(this);
+        mBinder = null;
         ThingyListenerHelper.unregisterThingyListener(this, mThingyListener);
         unregisterReceiver(mBleStateChangedReceiver);
     }
@@ -1194,10 +1194,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateActionbarTitle(final BluetoothDevice device) {
         if (device != null) {
-            if (mDatabaseHelper.isExist(device.getAddress())) {
-                String deviceName = mDatabaseHelper.getDeviceName(device.getAddress());
-                if (deviceName.isEmpty()) {
-                    deviceName = mDevice.getName();
+            final String address = device.getAddress();
+            if (mDatabaseHelper.isExist(address)) {
+                String deviceName = mDatabaseHelper.getDeviceName(address);
+                if (deviceName == null || deviceName.isEmpty()) {
+                    deviceName = device.getName();
                 }
                 getSupportActionBar().setTitle(deviceName);
             } else {

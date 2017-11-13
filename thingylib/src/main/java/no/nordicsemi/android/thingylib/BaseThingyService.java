@@ -167,6 +167,12 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
         Log.v(TAG, "onDestroy called on Base service");
     }
 
+    @Override
+    public void onTaskRemoved(final Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        disconnectFromAllDevices();
+    }
+
     @Nullable
     @Override
     public abstract BaseThingyBinder onBind(Intent intent);
@@ -195,6 +201,23 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
      */
     protected void onUnbind(){
 
+    }
+
+    /**
+     * Disconnects from all connected devices
+     *
+     */
+     /*package access*/ final void disconnectFromAllDevices(){
+        if (mDevices.size() > 0){
+            for(int i = 0; i < mDevices.size(); i++){
+                final ThingyConnection thingyConnection = mThingyConnections.get(mDevices.get(i));
+                if (thingyConnection != null){
+                    thingyConnection.disconnect();
+                }
+            }
+            mDevices.clear();
+            mThingyConnections.clear();
+        }
     }
 
     /**

@@ -625,7 +625,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
             int colorRgbIntensity = mThingySdkManager.getLedRgbIntensity(mDevice);
             final int ledIntensity = mCurrentIntensity = mThingySdkManager.getLedColorIntensity(mDevice);
             final int delay = mCurrentDelay = mThingySdkManager.getLedColorBreatheDelay(mDevice);
-            mSelectedRgbColorIntensity = colorRgbIntensity;
+            mSelectedRgbColorIntensity = color;
             mSelectedColorIndex = color;
 
             switch (ledMode) {
