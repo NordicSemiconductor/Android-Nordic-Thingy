@@ -471,17 +471,17 @@ public class ThingyConnection extends BluetoothGattCallback {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
         } else if (characteristic.equals(mRawDataCharacteristic)) {
-            final float mAccelerometerX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0)) / (2 << 14);
-            final float mAccelerometerY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 2)) / (2 << 14);
-            final float mAccelerometerZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 4)) / (2 << 14);
+            final float mAccelerometerX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 0)) / (1 << 10);
+            final float mAccelerometerY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 2)) / (1 << 10);
+            final float mAccelerometerZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 4)) / (1 << 10);
 
-            final float mGyroscopeX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 6)) / (2 << 14);
-            final float mGyroscopeY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 8)) / (2 << 14);
-            final float mGyroscopeZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 10)) / (2 << 14);
+            final float mGyroscopeX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 6)) / (1 << 5);
+            final float mGyroscopeY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 8)) / (1 << 5);
+            final float mGyroscopeZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 10)) / (1 << 5);
 
-            final float mCompassZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 12)) / (2 << 14);
-            final float mCompassX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 14)) / (2 << 14);
-            final float mCompassY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 16)) / (2 << 14);
+            final float mCompassZ = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 12)) / (1 << 4);
+            final float mCompassX = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 14)) / (1 << 4);
+            final float mCompassY = (float) (characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT16, 16)) / (1 << 4);
 
             final Intent intent = new Intent(ThingyUtils.RAW_DATA_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
