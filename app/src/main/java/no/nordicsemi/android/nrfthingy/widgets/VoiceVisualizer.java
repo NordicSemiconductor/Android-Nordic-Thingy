@@ -49,7 +49,6 @@ import android.view.SurfaceView;
 
 import no.nordicsemi.android.nrfthingy.R;
 
-
 public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callback {
     private final int PRECISSION = 4;
     private final float[] mPointsBuffer = new float[2 * 512 / PRECISSION]; // 512 samples, each has X and Y value, each point (but fist and last) must be doubled: A->B, B->C, C->D etc.
@@ -68,7 +67,7 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
     public VoiceVisualizer(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         mLinePaint = new Paint();
-        mLinePaint.setColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        mLinePaint.setColor(ContextCompat.getColor(getContext(), R.color.nordicLake));
         mLinePaint.setAntiAlias(true);
         mLinePaint.setStrokeWidth(5);
         mLinePaint.setStyle(Paint.Style.STROKE);

@@ -43,6 +43,8 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
@@ -61,18 +63,26 @@ public class DfuUpdateAvailableDialogFragment extends DialogFragment {
         void onDfuRequested();
     }
 
-    public static DfuUpdateAvailableDialogFragment newInstance(final BluetoothDevice device, final String fwFileVersion) {
-        DfuUpdateAvailableDialogFragment fragment = new DfuUpdateAvailableDialogFragment();
-        Bundle bundle = new Bundle();
+    public static DfuUpdateAvailableDialogFragment newInstance(@NonNull final BluetoothDevice device,
+                                                               @NonNull final String fwFileVersion) {
+        final DfuUpdateAvailableDialogFragment fragment = new DfuUpdateAvailableDialogFragment();
+
+        final Bundle bundle = new Bundle();
         bundle.putParcelable(Utils.CURRENT_DEVICE, device);
         bundle.putString(FW_FILE_VERSION, fwFileVersion);
         fragment.setArguments(bundle);
+
         return fragment;
     }
 
+    @Override
+    public void onAttach(@NonNull final Context context) {
+        super.onAttach(context);
+        mListener = (DfuUpdateAvailableListener) context;
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -81,51 +91,25 @@ public class DfuUpdateAvailableDialogFragment extends DialogFragment {
         mDatabaseHelper = new DatabaseHelper(getContext());
     }
 
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(R.string.dfu_title);
-
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         String deviceName = mDatabaseHelper.getDeviceName(mDevice.getAddress());
         if (deviceName.isEmpty()) {
             deviceName = mDevice.getName();
         }
 
-        alertDialogBuilder.setMessage(getString(R.string.fw_update_available, deviceName, mFwFileVersion));
-
-        alertDialogBuilder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mListener.onDfuRequested();
-            }
-        }).setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.setCancelable(false);
-        return alertDialog;
+        return new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.dfu_title)
+                .setMessage(getString(R.string.fw_update_available, deviceName, mFwFileVersion))
+                .setCancelable(false)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mListener.onDfuRequested();
+                    }
+                })
+                .setNegativeButton(R.string.later, null)
+                .create();
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mListener = (DfuUpdateAvailableListener) context;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-
 }

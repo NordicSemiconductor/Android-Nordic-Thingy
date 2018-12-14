@@ -220,7 +220,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -269,7 +269,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         }
         mThingySdkManager = ThingySdkManager.getInstance();
         mDatabaseHelper = new DatabaseHelper(getActivity());
-
     }
 
     @Override
@@ -538,7 +537,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                     updateLedOneShotModeUI(ledIntensity);
                     break;
             }
-
         } else {
             loadLedUI();
         }
@@ -550,7 +548,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -563,7 +560,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                     + " must implement CloudFragmentListener");
         }
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -741,7 +737,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                 }
                 mCurrentLedMode = ThingyUtils.CONSTANT;
                 updateLedConstantModeUI();
-
             } else {
                 Utils.showToast(getActivity(), "Please configureThingy to " + thingy.getDeviceName() + " before you proceed!");
             }
@@ -835,7 +830,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
             } else {
                 Utils.showToast(getActivity(), "Please configureThingy to " + thingy.getDeviceName() + " before you proceed!");
             }
-
         }
     }
 
@@ -856,16 +850,10 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mDelay.setText(getString(R.string.interval_ms, delay));
         mIntensity.setText(getString(R.string.led_percentage, ledIntensity));
 
-        mBreathe.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mBreathe.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.greyBg));
-
-        mOneShot.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mConstant.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mOff.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-
-        mOneShot.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mConstant.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
+        mBreathe.setSelected(true);
+        mOneShot.setSelected(false);
+        mConstant.setSelected(false);
+        mOff.setSelected(false);
 
         mBreatheDelay.setProgress(delay);
         mLedIntensity.setProgress(ledIntensity);
@@ -875,7 +863,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     }
 
     private void updateLedOneShotModeUI(final int ledIntensity) {
-
         mLedRed.setEnabled(true);
         mLedGreen.setEnabled(true);
         mLedYellow.setEnabled(true);
@@ -891,17 +878,10 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
 
         mIntensity.setText(getString(R.string.led_percentage, ledIntensity));
 
-        mOneShot.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mOneShot.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.greyBg));
-
-        mConstant.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mBreathe.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mOff.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-
-        mConstant.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mBreathe.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-
-        mOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
+        mBreathe.setSelected(false);
+        mOneShot.setSelected(true);
+        mConstant.setSelected(false);
+        mOff.setSelected(false);
 
         mLedIntensity.setProgress(ledIntensity);
 
@@ -920,16 +900,10 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mRgbIntensityControllerContainer.setVisibility(View.VISIBLE);
         mLedControllerContainer.setVisibility(View.GONE);
 
-        mConstant.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mConstant.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.greyBg));
-
-        mOneShot.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mBreathe.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mOff.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-
-        mOneShot.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mBreathe.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
+        mBreathe.setSelected(false);
+        mOneShot.setSelected(false);
+        mConstant.setSelected(true);
+        mOff.setSelected(false);
 
         final int r = Color.red(mSelectedRgbColorIntensity);
         final int g = Color.green(mSelectedRgbColorIntensity);
@@ -965,16 +939,10 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mBreatheDelay.setEnabled(false);
         mLedIntensity.setEnabled(false);
 
-        mOff.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mOff.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.greyBg));
-
-        mOneShot.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mConstant.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-        mBreathe.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.textColorWhite));
-
-        mOneShot.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mConstant.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
-        mBreathe.setTextColor(ContextCompat.getColor(getActivity(), R.color.textColorSecondary));
+        mBreathe.setSelected(false);
+        mOneShot.setSelected(false);
+        mConstant.setSelected(false);
+        mOff.setSelected(true);
     }
 
     private void updateSelectedImageView(final ImageView view) {
@@ -1122,7 +1090,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                 break;
         }
     }
-
 
     private int getColorFromIndex(final int colorIndex) {
         switch (colorIndex) {

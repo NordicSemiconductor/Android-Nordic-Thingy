@@ -37,11 +37,9 @@
   -->
 
 <resources>
-    <string name="app_name">ThingeeLib</string>
-    <string name="name">ThingeeLib</string>
-    <string name="please_wait">Please wait</string>
-    <string name="no_thingy_connected">Not connected to a Thingy</string>
-    <string name="no_thingy_configured">No Thingy configured</string>
-    <string name="service_not_bound">ThingyProxyService is not bound to the activity!</string>
-    <string name="mtu_failed">MTU configuration failed with error %d</string>
+    <string name="thingy_please_wait">Please wait…</string>
+    <string name="thingy_not_connected">Not connected to a Thingy</string>
+    <string name="thingy_not_configured">No Thingy configured</string>
+    <string name="thingy_error_service_not_bound">ThingyProxyService is not bound to the activity!</string>
+    <string name="thingy_error_mtu_failed">MTU configuration failed with error %d</string>
 </resources>

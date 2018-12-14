@@ -62,7 +62,6 @@ public class ChartMarker extends MarkerView {
         mMarkerValue = getRootView().findViewById(R.id.marker_text);
     }
 
-
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
         mMarkerValue.setText(String.valueOf(e.getVal()));
@@ -77,5 +76,4 @@ public class ChartMarker extends MarkerView {
     public int getYOffset(float ypos) {
         return -(getHeight() / 2);
     }
-
 }

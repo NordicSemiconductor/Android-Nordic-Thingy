@@ -71,19 +71,18 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
 
     private ThingySdkManager mThingySdkManager;
 
-    public CloudTokenConfigurationDialogFragment() {
-    }
-
     public static CloudTokenConfigurationDialogFragment newInstance(final BluetoothDevice device) {
-        CloudTokenConfigurationDialogFragment fragment = new CloudTokenConfigurationDialogFragment();
-        Bundle args = new Bundle();
+        final CloudTokenConfigurationDialogFragment fragment = new CloudTokenConfigurationDialogFragment();
+
+        final Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -94,10 +93,10 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.cloud_token_settings));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_cloud_token, null);
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_cloud_token, null);
 
         mCloudTokenLayout = view.findViewById(R.id.layout_cloud_token);
         mCloudTokenView = view.findViewById(R.id.cloud_token_view);
@@ -117,7 +116,6 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
                 } else {
                     mCloudTokenLayout.setError(null);
                 }
-
             }
 
             @Override
@@ -125,43 +123,23 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null) {
-                    if (validateInput()) {
-                        if (!mThingySdkManager.setCloudToken(mDevice, getValueFromView())) {
-                            Utils.showToast(getActivity(), getString(R.string.error_cloud_token));
-                            return;
+       return alertDialogBuilder.setView(view)
+                .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        if (mThingySdkManager != null) {
+                            if (validateInput()) {
+                                if (!mThingySdkManager.setCloudToken(mDevice, getValueFromView())) {
+                                    Utils.showToast(getActivity(), getString(R.string.error_cloud_token));
+                                    return;
+                                }
+                                ((ThingyBasicSettingsChangeListener) getParentFragment()).updateCloudToken();
+                            }
                         }
-                        dismiss();
-                        ((ThingeeBasicSettingsChangeListener) getParentFragment()).updateCloudToken();
                     }
-                }
-            }
-        });
-
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create();
     }
 
     private boolean validateInput() {

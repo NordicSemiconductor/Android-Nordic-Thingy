@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
   ~ All rights reserved.
   ~
@@ -41,6 +40,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="no.nordicsemi.android.nrfthingy.WelcomeActivity">
 
@@ -54,13 +54,13 @@
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true" />
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/greyBg"
+        android:layout_height="1dp"
+        android:background="@color/onBackground"
         android:layout_gravity="center_horizontal"
         android:layout_above="@id/continue_tv" />
 
@@ -71,28 +71,31 @@
         android:layout_centerInParent="true"
         android:layout_above="@id/view">
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:scaleType="center"
-            android:src="@drawable/nordic_welcome"
+            android:layout_marginTop="70dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/nordic_welcome"
             android:id="@+id/imageView" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/welcome_title"
                 android:id="@+id/textView"
-                android:layout_below="@+id/imageView"
-                android:layout_gravity="center_horizontal"/>
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,10 +103,8 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@string/welcome_summary"
                 android:id="@+id/add_thingy_summary"
-                android:layout_below="@+id/textView"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginTop="@dimen/activity_vertical_margin" />
         </LinearLayout>
     </LinearLayout>
 

@@ -63,8 +63,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/min_connection_params_hint"
                 android:inputType="number"
-                android:maxLength="4"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="4" />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
@@ -110,8 +109,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/max_connection_params_hint"
                 android:inputType="number"
-                android:maxLength="4"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="4" />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
@@ -154,8 +152,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/slave_latency_hint"
                 android:inputType="number"
-                android:maxLength="3"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="3" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -177,8 +174,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/conn_sup_timeout_hint"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout

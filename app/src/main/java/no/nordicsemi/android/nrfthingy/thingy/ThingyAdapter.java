@@ -153,6 +153,4 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     class ViewHolder {
         TextView label;
     }
-
-
 }

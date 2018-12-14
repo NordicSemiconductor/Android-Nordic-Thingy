@@ -62,24 +62,22 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
     private String mFirmwareFileVersion;
     private boolean isFirmwareUpdateDate = false;
 
-    public interface FimrwareVersionDialogFragmentListener {
+    public interface FirmwareVersionDialogFragmentListener {
         void onUpdateFirmwareClickListener();
     }
 
-    public FirmwareVersionDialogFragment() {
-    }
-
-
     public static FirmwareVersionDialogFragment newInstance(final BluetoothDevice device) {
-        FirmwareVersionDialogFragment fragment = new FirmwareVersionDialogFragment();
-        Bundle args = new Bundle();
+        final FirmwareVersionDialogFragment fragment = new FirmwareVersionDialogFragment();
+
+        final Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -89,84 +87,73 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.settings_fw_version_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_firmware_version, null);
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_firmware_version, null);
 
         final TextView fwVersion = view.findViewById(R.id.fw_version);
         isFirmwareUpdateDate = checkIfFirmwareUpdateAvailable();
         if (isFirmwareUpdateDate) {
-
-            final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
+            final DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
             String deviceName = databaseHelper.getDeviceName(mDevice.getAddress());
             if (deviceName.isEmpty()) {
                 deviceName = mDevice.getName();
             }
 
             fwVersion.setText(getString(R.string.fw_update_available, deviceName, mFirmwareFileVersion));
-            alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            alertDialogBuilder.setView(view)
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.later), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
-                }
-            }).setNegativeButton(getString(R.string.later), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                    ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
                 }
             });
         } else {
             fwVersion.setText(R.string.thingy_fw_version_summary);
-            alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.ok), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((FimrwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
-                }
-            });
+            alertDialogBuilder.setView(view)
+                    .setPositiveButton(getString(R.string.ok), null)
+                    .setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
+                        }
+                    });
         }
-
 
         return alertDialogBuilder.create();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-
     private boolean checkIfFirmwareUpdateAvailable() {
         final String version = mThingySdkManager.getFirmwareVersion(mDevice);
-        if(version != null && !version.isEmpty()) {
+        if (version != null && !version.isEmpty()) {
             final String[] fwVersion = version.split("\\.");
-            if (fwVersion != null) {
-                final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
-                final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
-                final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
-                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
-                final String[] resourceEntryNames = name.split("_");
+            final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
+            final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
+            final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
+            final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
+            final String[] resourceEntryNames = name.split("_");
 
-                final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
-                final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
-                final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
+            final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
+            final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
+            final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
 
-                mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
-                        resourceEntryNames[resourceEntryNames.length - 2] + "." +
-                        resourceEntryNames[resourceEntryNames.length - 1];
+            mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
+                    resourceEntryNames[resourceEntryNames.length - 2] + "." +
+                    resourceEntryNames[resourceEntryNames.length - 1];
 
-                if(fwFileVersionMajor > fwVersionMajor ){
-                    return true;
-                } else if(fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor){
-                    return true;
-                } else if(fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch){
-                    return true;
-                }
+            if (fwFileVersionMajor > fwVersionMajor) {
+                return true;
+            } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor) {
+                return true;
+            } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch) {
+                return true;
             }
         }
 

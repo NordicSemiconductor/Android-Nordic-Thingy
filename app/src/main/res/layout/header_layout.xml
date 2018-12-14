@@ -37,16 +37,17 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark">
+    android:background="@color/actionBarDark">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/nordic_logo_horiz_dark"
+        app:srcCompat="@drawable/nordic_logo_horiz_white"
         android:paddingBottom="30dp"
         android:paddingTop="@dimen/navdrawer_padding_top" />
 
@@ -57,6 +58,7 @@
         android:orientation="horizontal"
         android:clickable="true"
         android:visibility="gone"
+        tools:visibility="visible"
         android:paddingLeft="@dimen/navdrawer_padding_left"
         android:paddingRight="@dimen/navdrawer_padding_right">
 
@@ -73,7 +75,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:textSize="14sp"
-            android:textColor="@color/textColorWhite"
+            tools:text="My Thingy"
+            android:textColor="@color/actionBarText"
             android:gravity="center_vertical" />
 
         <TextView
@@ -83,8 +86,10 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:textSize="14sp"
-            android:textColor="@color/textColorWhite"
-            android:visibility="gone"/>
+            tools:text="100%"
+            android:textColor="@color/actionBarText"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <ImageView
             android:id="@+id/battery_level_img"
@@ -92,7 +97,8 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_battery_100"
             android:layout_gravity="center_vertical|end"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/header_toggle"

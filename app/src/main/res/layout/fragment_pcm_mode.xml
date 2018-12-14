@@ -41,22 +41,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
-
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:clipToPadding="false">
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/textColorWhite"
             android:elevation="2dp"
             android:paddingBottom="8dp"
             android:layout_alignParentTop="true">
@@ -77,10 +75,10 @@
             android:id="@+id/audio_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            tools:listitem="@layout/list_item_audio"
             android:layout_below="@id/view" />
 
     </RelativeLayout>
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_play"

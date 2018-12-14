@@ -63,7 +63,6 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class EnvironmentConfigurationDialogFragment extends DialogFragment {
-
     private static final String CONFIGURATION_DATA = "CONFIGURATION_DATA";
 
     private LinearLayout mTemperatureContainer = null;
@@ -98,29 +97,21 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     private BluetoothDevice mDevice;
     private int mSettingsMode;
 
-    private WeatherStationSettingsDialogFragmentListener mListener;
-
     private ThingySdkManager mThingySdkManager;
 
-    public interface WeatherStationSettingsDialogFragmentListener {
-        void configureWeatherStationSettings(final byte[] data);
-    }
-
-    public EnvironmentConfigurationDialogFragment() {
-        // Required empty public constructor
-    }
-
     public static EnvironmentConfigurationDialogFragment newInstance(final int settingsMode, final BluetoothDevice device) {
-        EnvironmentConfigurationDialogFragment fragment = new EnvironmentConfigurationDialogFragment();
+        final EnvironmentConfigurationDialogFragment fragment = new EnvironmentConfigurationDialogFragment();
+
         final Bundle args = new Bundle();
         args.putInt(Utils.SETTINGS_MODE, settingsMode);
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSettingsMode = getArguments().getInt(Utils.SETTINGS_MODE);
@@ -131,15 +122,16 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_weather_configuration, null);
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_weather_configuration, null);
 
         updateUi(view, alertDialogBuilder);
 
-        alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
+        alertDialogBuilder.setView(view)
+                .setPositiveButton(getString(R.string.confirm), null)
+                .setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
-
 
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,17 +150,6 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
         });
 
         return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     private boolean validateInput() {
@@ -239,25 +220,17 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     private void configureThingy() {
         final int interval;
         if (mTemperatureContainer != null && mTemperatureContainer.getVisibility() == View.VISIBLE) {
-
             interval = Integer.parseInt(mTemperatureIntervalView.getText().toString().trim());
             mThingySdkManager.setTemperatureInterval(mDevice, interval);
-
         } else if (mPressureContainer != null && mPressureContainer.getVisibility() == View.VISIBLE) {
-
             interval = Integer.parseInt(mPressureIntervalView.getText().toString().trim());
             mThingySdkManager.setPressureInterval(mDevice, interval);
-
         } else if (mHumidityContainer != null && mHumidityContainer.getVisibility() == View.VISIBLE) {
-
             interval = Integer.parseInt(mHumidityIntervalView.getText().toString().trim());
             mThingySdkManager.setHumidityInteval(mDevice, interval);
-
         } else if (mColorIntensityContainer != null && mColorIntensityContainer.getVisibility() == View.VISIBLE) {
-
             interval = Integer.parseInt(mColorIntervalView.getText().toString().trim());
             mThingySdkManager.setColorIntensityInterval(mDevice, interval);
-
         } else if (mGasModeContainer != null && mGasModeContainer.getVisibility() == View.VISIBLE) {
 
             int mode;
@@ -451,19 +424,19 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     private void updateParentFragmentUi() {
         switch (mSettingsMode) {
             case 0:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateTemperatureInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateTemperatureInterval();
                 break;
             case 1:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updatePressureInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updatePressureInterval();
                 break;
             case 2:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateHumidityInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateHumidityInterval();
                 break;
             case 3:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateColorIntensityInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateColorIntensityInterval();
                 break;
             case 4:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateGasMode();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateGasMode();
                 break;
         }
     }

@@ -38,9 +38,9 @@
 
 <resources>
     <style name="AppTheme" parent="@style/AppThemeBase">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:colorPrimary">@color/actionBar</item>
+        <item name="android:colorPrimaryDark">@color/actionBarDark</item>
+        <item name="android:colorAccent">@color/accent</item>
         <item name="android:windowTransitionBackgroundFadeDuration">5000</item>
     </style>
 
@@ -66,7 +66,7 @@
     <style name="ActionBarThemeOverlay">
         <item name="android:textColorPrimary">#fff</item>
         <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/textColorWhite</item>
+        <item name="colorControlNormal">@color/actionBarText</item>
         <item name="colorControlHighlight">#3fff</item>
     </style>
 </resources>

@@ -45,7 +45,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -67,7 +66,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.Space;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
@@ -82,6 +80,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Space;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,6 @@ import java.util.List;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.EnableNFCDialogFragment;
-import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.ProgressDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragment;
@@ -118,7 +116,7 @@ import static no.nordicsemi.android.nrfthingy.common.Utils.isConnected;
 public class InitialConfigurationActivity extends AppCompatActivity implements ScannerFragmentListener,
         PermissionRationaleDialogFragment.PermissionDialogListener,
         ThingySdkManager.ServiceConnectionListener,
-        CancelInitialConfigurationDialogFragment.CancleInitialConfigurationListener,
+        CancelInitialConfigurationDialogFragment.CancelInitialConfigurationListener,
         DfuUpdateAvailableDialogFragment.DfuUpdateAvailableListener,
         EnableNFCDialogFragment.EnableNFCDialogFragmentListener {
 
@@ -175,12 +173,11 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isLocationEnabled();
-            if(enabled){
+            if (enabled) {
                 mLocationServicesContainer.setVisibility(View.GONE);
             } else {
                 mLocationServicesContainer.setVisibility(View.VISIBLE);
             }
-
         }
     };
 
@@ -287,7 +284,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -313,7 +310,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_configuration);
 
@@ -404,7 +401,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             public void onClick(View v) {
                 if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
                     if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        if(isLocationEnabled()) {
+                        if (isLocationEnabled()) {
                             if (isBleEnabled()) {
                                 final String title = mConfirmThingy.getText().toString().trim();
                                 if (title.contains("Disconnect")) {
@@ -479,8 +476,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             mStepOneComplete = savedInstanceState.getBoolean("Step1", false);
             mStepTwoComplete = savedInstanceState.getBoolean("Step2", false);
             mAddressNfc = savedInstanceState.getString("ADDRESS_FOR_NFC");
-            if(mProgressDialog != null){
-                if(savedInstanceState.getBoolean("IS_SCANNING")) {
+            if (mProgressDialog != null) {
+                if (savedInstanceState.getBoolean("IS_SCANNING")) {
                     startScan();
                 }
             }
@@ -496,7 +493,9 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             }
         }
 
-        registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
+        }
         registerReceiver(mNfcAdapterStateChangedReceiver, new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED));
     }
 
@@ -515,7 +514,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
         updateNfcUi(isNfcEnabled());
 
-        if(!isLocationEnabled()){
+        if (!isLocationEnabled()) {
             mLocationServicesContainer.setVisibility(View.VISIBLE);
         }
 
@@ -528,20 +527,21 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onResume() {
         super.onResume();
         requestRequiredPermissions();
-        if(mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][] { new String[] { NfcF.class.getName() } });
+        if (mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][]{new String[]{NfcF.class.getName()}});
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        SharedPreferences sp = getSharedPreferences("APP_STATE", Context.MODE_PRIVATE);
+
+        final SharedPreferences sp = getSharedPreferences("APP_STATE", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("APP_STATE", isFinishing());
-        editor.commit();
+        editor.apply();
 
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
         }
     }
@@ -550,8 +550,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onStop() {
         super.onStop();
 
-        if(mIsScanning){
-            if(mBinder != null){
+        if (mIsScanning) {
+            if (mBinder != null) {
                 mBinder.setScanningState(true);
                 mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
                 final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
@@ -568,7 +568,9 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mLocationProviderChangedReceiver);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            unregisterReceiver(mLocationProviderChangedReceiver);
+        }
         unregisterReceiver(mNfcAdapterStateChangedReceiver);
     }
 
@@ -579,13 +581,12 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         switch (id) {
             case android.R.id.home:
                 handleOnBackPressed();
-                break;
+                return true;
             case android.R.id.closeButton:
                 onBackPressed();
-                break;
-
+                return true;
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -604,7 +605,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             stopService(new Intent(InitialConfigurationActivity.this, ThingyService.class));
             super.onBackPressed();
         } else {
-            CancelInitialConfigurationDialogFragment cancelInitialConfiguration = new CancelInitialConfigurationDialogFragment().newInstance(mDevice);
+            CancelInitialConfigurationDialogFragment cancelInitialConfiguration = new CancelInitialConfigurationDialogFragment().newInstance();
             cancelInitialConfiguration.show(getSupportFragmentManager(), null);
         }
     }
@@ -622,7 +623,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                     if (mScannerFragment != null && mScannerFragment.isVisible()) {
                         mScannerFragment.dismiss();
                     }
-                    finish();
+                    // finish();
                 }
                 break;
             default:
@@ -671,8 +672,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
      * Checks whether the Bluetooth adapter is enabled.
      */
     private boolean isBleEnabled() {
-        final BluetoothManager bm = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-        final BluetoothAdapter ba = bm.getAdapter();
+        final BluetoothAdapter ba = BluetoothAdapter.getDefaultAdapter();
         return ba != null && ba.isEnabled();
     }
 
@@ -907,13 +907,13 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         //Use this binder to access you own methods declared in the ThingyService
         mBinder = (ThingyService.ThingyBinder) mThingySdkManager.getThingyBinder();
         handleIntent(getIntent());
-        if(mThingySdkManager.hasInitialServiceDiscoverCompleted(mDevice)){
+        if (mThingySdkManager.hasInitialServiceDiscoverCompleted(mDevice)) {
             onServiceDiscoveryCompletion(mDevice);
         }
     }
 
     @Override
-    public void cancleInitialConfiguration() {
+    public void cancelInitialConfiguration() {
         if (mThingySdkManager != null) {
             mThingySdkManager.disconnectFromThingy(mDevice);
         }
@@ -937,12 +937,12 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     };
 
     private void showConnectionProgressDialog() {
-        if(mProgressDialog == null) {
-            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.please_wait), getString(R.string.state_connecting));
+        if (mProgressDialog == null) {
+            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), getString(R.string.state_connecting));
         }
 
         final Dialog dialog = mProgressDialog.getDialog();
-        if(dialog == null || (dialog != null && !dialog.isShowing())) {
+        if (dialog == null || (dialog != null && !dialog.isShowing())) {
             mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
         }
 
@@ -959,7 +959,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private void hideProgressDialog() {
         if (mProgressDialog != null) {
             final Dialog dialog = mProgressDialog.getDialog();
-            if(dialog != null) {
+            if (dialog != null) {
                 dialog.dismiss();
             }
         }
@@ -968,7 +968,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private void updateProgressDialogState(String message) {
         if (mProgressDialog != null) {
             final Dialog dialog = mProgressDialog.getDialog();
-            if(dialog != null) {
+            if (dialog != null) {
                 mProgressDialog.setMessage(message);
             }
         }
@@ -991,11 +991,11 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                 resourceEntryNames[resourceEntryNames.length - 2] + "." +
                 resourceEntryNames[resourceEntryNames.length - 1];
 
-        if(fwFileVersionMajor > fwVersionMajor ){
+        if (fwFileVersionMajor > fwVersionMajor) {
             return true;
-        } else if(fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor){
+        } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor) {
             return true;
-        } else if(fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch){
+        } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch) {
             return true;
         }
         return false;
@@ -1018,6 +1018,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
     /**
      * Since Marshmallow location services must be enabled in order to scan.
+     *
      * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmellow.
      */
     public boolean isLocationEnabled() {
@@ -1041,10 +1042,10 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         final String address = intent.getStringExtra(Utils.EXTRA_ADDRESS_DATA);
-        if(address != null && !address.isEmpty()) {
+        if (address != null && !address.isEmpty()) {
             mAddressNfc = address;
             final BluetoothDevice device = getBluetoothDevice(this, address);
-            if(device != null) {
+            if (device != null) {
                 if (!mIsScanning && !mThingySdkManager.isConnected(device)) {
                     prepareForScanning(address);
                 }
@@ -1061,7 +1062,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private void prepareForScanning(final String address) {
         if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
             if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if(isLocationEnabled()) {
+                if (isLocationEnabled()) {
                     if (isBleEnabled()) {
                         handleStartScan(address);
                     } else enableBle();
@@ -1084,8 +1085,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
-    private void handleStartScan(final String address){
-        if(!Utils.isConnected(address, mThingySdkManager.getConnectedDevices()) && !mBinder.isScanningState()) {
+    private void handleStartScan(final String address) {
+        if (!Utils.isConnected(address, mThingySdkManager.getConnectedDevices()) && !mBinder.isScanningState()) {
             mDevice = Utils.getBluetoothDevice(this, address);
             final String title = mConfirmThingy.getText().toString().trim();
             if (title.contains("Disconnect")) {
@@ -1101,7 +1102,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     private void startScan() {
-        if(mIsScanning){
+        if (mIsScanning) {
             return;
         }
 
@@ -1131,7 +1132,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
             mIsScanning = false;
-        } else if(!isFinishing()) {
+        } else if (!isFinishing()) {
             if (mBinder != null) {
                 mBinder.setScanningState(false);
             }
@@ -1140,7 +1141,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
             mIsScanning = false;
-
         }
     }
 
@@ -1186,30 +1186,29 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                 final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, Utils.REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
                 dialog.show(getSupportFragmentManager(), null);
             }
-
         }
     }
 
     private void loadNfcAdapter() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mStepOneSummary.setText(R.string.add_thingy_nfc_summary);
             mNfcPendingIntent = PendingIntent.getActivity(
                     this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);
-            mIntentFiltersArray = new IntentFilter[] {ndef };
+            mIntentFiltersArray = new IntentFilter[]{ndef};
         } else {
             mStepOneSummary.setText(R.string.add_thingy_summary);
         }
     }
 
-    private boolean isNfcEnabled(){
+    private boolean isNfcEnabled() {
         return !(mNfcAdapter != null && !mNfcAdapter.isEnabled());
     }
 
-    private void updateNfcUi(final boolean isNfcEnabled){
+    private void updateNfcUi(final boolean isNfcEnabled) {
         if (isNfcEnabled) {
             mNfcContainer.setVisibility(View.GONE);
         } else {
@@ -1217,7 +1216,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
-    public void showNfcDialogRationale(){
+    public void showNfcDialogRationale() {
         final EnableNFCDialogFragment fragment = EnableNFCDialogFragment.newInstance();
         fragment.show(getSupportFragmentManager(), null);
     }
@@ -1233,14 +1232,14 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                     for (NdefRecord record : records) {
                         if (record.getTnf() == NdefRecord.TNF_WELL_KNOWN) {
                             final String mimeType = record.toMimeType();
-                            if (mimeType != null && mimeType.equals(Utils.EXTRA_ADDRESS_DATA)){
+                            if (mimeType != null && mimeType.equals(Utils.EXTRA_ADDRESS_DATA)) {
                                 final String address = Utils.readAddressPayload(record.getPayload());
-                                if(TextUtils.isEmpty(address)) {
+                                if (TextUtils.isEmpty(address)) {
                                     Utils.showToast(this, getString(R.string.error_reading_nfc_tag));
                                     return;
                                 }
-                                if(!TextUtils.isEmpty(mAddressNfc)) {
-                                    if(!address.equals(mAddressNfc)){
+                                if (!TextUtils.isEmpty(mAddressNfc)) {
+                                    if (!address.equals(mAddressNfc)) {
                                         Utils.showToast(this, getString(R.string.eroor_adding_multiple_devices_over_nfc));
                                         return;
                                     }
@@ -1249,7 +1248,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                                 if (!mDatabaseHelper.isExist(address)) {
                                     if (isBleEnabled()) {
                                         final BluetoothDevice device = getBluetoothDevice(this, address);
-                                        if(device != null) {
+                                        if (device != null) {
                                             if (!isConnected(device, mThingySdkManager.getConnectedDevices())) {
                                                 if (mDatabaseHelper.getLastSelected(address)) {
                                                     prepareForScanning(device.getAddress());
@@ -1279,7 +1278,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
     }
 
-    private void onServiceDiscoveryCompletion(final BluetoothDevice device){
+    private void onServiceDiscoveryCompletion(final BluetoothDevice device) {
         mThingySdkManager.enableEnvironmentNotifications(device, true);
         hideProgressDialog();
         checkForFwUpdates();

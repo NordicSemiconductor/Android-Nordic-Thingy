@@ -41,6 +41,7 @@ package no.nordicsemi.android.nrfthingy.common;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
 
-
 public class ProgressDialogFragment extends DialogFragment {
 
     private static final String TITLE = "TITLE";
@@ -58,7 +58,6 @@ public class ProgressDialogFragment extends DialogFragment {
 
     private String mTitle;
     private String mMessage;
-    private ProgressBar mProgressBar;
     private TextView mSummary;
 
     public static ProgressDialogFragment newInstance(final String title, final String message) {
@@ -73,41 +72,38 @@ public class ProgressDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null){
+        if (getArguments() != null) {
             mTitle = getArguments().getString(TITLE);
             mMessage = getArguments().getString(MESSAGE);
         }
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(mTitle);
-
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.progress_layout, null);
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.progress_layout, null);
         mSummary = view.findViewById(R.id.progress_bar_summary);
         mSummary.setText(mMessage);
-
-        final AlertDialog alertDialog = alertDialogBuilder.setView(view).show();
-        setCancelable(false);
-        alertDialog.setCanceledOnTouchOutside(false);
-
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mSummary.setText(savedInstanceState.getString(MESSAGE));
         }
 
-        return alertDialog;
+        return new AlertDialog.Builder(requireContext())
+                .setView(view)
+                .setTitle(mTitle)
+                .setCancelable(false)
+                .create();
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(MESSAGE, mSummary.getText().toString());
     }
 
     public void setTitle(final String title) {
         final Dialog dialog = getDialog();
-        if(dialog != null) {
+        if (dialog != null) {
             dialog.setTitle(title);
         }
     }
@@ -115,5 +111,4 @@ public class ProgressDialogFragment extends DialogFragment {
     public void setMessage(final String message) {
         mSummary.setText(message);
     }
-
 }

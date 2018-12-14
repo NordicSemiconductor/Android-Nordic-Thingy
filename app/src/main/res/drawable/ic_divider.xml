@@ -40,5 +40,5 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <size android:width="1dip" />
-    <solid android:color="@color/colorPrimary"/>
+    <solid android:color="@color/onBackground"/>
 </shape>

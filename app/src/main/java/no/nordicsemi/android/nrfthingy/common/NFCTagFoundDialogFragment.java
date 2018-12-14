@@ -50,28 +50,24 @@ import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 
 public class NFCTagFoundDialogFragment extends DialogFragment {
-
-
     private String mAddress;
-
-    public NFCTagFoundDialogFragment() {
-
-    }
 
     public interface OnNfcTagFound {
         void configureThingy(final String address);
     }
 
     public static NFCTagFoundDialogFragment newInstance(final String address) {
-        NFCTagFoundDialogFragment fragment = new NFCTagFoundDialogFragment();
+        final NFCTagFoundDialogFragment fragment = new NFCTagFoundDialogFragment();
+
         final Bundle args = new Bundle();
         args.putString(Utils.EXTRA_DATA, address);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mAddress = getArguments().getString(Utils.EXTRA_DATA);
@@ -80,38 +76,25 @@ public class NFCTagFoundDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
 
-        alertDialogBuilder.setIcon(R.drawable.ic_nfc_black);
-        alertDialogBuilder.setTitle(getString(R.string.nfc_tag_dialog_title));
-        alertDialogBuilder.setCancelable(false);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.ic_nfc_black)
+                .setTitle(getString(R.string.nfc_tag_dialog_title))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final OnNfcTagFound listener = (OnNfcTagFound) requireActivity();
+                        listener.configureThingy(mAddress);
+                    }
+                });
 
-        if(!databaseHelper.isExist(mAddress)) {
+        if (!databaseHelper.isExist(mAddress)) {
             alertDialogBuilder.setMessage(getString(R.string.nfc_tag_dialog_summary));
         }
 
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-                final OnNfcTagFound listener = (OnNfcTagFound) getActivity();
-                listener.configureThingy(mAddress);
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        return alertDialogBuilder.create();
     }
 }

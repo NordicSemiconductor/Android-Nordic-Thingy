@@ -44,6 +44,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -278,7 +280,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -337,20 +339,18 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     public interface MotionFragmentListener {
     }
 
-    public MotionServiceFragment() {
-        // Required empty public constructor
-    }
-
     public static MotionServiceFragment newInstance(final BluetoothDevice device) {
-        MotionServiceFragment fragment = new MotionServiceFragment();
+        final  MotionServiceFragment fragment = new MotionServiceFragment();
+
         final Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabaseHelper = new DatabaseHelper(getActivity());
         if (getArguments() != null) {
@@ -359,9 +359,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_motion, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_motion, container, false);
         mThingySdkManager = ThingySdkManager.getInstance();
         mMotionToolbar = rootView.findViewById(R.id.card_toolbar_motion);
         mGravityToolbar = rootView.findViewById(R.id.card_toolbar_gravity);
@@ -644,8 +643,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         final LineDataSet[] lineDataSets = new LineDataSet[3];
         LineDataSet lineDataSetX = new LineDataSet(null, getString(R.string.gravity_vector_x));
         lineDataSetX.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSetX.setColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
-        lineDataSetX.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSetX.setColor(ContextCompat.getColor(requireContext(), R.color.red));
+        lineDataSetX.setHighLightColor(ContextCompat.getColor(requireContext(), R.color.accent));
         lineDataSetX.setValueFormatter(new GravityVectorChartValueFormatter());
         lineDataSetX.setDrawValues(true);
         lineDataSetX.setDrawCircles(true);
@@ -656,8 +655,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         LineDataSet lineDataSetY = new LineDataSet(null, getString(R.string.gravity_vector_y));
         lineDataSetY.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSetY.setColor(ContextCompat.getColor(getActivity(), R.color.colorGreen));
-        lineDataSetY.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSetY.setColor(ContextCompat.getColor(getActivity(), R.color.green));
+        lineDataSetY.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.accent));
         lineDataSetY.setValueFormatter(new GravityVectorChartValueFormatter());
         lineDataSetY.setDrawValues(true);
         lineDataSetY.setDrawCircles(true);
@@ -668,8 +667,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         LineDataSet lineDataSetZ = new LineDataSet(null, getString(R.string.gravity_vector_z));
         lineDataSetZ.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSetZ.setColor(ContextCompat.getColor(getActivity(), R.color.colorBlue));
-        lineDataSetZ.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSetZ.setColor(ContextCompat.getColor(getActivity(), R.color.blue));
+        lineDataSetZ.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.accent));
         lineDataSetZ.setValueFormatter(new GravityVectorChartValueFormatter());
         lineDataSetZ.setDrawValues(true);
         lineDataSetZ.setDrawCircles(true);
@@ -681,7 +680,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     }
 
     private void addGravityVectorEntry(final float gravityVectorX, final float gravityVectorY, final float gravityVectorZ) {
-
         LineData data = mLineChartGravityVector.getData();
 
         if (data != null) {
@@ -834,8 +832,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
             sequence.continueOnCancel(true);
             sequence.targets(
                     TapTarget.forToolbarOverflow(mQuaternionToolbar, desc).
-                            dimColor(R.color.greyBg).
-                            outerCircleColor(R.color.colorAccent).id(0)).listener(new TapTargetSequence.Listener() {
+                            dimColor(R.color.grey).
+                            outerCircleColor(R.color.accent).id(0)).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {
                     Utils.saveSequenceCompletion(getContext(), Utils.INITIAL_MOTION_TUTORIAL);

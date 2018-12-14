@@ -51,9 +51,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="@dimen/cardview_horizontal_padding"
+            android:layout_marginStart="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:id="@+id/microphone_card">
 
             <LinearLayout
@@ -66,7 +66,8 @@
                     android:id="@+id/microphone_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/microphone_title"
+                    app:logo="@drawable/ic_mic_grey"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
@@ -159,9 +160,9 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginEnd="@dimen/cardview_horizontal_padding"
+            android:layout_marginStart="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:layout_marginBottom="16dp"
             android:id="@+id/piano_card_view">
 
@@ -174,7 +175,8 @@
                     android:layout_width="match_parent"
                     android:id="@+id/speaker_toolbar"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/speaker_title"
+                    app:logo="@drawable/ic_sound"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
@@ -183,9 +185,9 @@
                     android:id="@+id/sliding_tabs"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    app:tabSelectedTextColor="@color/colorPrimary"
-                    app:tabTextColor="@color/textColorSecondary"
-                    app:tabIndicatorColor="@color/colorPrimary"
+                    app:tabSelectedTextColor="@color/actionBarText"
+                    app:tabTextColor="@color/actionBarTextDisabled"
+                    app:tabIndicatorColor="@color/actionBarTextDisabled"
                     app:tabIndicatorHeight="3dp"
                     app:tabGravity="fill"
                     app:tabMode="fixed"

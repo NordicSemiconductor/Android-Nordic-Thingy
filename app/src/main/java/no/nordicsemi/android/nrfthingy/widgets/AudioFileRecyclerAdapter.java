@@ -78,7 +78,6 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         return new CustomViewHolder(view);
     }
 
-
     @Override
     public void onBindViewHolder(final CustomViewHolder customViewHolder, final int position) {
         final File file = mAudioFileList.get(position);

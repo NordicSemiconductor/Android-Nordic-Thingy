@@ -126,10 +126,10 @@
     <string name="supervision_timeout_formula">x 10 ms = </string>
     <string name="led_percentage">%d %%</string>
 
-    <string name="error_temp_interval">Interval must be between 100-60000 milliseconds!</string>
-    <string name="error_pressure_interval">Interval cannot be less than 50-60000 milliseconds!</string>
-    <string name="error_humidity_interval">Interval cannot be less than 100-60000 milliseconds!</string>
-    <string name="error_color_intensity_interval">Interval cannot be less than 200-60000 milliseconds!</string>
+    <string name="error_temp_interval">Interval must be between 100 – 60000 milliseconds!</string>
+    <string name="error_pressure_interval">Interval cannot be less than 50 – 60000 milliseconds!</string>
+    <string name="error_humidity_interval">Interval cannot be less than 100 – 60000 milliseconds!</string>
+    <string name="error_color_intensity_interval">Interval cannot be less than 200 – 60000 milliseconds!</string>
     <string name="error_color_interval">Color interval cannot be less than %d seconds!</string>
     <string name="error_temp_interval_empty">Temperature interval cannot be empty!</string>
     <string name="error_pressure_interval_empty">Pressure interval cannot be empty!</string>
@@ -152,7 +152,7 @@
     <string name="settings_share_location">Share location</string>
     <string name="settings_environment">Environment Settings</string>
     <string name="settings_motion">Motion Settings</string>
-    <string name="coming_soon">Coming soon...</string>
+    <string name="coming_soon">Coming soon…</string>
     <string name="gas_mode_one">1s</string>
     <string name="gas_mode_two">10s</string>
     <string name="gas_mode_three">60s</string>
@@ -165,7 +165,7 @@
     <string name="conn_sup_timeout_hint">Supervision timeout</string>
     <string name="url_hint">URL</string>
     <string name="ifttt_token_hint">100 Byte token</string>
-    <string name="error_ifttt_token_too_long">Cloud token must be between 1 - 100 bytes</string>
+    <string name="error_ifttt_token_too_long">Cloud token must be between 1 – 100 bytes</string>
     <string name="url_data_text">Url text</string>
     <string name="error_empty_device_name">Thingy name cannot be empty!</string>
     <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes!</string>
@@ -181,10 +181,10 @@
     <string name="error_invalid_supervision_timeout">Value must be within 100ms and 32000ms</string>
     <string name="error_empty_cloud_token">Cloud token cannot be empty!</string>
     <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes</string>
-    <string name="error_cloud_token_length">Cloud token must between 1-250 bytes</string>
+    <string name="error_cloud_token_length">Cloud token must between 1 – 250 bytes</string>
     <string name="error_cloud_token">Error, unable to write to cloud token characteristic</string>
     <string name="cloud_token_settings">Cloud Token</string>
-    <string name="adv_interval">Advertisment interval</string>
+    <string name="adv_interval">Advertisement interval</string>
     <string name="adv_time_out">Advertisement timeout</string>
     <string name="error_empty_adv_interval">Error, value cannot be empty</string>
     <string name="error_adv_interval">Must be between 20ms and 10.24s</string>
@@ -320,7 +320,7 @@
     <string name="dfu_aborted">Uploading of the new application firmware has been canceled.</string>
     <string name="dfu_uploading_percentage_label">0%</string>
     <string name="dfu_uploading_percentage">%d%%</string>
-    <string name="dfu_reconnecting">Reconnecting to Thingy...</string>
+    <string name="dfu_reconnecting">Reconnecting to Thingy…</string>
     <string name="dfu_alert_no_file_selected">File not selected</string>
     <string name="dfu_alert_no_filebrowser_title">File Browser not found</string>
     <string name="dfu_alert_no_filebrowser_message">File browser application has not been found on your device. Would you like to download one?</string>
@@ -359,7 +359,7 @@
     <string name="action_delete">Delete</string>
     <string name="environment_service_info">Environment Service Info</string>
     <string name="motion_service_info">Motion Service Info</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="celcius">%s ℃</string>
     <string name="hecto_pascal">%s hPa</string>
     <string name="ppm">%d ppm</string>
@@ -462,8 +462,8 @@
     <string name="led_duration">Delay</string>
     <string name="microphone_permission_text">Nordic Thingy would like to have access to the microphone to record voice/audio that could be played on your Thingy:52 device.
         This application nor the Thingy:52 will record or save this data for any other purposes.</string>
-    <string name="state_connecting">Connecting...</string>
-    <string name="state_discovering_services">%s connected. Discovering services...</string>
+    <string name="state_connecting">Connecting…</string>
+    <string name="state_discovering_services">%s connected.\nDiscovering services…</string>
 
     <!--IFTTT-->
     <string name="feature_control">Feature Control</string>
@@ -517,15 +517,15 @@
         Updating is recommended as it ensures full compatibility with the Thingy app and includes all the latest features and bug fixes.
         Would you like to update the firmware version to %2$s?</string>
     <string name="later">Later</string>
-    <string name="dfu_complete_reconnecting">Device firmware update completed. Reconnecting to device. This may take up to a few seconds...</string>
+    <string name="dfu_complete_reconnecting">Device firmware update completed.\nReconnecting to device. This may take up to a few seconds…</string>
     <string name="dash">-</string>
     <string name="ifttt_error">IFTTT Error</string>
-    <string name="one_connected">%s  is connected</string>
+    <string name="one_connected">%s is connected</string>
     <string name="two_connected">%d are connected</string>
-    <string name="one_disconnected">%s  is disconnected</string>
+    <string name="one_disconnected">%s is disconnected</string>
     <string name="two_disconnected">%d are disconnected</string>
     <string name="enable">ENABLE</string>
-    <string name="nfc_tag_connecting">NFC tag found, connecting to device...</string>
+    <string name="nfc_tag_connecting">NFC tag found, connecting to device…</string>
     <string name="nfc_tag_dialog_title">NFC Tag found</string>
     <string name="nfc_tag_dialog_summary">A new Thingy:52 containing a NFC Tag was found. Would you like to connect to this device?</string>
     <string name="enable_nfc_tag_dialog_title">Enable NFC</string>
@@ -551,6 +551,7 @@
     <string name="invalid_value">Invalid value</string>
     <string name="error_reading_nfc_tag">Error reading NFC tag</string>
     <string name="error_nfc_tag">Error reading tag, tap the thingy:52 again.</string>
+    <string name="volume">Volume</string>
 
     <string-array name="gas_mode">
         <item>1s interval</item>

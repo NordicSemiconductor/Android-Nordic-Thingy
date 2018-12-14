@@ -37,9 +37,10 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:minWidth="400dp"
     android:layout_height="wrap_content">
 
@@ -50,12 +51,16 @@
         android:orientation="vertical"
         android:padding="6dp">
 
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:srcCompat="@drawable/nordic_logo_horiz"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:drawablePadding="15dp"
-            android:drawableTop="@drawable/nordic_logo_horiz"
             android:padding="5dp"
             android:text="@string/about_text" />
 
@@ -63,6 +68,7 @@
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="Version 2.0"
             android:layout_gravity="right" />
 
         <TextView
@@ -73,7 +79,7 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/about_link"
-            android:textColorLink="@color/colorPrimary" />
+            android:textColorLink="@color/vibrant" />
 
         <LinearLayout
             android:layout_width="match_parent"

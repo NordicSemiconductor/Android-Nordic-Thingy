@@ -36,18 +36,18 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground">
+        android:background="@color/background">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_layout"
@@ -64,43 +64,36 @@
                 app:titleTextAppearance="@style/ActionBar.TitleText" />
 
 
-            <LinearLayout
-                android:id="@+id/location_services_container"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@color/colorNordicOrange"
-                android:visibility="gone">
+			<LinearLayout
+				android:id="@+id/location_services_container"
+				android:layout_width="match_parent"
+				android:layout_height="36dp"
+				android:background="@color/alert"
+				android:visibility="gone"
+				tools:visibility="visible">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:textColor="@android:color/white"
-                    android:gravity="center_vertical"
-                    android:text="@string/location_services_disabled"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"/>
+				<TextView
+					android:layout_width="0dp"
+					android:layout_height="match_parent"
+					android:layout_weight="1"
+					android:gravity="center_vertical"
+					android:paddingEnd="@dimen/activity_horizontal_margin"
+					android:paddingStart="@dimen/activity_horizontal_margin"
+					android:text="@string/location_services_disabled"
+					android:textColor="@color/onAlert"/>
 
-                <TextView
-                    android:id="@+id/enable_location_services"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@android:color/white"
-                    android:gravity="center_vertical"
-                    android:text="@string/enable"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"/>
+				<TextView
+					android:id="@+id/enable_location_services"
+					android:layout_width="wrap_content"
+					android:layout_height="match_parent"
+					android:gravity="center_vertical"
+					android:paddingEnd="@dimen/activity_horizontal_margin"
+					android:paddingStart="@dimen/activity_horizontal_margin"
+					android:text="@string/enable"
+					android:textColor="@color/onAlert"/>
 
-            </LinearLayout>
+			</LinearLayout>
         </android.support.design.widget.AppBarLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/background_title"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:paddingBottom="2dp" />
 
         <ScrollView
             android:id="@+id/scroll_view"
@@ -110,7 +103,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <android.support.v7.widget.CardView
@@ -120,7 +113,7 @@
                     android:layout_marginLeft="@dimen/cardview_horizontal_padding"
                     android:layout_marginRight="@dimen/cardview_horizontal_padding"
                     android:layout_marginTop="@dimen/cardview_action_padding"
-                    card_view:cardCornerRadius="2dp">
+                    tools:cardCornerRadius="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -133,6 +126,8 @@
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+							app:title="@string/dfu_fw_info"
+							app:logo="@drawable/ic_format_list_bulleted"
                             app:titleTextAppearance="@style/Cardview.TitleText"
                             app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
@@ -230,15 +225,14 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:alpha="0.12"
-                            android:background="@android:color/black" />
+                            android:background="@color/onBackground" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/cardview_action_padding">
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/nordic_fw"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -247,11 +241,11 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center"
                                 android:padding="@dimen/cardview_action_padding"
-                                android:background="@color/greyBg"
-                                android:layout_alignParentRight="true"
-                                android:textColor="@color/textColorWhite" />
+								android:textColor="@color/selectable"
+								android:background="?attr/selectableItemBackground"
+                                android:layout_alignParentRight="true" />
 
-                            <TextView
+                            <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/custom_fw"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -260,6 +254,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center"
                                 android:padding="@dimen/cardview_action_padding"
+								android:textColor="@color/selectable"
                                 android:background="?attr/selectableItemBackground"
                                 android:layout_toLeftOf="@id/nordic_fw"
                                 android:layout_marginRight="@dimen/cardview_action_padding" />
@@ -277,7 +272,7 @@
                     android:layout_marginLeft="@dimen/cardview_horizontal_padding"
                     android:layout_marginRight="@dimen/cardview_horizontal_padding"
                     android:layout_marginTop="@dimen/cardview_action_padding"
-                    card_view:cardCornerRadius="2dp">
+                    tools:cardCornerRadius="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -290,6 +285,8 @@
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+							app:title="@string/dfu_target"
+							app:logo="@drawable/ic_thingy_gray"
                             app:titleTextAppearance="@style/Cardview.TitleText"
                             app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
@@ -324,7 +321,7 @@
                     android:layout_marginRight="@dimen/cardview_horizontal_padding"
                     android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="7dp"
-                    card_view:cardCornerRadius="2dp"
+                    tools:cardCornerRadius="2dp"
                     android:layout_below="@+id/dfu_target_view">
 
                     <LinearLayout
@@ -338,6 +335,8 @@
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+							app:title="@string/dfu_status"
+							app:logo="@drawable/ic_dfu_gray"
                             app:titleTextAppearance="@style/Cardview.TitleText"
                             app:popupTheme="@style/ActionBarThemeOverlayCard" />
 
@@ -372,7 +371,7 @@
                                     android:alpha="0.20" />
                             </LinearLayout>
 
-                            <android.support.v4.widget.Space
+                            <android.widget.Space
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/cardview_action_padding" />
 
@@ -399,7 +398,7 @@
                                     android:alpha="0.20" />
                             </LinearLayout>
 
-                            <android.support.v4.widget.Space
+                            <android.widget.Space
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/cardview_action_padding" />
 
@@ -454,7 +453,7 @@
 
                             </RelativeLayout>
 
-                            <android.support.v4.widget.Space
+                            <android.widget.Space
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/cardview_action_padding" />
 

@@ -38,34 +38,31 @@
 
 <resources>
 
+    <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/AppThemeBase">
         <!-- Empty -->
     </style>
-    <!-- Base application theme. -->
+
     <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary</item>
-        <item name="actionMenuTextColor">@color/actionBarMenuTextColor</item>
+        <item name="colorPrimary">@color/actionBar</item>
+        <item name="colorPrimaryDark">@color/actionBarDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="actionMenuTextColor">@color/actionBarText</item>
         <item name="alertDialogTheme">@style/AppTheme.DialogTheme</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
     </style>
 
     <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionMenuTextColor">@color/textColorSecondary</item>
+        <item name="actionMenuTextColor">@color/white</item>
     </style>
-    `
-
-    <color name="actionBarMenuTextColor">#ffffff</color>
 
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ActionBarThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">#000</item>
         <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/textColorWhite</item>
+        <item name="colorControlNormal">@color/actionBarText</item>
         <item name="colorControlHighlight">#3fff</item>
     </style>
 
@@ -91,32 +88,27 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="Cardview.TitleTextDisabled" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <!--<style name="Cardview.TitleTextDisabled" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/disabledBgColouor</item>
         <item name="android:textSize">14sp</item>
-    </style>
+    </style>-->
 
-    <style name="CardviewData" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/textColorBlack</item>
-        <item name="android:textSize">@dimen/card_view_data_text_size</item>
-    </style>
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
 
     <style name="AppTheme.TranslucentStatusBar">
         <!-- Empty -->
     </style>
 
-    <style name="AppTheme.Translucent">
+    <!--<style name="AppTheme.Translucent">
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
-    </style>
+    </style>-->
 
     <style name="Widget" />
 
@@ -125,34 +117,34 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+    <!--<style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">@color/colorPrimary</item>
         <item name="android:textColor">@color/textColorWhite</item>
-    </style>
+    </style>-->
 
-    <style name="EditTextHintStyle">
+    <!--<style name="EditTextHintStyle">
         <item name="android:textSize">14sp</item>
-    </style>
+    </style>-->
 
-    <style name="StepperTitleTextStyle">
-        <item name="android:color">@color/textColorBlack</item>
+    <!--<style name="StepperTitleTextStyle">
+        <item name="android:color">@color/black</item>
         <item name="android:textSize">@dimen/stepper_title_text_size</item>
-    </style>
+    </style>-->
 
     <style name="AppTheme.DialogTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionModeBackground">@color/actionMode</item>
-        <item name="actionMenuTextColor">@color/textColorWhite</item>
-        <item name="actionBarTheme">@style/ActionModeThemeOverlay</item>
+        <item name="colorPrimary">@color/actionBar</item>
+        <item name="colorPrimaryDark">@color/actionBarDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="actionModeBackground">@color/actionBarText</item>
+        <item name="actionMenuTextColor">@color/actionBarText</item>
+        <!--<item name="actionBarTheme">@style/ActionModeThemeOverlay</item>-->
         <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="android:keyTextSize">50sp</item>
     </style>
 
-    <style name="ActionModeThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+    <!--<style name="ActionModeThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/textColorWhite</item>
-    </style>
+    </style>-->
 
     <style name="PreferenceCategoryLayout">
         <item name="android:layout_width">match_parent</item>

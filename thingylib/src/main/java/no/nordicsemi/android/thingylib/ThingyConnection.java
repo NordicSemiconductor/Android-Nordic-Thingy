@@ -687,7 +687,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             Log.v(ThingyUtils.TAG, "onMtuChanged() " + mtu + " Status: " + status);
             mMtu = mtu;
         } else {
-            ThingyUtils.showToast(mContext, mContext.getString(R.string.mtu_failed, status));
+            ThingyUtils.showToast(mContext, mContext.getString(R.string.thingy_error_mtu_failed, status));
         }
     }
 
@@ -2590,7 +2590,8 @@ public class ThingyConnection extends BluetoothGattCallback {
         if (mSpeakerDataCharacteristic != null) {
             mPcmSample = sample;
             if (mSpeakerMode != ThingyUtils.PCM_MODE) {
-                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, new byte[]{ThingyUtils.PCM_MODE, (byte) mMicrophoneMode}, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                final byte[] data = new byte[]{ThingyUtils.PCM_MODE, (byte) mMicrophoneMode};
+                add(RequestType.WRITE_CHARACTERISTIC, mSoundConfigurationCharacteristic, data, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 mPlayPcmRequested = true;
                 streamAudio(sample);
             } else {

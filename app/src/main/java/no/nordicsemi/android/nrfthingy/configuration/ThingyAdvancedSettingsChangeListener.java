@@ -38,7 +38,7 @@
 
 package no.nordicsemi.android.nrfthingy.configuration;
 
-public interface ThingeeAdvancedSettingsChangeListener {
+public interface ThingyAdvancedSettingsChangeListener {
     //Weather settings
     void updateTemperatureInterval();
 
@@ -59,5 +59,4 @@ public interface ThingeeAdvancedSettingsChangeListener {
     void updateMotionInterval();
 
     void updateWakeOnMotion();
-
 }

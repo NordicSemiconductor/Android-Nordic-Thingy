@@ -201,7 +201,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                         mIsPlaying = false;
                     }
                 } else {
-                    Utils.showToast(getActivity(), getString(R.string.no_thingy_connected));
+                    Utils.showToast(getActivity(), getString(R.string.thingy_not_connected));
                 }
             }
         });
@@ -273,10 +273,10 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                     Utils.showToast(getActivity(), getString(R.string.audio_file_import_aborted));
                     break;
                 }
-            /*
-             * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
-			 * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
-			 */
+                /*
+                 * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
+                 * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
+                 */
                 if (uri.getScheme().equals("file")) {
                     // the direct path to the file has been returned
                     mFilePath = uri.getPath();
@@ -326,14 +326,13 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         }
     }
 
-
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final Uri uri = args.getParcelable(Utils.EXTRA_URI);
         /*
-		 * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
-		 * all columns and than check which columns are present.
-		 */
+         * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
+         * all columns and than check which columns are present.
+         */
         // final String[] projection = new String[] { MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.DATA };
         return new CursorLoader(getActivity(), uri, null /* all columns, instead of projection */, null, null, null);
     }
@@ -375,8 +374,6 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 } else {
                     Utils.showToast(getActivity(), getString(R.string.invalid_audio_file_format));
                 }
-
-
             }
         } else {
             mFilePath = null;

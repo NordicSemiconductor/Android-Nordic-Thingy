@@ -194,7 +194,7 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -265,7 +265,6 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
         }
         mThingySdkManager = ThingySdkManager.getInstance();
-
     }
 
     @Nullable
@@ -545,7 +544,6 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         mStartPlayingAudio = false;
     }
 
-
     private class FragmentAdapter extends FragmentPagerAdapter {
 
         private int mSelectedFragmentTab = 0;
@@ -617,12 +615,12 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             sequence.targets(
                     TapTarget.forView(mMicrophone, microphone).
                             transparentTarget(true).
-                            dimColor(R.color.greyBg).
-                            outerCircleColor(R.color.colorAccent).id(0),
+                            dimColor(R.color.grey).
+                            outerCircleColor(R.color.accent).id(0),
                     TapTarget.forView(mThingy, thingy).
                             transparentTarget(true).
-                            dimColor(R.color.greyBg).
-                            outerCircleColor(R.color.colorAccent).id(1)
+                            dimColor(R.color.grey).
+                            outerCircleColor(R.color.accent).id(1)
             ).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {

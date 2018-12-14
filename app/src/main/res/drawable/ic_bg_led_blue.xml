@@ -37,6 +37,6 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
-    <solid android:color="@color/colorBlue"/>
+    <solid android:color="@color/blue"/>
     <size android:width="@dimen/device_icon_size" android:height="@dimen/device_icon_size"/>
 </shape>

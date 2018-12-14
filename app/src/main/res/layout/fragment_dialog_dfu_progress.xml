@@ -49,7 +49,7 @@
         android:id="@+id/dfu_rationale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/please_wait" />
+        android:text="@string/thingy_please_wait" />
 
     <ProgressBar
         android:id="@+id/progressbar"

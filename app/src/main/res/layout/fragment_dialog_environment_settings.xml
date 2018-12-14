@@ -69,8 +69,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -105,8 +104,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -141,8 +139,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -177,8 +174,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
 
         </android.support.design.widget.TextInputLayout>
 

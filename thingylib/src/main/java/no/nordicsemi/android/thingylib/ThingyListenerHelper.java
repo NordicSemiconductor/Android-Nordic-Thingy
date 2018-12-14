@@ -286,11 +286,11 @@ public class ThingyListenerHelper {
                 case ThingyUtils.ROTATION_MATRIX_NOTIFICATION:
                     final byte [] rotationMatrix = intent.getExtras().getByteArray(ThingyUtils.EXTRA_DATA_ROTATION_MATRIX);
                     if(globalListener != null) {
-                        globalListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        globalListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
 
                     if(thingyListener != null) {
-                        thingyListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        thingyListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
                     break;
                 case ThingyUtils.HEADING_NOTIFICATION:

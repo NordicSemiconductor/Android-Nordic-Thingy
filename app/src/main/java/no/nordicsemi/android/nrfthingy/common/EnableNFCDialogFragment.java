@@ -45,75 +45,33 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.CheckBox;
 
 import no.nordicsemi.android.nrfthingy.R;
 
 public class EnableNFCDialogFragment extends DialogFragment {
-
-    public EnableNFCDialogFragment() {
-
-    }
 
     public interface EnableNFCDialogFragmentListener {
         void requestNfcFeature();
     }
 
     public static EnableNFCDialogFragment newInstance() {
-        EnableNFCDialogFragment fragment = new EnableNFCDialogFragment();
-        final Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        return new EnableNFCDialogFragment();
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setIcon(R.drawable.ic_nfc_black);
-        alertDialogBuilder.setTitle(getString(R.string.enable_nfc_tag_dialog_title));
-        alertDialogBuilder.setMessage(getString(R.string.enable_nfc_tag_dialog_summary));
-        /*final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_enable_nfc, null);
-        final CheckBox checkBox = view.findViewById(R.id.chk);
-        checkBox.setChecked(Utils.getNfcFeatureRequestState(getContext()));
-        checkBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                Utils.saveNfcFeatureRequestState(getContext(), checkBox.isChecked());
-            }
-        });
-
-        alertDialogBuilder.setView(view);*/
-        alertDialogBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ((EnableNFCDialogFragmentListener)getActivity()).requestNfcFeature();
-            }
-        }).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(final DialogInterface dialogInterface, final int i) {
-
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        return new AlertDialog.Builder(requireContext())
+                .setIcon(R.drawable.ic_nfc_black)
+                .setTitle(getString(R.string.enable_nfc_tag_dialog_title))
+                .setMessage(getString(R.string.enable_nfc_tag_dialog_summary))
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((EnableNFCDialogFragmentListener) requireActivity()).requestNfcFeature();
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .create();
     }
 }

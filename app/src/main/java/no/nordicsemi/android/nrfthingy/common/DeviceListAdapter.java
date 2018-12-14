@@ -35,6 +35,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.view.LayoutInflater;
@@ -85,11 +86,9 @@ public class DeviceListAdapter extends BaseAdapter {
         return null;
     }
 
-    public void clearDevices() {
-        if (mDevices != null) {
-            mDevices.clear();
-            notifyDataSetChanged();
-        }
+    void clearDevices() {
+        mDevices.clear();
+        notifyDataSetChanged();
     }
 
     @Override

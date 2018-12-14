@@ -39,9 +39,7 @@
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -55,54 +53,32 @@ import no.nordicsemi.android.nrfthingy.R;
 
 public class DismissNfcWarningDialogFragment extends DialogFragment {
 
-    public DismissNfcWarningDialogFragment() {
-
-    }
-
     public interface NfcWarningDismissListener {
         void onNfcWarningDismissed();
     }
 
     public static DismissNfcWarningDialogFragment newInstance() {
-        DismissNfcWarningDialogFragment fragment = new DismissNfcWarningDialogFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        return new DismissNfcWarningDialogFragment();
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setIcon(R.drawable.ic_warning_grey);
         alertDialogBuilder.setTitle(R.string.dismiss_nfc_warning_title);
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_dialog_nfc_warning, null);
         final CheckBox checkBox = view.findViewById(R.id.chk_nfc_warning);
-        alertDialogBuilder.setView(view);
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(checkBox.isChecked()){
-                    Utils.saveNfcMessageWarningState(getContext(), !checkBox.isChecked());
-                    ((NfcWarningDismissListener) getActivity()).onNfcWarningDismissed();
-                }
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        alertDialogBuilder.setView(view)
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (checkBox.isChecked()) {
+                            Utils.saveNfcMessageWarningState(requireContext(), !checkBox.isChecked());
+                            ((NfcWarningDismissListener) requireActivity()).onNfcWarningDismissed();
+                        }
+                    }
+                });
+        return alertDialogBuilder.create();
     }
 }

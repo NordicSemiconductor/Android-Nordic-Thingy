@@ -38,10 +38,11 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/background">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -67,14 +68,15 @@
             android:id="@+id/location_services_container"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="@color/colorNordicOrange"
-            android:visibility="gone">
+            android:background="@color/alert"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
                 android:text="@string/location_services_disabled"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -84,7 +86,7 @@
                 android:id="@+id/enable_location_services"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
                 android:text="@string/enable"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -96,14 +98,15 @@
             android:id="@+id/nfc_container"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:background="@color/colorPrimaryDark"
-            android:visibility="gone">
+            android:background="@color/alert"
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
                 android:text="@string/nfc_disabled"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -113,7 +116,7 @@
                 android:id="@+id/enable_nfc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
                 android:text="@string/enable"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -123,7 +126,7 @@
                 android:id="@+id/dismiss_nfc"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@android:color/white"
+                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
                 android:text="@string/more"
                 android:paddingStart="@dimen/activity_horizontal_margin"
@@ -171,7 +174,7 @@
                             android:background="@drawable/ic_blue_bg"
                             android:text="@string/step_one"
                             android:gravity="center"
-                            android:textColor="@color/textColorWhite"
+                            android:textColor="@color/onVibrant"
                             android:layout_marginBottom="8dp" />
 
                         <TextView
@@ -181,8 +184,7 @@
                             android:layout_toRightOf="@id/step_one"
                             android:layout_alignBaseline="@id/step_one"
                             android:layout_marginLeft="12dp"
-                            android:text="@string/connect_to_thingy"
-                            android:textAppearance="@style/StepperTitleTextStyle" />
+                            android:text="@string/connect_to_thingy" />
 
                         <TextView
                             android:id="@+id/step_one_summary"
@@ -208,7 +210,7 @@
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="wrap_content"
-                                android:background="@color/greyBg"
+                                android:background="@color/onBackground"
                                 android:layout_gravity="center_horizontal" />
                         </LinearLayout>
 
@@ -230,10 +232,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="48dp"
                                     android:text="@string/scan_thingy"
-                                    style="@style/Base.Widget.AppCompat.Button.Colored" />
+                                    style="@style/Widget.AppCompat.Button.Colored" />
                             </LinearLayout>
 
-                            <android.support.v4.widget.Space
+                            <android.widget.Space
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp" />
                         </LinearLayout>
@@ -257,7 +259,7 @@
                             android:background="@drawable/ic_blue_bg"
                             android:text="@string/step_two"
                             android:gravity="center"
-                            android:textColor="@color/textColorWhite"
+                            android:textColor="@color/onVibrant"
                             android:layout_marginBottom="8dp" />
 
                         <TextView
@@ -267,8 +269,7 @@
                             android:layout_toRightOf="@id/step_two"
                             android:layout_alignBaseline="@id/step_two"
                             android:layout_marginLeft="12dp"
-                            android:text="@string/dev_name_info"
-                            android:textAppearance="@style/StepperTitleTextStyle" />
+                            android:text="@string/dev_name_info" />
 
                         <TextView
                             android:id="@+id/step_two_summary"
@@ -295,7 +296,7 @@
                                 android:id="@+id/vertical_line"
                                 android:layout_width="1dp"
                                 android:layout_height="wrap_content"
-                                android:background="@color/greyBg"
+                                android:background="@color/onBackground"
                                 android:layout_gravity="center_horizontal" />
                         </LinearLayout>
 
@@ -311,7 +312,8 @@
                                 android:orientation="vertical"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone">
+                                android:visibility="gone"
+                                tools:visibility="visible">
 
                                 <android.support.design.widget.TextInputLayout
                                     android:id="@+id/device_name_layout"
@@ -348,7 +350,7 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <android.support.v4.widget.Space
+                            <android.widget.Space
                                 android:id="@+id/space"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp" />
@@ -364,7 +366,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_bottom_setup_complete_container"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -381,14 +384,4 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_bottom_bg_title"
-        android:scaleType="center"
-        android:src="@drawable/background_title" />
 </RelativeLayout>

@@ -54,8 +54,6 @@ import android.util.SparseArray;
 import android.webkit.URLUtil;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -167,7 +165,6 @@ public class Utils {
     public static final String EXTRA_DATA_FILE_SIZE = "EXTRA_DATA_FILE_SIZE";
     public static final int SELECT_FILE_REQ = 1;
     public static final int SELECT_INIT_FILE_REQ = 2;
-    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss:SSS");
 
     public static final String EXTRA_URI = "uri";
 
@@ -210,7 +207,7 @@ public class Utils {
             put((byte) 13, ".gov");
         }
     };
-    public static final String NFC_WARNING = "NFC_WARNING";
+    private static final String NFC_WARNING = "NFC_WARNING";
 
     public static int setValue(final byte[] dest, int offset, int value, int formatType) {
         int len = offset + getTypeLen(formatType);
@@ -283,6 +280,7 @@ public class Utils {
 
     /**
      * Inverts endianness of the byte array.
+     *
      * @param bytes input byte array
      * @return byte array in opposite order
      */
@@ -322,7 +320,8 @@ public class Utils {
         return null;
     }
 
-    private static String decodeUrl(final byte[] serviceData, final int start, final int length, final StringBuilder urlBuilder) {
+    private static String decodeUrl(final byte[] serviceData, final int start, final int length,
+                                    final StringBuilder urlBuilder) {
         int offset = 0;
         while (offset < length) {
             byte b = serviceData[start + offset++];
@@ -617,7 +616,7 @@ public class Utils {
         return sp.getString(KEY_IFTTT_TOKEN, "");
     }
 
-    public static String readAddressPayload(final byte [] payload){
+    public static String readAddressPayload(final byte[] payload) {
         try {
             final int length = payload.length;
             final byte[] newPayload = new byte[length - 3];
@@ -632,7 +631,6 @@ public class Utils {
             return null;
         }
     }
-
 
     public static BluetoothDevice getBluetoothDevice(final Context context, final String address) {
         final BluetoothManager bm = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -649,6 +647,7 @@ public class Utils {
 
     /**
      * Returns the user selection if the user is to be prompted again for NFC
+     *
      * @param context Context
      * @return true if do not show again was opted and false otherwise
      */
@@ -664,12 +663,12 @@ public class Utils {
         return editor.commit();
     }
 
-    public static void saveNfcMessageWarningState(final Context context, final boolean flag){
+    public static void saveNfcMessageWarningState(final Context context, final boolean flag) {
         SharedPreferences sp = context.getSharedPreferences(Utils.PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         sp.edit().putBoolean(Utils.NFC_WARNING, flag).commit();
     }
 
-    public static boolean showNfcDisabledWarning(final Context context){
+    public static boolean showNfcDisabledWarning(final Context context) {
         final SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         return sp.getBoolean(NFC_WARNING, true);
     }

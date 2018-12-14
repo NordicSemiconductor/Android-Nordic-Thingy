@@ -62,7 +62,7 @@
     <dimen name="stepper_padding_right">8dp</dimen>
 
     <dimen name="cardview_action_padding">8dp</dimen>
-    <dimen name="cardview_horizontal_padding">8dp</dimen>
+    <dimen name="cardview_horizontal_padding">0dp</dimen>
     <dimen name="cardview_vertical_padding">8dp</dimen>
     <dimen name="settings_category_layout_margin">0dp</dimen>
     <dimen name="spacing">8dp</dimen>

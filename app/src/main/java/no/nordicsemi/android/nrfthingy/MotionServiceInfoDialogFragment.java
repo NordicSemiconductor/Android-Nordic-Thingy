@@ -50,7 +50,6 @@ import android.view.View;
 
 public class MotionServiceInfoDialogFragment extends DialogFragment {
 
-
     public MotionServiceInfoDialogFragment() {
 
     }

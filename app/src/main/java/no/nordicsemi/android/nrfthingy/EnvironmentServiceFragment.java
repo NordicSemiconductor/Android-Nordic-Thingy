@@ -39,14 +39,13 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
@@ -83,8 +82,6 @@ import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract.ThingyDbColumns;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
-import no.nordicsemi.android.nrfthingy.thingy.Thingy;
-import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingyListener;
 import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -197,11 +194,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
         @Override
         public void onColorIntensityValueChangedEvent(BluetoothDevice bluetoothDevice, final float red, final float green, final float blue, final float alpha) {
-            final float r = red;
-            final float g = green;
-            final float b = blue;
-            final float a = alpha;
-            final String colorText = createColorValue(r, g, b, a);
+            final String colorText = createColorValue(red, green, blue, alpha);
             if (mIsFragmentAttached) {
                 mColorView.setText(colorText);
             }
@@ -253,7 +246,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -309,25 +302,12 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mThingySdkManager = ThingySdkManager.getInstance();
 
         final View rootView = inflater.inflate(R.layout.fragment_environment, container, false);
         final Toolbar toolbarEnvironment = rootView.findViewById(R.id.environment_toolbar);
-
-        final Toolbar mToolbarTemperature = rootView.findViewById(R.id.toolbar_temperature);
-        final Toolbar mToolbarPressure = rootView.findViewById(R.id.toolbar_pressure);
-        final Toolbar mToolbarHumidity = rootView.findViewById(R.id.toolbar_humidity);
-
-        mToolbarTemperature.setLogo(R.drawable.ic_graph);
-        mToolbarTemperature.setTitle(getString(R.string.temperature_title));
-
-        mToolbarPressure.setLogo(R.drawable.ic_graph);
-        mToolbarPressure.setTitle(getString(R.string.pressure_title));
-
-        mToolbarHumidity.setLogo(R.drawable.ic_humidity);
-        mToolbarHumidity.setTitle(getString(R.string.humidity_title));
 
         mTemperatureView = rootView.findViewById(R.id.temperature);
         mPressureView = rootView.findViewById(R.id.pressure);
@@ -467,7 +447,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -483,7 +462,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
@@ -540,23 +519,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
     }
 
-    /**
-     * Checks whether the Bluetooth adapter is enabled.
-     */
-    private boolean isBleEnabled() {
-        final BluetoothManager bm = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);
-        final BluetoothAdapter ba = bm.getAdapter();
-        return ba != null && ba.isEnabled();
-    }
-
-    /**
-     * Tries to start Bluetooth adapter.
-     */
-    private void enableBle() {
-        final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-    }
-
     private void updateEnvironmentCardView() {
         if (mDevice != null) {
             final String address = mDevice.getAddress();
@@ -584,7 +546,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void updateEnvironmentCardViewOptionsMenu(final Menu environmentStatusMenu) {
-
         final String address = mDevice.getAddress();
         if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE)) {
             environmentStatusMenu.findItem(R.id.action_temperature_notifications).setChecked(true);
@@ -615,7 +576,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         } else {
             environmentStatusMenu.findItem(R.id.action_color_notifications).setChecked(false);
         }
-
     }
 
     private void prepareTemperatureGraph() {
@@ -667,9 +627,9 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     private LineDataSet createTemperatureDataSet() {
         LineDataSet lineDataSet = new LineDataSet(null, getString(R.string.temperature_graph));
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
-        lineDataSet.setFillColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-        lineDataSet.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSet.setColor(ContextCompat.getColor(requireContext(), R.color.red));
+        lineDataSet.setFillColor(ContextCompat.getColor(requireContext(), R.color.accent));
+        lineDataSet.setHighLightColor(ContextCompat.getColor(requireContext(), R.color.accent));
         lineDataSet.setValueFormatter(new TemperatureChartValueFormatter());
         lineDataSet.setDrawValues(true);
         lineDataSet.setDrawCircles(true);
@@ -700,7 +660,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void addTemperatureEntry(final String timeStamp, final float temperatureValue) {
-
         LineData data = mLineChartTemperature.getData();
 
         if (data != null) {
@@ -717,7 +676,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
             if (temperatureValue > leftAxis.getAxisMaximum()) {
                 leftAxis.setAxisMaxValue(leftAxis.getAxisMaximum() + 20f);
-            } else if(temperatureValue < leftAxis.getAxisMinimum()) {
+            } else if (temperatureValue < leftAxis.getAxisMinimum()) {
                 leftAxis.setAxisMinValue(leftAxis.getAxisMinimum() - 20f);
             }
 
@@ -800,12 +759,11 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private LineDataSet createPressureDataSet() {
-
         LineDataSet lineDataSet = new LineDataSet(null, getString(R.string.pressure_graph));
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
-        lineDataSet.setFillColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-        lineDataSet.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSet.setColor(ContextCompat.getColor(requireContext(), R.color.red));
+        lineDataSet.setFillColor(ContextCompat.getColor(requireContext(), R.color.accent));
+        lineDataSet.setHighLightColor(ContextCompat.getColor(requireContext(), R.color.accent));
         lineDataSet.setValueFormatter(new TemperatureChartValueFormatter());
         lineDataSet.setDrawValues(true);
         lineDataSet.setDrawCircles(true);
@@ -831,7 +789,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void addPressureEntry(final String timestamp, float pressureValue) {
-
         LineData data = mLineChartPressure.getData();
 
         if (data != null) {
@@ -846,7 +803,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
             if (pressureValue < 700 && pressureValue > 600 && mLineChartPressure.getAxisLeft().getAxisMinimum() > 600) {
                 mLineChartPressure.getAxisLeft().setAxisMinValue(600);
-                mLineChartPressure.getAxisLeft().setZeroLineColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+                mLineChartPressure.getAxisLeft().setZeroLineColor(ContextCompat.getColor(requireContext(), R.color.nordicBlue));
             } else if (pressureValue < 600 && pressureValue > 500 && mLineChartPressure.getAxisLeft().getAxisMinimum() > 500) {
                 mLineChartPressure.getAxisLeft().setAxisMinValue(500);
             }
@@ -911,9 +868,9 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
         LineDataSet lineDataSet = new LineDataSet(null, getString(R.string.humidity_graph));
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        lineDataSet.setColor(ContextCompat.getColor(getActivity(), R.color.colorRed));
-        lineDataSet.setFillColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
-        lineDataSet.setHighLightColor(ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark));
+        lineDataSet.setColor(ContextCompat.getColor(requireContext(), R.color.red));
+        lineDataSet.setFillColor(ContextCompat.getColor(requireContext(), R.color.accent));
+        lineDataSet.setHighLightColor(ContextCompat.getColor(requireContext(), R.color.accent));
         lineDataSet.setValueFormatter(new HumidityChartValueFormatter());
         lineDataSet.setDrawValues(true);
         lineDataSet.setDrawCircles(true);
@@ -1058,22 +1015,21 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void loadFeatureDiscoverySequence(final Toolbar mainToolbar, final Toolbar environmentToolbar) {
-        if (!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_ENV_TUTORIAL)) {
-
+        if (!Utils.checkIfSequenceIsCompleted(requireContext(), Utils.INITIAL_ENV_TUTORIAL)) {
             final SpannableString desc = new SpannableString(getString(R.string.start_stop_env_sensors));
 
-            final TapTargetSequence sequence = new TapTargetSequence(getActivity());
+            final TapTargetSequence sequence = new TapTargetSequence(requireActivity());
             sequence.continueOnCancel(true);
             sequence.targets(
                     TapTarget.forToolbarNavigationIcon(mainToolbar, getString(R.string.discover_features)).
-                            dimColor(R.color.greyBg).
-                            outerCircleColor(R.color.colorAccent).id(0),
+                            dimColor(R.color.grey).
+                            outerCircleColor(R.color.accent).id(0),
                     TapTarget.forToolbarOverflow(environmentToolbar, desc).
-                            dimColor(R.color.greyBg).
-                            outerCircleColor(R.color.colorAccent).id(1)).listener(new TapTargetSequence.Listener() {
+                            dimColor(R.color.grey).
+                            outerCircleColor(R.color.accent).id(1)).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {
-                    Utils.saveSequenceCompletion(getContext(), Utils.INITIAL_ENV_TUTORIAL);
+                    Utils.saveSequenceCompletion(requireContext(), Utils.INITIAL_ENV_TUTORIAL);
                 }
 
                 @Override

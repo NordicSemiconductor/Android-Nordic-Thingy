@@ -50,7 +50,6 @@ import android.view.View;
 
 public class EnvironmentServiceInfoDialogFragment extends DialogFragment {
 
-
     public EnvironmentServiceInfoDialogFragment() {
 
     }

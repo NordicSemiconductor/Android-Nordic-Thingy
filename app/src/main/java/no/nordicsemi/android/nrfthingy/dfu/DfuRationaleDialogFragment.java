@@ -42,11 +42,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import no.nordicsemi.android.nrfthingy.R;
 
@@ -58,64 +59,29 @@ public class DfuRationaleDialogFragment extends DialogFragment {
     }
 
     public static DfuRationaleDialogFragment newInstance() {
-        DfuRationaleDialogFragment fragment = new DfuRationaleDialogFragment();
-        return fragment;
-    }
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        return new DfuRationaleDialogFragment();
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(R.string.dfu_title);
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_dfu_rationale, null);
-
-        final TextView mProgressText = view.findViewById(R.id.dfu_rationale);
-        mProgressText.setText(R.string.dfu_rationale);
-        alertDialogBuilder.setView(view).setPositiveButton(R.string.confirm, null).setNegativeButton(R.string.cancel, null);
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onDfuAborted();
-                dismiss();
-            }
-        });
-
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        alertDialog.setCanceledOnTouchOutside(false);
-        alertDialog.setCancelable(false);
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         mListener = (DfuRationaleFragmentListener) context;
     }
 
+    @NonNull
     @Override
-    public void onStop() {
-        super.onStop();
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        return new AlertDialog.Builder(requireContext())
+                .setView(R.layout.fragment_dialog_dfu_rationale)
+                .setTitle(R.string.dfu_title)
+                .setCancelable(false)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(final DialogInterface dialog, final int which) {
+                        mListener.onDfuAborted();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
     }
-
-
 }

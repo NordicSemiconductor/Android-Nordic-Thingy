@@ -68,7 +68,8 @@
                     android:id="@+id/environment_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/environment_current_conditions_title"
+                    app:logo="@drawable/ic_weather"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText" />
@@ -236,8 +237,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:alpha="0.12"
-                    android:background="@android:color/black" />
+                    android:background="@color/onBackground" />
 
                 <TextView
                     android:id="@+id/weather_settings"
@@ -260,7 +260,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/cardview_horizontal_padding"
             android:layout_marginRight="@dimen/cardview_horizontal_padding"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             card_view:cardCornerRadius="2dp">
 
             <LinearLayout
@@ -272,7 +272,8 @@
                     android:id="@+id/toolbar_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/temperature_title"
+                    app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
@@ -295,7 +296,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/cardview_horizontal_padding"
             android:layout_marginRight="@dimen/cardview_horizontal_padding"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             card_view:cardCornerRadius="2dp">
 
             <LinearLayout
@@ -307,7 +308,8 @@
                     android:id="@+id/toolbar_pressure"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/pressure_title"
+                    app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
@@ -330,7 +332,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/cardview_horizontal_padding"
             android:layout_marginRight="@dimen/cardview_horizontal_padding"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             card_view:cardCornerRadius="2dp">
 
@@ -343,7 +345,8 @@
                     android:id="@+id/toolbar_humidity"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/humidity_title"
+                    app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />

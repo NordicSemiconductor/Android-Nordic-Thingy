@@ -52,4 +52,5 @@
     <dimen name="sound_pager_height">400dp</dimen>
     <dimen name="margin_troubleshoot">50dp</dimen>
     <dimen name="add_thingy_margin_top">26dp</dimen>
+    <dimen name="cardview_horizontal_padding">32dp</dimen>
 </resources>

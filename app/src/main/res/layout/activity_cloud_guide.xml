@@ -41,15 +41,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/background_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/background_title"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="2dp" />
-
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         style="@style/HeaderBar"
@@ -71,7 +62,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/app_bar_layout"
-        android:layout_above="@id/background_title"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v4.view.PagerTitleStrip
@@ -80,8 +70,8 @@
             android:layout_height="32dp"
             android:layout_gravity="top"
             android:paddingBottom="8dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/textColorWhite" />
+            android:background="@color/actionBar"
+            android:textColor="@color/actionBarText" />
 
     </android.support.v4.view.ViewPager>
 

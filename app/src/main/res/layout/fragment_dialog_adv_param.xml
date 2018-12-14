@@ -62,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/adv_interval"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
+                android:maxLength="5" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -96,8 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/adv_time_out"
-                android:inputType="number"
-                style="@style/EditTextHintStyle" />
+                android:inputType="number" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView

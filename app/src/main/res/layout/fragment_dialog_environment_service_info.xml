@@ -154,10 +154,10 @@
             android:text="@string/color_intensity_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/color_view_info" />
+            app:srcCompat="@drawable/color_view" />
     </LinearLayout>
 
 </LinearLayout>

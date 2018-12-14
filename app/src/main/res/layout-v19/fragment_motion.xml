@@ -68,7 +68,8 @@
                     android:id="@+id/card_toolbar_euler"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/euler_title"
+                    app:logo="@drawable/ic_animation"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
@@ -107,7 +108,8 @@
                     android:id="@+id/card_toolbar_motion"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/motion_title"
+                    app:logo="@drawable/ic_motion"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
@@ -314,7 +316,7 @@
                             app:srcCompat="@drawable/ic_portrait_black_36px"
                             android:layout_gravity="center"/>
 
-                        <android.support.v4.widget.Space
+                        <android.widget.Space
                             android:layout_width="@dimen/activity_horizontal_margin"
                             android:layout_height="match_parent" />
 
@@ -355,7 +357,7 @@
             android:id="@+id/gravity_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:layout_marginStart="@dimen/cardview_horizontal_padding"
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -370,8 +372,9 @@
                     android:id="@+id/card_toolbar_gravity"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
+                    app:title="@string/title_gravity_vector"
+                    app:logo="@drawable/ic_apple"
                     app:titleTextAppearance="@style/Cardview.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
@@ -401,7 +404,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorRed"
+                            android:background="@color/red"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>
@@ -415,7 +418,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorGreen"
+                            android:background="@color/green"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>
@@ -429,7 +432,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorBlue"
+                            android:background="@color/blue"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>

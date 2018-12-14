@@ -177,10 +177,10 @@
                     android:layout_height="wrap_content"
                     android:background="?android:attr/selectableItemBackground">
 
-                    <ImageView
+                    <android.support.v7.widget.AppCompatImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/color_view_info"
+                        app:srcCompat="@drawable/color_view"
                         android:padding="16dp"
                         android:layout_gravity="center_vertical" />
 
