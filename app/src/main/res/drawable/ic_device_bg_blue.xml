@@ -40,7 +40,7 @@
 
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
 
-    <solid android:color="@color/blue"/>
+    <solid android:color="@color/nordicBlue"/>
     
     <size android:width="@dimen/device_icon_size" android:height="@dimen/device_icon_size"/>
 </shape>

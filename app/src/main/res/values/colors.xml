@@ -41,10 +41,10 @@
     <color name="actionBarText">@color/white</color>
     <color name="actionBarTextDisabled">#AAFFFFFF</color>
     <color name="actionBarDark">@color/nordicBlueDark</color>
-    <color name="accent">@color/nordicBlueDark</color>
+    <color name="accent">@color/nordicLake</color>
     <color name="background">#F5F5F5</color>
     <color name="onBackground">@color/nordicLightGray</color>
-    <color name="vibrant">@color/nordicBlue</color>
+    <color name="vibrant">@color/nordicLake</color>
     <color name="onVibrant">@color/white</color>
     <color name="alert">@color/nordicRed</color>
     <color name="onAlert">@color/white</color>
