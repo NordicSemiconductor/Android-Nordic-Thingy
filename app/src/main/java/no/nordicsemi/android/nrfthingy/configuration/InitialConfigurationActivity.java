@@ -459,9 +459,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length() > 0) {
-                    mConfirmDeviceName.setEnabled(true);
-                }
+                mConfirmDeviceName.setEnabled(s.toString().trim().length() > 0);
             }
 
             @Override
