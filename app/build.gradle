@@ -43,7 +43,7 @@ dependencies {
     // Thingy library
     implementation project(':thingylib')
     // Scanner Compat library
-    implementation 'no.nordicsemi.android.support.v18:scanner:1.4.0'
+    implementation 'no.nordicsemi.android.support.v18:scanner:1.3.0'
     // Material Tutorial views
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
     // Charts

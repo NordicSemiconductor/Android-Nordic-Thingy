@@ -43,7 +43,7 @@
     <color name="actionBarDark">@color/nordicBlueDark</color>
     <color name="accent">@color/nordicBlueDark</color>
     <color name="background">#F5F5F5</color>
-    <color name="onBackground">@color/nordicMediumGray</color>
+    <color name="onBackground">@color/nordicLightGray</color>
     <color name="vibrant">@color/nordicBlue</color>
     <color name="onVibrant">@color/white</color>
     <color name="alert">@color/nordicRed</color>
@@ -51,20 +51,6 @@
     <color name="fab">@color/nordicRed</color>
     <color name="onFab">@color/white</color>
     <color name="selectedMenuBackground">#FFEEEEEE</color>
-    <!--<color name="colorPrimary">#009CDE</color>
-    <color name="colorPrimaryDark">#0081B7</color>
-    <color name="colorAccent">#0081B7</color>
-    <color name="textColorWhite">#FFFFFF</color>
-    <color name="colorRed">#D32F2F</color>
-    <color name="tabSelectedTextColor">@android:color/white</color>
-    <color name="tabTextColor">#AAFFFFFF</color>
-    <color name="tabIndicatorColor">@android:color/white</color>
-    <color name="greyBg">#9A9A9A</color>
-    <color name="textColorSecondary">#727272</color>
-    <color name="actionMode">#FF7E7E7E</color>
-    <color name="textColorBlack">#000000</color>
-    <color name="disabledBgColouor">#BDBDBD</color>
-    <color name="selectedMenuBackground">#FFEEEEEE</color>-->
 
     <!--
 		Nordic logo on splash screen.
@@ -76,11 +62,6 @@
     <color name="colorNordicLogoBottom">@color/nordicBlue</color>
     <color name="colorNordicLogoTop">@color/nordicBlueslate</color>
 
-    <!--
-		Nordic logo on splash screen.
-		When using light/dark top background, consider changing status bar to light/dark
-		in styles-v23.
-	-->
     <color name="welcomeNordicLogo">@color/nordicBlue</color>
     <color name="welcomeBackground">@color/background</color>
 
