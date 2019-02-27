@@ -107,7 +107,7 @@ public class CustomPagerAdapter extends PagerAdapter {
         CLOUD_STEP_1(R.string.intro_ifttt, R.layout.cloud_step0),
         CLOUD_STEP_2(R.string.account_preparation, R.layout.cloud_step1),
         CLOUD_STEP_3(R.string.maker_webhooks_service, R.layout.cloud_step2),
-        CLOUD_STEP_4(R.string.maker_webhooks_servic_key, R.layout.cloud_step3),
+        CLOUD_STEP_4(R.string.maker_webhooks_service_key, R.layout.cloud_step3),
         CLOUD_STEP_5(R.string.access_key_to_thingy, R.layout.cloud_step4),
         CLOUD_STEP_6(R.string.enable_cloud_features, R.layout.cloud_step5);
 

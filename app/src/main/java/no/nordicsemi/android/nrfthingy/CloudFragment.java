@@ -314,7 +314,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
         final Toolbar toolbarFeatureInfo = rootView.findViewById(R.id.card_toolbar_feature_info);
         toolbarFeatureInfo.setLogo(R.drawable.ic_info_grey);
-        toolbarFeatureInfo.setTitle(R.string.freature_info);
+        toolbarFeatureInfo.setTitle(R.string.feature_info);
 
         final Toolbar toolbarDataStatistics = rootView.findViewById(R.id.card_toolbar_data_statistics);
         toolbarDataStatistics.setLogo(R.drawable.ic_data_usage);

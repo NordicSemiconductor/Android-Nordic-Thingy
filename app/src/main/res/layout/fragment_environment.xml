@@ -81,7 +81,8 @@
                     android:paddingBottom="@dimen/activity_vertical_margin"
                     android:paddingEnd="@dimen/cardview_horizontal_padding"
                     android:paddingStart="@dimen/cardview_horizontal_padding"
-                    android:paddingTop="@dimen/activity_vertical_margin">
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:baselineAligned="false">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -97,9 +98,8 @@
                         <TextView
                             android:id="@+id/temperature"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />
@@ -120,9 +120,8 @@
                         <TextView
                             android:id="@+id/pressure"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />
@@ -143,9 +142,8 @@
                         <TextView
                             android:id="@+id/humidity"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />
@@ -177,9 +175,8 @@
                         <TextView
                             android:id="@+id/carbon"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />
@@ -200,9 +197,8 @@
                         <TextView
                             android:id="@+id/tvoc"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />
@@ -225,9 +221,8 @@
                         <TextView
                             android:id="@+id/color"
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_weight="1"
                             android:gravity="center"
                             android:paddingTop="@dimen/cardview_action_padding"
                             android:textSize="16sp" />

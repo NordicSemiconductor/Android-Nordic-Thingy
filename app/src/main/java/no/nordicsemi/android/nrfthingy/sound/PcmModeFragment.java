@@ -460,7 +460,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             appsList.setAdapter(new FileBrowserAppsAdapter(getActivity()));
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);
-            new AlertDialog.Builder(getActivity()).setTitle(R.string.dfu_alert_no_filebrowser_title).setView(customView)
+            new AlertDialog.Builder(getActivity()).setTitle(R.string.dfu_alert_no_file_browser_title).setView(customView)
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialog, final int which) {

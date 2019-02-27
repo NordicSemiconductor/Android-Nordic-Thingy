@@ -48,7 +48,7 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
 		<LinearLayout
@@ -106,9 +106,8 @@
 							<TextView
 								android:id="@+id/temperature"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -129,9 +128,8 @@
 							<TextView
 								android:id="@+id/pressure"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -152,9 +150,8 @@
 							<TextView
 								android:id="@+id/humidity"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -187,9 +184,8 @@
 							<TextView
 								android:id="@+id/carbon"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -210,9 +206,8 @@
 							<TextView
 								android:id="@+id/tvoc"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -235,9 +230,8 @@
 							<TextView
 								android:id="@+id/color"
 								android:layout_width="match_parent"
-								android:layout_height="0dp"
+								android:layout_height="wrap_content"
 								android:layout_gravity="center"
-								android:layout_weight="1"
 								android:gravity="center"
 								android:paddingTop="@dimen/cardview_action_padding"
 								android:textSize="16sp"/>
@@ -345,7 +339,6 @@
 				android:id="@+id/humidity_card"
 				android:layout_width="0dp"
 				android:layout_height="match_parent"
-				android:layout_below="@+id/pressure_card"
 				android:layout_marginBottom="@dimen/activity_vertical_margin"
 				android:layout_marginLeft="@dimen/cardview_horizontal_padding"
 				android:layout_marginRight="@dimen/cardview_horizontal_padding"

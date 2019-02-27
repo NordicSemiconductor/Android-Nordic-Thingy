@@ -185,7 +185,7 @@
 					app:layout_constraintTop_toTopOf="parent"
 					app:logo="@drawable/ic_info_grey"
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
-					app:title="@string/freature_info"
+					app:title="@string/feature_info"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
 					app:titleTextAppearance="@style/Cardview.TitleText"/>
 

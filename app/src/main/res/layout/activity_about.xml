@@ -272,7 +272,7 @@
 
                 <TextView
                     style="@style/PreferenceCategoryTitle"
-                    android:text="@string/about_licenes" />
+                    android:text="@string/about_licenses" />
 
                 <LinearLayout
                     android:id="@+id/category_mpchart_license"

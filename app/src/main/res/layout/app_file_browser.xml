@@ -70,7 +70,7 @@
         android:paddingEnd="16dip"
         android:paddingStart="16dip"
         android:paddingTop="8dip"
-        android:text="@string/dfu_alert_no_filebrowser_message" />
+        android:text="@string/dfu_alert_no_file_browser_message" />
 
     <ListView
         android:id="@android:id/list"

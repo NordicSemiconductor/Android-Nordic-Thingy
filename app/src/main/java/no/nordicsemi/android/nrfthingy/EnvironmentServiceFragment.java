@@ -154,7 +154,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             mTemperature = temperature;
             mTemperatureTimeStamp = ThingyUtils.TIME_FORMAT.format(System.currentTimeMillis());
             if (mIsFragmentAttached) {
-                mTemperatureView.setText(String.format(Locale.US, getString(R.string.celcius), temperature));
+                mTemperatureView.setText(String.format(Locale.US, getString(R.string.celsius), temperature));
                 handleTemperatureGraphUpdates(mLineChartTemperature);
                 addTemperatureEntry(mTemperatureTimeStamp, Float.valueOf(mTemperature));
             }

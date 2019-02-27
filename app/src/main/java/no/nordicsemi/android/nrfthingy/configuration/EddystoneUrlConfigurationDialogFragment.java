@@ -123,7 +123,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
-        alertDialogBuilder.setTitle(getString(R.string.physcial_web_url_title));
+        alertDialogBuilder.setTitle(getString(R.string.physical_web_url_title));
         final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_eddystone_url, null);
 
         mShortUrlContainer = view.findViewById(R.id.short_url_container);
