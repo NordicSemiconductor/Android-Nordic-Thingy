@@ -37,7 +37,8 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="no.nordicsemi.android.nrfthingy">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="no.nordicsemi.android.nrfthingy">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -60,7 +61,8 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".SplashScreenActivity"
             android:label="@string/app_name"

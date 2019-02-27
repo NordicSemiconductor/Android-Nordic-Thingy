@@ -324,8 +324,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         setSupportActionBar(mainToolbar);
         mainToolbar.setTitle(getString(R.string.initial_configuration));
 
-        Intent intent = getIntent();
-        mConfig = intent.getBooleanExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, false);
+        mConfig = getIntent().getBooleanExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, false);
 
         if (mConfig) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -942,7 +941,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         final Dialog dialog = mProgressDialog.getDialog();
-        if (dialog == null || (dialog != null && !dialog.isShowing())) {
+        if (dialog == null || !dialog.isShowing()) {
             mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
         }
 
@@ -1038,7 +1037,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mConfig = intent.getBooleanExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, false);
         if (mConfig) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_white);
         }
 
         final String address = intent.getStringExtra(Utils.EXTRA_ADDRESS_DATA);
@@ -1147,10 +1145,10 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private ScanCallback mScanCallback = new ScanCallback() {
 
         @Override
-        public void onScanResult(final int callbackType, final ScanResult result) {
+        public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
             // do nothing
             final BluetoothDevice device = result.getDevice();
-            if (mDevice != null && device.equals(mDevice)) {
+            if (device.equals(mDevice)) {
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -1164,7 +1162,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         @Override
-        public void onBatchScanResults(final List<ScanResult> results) {
+        public void onBatchScanResults(@NonNull final List<ScanResult> results) {
         }
 
         @Override

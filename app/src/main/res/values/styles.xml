@@ -60,9 +60,9 @@
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="ActionBarThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">#000</item>
+        <item name="android:textColorPrimary">#fff</item>
         <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/actionBarText</item>
+        <item name="colorControlNormal">#fff</item>
         <item name="colorControlHighlight">#3fff</item>
     </style>
 

@@ -62,11 +62,4 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:elevation">5dp</item>
     </style>
-
-    <style name="ActionBarThemeOverlay">
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/actionBarText</item>
-        <item name="colorControlHighlight">#3fff</item>
-    </style>
 </resources>
