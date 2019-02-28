@@ -44,10 +44,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -128,7 +128,7 @@ public class AboutDialogFragment extends DialogFragment {
             final String versionName = requireContext().getPackageManager()
                     .getPackageInfo(requireContext().getPackageName(), 0).versionName;
             final TextView version = view.findViewById(R.id.version);
-            version.setText(getContext().getString(R.string.version, versionName));
+            version.setText(getString(R.string.version, versionName));
         } catch (final Exception e) {
             // do nothing
         }

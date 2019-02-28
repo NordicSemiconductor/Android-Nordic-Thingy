@@ -48,10 +48,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
@@ -89,10 +89,10 @@ public class ThingyService extends BaseThingyService {
         /**
          * Saves the activity state.
          *
-         * @param activitFinishing if the activity is finishing or not
+         * @param activityFinishing if the activity is finishing or not
          */
-        public final void setActivityFinishing(final boolean activitFinishing) {
-            mIsActivityFinishing = activitFinishing;
+        public final void setActivityFinishing(final boolean activityFinishing) {
+            mIsActivityFinishing = activityFinishing;
         }
 
         /**

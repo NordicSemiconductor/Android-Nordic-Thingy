@@ -41,8 +41,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
@@ -59,7 +59,8 @@
             android:text="@string/temperature_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_temp" />
@@ -78,7 +79,8 @@
             android:text="@string/pressure_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_barometer" />
@@ -97,7 +99,8 @@
             android:text="@string/humidity_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_humidity" />
@@ -116,7 +119,8 @@
             android:text="@string/eco2_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_co2" />
@@ -135,7 +139,8 @@
             android:text="@string/tvoc_title"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_leaf" />
@@ -154,7 +159,7 @@
             android:text="@string/color_intensity_title"
             android:layout_gravity="center_vertical" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/color_view" />

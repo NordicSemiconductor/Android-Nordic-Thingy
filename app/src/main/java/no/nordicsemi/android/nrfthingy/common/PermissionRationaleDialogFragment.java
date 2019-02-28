@@ -38,14 +38,13 @@
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AlertDialog;
 
 import no.nordicsemi.android.nrfthingy.R;
 
@@ -69,7 +68,7 @@ public class PermissionRationaleDialogFragment extends DialogFragment implements
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPermission = getArguments().getString(PERMISSION);
@@ -84,15 +83,10 @@ public class PermissionRationaleDialogFragment extends DialogFragment implements
         void onCancellingPermissionRationale();
     }
 
-    @Override
-    public void onAttach(Context activity) {
-        super.onAttach(activity);
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).setTitle(R.string.rationale_title)
+        final AlertDialog alertDialog = new AlertDialog.Builder(requireContext()).setTitle(R.string.rationale_title)
                 .setMessage(mRationaleMessage)
                 .setPositiveButton(R.string.rationale_request, this)
                 .setNegativeButton(R.string.rationale_cancel, this).create();
@@ -108,14 +102,14 @@ public class PermissionRationaleDialogFragment extends DialogFragment implements
             if (fragment != null) {
                 ((PermissionDialogListener) getParentFragment()).onRequestPermission(mPermission, mRequestCode);
             } else {
-                ((PermissionDialogListener) getActivity()).onRequestPermission(mPermission, mRequestCode);
+                ((PermissionDialogListener) requireActivity()).onRequestPermission(mPermission, mRequestCode);
             }
         } else if (position == DialogInterface.BUTTON_NEGATIVE) {
             Fragment fragment = getParentFragment();
             if (fragment != null) {
                 ((PermissionDialogListener) getParentFragment()).onCancellingPermissionRationale();
             } else {
-                ((PermissionDialogListener) getActivity()).onCancellingPermissionRationale();
+                ((PermissionDialogListener) requireActivity()).onCancellingPermissionRationale();
             }
         }
     }

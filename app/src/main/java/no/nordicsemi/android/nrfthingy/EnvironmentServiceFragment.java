@@ -41,14 +41,13 @@ package no.nordicsemi.android.nrfthingy;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -87,7 +86,7 @@ import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
-public class EnvironmentServiceFragment extends Fragment implements ScannerFragmentListener, EnvironmentServiceSettingsFragment.EnvironmentServiceSettingsFragmentListener {
+public class EnvironmentServiceFragment extends Fragment implements ScannerFragmentListener {
 
     private static final int REQUEST_ENABLE_BT = 1021;
     private TextView mTemperatureView;
@@ -450,7 +449,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         mIsFragmentAttached = true;
         if (context instanceof EnvironmentServiceListener) {
@@ -459,11 +458,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             throw new RuntimeException(context.toString()
                     + " must implement CloudFragmentListener");
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     private LinkedHashMap<String, Entry> saveGraphDataOnRotation(final LineChart lineChart) {
@@ -486,28 +480,9 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        //ThingyListenerHelper.unregisterThingyListener(getContext(), mThingyListener);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         ThingyListenerHelper.unregisterThingyListener(getContext(), mThingyListener);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_ENABLE_BT:
-                if (resultCode == Activity.RESULT_OK) {
-
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
@@ -660,7 +635,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void addTemperatureEntry(final String timeStamp, final float temperatureValue) {
-        LineData data = mLineChartTemperature.getData();
+        final  LineData data = mLineChartTemperature.getData();
 
         if (data != null) {
             ILineDataSet set = data.getDataSetByIndex(0);
@@ -789,7 +764,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void addPressureEntry(final String timestamp, float pressureValue) {
-        LineData data = mLineChartPressure.getData();
+        final LineData data = mLineChartPressure.getData();
 
         if (data != null) {
             ILineDataSet set = data.getDataSetByIndex(0);
@@ -838,7 +813,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         /*final ChartMarker marker = new ChartMarker(getActivity(), R.layout.marker_layout_pressure);
         mLineChartHumidity.setMarkerView(marker);*/
 
-        LineData data = new LineData();
+        final LineData data = new LineData();
         data.setValueFormatter(new TemperatureChartValueFormatter());
         data.setValueTextColor(Color.WHITE);
         mLineChartHumidity.setData(data);
@@ -865,8 +840,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private LineDataSet createHumidityDataSet() {
-
-        LineDataSet lineDataSet = new LineDataSet(null, getString(R.string.humidity_graph));
+        final LineDataSet lineDataSet = new LineDataSet(null, getString(R.string.humidity_graph));
         lineDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
         lineDataSet.setColor(ContextCompat.getColor(requireContext(), R.color.red));
         lineDataSet.setFillColor(ContextCompat.getColor(requireContext(), R.color.accent));
@@ -881,7 +855,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void plotSavedHumidityData() {
-        LinkedHashMap<String, Integer> humidityData = mListener.getSavedHumidityData(mDevice);
+        final LinkedHashMap<String, Integer> humidityData = mListener.getSavedHumidityData(mDevice);
         if (humidityData.size() > 0) {
             Set<String> timeStamps = humidityData.keySet();
             Integer pressure;
@@ -896,8 +870,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
     }
 
     private void addHumidityEntry(final String timestamp, float humidityValue) {
-
-        LineData data = mLineChartHumidity.getData();
+        final LineData data = mLineChartHumidity.getData();
 
         if (data != null) {
             ILineDataSet set = data.getDataSetByIndex(0);
@@ -925,10 +898,10 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    public class TemperatureYValueFormatter implements YAxisValueFormatter {
+    class TemperatureYValueFormatter implements YAxisValueFormatter {
         private DecimalFormat mFormat;
 
-        public TemperatureYValueFormatter() {
+        TemperatureYValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
         }
 
@@ -938,10 +911,10 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    public class TemperatureChartValueFormatter implements ValueFormatter {
+    class TemperatureChartValueFormatter implements ValueFormatter {
         private DecimalFormat mFormat;
 
-        public TemperatureChartValueFormatter() {
+        TemperatureChartValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
         }
 
@@ -951,10 +924,10 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    public class PressureChartYValueFormatter implements YAxisValueFormatter {
+    class PressureChartYValueFormatter implements YAxisValueFormatter {
         private DecimalFormat mFormat;
 
-        public PressureChartYValueFormatter() {
+        PressureChartYValueFormatter() {
             mFormat = new DecimalFormat("###,##0.00");
         }
 
@@ -964,10 +937,10 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    public class HumidityChartValueFormatter implements ValueFormatter {
+    class HumidityChartValueFormatter implements ValueFormatter {
         private DecimalFormat mFormat;
 
-        public HumidityChartValueFormatter() {
+        HumidityChartValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0");
         }
 
@@ -975,10 +948,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
             return mFormat.format(value);
         }
-    }
-
-    @Override
-    public void configureEnvironmentServiceSettings(final byte[] data) {
     }
 
     private String createColorValue(float r, float g, float b, float a) {

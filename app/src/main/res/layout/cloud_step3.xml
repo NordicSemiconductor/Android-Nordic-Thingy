@@ -36,7 +36,7 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -44,6 +44,7 @@
     android:padding="@dimen/activity_horizontal_margin">
 
     <ImageView
+        android:contentDescription="@string/cloud_step4_image"
         android:id="@+id/image"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -67,4 +68,4 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,7 +44,7 @@
     android:layout_height="wrap_content"
     android:background="@color/actionBarDark">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/nordic_logo_horiz_white"
@@ -59,10 +59,12 @@
         android:clickable="true"
         android:visibility="gone"
         tools:visibility="visible"
-        android:paddingLeft="@dimen/navdrawer_padding_left"
-        android:paddingRight="@dimen/navdrawer_padding_right">
+        android:paddingStart="@dimen/navdrawer_padding_left"
+        android:paddingEnd="@dimen/navdrawer_padding_right"
+        android:focusable="true">
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thingy_white"
@@ -92,6 +94,7 @@
             tools:visibility="visible"/>
 
         <ImageView
+            android:contentDescription="@string/battery"
             android:id="@+id/battery_level_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +104,7 @@
             tools:visibility="visible" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:id="@+id/header_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

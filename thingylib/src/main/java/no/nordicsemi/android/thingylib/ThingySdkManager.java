@@ -769,10 +769,9 @@ public class ThingySdkManager {
         if (device != null) {
             Log.v(ThingyUtils.TAG, "BINDER: " + mBinder);
             if (mBinder != null) {
-                //mBinder.enableEnvironmentNotifications(device, flag);
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    thingyConnection.enableBatteryLevelNotifcations(flag);
+                    thingyConnection.enableBatteryLevelNotifications(flag);
                 }
             }
         }

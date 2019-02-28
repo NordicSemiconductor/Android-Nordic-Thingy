@@ -37,11 +37,12 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
@@ -50,22 +51,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_pedometer"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_pedometer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="4" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -79,22 +81,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_temperature"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="4" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -108,22 +111,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_compass"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_compass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="4" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -137,22 +141,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_motion"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_motion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/frequency"
                 android:inputType="number"
                 android:maxLength="3" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -161,29 +166,23 @@
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/motion_wake_container"
+    <RadioGroup
+        android:id="@+id/rg_motion_wake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        tools:visibility="visible"
         android:visibility="gone">
 
-        <RadioGroup
-            android:id="@+id/rg_motion_wake"
+        <RadioButton
+            android:id="@+id/rb_motion_wake_on"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="@string/on" />
 
-            <RadioButton
-                android:id="@+id/rb_motion_wake_on"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/on" />
-
-            <RadioButton
-                android:id="@+id/rb_motion_wake_off"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/off" />
-        </RadioGroup>
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/rb_motion_wake_off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/off" />
+    </RadioGroup>
 </LinearLayout>

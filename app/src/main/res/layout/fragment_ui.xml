@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/ui_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                     android:layout_height="?actionBarSize"
                     android:orientation="horizontal">
 
-                    <android.support.v7.widget.Toolbar
+                    <androidx.appcompat.widget.Toolbar
                         android:id="@+id/card_toolbar_led"
                         android:layout_width="0dp"
                         android:layout_weight="1"
@@ -80,7 +80,7 @@
                         app:popupTheme="@style/ActionBarPopupThemeOverlay" />
                 </LinearLayout>
 
-                <android.support.constraint.ConstraintLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/led_color_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -89,6 +89,7 @@
                     android:paddingBottom="@dimen/activity_vertical_margin">
 
                     <ImageView
+                        android:contentDescription="Red"
                         android:id="@+id/img_led_red"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -100,6 +101,7 @@
                         android:scaleType="centerInside" />
 
                     <ImageView
+                        android:contentDescription="Green"
                         android:id="@+id/img_led_green"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -112,6 +114,7 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <ImageView
+                        android:contentDescription="Yellow"
                         android:id="@+id/img_led_yellow"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -124,6 +127,7 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <ImageView
+                        android:contentDescription="Blue"
                         android:id="@+id/img_led_blue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -136,6 +140,7 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <ImageView
+                        android:contentDescription="Purple"
                         android:id="@+id/img_led_purple"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -148,6 +153,7 @@
                         app:layout_constraintTop_toTopOf="parent"/>
 
                     <ImageView
+                        android:contentDescription="Cyan"
                         android:id="@+id/img_led_cyan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -160,6 +166,7 @@
                         android:scaleType="centerInside" />
 
                     <ImageView
+                        android:contentDescription="White"
                         android:id="@+id/img_led_white"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -171,7 +178,7 @@
                         app:layout_constraintStart_toEndOf="@+id/img_led_cyan"
                         app:layout_constraintTop_toTopOf="parent"/>
 
-                </android.support.constraint.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <LinearLayout
                     android:id="@+id/led_rgb_color_container"
@@ -180,9 +187,11 @@
                     android:orientation="horizontal"
                     android:gravity="center_horizontal"
                     android:padding="@dimen/activity_horizontal_margin"
+                    tools:visibility="visible"
                     android:visibility="gone">
 
                     <ImageView
+                        android:contentDescription="@string/color_title"
                         android:id="@+id/img_led_rgb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -203,7 +212,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/led_controler_container"
+                    android:id="@+id/led_controller_container"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:orientation="vertical">
@@ -222,7 +231,7 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/cardview_vertical_padding">
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/seek_bar_intensity"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -256,7 +265,7 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/cardview_vertical_padding">
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/seek_bar_delay"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -295,7 +304,7 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/cardview_vertical_padding">
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/seek_bar_red"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -325,7 +334,7 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/cardview_vertical_padding">
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/seek_bar_green"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -355,7 +364,7 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:layout_marginTop="@dimen/cardview_vertical_padding">
 
-                        <android.support.v7.widget.AppCompatSeekBar
+                        <androidx.appcompat.widget.AppCompatSeekBar
                             android:id="@+id/seek_bar_blue"
                             android:layout_width="0dp"
                             android:layout_weight="1"
@@ -450,12 +459,11 @@
                 </LinearLayout>
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ui_view"
             android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:layout_marginLeft="@dimen/cardview_horizontal_padding"
             android:layout_marginRight="@dimen/cardview_horizontal_padding"
@@ -466,7 +474,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_button"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
@@ -503,6 +511,6 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>

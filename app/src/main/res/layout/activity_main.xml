@@ -36,7 +36,7 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<android.support.v4.widget.DrawerLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -50,13 +50,13 @@
         android:layout_height="match_parent"
         android:background="@color/background">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             style="@style/HeaderBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
@@ -122,6 +122,7 @@
                     android:paddingEnd="@dimen/cardview_action_padding"/>
 
                 <ImageView
+                    android:contentDescription="@string/close"
                     android:id="@+id/dismiss_nfc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -132,6 +133,7 @@
                     app:srcCompat="@drawable/ic_close_white"/>
 
                 <ImageView
+                    android:contentDescription="@string/info"
                     android:id="@+id/more_nfc_info"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -142,7 +144,7 @@
                     app:srcCompat="@drawable/ic_info_white"/>
 
             </LinearLayout>
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <RelativeLayout
             android:id="@+id/fragment_container"
@@ -200,7 +202,7 @@
 
                 </LinearLayout>
 
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/connect_thingy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -219,7 +221,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <android.support.design.widget.NavigationView
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -230,4 +232,4 @@
         app:headerLayout="@layout/header_layout"
         app:itemTextColor="@color/menu_item_text" />
 
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

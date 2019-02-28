@@ -39,7 +39,11 @@
 package no.nordicsemi.android.nrfthingy.widgets;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
+
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,14 +56,15 @@ import no.nordicsemi.android.nrfthingy.R;
 
 public class CustomPagerAdapter extends PagerAdapter {
     private Context mContext;
-    private Map<Integer, View> viewMap = new HashMap<>();
+    private SparseArray<View> viewMap = new SparseArray<>();
 
-    public CustomPagerAdapter(Context context) {
+    public CustomPagerAdapter(@NonNull final Context context) {
         mContext = context;
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup collection, int position) {
+    public Object instantiateItem(@NonNull final ViewGroup collection, final int position) {
         CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
         LayoutInflater inflater = LayoutInflater.from(mContext);
         ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
@@ -70,7 +75,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull final ViewGroup container, final int position, final @NonNull Object object) {
         container.removeView((View) object);
     }
 
@@ -79,21 +84,18 @@ public class CustomPagerAdapter extends PagerAdapter {
         return CustomPagerEnum.values().length;
     }
 
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull final View view, @NonNull final Object object) {
         return view == object;
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
+    public CharSequence getPageTitle(final int position) {
+        final CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
         return mContext.getString(customPagerEnum.getTitleResId());
     }
 
     public View getCurrentView(final int key) {
-        if (viewMap.containsKey(key)) {
-            return viewMap.get(key);
-        }
-        return null;
+        return viewMap.get(key);
     }
 
     public void clearViews() {
@@ -103,7 +105,6 @@ public class CustomPagerAdapter extends PagerAdapter {
     }
 
     public enum CustomPagerEnum {
-
         CLOUD_STEP_1(R.string.intro_ifttt, R.layout.cloud_step0),
         CLOUD_STEP_2(R.string.account_preparation, R.layout.cloud_step1),
         CLOUD_STEP_3(R.string.maker_webhooks_service, R.layout.cloud_step2),
@@ -114,7 +115,7 @@ public class CustomPagerAdapter extends PagerAdapter {
         private int mTitleResId;
         private int mLayoutResId;
 
-        CustomPagerEnum(int titleResId, int layoutResId) {
+        CustomPagerEnum(final int titleResId, final int layoutResId) {
             mTitleResId = titleResId;
             mLayoutResId = layoutResId;
         }

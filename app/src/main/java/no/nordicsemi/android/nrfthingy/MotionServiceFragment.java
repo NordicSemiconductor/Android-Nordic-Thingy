@@ -40,15 +40,9 @@ package no.nordicsemi.android.nrfthingy;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,6 +75,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
@@ -114,7 +113,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
     private DatabaseHelper mDatabaseHelper;
     private ThingySdkManager mThingySdkManager = null;
-    private MotionFragmentListener mListener;
     private boolean mIsConnected = false;
 
     private ImageView mHeadingImage;
@@ -123,7 +121,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     private Renderer mRenderer;
 
     private ThingyListener mThingyListener = new ThingyListener() {
-        public float mCurrentDegree = 0.0f;
+        float mCurrentDegree = 0.0f;
         private float mHeadingDegrees;
         private RotateAnimation mHeadingAnimation;
 
@@ -214,8 +212,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         @Override
         public void onOrientationValueChangedEvent(BluetoothDevice bluetoothDevice, int orientation) {
-            mPortraitImage.setPivotX(mPortraitImage.getWidth() / 2);
-            mPortraitImage.setPivotY(mPortraitImage.getHeight() / 2);
+            mPortraitImage.setPivotX(mPortraitImage.getWidth() / 2.0f);
+            mPortraitImage.setPivotY(mPortraitImage.getHeight() / 2.0f);
             mPortraitImage.setRotation(0);
 
             if (mIsFragmentAttached) {
@@ -335,9 +333,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
         }
     };
-
-    public interface MotionFragmentListener {
-    }
 
     public static MotionServiceFragment newInstance(final BluetoothDevice device) {
         final  MotionServiceFragment fragment = new MotionServiceFragment();
@@ -516,17 +511,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mIsFragmentAttached = true;
-        if (context instanceof MotionFragmentListener) {
-            mListener = (MotionFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement CloudFragmentListener");
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if (mGlSurfaceView != null) {
@@ -552,11 +536,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     public void onStop() {
         super.onStop();
         ThingyListenerHelper.unregisterThingyListener(getContext(), mThingyListener);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -708,10 +687,10 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    public class GravityVectorYValueFormatter implements YAxisValueFormatter {
+    class GravityVectorYValueFormatter implements YAxisValueFormatter {
         private DecimalFormat mFormat;
 
-        public GravityVectorYValueFormatter() {
+        GravityVectorYValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
         }
 
@@ -721,10 +700,10 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    public class GravityVectorChartValueFormatter implements ValueFormatter {
+    class GravityVectorChartValueFormatter implements ValueFormatter {
         private DecimalFormat mFormat;
 
-        public GravityVectorChartValueFormatter() {
+        GravityVectorChartValueFormatter() {
             mFormat = new DecimalFormat("#0.00");
         }
 
@@ -787,7 +766,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA);
     }
 
-    public void enableOrientationNotifications(final boolean notificationEnabled) {
+    private void enableOrientationNotifications(final boolean notificationEnabled) {
         mThingySdkManager.enableOrientationNotifications(mDevice, notificationEnabled);
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION);
     }
@@ -824,11 +803,11 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     }
 
     private void loadFeatureDiscoverySequence() {
-        if (!Utils.checkIfSequenceIsCompleted(getContext(), Utils.INITIAL_MOTION_TUTORIAL)) {
+        if (!Utils.checkIfSequenceIsCompleted(requireContext(), Utils.INITIAL_MOTION_TUTORIAL)) {
 
             final SpannableString desc = new SpannableString(getString(R.string.start_stop_motion_sensors));
 
-            final TapTargetSequence sequence = new TapTargetSequence(getActivity());
+            final TapTargetSequence sequence = new TapTargetSequence(requireActivity());
             sequence.continueOnCancel(true);
             sequence.targets(
                     TapTarget.forToolbarOverflow(mQuaternionToolbar, desc).
@@ -836,7 +815,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                             outerCircleColor(R.color.accent).id(0)).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {
-                    Utils.saveSequenceCompletion(getContext(), Utils.INITIAL_MOTION_TUTORIAL);
+                    Utils.saveSequenceCompletion(requireContext(), Utils.INITIAL_MOTION_TUTORIAL);
                 }
 
                 @Override

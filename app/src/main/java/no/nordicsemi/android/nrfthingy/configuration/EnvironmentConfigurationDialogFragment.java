@@ -43,17 +43,17 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -63,13 +63,10 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class EnvironmentConfigurationDialogFragment extends DialogFragment {
-    private static final String CONFIGURATION_DATA = "CONFIGURATION_DATA";
-
-    private LinearLayout mTemperatureContainer = null;
-    private LinearLayout mPressureContainer = null;
-    private LinearLayout mHumidityContainer = null;
-    private LinearLayout mColorIntensityContainer = null;
-    private LinearLayout mGasModeContainer = null;
+    private ViewGroup mTemperatureContainer = null;
+    private ViewGroup mPressureContainer = null;
+    private ViewGroup mHumidityContainer = null;
+    private ViewGroup mColorIntensityContainer = null;
 
     private TextInputLayout mTemperatureIntervalLayout;
     private TextInputLayout mPressureIntervalLayout;
@@ -231,7 +228,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
         } else if (mColorIntensityContainer != null && mColorIntensityContainer.getVisibility() == View.VISIBLE) {
             interval = Integer.parseInt(mColorIntervalView.getText().toString().trim());
             mThingySdkManager.setColorIntensityInterval(mDevice, interval);
-        } else if (mGasModeContainer != null && mGasModeContainer.getVisibility() == View.VISIBLE) {
+        } else if (mGasModeView != null && mGasModeView.getVisibility() == View.VISIBLE) {
 
             int mode;
             if (mGasModeOne.isChecked()) {
@@ -400,9 +397,8 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 break;
             case 4:
                 alertDialog.setTitle(getString(R.string.gas_mode_title));
-                mGasModeContainer = view.findViewById(R.id.gas_mode_container);
                 mGasModeView = view.findViewById(R.id.rg_gas_mode);
-                mGasModeContainer.setVisibility(View.VISIBLE);
+                mGasModeView.setVisibility(View.VISIBLE);
                 mGasModeView.check(Integer.parseInt(mGasMode));
 
                 mGasModeOne = view.findViewById(R.id.rb_gas_one);

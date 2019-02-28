@@ -38,18 +38,11 @@
 
 package no.nordicsemi.android.nrfthingy;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +51,11 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
@@ -68,11 +66,10 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class UiFragment extends Fragment implements ScannerFragmentListener {
-    private static final int REQUEST_ENABLE_BT = 1021;
-    protected static final String LAST_VISIBLE_UI_MODE = "selected_color";
+    private static final String LAST_VISIBLE_UI_MODE = "selected_color";
 
-    protected int mSelectedColorIndex = ThingyUtils.DEFAULT_LED_INTENSITY;
-    protected int mSelectedRgbColorIntensity;
+    private int mSelectedColorIndex = ThingyUtils.DEFAULT_LED_INTENSITY;
+    private int mSelectedRgbColorIntensity;
 
     private LinearLayout mLedRgbColorContainer;
     private LinearLayout mLedControllerContainer;
@@ -107,7 +104,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     private ImageView mLedCyan;
     private ImageView mLedWhite;
 
-    private UIFragmetnListener mListener;
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
 
@@ -115,7 +111,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     private int mCurrentDelay;
     private int mCurrentIntensity;
     private int mCurrentLedMode;
-    private int defaultColorIndex;
 
     private Drawable mSwatchSelected;
     private GradientDrawable mRgbDrawable;
@@ -245,14 +240,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         }
     };
 
-    public interface UIFragmetnListener {
-        void OnUiFragmetnListener(final BluetoothDevice device);
-    }
-
-    public UiFragment() {
-        // Required empty public constructor
-    }
-
     public static UiFragment newInstance(final BluetoothDevice device) {
         UiFragment fragment = new UiFragment();
         final Bundle args = new Bundle();
@@ -272,9 +259,8 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_ui, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_ui, container, false);
 
         final Toolbar toolbarLed = rootView.findViewById(R.id.card_toolbar_led);
         toolbarLed.setLogo(R.drawable.ic_led);
@@ -285,7 +271,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         toolbarButton.setTitle(R.string.button_title);
 
         mLedRgbColorContainer = rootView.findViewById(R.id.led_rgb_color_container);
-        mLedControllerContainer = rootView.findViewById(R.id.led_controler_container);
+        mLedControllerContainer = rootView.findViewById(R.id.led_controller_container);
         mRgbIntensityControllerContainer = rootView.findViewById(R.id.led_rgb_container);
         mColorContainer = rootView.findViewById(R.id.led_color_container);
 
@@ -298,7 +284,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mLedCyan = rootView.findViewById(R.id.img_led_cyan);
         mLedWhite = rootView.findViewById(R.id.img_led_white);
 
-        mSwatchSelected = ContextCompat.getDrawable(getContext(), R.drawable.ic_colorpicker_swatch_selected);
+        mSwatchSelected = ContextCompat.getDrawable(requireContext(), R.drawable.ic_colorpicker_swatch_selected);
         mRgbDrawable = (GradientDrawable) mLedRgb.getDrawable();
 
         mLedRgbView = rootView.findViewById(R.id.led_rgb);
@@ -413,56 +399,23 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
             }
         });
 
-        mRedIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        final SeekBar.OnSeekBarChangeListener colorListener = new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 setupRgbColor();
             }
-        });
-
-        mGreenIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setupRgbColor();
-            }
-        });
-
-        mBlueIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                setupRgbColor();
-            }
-        });
+        };
+        mRedIntensity.setOnSeekBarChangeListener(colorListener);
+        mGreenIntensity.setOnSeekBarChangeListener(colorListener);
+        mBlueIntensity.setOnSeekBarChangeListener(colorListener);
 
         mLedIntensity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -515,7 +468,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         });
 
         if (savedInstanceState != null) {
-            final int ledMode = mCurrentLedMode = mThingySdkManager.getLedMode(mDevice);
             int color = mThingySdkManager.getLedColorIndex(mDevice);
             int colorRgbIntensity = mThingySdkManager.getLedRgbIntensity(mDevice);
             final int ledIntensity = mCurrentIntensity = mThingySdkManager.getLedColorIntensity(mDevice);
@@ -546,23 +498,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof UIFragmetnListener) {
-            mListener = (UIFragmetnListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement CloudFragmentListener");
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mLedRgbColorContainer.getVisibility() == View.VISIBLE) {
             outState.putInt(LAST_VISIBLE_UI_MODE, ThingyUtils.CONSTANT);
@@ -574,34 +510,9 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         ThingyListenerHelper.unregisterThingyListener(getContext(), mThingyListener);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_ENABLE_BT:
-                if (resultCode == Activity.RESULT_OK) {
-
-                }
-
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
@@ -613,46 +524,14 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
 
     }
 
-    public void loadLedUI() {
+    private void loadLedUI() {
         final BluetoothDevice device = mDevice;
         if (device != null && mThingySdkManager.isConnected(device)) {
             final int ledMode = mCurrentLedMode = mThingySdkManager.getLedMode(mDevice);
             int color = mThingySdkManager.getLedColorIndex(mDevice);
-            int colorRgbIntensity = mThingySdkManager.getLedRgbIntensity(mDevice);
             final int ledIntensity = mCurrentIntensity = mThingySdkManager.getLedColorIntensity(mDevice);
             final int delay = mCurrentDelay = mThingySdkManager.getLedColorBreatheDelay(mDevice);
             mSelectedRgbColorIntensity = color;
-            mSelectedColorIndex = color;
-
-            switch (ledMode) {
-                case ThingyUtils.CONSTANT:
-                    updateLedConstantModeUI();
-                    break;
-                case ThingyUtils.BREATHE:
-                    updateSelectedImageView(color);
-                    updateLedBreatheModeUI(ledIntensity, delay);
-                    break;
-                case ThingyUtils.ONE_SHOT:
-                    updateSelectedImageView(color);
-                    updateLedOneShotModeUI(ledIntensity);
-                    break;
-                case ThingyUtils.OFF:
-                    updateSelectedImageView(color);
-                    updateLedOffModeUI();
-                    break;
-            }
-        }
-    }
-
-    public void loadLedUIOnRotation() {
-        final BluetoothDevice device = mDevice;
-        if (device != null && mThingySdkManager.isConnected(device)) {
-            final int ledMode = mCurrentLedMode = mThingySdkManager.getLedMode(mDevice);
-            int color = mThingySdkManager.getLedColorIndex(mDevice);
-            int colorRgbIntensity = mThingySdkManager.getLedRgbIntensity(mDevice);
-            final int ledIntensity = mCurrentIntensity = mThingySdkManager.getLedColorIntensity(mDevice);
-            final int delay = mCurrentDelay = mThingySdkManager.getLedColorBreatheDelay(mDevice);
-            mSelectedRgbColorIntensity = colorRgbIntensity;
             mSelectedColorIndex = color;
 
             switch (ledMode) {
@@ -728,8 +607,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                     final int r = mRedIntensity.getProgress();
                     final int g = mGreenIntensity.getProgress();
                     final int b = mBlueIntensity.getProgress();
-                    final int color = Color.rgb(r, g, b);
-                    mSelectedRgbColorIntensity = color;
+                    mSelectedRgbColorIntensity = Color.rgb(r, g, b);
                     mThingySdkManager.setConstantLedMode(device, r, g, b);
                 } else {
                     final int color = mSelectedRgbColorIntensity = getColorFromIndex(ThingyUtils.DEFAULT_LED_COLOR);
@@ -763,8 +641,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
                                 final int g = mGreenIntensity.getProgress();
                                 final int b = mBlueIntensity.getProgress();
 
-                                final int color = Color.rgb(r, g, b);
-                                mSelectedRgbColorIntensity = color;
+                                mSelectedRgbColorIntensity = Color.rgb(r, g, b);
                                 mThingySdkManager.setConstantLedMode(device, r, g, b);
                             }
                         } else {

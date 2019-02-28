@@ -38,17 +38,17 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="72dp"
@@ -58,168 +58,161 @@
             android:id="@+id/label_1"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/label_2"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="16dp"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
             android:elevation="6dp"
-            android:clickable="true"/>
+            app:layout_constraintEnd_toStartOf="@+id/label_2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_2"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@id/label_1"
-            app:layout_constraintEnd_toStartOf="@+id/label_3"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
             android:elevation="6dp"
-            android:clickable="true" />
+            app:layout_constraintEnd_toStartOf="@+id/label_3"
+            app:layout_constraintStart_toEndOf="@id/label_1"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_3"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@+id/label_2"
-            app:layout_constraintEnd_toStartOf="@+id/label_4"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
-            android:elevation="6dp"/>
+            android:elevation="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/label_4"
+            app:layout_constraintStart_toEndOf="@+id/label_2"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_4"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@+id/label_3"
-            app:layout_constraintEnd_toEndOf="@+id/label_5"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
-            android:elevation="6dp" />
+            android:elevation="6dp"
+            app:layout_constraintEnd_toEndOf="@+id/label_5"
+            app:layout_constraintStart_toEndOf="@+id/label_3"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_5"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@+id/label_4"
-            app:layout_constraintEnd_toStartOf="@+id/label_6"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
-            android:elevation="6dp" />
+            android:elevation="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/label_6"
+            app:layout_constraintStart_toEndOf="@+id/label_4"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_6"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@+id/label_5"
-            app:layout_constraintEnd_toStartOf="@+id/label_7"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
-            android:elevation="6dp" />
+            android:elevation="6dp"
+            app:layout_constraintEnd_toStartOf="@+id/label_7"
+            app:layout_constraintStart_toEndOf="@+id/label_5"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <View
             android:id="@+id/label_7"
             android:layout_width="0dp"
             android:layout_height="@dimen/white_key_height"
-            app:layout_constraintStart_toEndOf="@+id/label_6"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
             android:background="@drawable/white_keys_bg"
-            tools:layout_editor_absoluteX="-15dp"
-            android:elevation="6dp" />
+            android:elevation="6dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/label_6"
+            app:layout_constraintTop_toTopOf="@+id/label_1"
+            tools:layout_editor_absoluteX="-15dp"/>
 
         <TextView
             android:id="@+id/label_8"
             android:layout_width="@dimen/black_key_width"
             android:layout_height="@dimen/black_key_height"
-            app:layout_constraintTop_toTopOf="@+id/label_1"
-            app:layout_constraintLeft_toLeftOf="@+id/label_2"
-            app:layout_constraintRight_toRightOf="@+id/label_1"
             android:background="@drawable/black_keys_bg"
             android:elevation="9dp"
-            android:clickable="true"/>
+            app:layout_constraintLeft_toLeftOf="@+id/label_2"
+            app:layout_constraintRight_toRightOf="@+id/label_1"
+            app:layout_constraintTop_toTopOf="@+id/label_1"/>
 
         <TextView
             android:id="@+id/label_9"
             android:layout_width="@dimen/black_key_width"
             android:layout_height="@dimen/black_key_height"
-            app:layout_constraintTop_toTopOf="@+id/label_2"
-            app:layout_constraintLeft_toLeftOf="@+id/label_3"
-            app:layout_constraintRight_toLeftOf="@+id/label_3"
             android:background="@drawable/black_keys_bg"
             android:elevation="9dp"
-            android:clickable="true"/>
+            app:layout_constraintLeft_toLeftOf="@+id/label_3"
+            app:layout_constraintRight_toLeftOf="@+id/label_3"
+            app:layout_constraintTop_toTopOf="@+id/label_2"/>
 
         <TextView
             android:id="@+id/label_10"
             android:layout_width="@dimen/black_key_width"
             android:layout_height="@dimen/black_key_height"
-            app:layout_constraintTop_toTopOf="@+id/label_4"
-            app:layout_constraintLeft_toLeftOf="@+id/label_5"
-            app:layout_constraintRight_toLeftOf="@+id/label_5"
             android:background="@drawable/black_keys_bg"
             android:elevation="9dp"
-            android:clickable="true"/>
+            app:layout_constraintLeft_toLeftOf="@+id/label_5"
+            app:layout_constraintRight_toLeftOf="@+id/label_5"
+            app:layout_constraintTop_toTopOf="@+id/label_4"/>
 
         <TextView
             android:id="@+id/label_11"
             android:layout_width="@dimen/black_key_width"
             android:layout_height="@dimen/black_key_height"
-            app:layout_constraintTop_toTopOf="@+id/label_5"
-            app:layout_constraintLeft_toLeftOf="@+id/label_6"
-            app:layout_constraintRight_toLeftOf="@+id/label_6"
             android:background="@drawable/black_keys_bg"
             android:elevation="9dp"
-            android:clickable="true"/>
+            app:layout_constraintLeft_toLeftOf="@+id/label_6"
+            app:layout_constraintRight_toLeftOf="@+id/label_6"
+            app:layout_constraintTop_toTopOf="@+id/label_5"/>
 
         <TextView
             android:id="@+id/label_12"
             android:layout_width="@dimen/black_key_width"
             android:layout_height="@dimen/black_key_height"
-            app:layout_constraintTop_toTopOf="@+id/label_6"
-            app:layout_constraintLeft_toLeftOf="@+id/label_7"
-            app:layout_constraintRight_toLeftOf="@+id/label_7"
             android:background="@drawable/black_keys_bg"
             android:elevation="9dp"
-            android:clickable="true"/>
-    </android.support.constraint.ConstraintLayout>
+            app:layout_constraintLeft_toLeftOf="@+id/label_7"
+            app:layout_constraintRight_toLeftOf="@+id/label_7"
+            app:layout_constraintTop_toTopOf="@+id/label_6"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingLeft="72dp"
-        android:paddingRight="72dp">
+        android:paddingRight="72dp"
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
             android:id="@+id/textView5"
-            android:text="@string/volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/volume"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <SeekBar
             android:id="@+id/seek_bar_volume"
+            style="@style/Widget.AppCompat.SeekBar"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:max="100"
-            android:progress="90"
-            style="@style/Widget.AppCompat.SeekBar"/>
+            android:progress="90"/>
 
         <TextView
             android:id="@+id/frequency_volume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="90"/>
+            tools:text="90"/>
 
     </LinearLayout>
 </LinearLayout>

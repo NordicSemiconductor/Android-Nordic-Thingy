@@ -36,7 +36,7 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -64,14 +64,14 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="PCM Files"
+                android:text="@string/pcm_files"
                 style="@style/Cardview.TitleText"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:gravity="bottom" />
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/audio_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
 
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
         app:layout_anchorGravity="bottom|right"
         android:layout_margin="@dimen/activity_vertical_margin" />
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_import"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -102,4 +102,4 @@
         app:layout_anchor="@id/fab_play"
         app:layout_anchorGravity="center|start" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

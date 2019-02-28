@@ -62,13 +62,13 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.textfield.TextInputEditText;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -587,7 +587,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Utils.EXTRA_DEVICE, mDevice);
         outState.putBoolean("Step1", mStepOneComplete);
@@ -613,7 +613,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         switch (requestCode) {
             case Utils.REQUEST_ENABLE_BT:
                 if (resultCode != RESULT_OK) {
@@ -639,7 +639,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Utils.REQUEST_ACCESS_COARSE_LOCATION:
@@ -682,7 +682,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     @Override
-    public void onDeviceSelected(BluetoothDevice device, String name) {
+    public void onDeviceSelected(final BluetoothDevice device, final String name) {
         if (mThingySdkManager != null) {
             mThingySdkManager.connectToThingy(this, device, ThingyService.class);
         }
@@ -854,7 +854,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     private void getStarted() {
-
         if (!Utils.isAppInitialisedBefore(this)) {
             SharedPreferences sp = getSharedPreferences(Utils.PREFS_INITIAL_SETUP, MODE_PRIVATE);
             sp.edit().putBoolean(Utils.INITIAL_CONFIG_STATE, true).commit();
@@ -1236,7 +1235,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                                 }
                                 if (!TextUtils.isEmpty(mAddressNfc)) {
                                     if (!address.equals(mAddressNfc)) {
-                                        Utils.showToast(this, getString(R.string.eroor_adding_multiple_devices_over_nfc));
+                                        Utils.showToast(this, getString(R.string.error_adding_multiple_devices_over_nfc));
                                         return;
                                     }
                                 }

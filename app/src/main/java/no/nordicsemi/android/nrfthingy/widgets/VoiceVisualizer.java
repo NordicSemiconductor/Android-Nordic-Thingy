@@ -42,7 +42,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -55,7 +55,7 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
     private final float[] mPointsBuffer2 = new float[2 * 512 / PRECISSION];
     private float[] mCurrentBuffer;
     private float[] mPoints;
-    private Object mLock = new Object();
+    private final Object mLock = new Object();
     private boolean isDrawing = false;
 
     private int mWidth, mHeight;
@@ -179,6 +179,6 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
         int b1 = data[start] & 0xff;
         int b2 = data[start + 1] & 0xff;
 
-        return (short) (b2 << 8 | b1 << 0);
+        return (short) (b2 << 8 | b1);
     }
 }

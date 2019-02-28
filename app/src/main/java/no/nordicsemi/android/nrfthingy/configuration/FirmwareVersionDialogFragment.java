@@ -42,10 +42,10 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -60,7 +60,6 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
     private String mFirmwareFileVersion;
-    private boolean isFirmwareUpdateDate = false;
 
     public interface FirmwareVersionDialogFragmentListener {
         void onUpdateFirmwareClickListener();
@@ -93,7 +92,7 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
         final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_firmware_version, null);
 
         final TextView fwVersion = view.findViewById(R.id.fw_version);
-        isFirmwareUpdateDate = checkIfFirmwareUpdateAvailable();
+        boolean isFirmwareUpdateDate = checkIfFirmwareUpdateAvailable();
         if (isFirmwareUpdateDate) {
             final DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
             String deviceName = databaseHelper.getDeviceName(mDevice.getAddress());

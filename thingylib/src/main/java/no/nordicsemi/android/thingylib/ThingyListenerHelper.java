@@ -44,7 +44,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,6 @@ public class ThingyListenerHelper {
                 return;
 
             final String action = intent.getAction();
-
             switch (action) {
                 case ThingyUtils.ACTION_DEVICE_CONNECTED:
                     if(globalListener != null) {

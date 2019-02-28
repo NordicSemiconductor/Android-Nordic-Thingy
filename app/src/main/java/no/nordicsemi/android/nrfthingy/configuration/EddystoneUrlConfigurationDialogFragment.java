@@ -43,12 +43,12 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
@@ -84,12 +84,12 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
-    //If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project
+    //If you're setting up the Nordic Thingy example app project from GitHub make sure to create your own project
     //on the Google Developer Console and enable the URLShortener API and use the API key in your project.
     private LinearLayout mShortUrlContainer;
 
     private Spinner mEddystoneUrlTypesView;
-    private TextInputLayout mEddystonUrlLayout;
+    private TextInputLayout mEddystoneUrlLayout;
     private TextInputEditText mEddystoneUrlView;
     private TextView mShortUrl;
     private Switch mSwitchPhysicalWeb;
@@ -127,7 +127,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_eddystone_url, null);
 
         mShortUrlContainer = view.findViewById(R.id.short_url_container);
-        mEddystonUrlLayout = view.findViewById(R.id.layout_url_data);
+        mEddystoneUrlLayout = view.findViewById(R.id.layout_url_data);
         mEddystoneUrlTypesView = view.findViewById(R.id.url_types);
         mEddystoneUrlView = view.findViewById(R.id.url_data_view);
         mShortUrl = view.findViewById(R.id.short_url);
@@ -146,7 +146,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                mEddystonUrlLayout.setError(null);
+                mEddystoneUrlLayout.setError(null);
                 mShortUrlContainer.setVisibility(View.GONE);
             }
         });
@@ -242,16 +242,6 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private boolean validateInput() {
         if (mShortUrlContainer.getVisibility() == View.VISIBLE) {
             return true;
@@ -259,21 +249,21 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
         final String urlText = mEddystoneUrlView.getText().toString().trim();
         if (urlText.isEmpty()) {
-            mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+            mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
             return false;
         }
 
         final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + urlText;
         if (url.isEmpty()) {
-            mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+            mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
             return false;
         } else {
 
             if (!Patterns.WEB_URL.matcher(url).matches()) {
-                mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+                mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
                 return false;
             } else if (Utils.encodeUri(url).length > 18) {
-                mEddystonUrlLayout.setError(getString(R.string.url_shortener_message));
+                mEddystoneUrlLayout.setError(getString(R.string.url_shortener_message));
                 return false;
             }
         }
@@ -281,7 +271,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         return true;
     }
 
-    public String getValueFromView() {
+    private String getValueFromView() {
         final String urlText;
         if (mShortUrlContainer.getVisibility() != View.VISIBLE) {
             urlText = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
@@ -408,9 +398,10 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 writeStream(out, json);
 
-                final int reponseCode = urlConnection.getResponseCode();
-                //Check for the reposnse code before reading the error stream, if not causes an exception with stream closed as there may not be an error
-                if (reponseCode != HttpURLConnection.HTTP_OK) {
+                final int responseCode = urlConnection.getResponseCode();
+                // Check for the response code before reading the error stream, if not causes an
+                // exception with stream closed as there may not be an error
+                if (responseCode != HttpURLConnection.HTTP_OK) {
                     readStream(new BufferedInputStream(urlConnection.getErrorStream()));
                 } else {
                     readStream(new BufferedInputStream(urlConnection.getInputStream()));

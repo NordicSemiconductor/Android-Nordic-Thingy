@@ -35,7 +35,7 @@
   ~ LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
-<android.support.design.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -49,13 +49,13 @@
         android:layout_height="match_parent"
         android:background="@color/background">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
             style="@style/HeaderBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/dfu_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
@@ -93,7 +93,7 @@
 					android:textColor="@color/onAlert"/>
 
 			</LinearLayout>
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/scroll_view"
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/firmware_info_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.Toolbar
+                        <androidx.appcompat.widget.Toolbar
                             android:id="@+id/dfu_fw_info_toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
@@ -232,7 +232,7 @@
                             android:layout_height="match_parent"
                             android:layout_margin="@dimen/cardview_action_padding">
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/nordic_fw"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -245,7 +245,7 @@
 								android:background="?attr/selectableItemBackground"
                                 android:layout_alignParentRight="true" />
 
-                            <android.support.v7.widget.AppCompatTextView
+                            <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/custom_fw"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -262,9 +262,9 @@
                         </RelativeLayout>
                     </LinearLayout>
 
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/dfu_target_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -279,7 +279,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.Toolbar
+                        <androidx.appcompat.widget.Toolbar
                             android:id="@+id/dfu_target_toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
@@ -311,9 +311,9 @@
 
                         </LinearLayout>
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/dfu_status_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -329,7 +329,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <android.support.v7.widget.Toolbar
+                        <androidx.appcompat.widget.Toolbar
                             android:id="@+id/dfu_status_toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
@@ -354,6 +354,7 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
+                                    android:importantForAccessibility="no"
                                     android:id="@+id/dfu_step_one_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -376,6 +377,7 @@
                                 android:layout_height="@dimen/cardview_action_padding" />
 
                             <LinearLayout
+                                android:importantForAccessibility="no"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
@@ -407,6 +409,7 @@
                                 android:layout_height="wrap_content">
 
                                 <ImageView
+                                    android:importantForAccessibility="no"
                                     android:id="@+id/dfu_step_three_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -463,6 +466,7 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
+                                    android:importantForAccessibility="no"
                                     android:id="@+id/dfu_step_four_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -484,12 +488,12 @@
                         </LinearLayout>
 
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/dfu_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -500,4 +504,4 @@
         app:elevation="6dp"
         app:layout_anchor="@id/container"
         app:layout_anchorGravity="bottom|right|end"/>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -37,397 +37,206 @@
   -->
 
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
+            style="@style/PreferenceCategoryLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                style="@style/PreferenceCategoryTitle"
+                android:text="@string/settings_environment"/>
+
             <LinearLayout
-                style="@style/PreferenceCategoryLayout"
+                android:id="@+id/category_temp_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="?android:attr/selectableItemBackground">
 
-                <TextView
-                    style="@style/PreferenceCategoryTitle"
-                    android:text="@string/settings_environment" />
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_temp"/>
 
                 <LinearLayout
-                    android:id="@+id/category_temp_interval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_temp"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_temperature"/>
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/category_temp_interval_summary"
+                        style="@style/PreferenceCategorySummary"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_temperature" />
-
-                        <TextView
-                            android:id="@+id/category_temp_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_pressure_interval"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_barometer"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_pressure" />
-
-                        <TextView
-                            android:id="@+id/category_pressure_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_humidity_interval"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_humidity"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_humidity" />
-
-                        <TextView
-                            android:id="@+id/category_humidity_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_color_intensity_interval"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <android.support.v7.widget.AppCompatImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/color_view"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_color_intensity" />
-
-                        <TextView
-                            android:id="@+id/category_color_intensity_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_gas_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_gas_mask"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/air_quality_interval" />
-
-                        <TextView
-                            android:id="@+id/category_gas_mode_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
             </LinearLayout>
 
+            <View style="@style/PreferenceCategoryDivider"/>
+
             <LinearLayout
-                style="@style/PreferenceCategoryLayout"
+                android:id="@+id/category_pressure_interval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:background="?android:attr/selectableItemBackground">
 
-                <TextView
-                    style="@style/PreferenceCategoryTitle"
-                    android:text="@string/settings_motion" />
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_barometer"/>
 
                 <LinearLayout
-                    android:id="@+id/category_pedometer_interval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_walk"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_pressure"/>
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/category_pressure_interval_summary"
+                        style="@style/PreferenceCategorySummary"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
 
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_pedometer" />
+            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/category_pedometer_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
+            <View style="@style/PreferenceCategoryDivider"/>
 
-                    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/category_humidity_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_humidity"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_humidity"/>
+
+                    <TextView
+                        android:id="@+id/category_humidity_interval_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
-                <View style="@style/PreferenceCategoryDivider" />
+            </LinearLayout>
+
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_color_intensity_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/color_view"/>
 
                 <LinearLayout
-                    android:id="@+id/category_motion_temperature_interval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_temp"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_color_intensity"/>
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/category_color_intensity_interval_summary"
+                        style="@style/PreferenceCategorySummary"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_temperature_compensation" />
-
-                        <TextView
-                            android:id="@+id/category_motion_temperature_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
-                <View style="@style/PreferenceCategoryDivider" />
+            </LinearLayout>
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_gas_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_gas_mask"/>
 
                 <LinearLayout
-                    android:id="@+id/category_compass_interval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_explore"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/air_quality_interval"/>
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/category_gas_mode_summary"
+                        style="@style/PreferenceCategorySummary"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_compass_compensation" />
-
-                        <TextView
-                            android:id="@+id/category_compass_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_motion_interval"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_animation"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/interval_motion" />
-
-                        <TextView
-                            android:id="@+id/category_motion_interval_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <View style="@style/PreferenceCategoryDivider" />
-
-                <LinearLayout
-                    android:id="@+id/category_wake_on_motion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_pressure"
-                        android:padding="16dp"
-                        android:layout_gravity="center_vertical" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:minHeight="@dimen/preference_category_height"
-                        android:gravity="center_vertical">
-
-                        <TextView
-                            style="@style/PreferenceCategory"
-                            android:text="@string/wake_on_motion_title" />
-
-                        <TextView
-                            android:id="@+id/category_wake_on_motion_summary"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/PreferenceCategorySummary" />
-
-                    </LinearLayout>
+                        android:layout_height="wrap_content"/>
 
                 </LinearLayout>
 
@@ -435,6 +244,201 @@
 
         </LinearLayout>
 
-    </ScrollView>
+        <LinearLayout
+            style="@style/PreferenceCategoryLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-</RelativeLayout>
+            <TextView
+                style="@style/PreferenceCategoryTitle"
+                android:text="@string/settings_motion"/>
+
+            <LinearLayout
+                android:id="@+id/category_pedometer_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_walk"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_pedometer"/>
+
+                    <TextView
+                        android:id="@+id/category_pedometer_interval_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_motion_temperature_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_temp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_temperature_compensation"/>
+
+                    <TextView
+                        android:id="@+id/category_motion_temperature_interval_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_compass_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_explore"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_compass_compensation"/>
+
+                    <TextView
+                        android:id="@+id/category_compass_interval_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_motion_interval"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_animation"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/interval_motion"/>
+
+                    <TextView
+                        android:id="@+id/category_motion_interval_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View style="@style/PreferenceCategoryDivider"/>
+
+            <LinearLayout
+                android:id="@+id/category_wake_on_motion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground">
+
+                <ImageView
+                    android:importantForAccessibility="no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    app:srcCompat="@drawable/ic_pressure"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/preference_category_height"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/PreferenceCategory"
+                        android:text="@string/wake_on_motion_title"/>
+
+                    <TextView
+                        android:id="@+id/category_wake_on_motion_summary"
+                        style="@style/PreferenceCategorySummary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

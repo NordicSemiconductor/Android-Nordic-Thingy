@@ -64,16 +64,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
@@ -487,7 +487,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
         setGUI();
         DfuServiceListenerHelper.registerProgressListener(this, mDfuProgressListener);
-        registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
+        }
         loadNfcAdapter();
         loadFeatureDiscoverySequence();
     }
@@ -557,7 +559,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onSaveInstanceState(final Bundle outState) {
+    protected void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Utils.NORDIC_FW, mIsNordicFw);
         outState.putInt(Utils.DATA_FILE_TYPE, mFileType);
@@ -596,7 +598,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         super.onDestroy();
         mThingySdkManager.unbindService(this);
         DfuServiceListenerHelper.unregisterProgressListener(this, mDfuProgressListener);
-        unregisterReceiver(mLocationProviderChangedReceiver);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            unregisterReceiver(mLocationProviderChangedReceiver);
+        }
     }
 
     @Override
@@ -867,12 +871,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private ScanCallback scanCallback = new ScanCallback() {
 
         @Override
-        public void onScanResult(final int callbackType, final ScanResult result) {
+        public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
             // do nothing
         }
 
         @Override
-        public void onBatchScanResults(final List<ScanResult> results) {
+        public void onBatchScanResults(final @NonNull List<ScanResult> results) {
             for (final ScanResult result : results) {
                 if (mNewAddress != null && mNewAddress.equals(result.getDevice().getAddress())) {
                     mScanHandler.post(new Runnable() {
@@ -965,9 +969,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mFileSize = Utils.humanReadableByteCount(Long.parseLong(size), true);
                 mFileSizeView.setText(mFileSize);
             }
-        } else {
-            /*mFilePath = null;
-            mFileStreamUri = null;*/
         }
     }
 
@@ -1018,12 +1019,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     private final DfuProgressListener mDfuProgressListener = new DfuProgressListenerAdapter() {
         @Override
-        public void onDeviceConnecting(final String deviceAddress) {
+        public void onDeviceConnecting(@NonNull final String deviceAddress) {
             //mProgressBar.setText(R.string.dfu_status_connecting);
         }
 
         @Override
-        public void onDfuProcessStarting(final String deviceAddress) {
+        public void onDfuProcessStarting(@NonNull final String deviceAddress) {
             if (mEnableBootloaderView.getAlpha() < 1.0f) {
                 mEnabledBootloaderAlpha = 1.0f;
                 mEnableBootloaderView.setAlpha(mEnabledBootloaderAlpha);
@@ -1033,11 +1034,11 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onEnablingDfuMode(final String deviceAddress) {
+        public void onEnablingDfuMode(@NonNull final String deviceAddress) {
         }
 
         @Override
-        public void onFirmwareValidating(final String deviceAddress) {
+        public void onFirmwareValidating(@NonNull final String deviceAddress) {
         }
 
         @Override
@@ -1045,7 +1046,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onDfuCompleted(final String deviceAddress) {
+        public void onDfuCompleted(@NonNull final String deviceAddress) {
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             mScanHandler.postDelayed(new Runnable() {
                 @Override
@@ -1059,7 +1060,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onDfuAborted(final String deviceAddress) {
+        public void onDfuAborted(@NonNull final String deviceAddress) {
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -1073,7 +1074,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onProgressChanged(final String deviceAddress, final int percent, final float speed, final float avgSpeed, final int currentPart, final int partsTotal) {
+        public void onProgressChanged(@NonNull final String deviceAddress, final int percent, final float speed, final float avgSpeed, final int currentPart, final int partsTotal) {
 
             if (partsTotal > 1) {
                 mUploadingFwMsg.setText(getString(R.string.dfu_status_uploading_part, currentPart, partsTotal));
@@ -1107,7 +1108,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
 
         @Override
-        public void onError(final String deviceAddress, final int error, final int errorType, final String message) {
+        public void onError(@NonNull final String deviceAddress, final int error, final int errorType, final String message) {
             Log.v(Utils.TAG, "Error: " + message);
             //final String errorMessage = parseError(error, errorType, message);
             onDfuError(message, error, deviceAddress);

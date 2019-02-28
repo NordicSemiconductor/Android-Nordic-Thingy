@@ -41,8 +41,10 @@ package no.nordicsemi.android.nrfthingy.thingy;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.ThemedSpinnerAdapter;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.ThemedSpinnerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,21 +56,20 @@ import java.util.ArrayList;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements ThemedSpinnerAdapter {
-
     private Context mContext;
     private ArrayList<BluetoothDevice> mThingyList;
     private final ThemedSpinnerAdapter.Helper mDropDownHelper;
     private ActionListener mListener;
 
     public interface ActionListener {
-        void onAddNewThingee();
+        void onAddNewThingy();
     }
 
-    public ThingyAdapter(Context context, ArrayList<BluetoothDevice> thingeeList) {
-        super(context, R.layout.custom_spinner, thingeeList);
+    public ThingyAdapter(final Context context, final ArrayList<BluetoothDevice> thingyList) {
+        super(context, R.layout.custom_spinner, thingyList);
         this.mContext = context;
         this.mDropDownHelper = new ThemedSpinnerAdapter.Helper(this.mContext);
-        mThingyList = thingeeList;
+        mThingyList = thingyList;
         mListener = (ActionListener) mContext;
     }
 
@@ -78,7 +79,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     }
 
     @Override
-    public BluetoothDevice getItem(int position) {
+    public BluetoothDevice getItem(final int position) {
         if (mThingyList.size() == 0)
             return null;
 
@@ -86,14 +87,15 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     }
 
     @Override
-    public long getItemId(int position) {
+    public long getItemId(final int position) {
         if (position > 0)
             return super.getItemId(position - 1);
         return 0;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, final View convertView, @NonNull final ViewGroup parent) {
         final LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View spinnerView = inflater.inflate(R.layout.custom_spinner, parent, false);
         TextView main_text = spinnerView.findViewById(R.id.tv_dropdown);
@@ -103,7 +105,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     }
 
     @Override
-    public void setDropDownViewTheme(@Nullable Resources.Theme theme) {
+    public void setDropDownViewTheme(@Nullable final Resources.Theme theme) {
         mDropDownHelper.setDropDownViewTheme(theme);
     }
 
@@ -114,7 +116,7 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(final int position, final View convertView, @NonNull final ViewGroup parent) {
         View view;
         ViewHolder holder;
 
@@ -130,21 +132,19 @@ public class ThingyAdapter extends ArrayAdapter<BluetoothDevice> implements Them
 
 
         final String name = mThingyList.get(position).getName();
-        if (holder != null)
-            holder.label.setText(name);
+        holder.label.setText(name);
         return view;
     }
 
-    public View newToolbarView(final Context context, final View convertView, final ViewGroup viewGroup) {
-
+    private View newToolbarView(final Context context, final View convertView, final ViewGroup viewGroup) {
         LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
         final View view = inflater.inflate(R.layout.custom_add_thingy, viewGroup, false);
-        final TextView add_thingee = view.findViewById(R.id.add_thingee);
-        add_thingee.setText(R.string.action_add);
-        add_thingee.setOnClickListener(new View.OnClickListener() {
+        final TextView addThingy = view.findViewById(R.id.add_thingee);
+        addThingy.setText(R.string.action_add);
+        addThingy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onAddNewThingee();
+                mListener.onAddNewThingy();
             }
         });
         return view;

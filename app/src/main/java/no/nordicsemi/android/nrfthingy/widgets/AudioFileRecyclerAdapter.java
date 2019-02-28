@@ -39,7 +39,9 @@
 package no.nordicsemi.android.nrfthingy.widgets;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,25 +55,23 @@ import java.util.ArrayList;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecyclerAdapter.CustomViewHolder> {
-
     private ArrayList<File> mAudioFileList;
     private ArrayList<String> mAudioFileDisplayNameList;
-    private Context mContext;
     private final LayoutInflater inflater;
     private RadioButton lastCheckedRadioButton;
     private int mSelectedItemPosition = -1;
     private int selectedItemPosition;
     private boolean mOnClickEnabled = true;
 
-    public AudioFileRecyclerAdapter(Context context) {
+    public AudioFileRecyclerAdapter(final Context context) {
         this.inflater = LayoutInflater.from(context);
-        this.mContext = context;
         mAudioFileList = new ArrayList<>();
         mAudioFileDisplayNameList = new ArrayList<>();
     }
 
+    @NonNull
     @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, final int type) {
+    public CustomViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup, final int type) {
 
         View view = inflater.inflate(R.layout.list_item_audio, viewGroup, false);
         view.setSelected(true);
@@ -79,7 +79,7 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
     }
 
     @Override
-    public void onBindViewHolder(final CustomViewHolder customViewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final CustomViewHolder customViewHolder, final int position) {
         final File file = mAudioFileList.get(position);
         customViewHolder.audioFileNameView.setText(file.getName());
         customViewHolder.relativeLayout.setTag(position);
@@ -160,11 +160,11 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected LinearLayout relativeLayout;
-        protected TextView audioFileNameView;
-        protected RadioButton audioRadioButton;
+        LinearLayout relativeLayout;
+        TextView audioFileNameView;
+        RadioButton audioRadioButton;
 
-        public CustomViewHolder(View view) {
+        CustomViewHolder(final View view) {
             super(view);
             view.setSelected(false);
             relativeLayout = view.findViewById(R.id.audio_list_item_container);

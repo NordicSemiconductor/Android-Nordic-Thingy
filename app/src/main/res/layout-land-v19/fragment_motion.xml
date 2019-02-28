@@ -50,7 +50,7 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
-		<android.support.v7.widget.CardView
+		<androidx.cardview.widget.CardView
 			android:id="@+id/animation_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
 				android:layout_height="match_parent"
 				android:orientation="vertical">
 
-				<android.support.v7.widget.Toolbar
+				<androidx.appcompat.widget.Toolbar
 					android:id="@+id/card_toolbar_euler"
 					android:layout_width="match_parent"
 					android:layout_height="?actionBarSize"
@@ -88,9 +88,9 @@
 						surfaceview:renderMode="RENDERMODE_WHEN_DIRTY"/>
 				</LinearLayout>
 			</LinearLayout>
-		</android.support.v7.widget.CardView>
+		</androidx.cardview.widget.CardView>
 
-		<android.support.v7.widget.CardView
+		<androidx.cardview.widget.CardView
 			android:id="@+id/motion_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 
-				<android.support.v7.widget.Toolbar
+				<androidx.appcompat.widget.Toolbar
 					android:id="@+id/card_toolbar_motion"
 					android:layout_width="match_parent"
 					android:layout_height="?actionBarSize"
@@ -136,6 +136,7 @@
 							android:orientation="horizontal">
 
 							<ImageView
+								android:contentDescription="@string/steps"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
 								android:layout_gravity="center"
@@ -192,6 +193,7 @@
 							android:orientation="horizontal">
 
 							<ImageView
+								android:contentDescription="@string/tap_count"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
 								android:layout_gravity="center"
@@ -265,6 +267,7 @@
 							android:orientation="horizontal">
 
 							<ImageView
+								android:contentDescription="@string/title_heading"
 								android:id="@+id/heading_image"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
@@ -323,6 +326,7 @@
 							android:orientation="horizontal">
 
 							<ImageView
+								android:contentDescription="@string/orientation"
 								android:layout_width="wrap_content"
 								android:layout_height="wrap_content"
 								android:layout_gravity="center"
@@ -343,6 +347,7 @@
 									android:textSize="30sp"/>
 
 								<ImageView
+									android:importantForAccessibility="no"
 									android:id="@+id/portrait_image"
 									android:layout_width="wrap_content"
 									android:layout_height="wrap_content"
@@ -386,9 +391,9 @@
 
 			</LinearLayout>
 
-		</android.support.v7.widget.CardView>
+		</androidx.cardview.widget.CardView>
 
-		<android.support.v7.widget.CardView
+		<androidx.cardview.widget.CardView
 			android:id="@+id/gravity_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -403,7 +408,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical">
 
-				<android.support.v7.widget.Toolbar
+				<androidx.appcompat.widget.Toolbar
 					android:id="@+id/card_toolbar_gravity"
 					android:layout_width="match_parent"
 					android:layout_height="?actionBarSize"
@@ -476,7 +481,7 @@
 					</TableRow>
 				</TableLayout>
 			</LinearLayout>
-		</android.support.v7.widget.CardView>
+		</androidx.cardview.widget.CardView>
 
 	</LinearLayout>
 

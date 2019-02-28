@@ -43,16 +43,17 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -65,11 +66,10 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 public class MotionConfigurationDialogFragment extends DialogFragment {
     private static final String CONFIGURATION_DATA = "CONFIGURATION_DATA";
 
-    private LinearLayout mPedometerContainer = null;
-    private LinearLayout mTemperatureContainer = null;
-    private LinearLayout mCompassContainer = null;
-    private LinearLayout mMotionContainer = null;
-    private LinearLayout mWakeOnMotionContainer = null;
+    private ViewGroup mPedometerContainer = null;
+    private ViewGroup mTemperatureContainer = null;
+    private ViewGroup mCompassContainer = null;
+    private ViewGroup mMotionContainer = null;
 
     private TextInputLayout mPedometerIntervalLayout;
     private TextInputLayout mTemperatureIntervalLayout;
@@ -226,7 +226,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
         } else if (mMotionContainer != null && mMotionContainer.getVisibility() == View.VISIBLE) {
             final int motionInterval = Integer.parseInt(mMotionIntervalView.getText().toString());
             mThingySdkManager.setMotionProcessingFrequency(mDevice, motionInterval);
-        } else if (mWakeOnMotionContainer != null && mWakeOnMotionContainer.getVisibility() == View.VISIBLE) {
+        } else if (mWakeOnMotionView != null && mWakeOnMotionView.getVisibility() == View.VISIBLE) {
             int mode;
             if (mOn.isChecked()) {
                 mode = 1;
@@ -386,9 +386,8 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 4:
                 alertDialog.setTitle(getString(R.string.wake_on_motion_title));
-                mWakeOnMotionContainer = view.findViewById(R.id.motion_wake_container);
                 mWakeOnMotionView = view.findViewById(R.id.rg_motion_wake);
-                mWakeOnMotionContainer.setVisibility(View.VISIBLE);
+                mWakeOnMotionView.setVisibility(View.VISIBLE);
 
                 mOn = view.findViewById(R.id.rb_motion_wake_on);
                 mOff = view.findViewById(R.id.rb_motion_wake_off);

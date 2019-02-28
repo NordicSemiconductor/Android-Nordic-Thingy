@@ -67,19 +67,19 @@ import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -125,11 +125,7 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         EnvironmentServiceFragment.EnvironmentServiceListener,
-        UiFragment.UIFragmetnListener,
-        MotionServiceFragment.MotionFragmentListener,
-        CloudFragment.CloudFragmentListener,
-        EnvironmentServiceSettingsFragment.EnvironmentServiceSettingsFragmentListener,
-        ConfirmThingyDeletionDialogFragment.ConfirmThingeeDeletionListener,
+        ConfirmThingyDeletionDialogFragment.ConfirmThingyDeletionListener,
         ThingyAdapter.ActionListener,
         ThingySdkManager.ServiceConnectionListener,
         PermissionRationaleDialogFragment.PermissionDialogListener,
@@ -186,9 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView mBatteryLevel;
     private ImageView mBatteryLevelImg;
     private NFCTagFoundDialogFragment mNfcTagFoundDialogFragment;
-
-    public MainActivity() {
-    }
 
     private ThingyListener mThingyListener = new ThingyListener() {
         @Override
@@ -626,11 +619,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mDevice != null) {
             if (mThingySdkManager.isConnected(mDevice)) {
@@ -1006,15 +994,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onAddNewThingee() {
+    public void onAddNewThingy() {
         Intent intent = new Intent(this, InitialConfigurationActivity.class);
         intent.putExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, true);
         startActivity(intent);
-    }
-
-    @Override
-    public void configureEnvironmentServiceSettings(final byte[] data) {
-
     }
 
     private void enableSelection() {
@@ -1031,8 +1014,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mThingySdkManager != null) {
             final List<BluetoothDevice> devices = new ArrayList<>();
             devices.addAll(mThingySdkManager.getConnectedDevices());
-            ArrayList<Thingy> thigyList = mDatabaseHelper.getSavedDevices();
-            if ((devices.size() > 0) || (thigyList != null && thigyList.size() > 0)) {
+            ArrayList<Thingy> thingyList = mDatabaseHelper.getSavedDevices();
+            if ((devices.size() > 0) || (thingyList != null && thingyList.size() > 0)) {
                 updateHeaderView(View.VISIBLE);
                 createFragmentDrawerMenu();
             } else {
@@ -1512,11 +1495,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void OnUiFragmetnListener(BluetoothDevice device) {
-
-    }
-
-    @Override
     public LinkedHashMap<String, String> getSavedTemperatureData(BluetoothDevice device) {
         if (mThingySdkManager != null) {
             return mThingySdkManager.getSavedTemperatureData(device);
@@ -1570,7 +1548,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void deleteThingee(BluetoothDevice device) {
+    public void deleteThingy(BluetoothDevice device) {
         clearFragments();
         if (mThingySdkManager.isConnected(device)) {
             mDatabaseHelper.removeDevice(device.getAddress());
@@ -1667,7 +1645,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ScanCallback mScanCallback = new ScanCallback() {
 
         @Override
-        public void onScanResult(final int callbackType, final ScanResult result) {
+        public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
             // do nothing
             final BluetoothDevice device = result.getDevice();
             if (mAddress != null && mAddress.equals(device.getAddress())) {
@@ -1678,7 +1656,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return;
             }
 
-            if (mDevice != null && device.equals(mDevice)) {
+            if (device.equals(mDevice)) {
                 new Handler().post(new Runnable() {
                     @Override
                     public void run() {
@@ -1691,7 +1669,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @Override
-        public void onBatchScanResults(final List<ScanResult> results) {
+        public void onBatchScanResults(@NonNull final List<ScanResult> results) {
         }
 
         @Override
@@ -1774,11 +1752,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onCancellingPermissionRationale() {
         Utils.showToast(this, getString(R.string.requested_permission_not_granted_rationale));
-    }
-
-    @Override
-    public void OnCloudFragmentListener(BluetoothDevice device) {
-
     }
 
     private boolean checkIfFirmwareUpdateAvailable() {

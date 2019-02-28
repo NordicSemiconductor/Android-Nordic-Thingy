@@ -44,8 +44,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,7 +105,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     private String mCloudToken;
     private boolean mIsFragmentAttached = false;
 
-    private CloudFragmentListener mListener;
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
     private static final DecimalFormat TIME_FORMAT = new DecimalFormat("#0.00");
@@ -258,14 +257,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
     };
 
-    public interface CloudFragmentListener {
-        void OnCloudFragmentListener(final BluetoothDevice device);
-    }
-
-    public CloudFragment() {
-        // Required empty public constructor
-    }
-
     public static CloudFragment newInstance(final BluetoothDevice device) {
         CloudFragment fragment = new CloudFragment();
         final Bundle args = new Bundle();
@@ -330,7 +321,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         mDownloadedView = rootView.findViewById(R.id.downloaded);
 
         mTemperatureSwitch = rootView.findViewById(R.id.switch_temperature);
-        mPressureSwitch = rootView.findViewById(R.id.switch_pressuure);
+        mPressureSwitch = rootView.findViewById(R.id.switch_pressure);
         mButtonStateSwitch = rootView.findViewById(R.id.switch_button);
 
         mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
@@ -408,23 +399,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mIsFragmentAttached = true;
-        if (context instanceof CloudFragmentListener) {
-            mListener = (CloudFragmentListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement CloudFragmentListener");
-        }
-    }
-
-    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("UPLOADED", mUploadedSize);
@@ -435,12 +409,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     public void onDetach() {
         super.onDetach();
         mIsFragmentAttached = false;
-        mListener = null;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -451,7 +419,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     @Override
     public void onTokenChanged() {
-        final String token = Utils.getIFTTTToken(getContext());
+        final String token = Utils.getIFTTTToken(requireContext());
         if (token.isEmpty()) {
             mTemperatureSwitch.setChecked(false);
             mPressureSwitch.setChecked(false);
@@ -481,7 +449,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         final int temperatureInterval = mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
         final int pressureInterval = mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
         final int buttonState = mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
-        mCloudToken = Utils.getIFTTTToken(getContext());
+        mCloudToken = Utils.getIFTTTToken(requireContext());
 
         mTemperatureIntervalView.setText((String.valueOf(temperatureInterval)));
         mPressureIntervalView.setText((String.valueOf(pressureInterval)));
@@ -636,7 +604,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         private final String json;
         private final int eventType;
 
-        public CloudTask(final int eventType, final String json) {
+        CloudTask(final int eventType, final String json) {
             this.eventType = eventType;
             this.json = json;
         }

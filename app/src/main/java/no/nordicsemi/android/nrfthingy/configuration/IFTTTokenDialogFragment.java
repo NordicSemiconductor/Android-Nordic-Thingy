@@ -79,12 +79,12 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -97,7 +97,6 @@ import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 
 public class IFTTTokenDialogFragment extends DialogFragment {
-
     private TextInputLayout mCloudTokenLayout;
     private TextInputEditText mCloudTokenView;
 
@@ -109,24 +108,20 @@ public class IFTTTokenDialogFragment extends DialogFragment {
         void onTokenChanged();
     }
 
-    public IFTTTokenDialogFragment() {
-    }
-
     public static IFTTTokenDialogFragment newInstance() {
-        IFTTTokenDialogFragment fragment = new IFTTTokenDialogFragment();
-        return fragment;
+        return new IFTTTokenDialogFragment();
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCloudToken = Utils.getIFTTTToken(getContext());
+        mCloudToken = Utils.getIFTTTToken(requireContext());
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.cloud_token_settings));
         alertDialogBuilder.setMessage(R.string.cloud_token_rationale);
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_ifttt_token, null);
@@ -182,12 +177,12 @@ public class IFTTTokenDialogFragment extends DialogFragment {
                 final String token = mCloudTokenView.getText().toString().trim();
                 if (!mSwitchClearToken.isChecked()) {
                     if (validateInput()) {
-                        Utils.saveIFTTTTokenToPreferences(getContext(), token);
+                        Utils.saveIFTTTTokenToPreferences(requireContext(), token);
                         dismiss();
                         ((IFTTTokenDialogFragmentListener) getParentFragment()).onTokenChanged();
                     }
                 } else {
-                    Utils.saveIFTTTTokenToPreferences(getContext(), token);
+                    Utils.saveIFTTTTokenToPreferences(requireContext(), token);
                     dismiss();
                     ((IFTTTokenDialogFragmentListener) getParentFragment()).onTokenChanged();
                 }
@@ -205,16 +200,6 @@ public class IFTTTokenDialogFragment extends DialogFragment {
         return alertDialog;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private boolean validateInput() {
         final String cloudToken = mCloudTokenView.getText().toString().trim();
         if (cloudToken.isEmpty() || cloudToken.getBytes().length > 100) {
@@ -225,7 +210,7 @@ public class IFTTTokenDialogFragment extends DialogFragment {
     }
 
     private void updateUi() {
-        if (!Utils.getIFTTTToken(getContext()).isEmpty()) {
+        if (!Utils.getIFTTTToken(requireContext()).isEmpty()) {
             mSwitchClearToken.setChecked(false);
             mCloudTokenView.setEnabled(true);
         } else {

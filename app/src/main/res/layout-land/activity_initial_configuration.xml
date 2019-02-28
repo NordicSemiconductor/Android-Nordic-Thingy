@@ -45,13 +45,13 @@
 	android:background="@color/background"
 	android:orientation="vertical">
 
-	<android.support.design.widget.AppBarLayout
+	<com.google.android.material.appbar.AppBarLayout
 		android:id="@+id/app_bar_layout"
 		style="@style/HeaderBar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
 
-		<android.support.v7.widget.Toolbar
+		<androidx.appcompat.widget.Toolbar
 			android:id="@+id/toolbar"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
@@ -129,7 +129,7 @@
 				android:textColor="@color/onAlert"/>
 
 		</LinearLayout>
-	</android.support.design.widget.AppBarLayout>
+	</com.google.android.material.appbar.AppBarLayout>
 
 	<ScrollView
 		android:id="@+id/scroll_view"
@@ -310,19 +310,19 @@
 								android:visibility="gone"
 								tools:visibility="visible">
 
-								<android.support.design.widget.TextInputLayout
+								<com.google.android.material.textfield.TextInputLayout
 									android:id="@+id/device_name_layout"
 									android:layout_width="match_parent"
 									android:layout_height="wrap_content">
 
-									<android.support.design.widget.TextInputEditText
+									<com.google.android.material.textfield.TextInputEditText
 										android:id="@+id/device_name"
 										android:layout_width="match_parent"
 										android:layout_height="wrap_content"
 										android:hint="@string/device_name_hint"
 										android:inputType="textPersonName"
 										android:maxLength="10"/>
-								</android.support.design.widget.TextInputLayout>
+								</com.google.android.material.textfield.TextInputLayout>
 
 								<LinearLayout
 									android:layout_width="match_parent"

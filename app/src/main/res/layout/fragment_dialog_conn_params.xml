@@ -40,8 +40,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
@@ -49,22 +49,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:baselineAligned="false">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_min_connection_params"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/min_conn_int_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/min_connection_params_hint"
                 android:inputType="number"
                 android:maxLength="4" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -95,22 +96,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:baselineAligned="false">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_max_connection_params"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/max_conn_int_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/max_connection_params_hint"
                 android:inputType="number"
                 android:maxLength="4" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -141,41 +143,41 @@
         android:orientation="horizontal"
         android:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_slave_latency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/slave_latency_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/slave_latency_hint"
                 android:inputType="number"
                 android:maxLength="3" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible">
+        android:baselineAligned="false">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_conn_sup_timeout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/conn_sup_timeout_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/conn_sup_timeout_hint"
                 android:inputType="number"
                 android:maxLength="5" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="0dp"

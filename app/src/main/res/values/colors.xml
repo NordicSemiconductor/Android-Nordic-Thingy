@@ -65,6 +65,9 @@
     <color name="welcomeNordicLogo">@color/nordicBlue</color>
     <color name="welcomeBackground">@color/background</color>
 
+    <color name="aboutNordicLogo">@color/nordicBlue</color>
+    <color name="aboutNordicLogoText">@color/black</color>
+
     <!-- Nordic colors -->
     <color name="nordicBlue">#FF00A9CE</color>
     <color name="nordicBlueDark">#FF0090B0</color>
