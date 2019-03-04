@@ -52,7 +52,6 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_bar_layout"
-            style="@style/HeaderBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -61,14 +60,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:theme="@style/ActionBarThemeOverlay"
-                app:popupTheme="@style/ActionBarPopupThemeOverlay"
-                app:titleTextAppearance="@style/ActionBar.TitleText" />
+                app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
             <LinearLayout
                 android:id="@+id/location_services_container"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@color/alert"
+                android:layout_height="42dp"
+                android:background="?colorError"
                 android:visibility="gone"
                 tools:visibility="visible">
 
@@ -76,72 +74,60 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
+                    android:textColor="?colorOnError"
                     android:gravity="center_vertical"
                     android:text="@string/location_services_disabled"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/enable_location_services"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
-                    android:gravity="center_vertical"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
                     android:text="@string/enable"
-                    android:paddingStart="@dimen/activity_horizontal_margin"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                    android:textColor="?colorOnError"
+                    app:backgroundTint="?colorError"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/nfc_container"
                 android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="@color/alert"
+                android:layout_height="42dp"
+                android:background="?colorError"
                 android:visibility="visible">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
+                    android:textColor="?colorOnError"
                     android:gravity="center_vertical"
                     android:text="@string/nfc_disabled"
                     android:paddingStart="@dimen/activity_horizontal_margin"
                     android:paddingEnd="@dimen/activity_horizontal_margin"/>
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/enable_nfc"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
-                    android:gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
                     android:text="@string/enable"
-                    android:paddingStart="@dimen/cardview_action_padding"
-                    android:paddingEnd="@dimen/cardview_action_padding"/>
+                    android:textColor="?colorOnError"
+                    app:backgroundTint="?colorError"/>
 
-                <ImageView
-                    android:contentDescription="@string/close"
-                    android:id="@+id/dismiss_nfc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/cardview_action_padding"
-                    android:paddingEnd="@dimen/cardview_action_padding"
-                    app:srcCompat="@drawable/ic_close_white"/>
-
-                <ImageView
-                    android:contentDescription="@string/info"
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/more_nfc_info"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:textColor="@color/onAlert"
-                    android:gravity="center_vertical"
-                    android:paddingStart="@dimen/cardview_action_padding"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    app:srcCompat="@drawable/ic_info_white"/>
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:text="@string/more"
+                    android:textColor="?colorOnError"
+                    app:backgroundTint="?colorError"/>
 
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -153,7 +139,7 @@
             android:layout_below="@+id/app_bar_layout">
 
             <RelativeLayout
-                android:id="@+id/no_thingee_connected"
+                android:id="@+id/no_thingy_connected"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -164,7 +150,6 @@
                     android:layout_centerInParent="true">
 
                     <TextView
-                        android:id="@+id/textView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -182,7 +167,6 @@
                         android:layout_marginTop="@dimen/add_thingy_margin_top"/>
 
                     <TextView
-                        android:id="@+id/textView3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -191,10 +175,8 @@
                         android:layout_marginTop="@dimen/margin_troubleshoot" />
 
                     <TextView
-                        android:id="@+id/textView4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/thing_url"
                         android:layout_gravity="center_horizontal"
                         android:autoLink="web"
@@ -213,6 +195,7 @@
                     app:srcCompat="@drawable/ic_add_white"/>
 
             </RelativeLayout>
+
             <FrameLayout
                 android:id="@+id/container"
                 android:layout_width="match_parent"

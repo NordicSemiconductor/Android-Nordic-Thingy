@@ -39,19 +39,15 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -68,8 +64,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DecimalFormat;
 
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.common.CloudGuideActivity;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -86,9 +84,9 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     private static final int PRESSURE_UPDATE_EVENT = 1;
     private static final int BUTTON_STATE_UPDATE_EVENT = 2;
 
-    private Switch mTemperatureSwitch;
-    private Switch mPressureSwitch;
-    private Switch mButtonStateSwitch;
+    private SwitchCompat mTemperatureSwitch;
+    private SwitchCompat mPressureSwitch;
+    private SwitchCompat mButtonStateSwitch;
 
     private TextView mTemperatureView;
     private TextView mPressureView;
@@ -107,7 +105,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
-    private static final DecimalFormat TIME_FORMAT = new DecimalFormat("#0.00");
 
     private DatabaseHelper mDatabaseHelper;
     private Handler mHandler = new Handler();

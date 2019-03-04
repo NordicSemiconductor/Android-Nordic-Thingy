@@ -46,6 +46,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -89,10 +90,10 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     private SeekBar mLedIntensity;
     private SeekBar mBreatheDelay;
 
-    private TextView mOneShot;
-    private TextView mConstant;
-    private TextView mBreathe;
-    private TextView mOff;
+    private Button mOneShot;
+    private Button mConstant;
+    private Button mBreathe;
+    private Button mOff;
     private TextView mLedRgbView;
 
     private ImageView mLedRgb;

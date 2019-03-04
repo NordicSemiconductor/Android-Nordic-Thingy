@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/animation_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                     app:title="@string/euler_title"
                     app:logo="@drawable/ic_animation"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:titleTextAppearance="@style/CardView.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -87,9 +87,9 @@
                         surfaceview:renderMode="RENDERMODE_WHEN_DIRTY"/>
                 </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/motion_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -111,7 +111,7 @@
                     app:title="@string/motion_title"
                     app:logo="@drawable/ic_motion"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:titleTextAppearance="@style/CardView.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -148,7 +148,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -205,7 +205,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -264,7 +264,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -358,9 +358,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/gravity_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -382,7 +382,7 @@
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:title="@string/title_gravity_vector"
                     app:logo="@drawable/ic_apple"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:titleTextAppearance="@style/CardView.TitleText"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -447,7 +447,7 @@
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

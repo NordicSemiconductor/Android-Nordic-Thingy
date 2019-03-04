@@ -51,18 +51,14 @@ import android.widget.TextView;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class ProgressDialogFragment extends DialogFragment {
-
-    private static final String TITLE = "TITLE";
     private static final String MESSAGE = "MESSAGE";
 
-    private String mTitle;
     private String mMessage;
     private TextView mSummary;
 
-    public static ProgressDialogFragment newInstance(final String title, final String message) {
+    public static ProgressDialogFragment newInstance(final String message) {
         final ProgressDialogFragment fragment = new ProgressDialogFragment();
         final Bundle args = new Bundle();
-        args.putString(TITLE, title);
         args.putString(MESSAGE, message);
         fragment.setArguments(args);
         return fragment;
@@ -72,7 +68,6 @@ public class ProgressDialogFragment extends DialogFragment {
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mTitle = getArguments().getString(TITLE);
             mMessage = getArguments().getString(MESSAGE);
         }
     }
@@ -89,7 +84,6 @@ public class ProgressDialogFragment extends DialogFragment {
 
         return new AlertDialog.Builder(requireContext())
                 .setView(view)
-                .setTitle(mTitle)
                 .setCancelable(false)
                 .create();
     }
@@ -98,13 +92,6 @@ public class ProgressDialogFragment extends DialogFragment {
     public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(MESSAGE, mSummary.getText().toString());
-    }
-
-    public void setTitle(final String title) {
-        final Dialog dialog = getDialog();
-        if (dialog != null) {
-            dialog.setTitle(title);
-        }
     }
 
     public void setMessage(final String message) {

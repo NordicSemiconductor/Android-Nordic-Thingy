@@ -39,10 +39,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -50,88 +50,87 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:importantForAccessibility="no"
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_image_height"
-            android:src="@drawable/ic_settings_title"
-            android:background="#8ae4fb"
-            android:scaleType="fitCenter" />
+            android:background="#46D8FD"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_settings_title"/>
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:theme="@style/ActionBarThemeOverlay"
-            app:popupTheme="@style/ActionBarPopupThemeOverlay"
-            app:titleTextAppearance="@style/ActionBar.TitleText" />
+            app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
         <LinearLayout
             android:id="@+id/location_services_container"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@color/alert"
+            android:layout_height="42dp"
+            android:background="?colorError"
             android:visibility="gone"
             tools:visibility="visible">
 
             <TextView
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:textColor="@color/onAlert"
+                android:layout_weight="1"
                 android:gravity="center_vertical"
-                android:text="@string/location_services_disabled"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
                 android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                android:text="@string/location_services_disabled"
+                android:textColor="?colorOnError"/>
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/enable_location_services"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/onAlert"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:text="@string/enable"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                android:textColor="?colorOnError"
+                app:backgroundTint="?colorError"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/nfc_container"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:background="@color/alert"
+            android:layout_height="42dp"
+            android:background="?colorError"
             android:visibility="gone"
             tools:visibility="visible">
 
             <TextView
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:textColor="@color/onAlert"
                 android:gravity="center_vertical"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin"
                 android:text="@string/nfc_disabled"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                android:textColor="?colorOnError"/>
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/enable_nfc"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/onAlert"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="8dp"
                 android:text="@string/enable"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                android:textColor="?colorOnError"
+                app:backgroundTint="?colorError"/>
 
-            <TextView
-                android:id="@+id/dismiss_nfc"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/more_nfc_info"
+                style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textColor="@color/onAlert"
-                android:gravity="center_vertical"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:text="@string/more"
-                android:paddingStart="@dimen/activity_horizontal_margin"
-                android:paddingEnd="@dimen/activity_horizontal_margin"/>
+                android:textColor="?colorOnError"
+                app:backgroundTint="?colorError"/>
 
         </LinearLayout>
 
@@ -139,9 +138,9 @@
 
     <ScrollView
         android:id="@+id/scroll_view"
-        android:layout_below="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/app_bar_layout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -150,19 +149,19 @@
 
             <LinearLayout
                 android:id="@+id/setup_container"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="24dp"
                 android:paddingLeft="24dp"
                 android:paddingRight="24dp"
                 android:paddingTop="24dp"
-                android:paddingBottom="24dp"
                 android:visibility="visible">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -172,30 +171,30 @@
                             android:id="@+id/step_one"
                             android:layout_width="@dimen/stepper_circle_width"
                             android:layout_height="@dimen/stepper_circle_height"
+                            android:layout_marginBottom="8dp"
                             android:background="@drawable/ic_blue_bg"
-                            android:text="@string/step_one"
                             android:gravity="center"
-                            android:textColor="@color/onVibrant"
-                            android:layout_marginBottom="8dp" />
+                            android:text="@string/step_one"
+                            android:textColor="?colorOnPrimary"/>
 
                         <TextView
                             android:id="@+id/step_one_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/step_one"
                             android:layout_alignBaseline="@id/step_one"
                             android:layout_marginLeft="12dp"
-                            android:text="@string/connect_to_thingy" />
+                            android:layout_toRightOf="@id/step_one"
+                            android:text="@string/connect_to_thingy"/>
 
                         <TextView
                             android:id="@+id/step_one_summary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/step_one_title"
-                            android:text="@string/connect_thingy_summary"
-                            android:textSize="12sp"
                             android:layout_marginLeft="36dp"
-                            android:gravity="top" />
+                            android:gravity="top"
+                            android:text="@string/connect_thingy_summary"
+                            android:textSize="12sp"/>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -204,49 +203,45 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="@dimen/stepper_circle_width"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
                             <View
                                 android:layout_width="1dp"
                                 android:layout_height="wrap_content"
-                                android:background="@color/onBackground"
-                                android:layout_gravity="center_horizontal" />
+                                android:layout_gravity="center_horizontal"
+                                android:background="@color/onBackground"/>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/stepper_padding_left"
+                            android:orientation="vertical"
                             android:paddingTop="@dimen/stepper_padding_top">
 
                             <LinearLayout
                                 android:id="@+id/thingy_container"
-                                android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
 
-                                <Button
+                                <com.google.android.material.button.MaterialButton
+                                    style="@style/Widget.MaterialComponents.Button"
                                     android:id="@+id/confirm_thingy"
                                     android:layout_width="wrap_content"
                                     android:layout_height="48dp"
-                                    android:text="@string/scan_thingy"
-                                    style="@style/Widget.AppCompat.Button.Colored" />
+                                    android:text="@string/scan_thingy"/>
                             </LinearLayout>
-
-                            <android.widget.Space
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:paddingTop="@dimen/stepper_padding_top">
 
                     <RelativeLayout
@@ -257,30 +252,30 @@
                             android:id="@+id/step_two"
                             android:layout_width="@dimen/stepper_circle_width"
                             android:layout_height="@dimen/stepper_circle_height"
+                            android:layout_marginBottom="8dp"
                             android:background="@drawable/ic_blue_bg"
-                            android:text="@string/step_two"
                             android:gravity="center"
-                            android:textColor="@color/onVibrant"
-                            android:layout_marginBottom="8dp" />
+                            android:text="@string/step_two"
+                            android:textColor="?colorOnPrimary"/>
 
                         <TextView
                             android:id="@+id/step_two_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_toRightOf="@id/step_two"
                             android:layout_alignBaseline="@id/step_two"
                             android:layout_marginLeft="12dp"
-                            android:text="@string/dev_name_info" />
+                            android:layout_toRightOf="@id/step_two"
+                            android:text="@string/dev_name_info"/>
 
                         <TextView
                             android:id="@+id/step_two_summary"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/step_two_title"
-                            android:text="@string/dev_name_info_summary"
-                            android:textSize="12sp"
                             android:layout_marginLeft="36dp"
-                            android:gravity="top" />
+                            android:gravity="top"
+                            android:text="@string/dev_name_info_summary"
+                            android:textSize="12sp"/>
                     </RelativeLayout>
 
                     <LinearLayout
@@ -289,73 +284,71 @@
                         android:orientation="horizontal">
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="@dimen/stepper_circle_width"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
 
                             <View
                                 android:id="@+id/vertical_line"
                                 android:layout_width="1dp"
                                 android:layout_height="wrap_content"
-                                android:background="@color/onBackground"
-                                android:layout_gravity="center_horizontal" />
+                                android:layout_gravity="center_horizontal"
+                                android:background="@color/onBackground"/>
                         </LinearLayout>
 
                         <LinearLayout
-                            android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/stepper_padding_left"
+                            android:orientation="vertical"
                             android:paddingTop="@dimen/stepper_padding_top">
 
                             <LinearLayout
                                 android:id="@+id/device_name_container"
-                                android:orientation="vertical"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:orientation="vertical"
                                 android:visibility="gone"
                                 tools:visibility="visible">
 
                                 <com.google.android.material.textfield.TextInputLayout
                                     android:id="@+id/device_name_layout"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:hint="@string/device_name_hint"
+                                    app:counterEnabled="true"
+                                    app:counterMaxLength="10">
 
                                     <com.google.android.material.textfield.TextInputEditText
                                         android:id="@+id/device_name"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:hint="@string/device_name_hint"
-                                        android:maxLength="10"
-                                        android:inputType="textPersonName" />
+                                        android:inputType="textPersonName"
+                                        android:maxLength="10"/>
                                 </com.google.android.material.textfield.TextInputLayout>
 
                                 <LinearLayout
-                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
 
-                                    <Button
+                                    <com.google.android.material.button.MaterialButton
+                                        style="@style/Widget.MaterialComponents.Button"
                                         android:id="@+id/confirm_device_name"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="48dp"
-                                        android:text="@string/confirm"
+                                        android:layout_height="wrap_content"
                                         android:enabled="false"
-                                        style="@style/Widget.AppCompat.Button.Colored" />
+                                        android:text="@string/confirm"/>
 
-                                    <Button
+                                    <com.google.android.material.button.MaterialButton
+                                        style="@style/Widget.MaterialComponents.Button"
                                         android:id="@+id/skip_device_name"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="48dp"
-                                        android:text="@string/skip"
-                                        style="@style/Widget.AppCompat.Button.Colored" />
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="8dp"
+                                        android:text="@string/skip"/>
                                 </LinearLayout>
                             </LinearLayout>
-
-                            <android.widget.Space
-                                android:id="@+id/space"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -363,26 +356,26 @@
 
             <LinearLayout
                 android:id="@+id/setup_complete_container"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/margin_bottom_setup_complete_container"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
                 android:visibility="gone"
                 tools:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/initial_setup_complete" />
+                    android:text="@string/initial_setup_complete"/>
 
-                <Button
-                    android:layout_marginTop="@dimen/margin_setup_complete_button"
+                <com.google.android.material.button.MaterialButton
+                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/get_started"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/get_started"
-                    style="@style/Widget.AppCompat.Button.Colored" />
+                    android:layout_marginTop="@dimen/margin_setup_complete_button"
+                    android:text="@string/get_started"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

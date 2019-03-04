@@ -37,138 +37,122 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/alert_dialog_padding_left"
-    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_min_connection_params"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:hint="@string/min_connection_params_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/min_conn_int_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/min_connection_params_hint"
                 android:inputType="number"
-                android:maxLength="4" />
+                android:maxLength="4"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginStart="8dp"
+            android:text="@string/conn_interval_formula"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/conn_interval_formula"
-                android:layout_gravity="center"
-                android:id="@+id/textView3" />
+        <TextView
+            android:id="@+id/min_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="70dp"/>
 
-            <TextView
-                android:id="@+id/min_interval"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="5dp" />
-
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        android:baselineAligned="false">
+        android:layout_marginTop="8dp"
+        android:baselineAligned="false"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_max_connection_params"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:hint="@string/max_connection_params_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/max_conn_int_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/max_connection_params_hint"
                 android:inputType="number"
-                android:maxLength="4" />
+                android:maxLength="4"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginStart="8dp"
+            android:text="@string/conn_interval_formula"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/conn_interval_formula"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/max_interval"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="5dp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/max_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="70dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_slave_latency"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="@string/slave_latency_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/slave_latency_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/slave_latency_hint"
                 android:inputType="number"
-                android:maxLength="3" />
+                android:maxLength="3"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:layout_marginTop="8dp"
+        android:baselineAligned="false"
+        android:gravity="center_vertical">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_conn_sup_timeout"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/conn_sup_timeout_view"
@@ -176,30 +160,21 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/conn_sup_timeout_hint"
                 android:inputType="number"
-                android:maxLength="5" />
+                android:maxLength="5"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_marginStart="8dp"
+            android:text="@string/supervision_timeout_formula"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/supervision_timeout_formula"
-                android:layout_gravity="center" />
-
-            <TextView
-                android:id="@+id/supervision_timeout"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="5dp" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/supervision_timeout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:minWidth="70dp"/>
     </LinearLayout>
 
 </LinearLayout>

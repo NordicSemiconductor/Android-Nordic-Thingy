@@ -48,19 +48,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_adv_interval"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="@string/adv_interval">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/adv_interval_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/adv_interval"
                 android:inputType="number"
                 android:maxLength="5" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -69,20 +70,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/adv_interval_formula"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:id="@+id/adv_interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="4dp"/>
+            android:layout_marginStart="4dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_adv_timeout"
@@ -102,6 +104,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time_unit_s"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 </LinearLayout>

@@ -54,17 +54,14 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:theme="@style/ActionBarThemeOverlay"
-            app:popupTheme="@style/ActionBarPopupThemeOverlay"
-            app:titleTextAppearance="@style/ActionBar.TitleText" />
+            app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
         <com.google.android.material.tabs.TabLayout
-            style="@style/HeaderBar"
+            style="@style/Widget.MaterialComponents.TabLayout.Colored"
+            android:theme="@style/ActionBarThemeOverlay"
             android:id="@+id/sliding_tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tabSelectedTextColor="@color/actionBarText"
-            app:tabTextColor="@color/actionBarTextDisabled"
-            app:tabIndicatorColor="@color/actionBarTextDisabled"
             app:tabIndicatorHeight="3dp"
             app:tabGravity="fill"
             app:tabMode="fixed" />
@@ -75,4 +72,5 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </RelativeLayout>

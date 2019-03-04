@@ -37,30 +37,31 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:attr/buttonBarStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:animateLayoutChanges="true"
-    android:paddingTop="10dp" >
+    android:orientation="vertical"
+    android:paddingTop="10dp">
 
-    <include android:id="@+id/troubleshoot_guide" layout="@layout/layout_troubleshoot"/>
+    <include
+        android:id="@+id/troubleshoot_guide"
+        layout="@layout/layout_troubleshoot"/>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_weight="1"
         android:paddingEnd="@dimen/alert_dialog_padding"
         android:paddingStart="@dimen/alert_dialog_padding"
-        android:scrollbarStyle="outsideOverlay"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
+        android:scrollbarStyle="outsideOverlay"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/action_cancel"
-        style="?android:attr/buttonBarButtonStyle"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/scanner_action_scan" />
+        android:text="@string/scanner_action_scan"/>
 
 </LinearLayout>

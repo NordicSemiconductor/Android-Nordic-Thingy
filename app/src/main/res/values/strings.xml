@@ -57,14 +57,15 @@
     <string name="scanner_action_cancel">Cancel</string>
     <string name="not_available">n/a</string>
     <string name="scanner_subtitle_not_bonded">AVAILABLE DEVICES:</string>
-    <string name="dev_name_info">Thingy name</string>
-    <string name="dev_name_info_summary">Give a name to your Thingy (optional)</string>
+    <string name="dev_name_info">Name your Thingy:52</string>
+    <string name="dev_name_info_summary">Change the name of your Thingy:52 (optional).</string>
     <string name="user_info">User information</string>
-    <string name="connect_thingy_summary">Click to scan or touch Thingy:52 with the back of your smart phone to connect via NFC</string>
+    <string name="connect_thingy_summary">Status: disconnected.</string>
+    <string name="status_connected_to_device">Status: connected to %s.</string>
     <string name="user_info_hint">Name</string>
     <string name="email_info">Email information</string>
     <string name="email">Email</string>
-    <string name="device_name_hint">10 byte name</string>
+    <string name="device_name_hint">Thingy name</string>
     <string name="initial_configuration">Initial Configuration</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -106,7 +107,6 @@
     <string name="time">Time</string>
     <string name="frequency">Frequency</string>
 
-
     <string name="interval_pedometer">Pedometer interval</string>
     <string name="interval_temperature_compensation">Temp. compensation interval</string>
     <string name="interval_compass">Compass interval</string>
@@ -114,30 +114,30 @@
     <string name="interval_motion">Motion interval</string>
     <string name="interval_wake_on_motion">Wake on motion</string>
 
-    <string name="motion_freq_hz">hz</string>
+    <string name="motion_freq_hz">Hz</string>
     <string name="time_unit_ms">ms</string>
     <string name="time_unit_s">s</string>
     <string name="interval_ms">%d ms</string>
     <string name="interval_s">%d s</string>
-    <string name="interval_hz">%d hz</string>
+    <string name="interval_hz">%d Hz</string>
     <string name="adv_interval_formula">x 0.625 ms =</string>
     <string name="decimal_format_ms"> %.2f ms</string>
     <string name="conn_interval_formula">x 1.25 ms = </string>
     <string name="supervision_timeout_formula">x 10 ms = </string>
     <string name="led_percentage">%d %%</string>
 
-    <string name="error_temp_interval">Interval must be between 100 – 60000 milliseconds!</string>
-    <string name="error_pressure_interval">Interval cannot be less than 50 – 60000 milliseconds!</string>
-    <string name="error_humidity_interval">Interval cannot be less than 100 – 60000 milliseconds!</string>
-    <string name="error_color_intensity_interval">Interval cannot be less than 200 – 60000 milliseconds!</string>
-    <string name="error_color_interval">Color interval cannot be less than %d seconds!</string>
-    <string name="error_temp_interval_empty">Temperature interval cannot be empty!</string>
-    <string name="error_pressure_interval_empty">Pressure interval cannot be empty!</string>
-    <string name="error_color_intensity_interval_empty">Color intensity interval cannot be empty!</string>
-    <string name="error_humidity_interval_empty">Humidity interval cannot be empty!</string>
-    <string name="error_pedometer_interval_empty">Pedometer interval cannot be empty!</string>
-    <string name="error_compass_interval_empty">Compass interval cannot be empty!</string>
-    <string name="error_motion_interval_empty">Motion frequency cannot be empty!</string>
+    <string name="error_temp_interval">Interval must be between 100 – 60000 milliseconds.</string>
+    <string name="error_pressure_interval">Interval must be between 50 – 60000 milliseconds.</string>
+    <string name="error_humidity_interval">Interval must be between 100 – 60000 milliseconds.</string>
+    <string name="error_color_intensity_interval">Interval must be between 200 – 60000 milliseconds.</string>
+    <string name="error_color_interval">Color interval cannot be less than %d seconds.</string>
+    <string name="error_temp_interval_empty">Temperature interval cannot be empty.</string>
+    <string name="error_pressure_interval_empty">Pressure interval cannot be empty.</string>
+    <string name="error_color_intensity_interval_empty">Color intensity interval cannot be empty.</string>
+    <string name="error_humidity_interval_empty">Humidity interval cannot be empty.</string>
+    <string name="error_pedometer_interval_empty">Pedometer interval cannot be empty.</string>
+    <string name="error_compass_interval_empty">Compass interval cannot be empty.</string>
+    <string name="error_motion_interval_empty">Motion frequency cannot be empty.</string>
     <string name="settings_basic_thingy">Thingy Settings</string>
     <string name="settings_thingy_name">Thingy name</string>
     <string name="settings_adv_param_char">Advertising parameters</string>
@@ -164,32 +164,32 @@
     <string name="slave_latency_hint">Slave latency</string>
     <string name="conn_sup_timeout_hint">Supervision timeout</string>
     <string name="url_hint">URL</string>
-    <string name="ifttt_token_hint">100 Byte token</string>
-    <string name="error_ifttt_token_too_long">Cloud token must be between 1 – 100 bytes</string>
+    <string name="ifttt_token_hint">IFTTT Token</string>
+    <string name="error_ifttt_token_too_long">Cloud token must be between 1 – 100 bytes.</string>
     <string name="url_data_text">Url text</string>
-    <string name="error_empty_device_name">Thingy name cannot be empty!</string>
-    <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes!</string>
-    <string name="error_empty_min_conn_interval">Min. connection interval cannot be empty</string>
-    <string name="error_empty_max_conn_interval">Max. connection interval cannot be empty</string>
-    <string name="error_empty_slave_latency">Slave latency cannot be empty</string>
-    <string name="error_empty_supervision_timeout">Supervision timeout cannot be empty</string>
-    <string name="error_uint16">Value does not match UINT16</string>
-    <string name="error_uint8">Value does not match UINT8</string>
-    <string name="error_configuring_char">Unable to configure characteristic!</string>
-    <string name="error_invalid_conn_interval">Value must be within 7.5ms and 4000ms</string>
-    <string name="error_invalid_slave_latency">Value must be within 0 and 500</string>
-    <string name="error_invalid_supervision_timeout">Value must be within 100ms and 32000ms</string>
-    <string name="error_empty_cloud_token">Cloud token cannot be empty!</string>
-    <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes</string>
-    <string name="error_cloud_token_length">Cloud token must between 1 – 250 bytes</string>
-    <string name="error_cloud_token">Error, unable to write to cloud token characteristic</string>
+    <string name="error_empty_device_name">Thingy name cannot be empty.</string>
+    <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes.</string>
+    <string name="error_empty_min_conn_interval">Min. connection interval cannot be empty.</string>
+    <string name="error_empty_max_conn_interval">Max. connection interval cannot be empty.</string>
+    <string name="error_empty_slave_latency">Slave latency cannot be empty.</string>
+    <string name="error_empty_supervision_timeout">Supervision timeout cannot be empty.</string>
+    <string name="error_uint16">Value does not match UINT16.</string>
+    <string name="error_uint8">Value does not match UINT8.</string>
+    <string name="error_configuring_char">Unable to configure characteristic.</string>
+    <string name="error_invalid_conn_interval">Value must be within 7.5 and 4000 ms.</string>
+    <string name="error_invalid_slave_latency">Value must be within 0 and 500.</string>
+    <string name="error_invalid_supervision_timeout">Value must be within 100 and 32000 ms.</string>
+    <string name="error_empty_cloud_token">Cloud token cannot be empty.</string>
+    <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes.</string>
+    <string name="error_cloud_token_length">Cloud token must between 1 – 250 bytes.</string>
+    <string name="error_cloud_token">Error, unable to write to cloud token characteristic.</string>
     <string name="cloud_token_settings">Cloud Token</string>
-    <string name="adv_interval">Advertisement interval</string>
-    <string name="adv_time_out">Advertisement timeout</string>
+    <string name="adv_interval">Advertising interval</string>
+    <string name="adv_time_out">Timeout</string>
     <string name="error_empty_adv_interval">Error, value cannot be empty</string>
-    <string name="error_adv_interval">Must be between 20ms and 10.24s</string>
-    <string name="error_empty_adv_timeout">Error, avalue cannot be empty</string>
-    <string name="error_adv_timeout">Value must be between 0s and 180 seconds</string>
+    <string name="error_adv_interval">Must be between 20 ms and 10.24 seconds.</string>
+    <string name="error_empty_adv_timeout">Error, value cannot be empty</string>
+    <string name="error_adv_timeout">Value must be between 0 and 180 seconds.</string>
     <string name="adv_param_title">Advertising Interval Parameters</string>
     <string name="thingy_name_title">Thingy Name</string>
     <string name="appearance_title">Appearance</string>
@@ -199,8 +199,8 @@
     <string name="temperature_compensation_interval_title">Temp. Compensation Interval</string>
     <string name="pressure_interval_title">Pressure Interval</string>
     <string name="humidity_interval_title">Humidity Interval</string>
-    <string name="color_intensity_interval_title">Color Intensity Interval</string>
-    <string name="gas_mode_title">Air quality Interval</string>
+    <string name="color_intensity_interval_title">Color intensity interval</string>
+    <string name="gas_mode_title">Air Quality Interval</string>
     <string name="pressure_mode_title">Pressure Mode</string>
     <string name="shortened_url">Shortened URL</string>
     <string name="shorten_url">Shorten URL</string>
@@ -538,11 +538,10 @@
     <string name="enable_nfc_tag_dialog_title">Enable NFC</string>
     <string name="enable_nfc_tag_dialog_summary">Nordic Thingy:52 firmware version 2.0 contains "Touch to Connect" using NFC.
         In order to make use of this feature your smart phone\'s NFC feature has to be enabled. Would you like to proceed?</string>
-    <string name="status_connected_to_device">Status: Connected to : %s</string>
     <string name="dfu_bootloader_push_error">Unable to push the device to bootloader mode</string>
 
     <string name="add_thingy_summary">Click to add a new Thingy:52</string>
-    <string name="add_thingy_nfc_summary">Click to add a new Thingy:52 or touch Thingy:52 with the back of your smart phone to connect via NFC (FW version 2.0 onwards)</string>
+    <string name="add_thingy_nfc_summary">Click below, or touch Thingy:52 with the back of your smart phone to connect using NFC (FW version 2.0 onwards).</string>
     <string name="do_not_ask_again">Do not ask again</string>
     <string name="nfc_disabled">NFC disabled</string>
     <string name="enable_nfc">Enable NFC</string>
@@ -566,9 +565,9 @@
     <string name="event_name_button_press">Event name: button_press</string>
 
     <string-array name="gas_mode">
-        <item>1 second interval</item>
-        <item>10 seconds interval</item>
-        <item>60 seconds interval</item>
+        <item>1 second</item>
+        <item>10 seconds</item>
+        <item>1 minute</item>
     </string-array>
     <string-array name="pressure_mode">
         <item>Barometer mode</item>

@@ -39,7 +39,6 @@
 
 <resources>
     <dimen name="activity_horizontal_margin">32dp</dimen>
-    <dimen name="margin_setup_complete_button">60dp</dimen>
     <dimen name="margin_bottom_setup_complete_container">10dp</dimen>
     <dimen name="toolbar_image_height">350dp</dimen>
     <dimen name="stepper_title_text_size">14sp</dimen>

@@ -37,6 +37,7 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,13 +49,16 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_device_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:hint="@string/device_name_hint"
+        app:counterEnabled="true"
+        app:counterMaxLength="10">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/device_name_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/device_name_hint"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:maxLength="10"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

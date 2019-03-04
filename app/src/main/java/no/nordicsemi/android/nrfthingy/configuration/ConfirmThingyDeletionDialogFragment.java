@@ -47,7 +47,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 
@@ -78,21 +77,16 @@ public class ConfirmThingyDeletionDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.delete_thingy_title));
-        alertDialogBuilder.setMessage(getString(R.string.delete_thingy_message));
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-                ((ConfirmThingyDeletionListener) requireContext()).deleteThingy(mDevice);
-            }
-        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.delete_thingy_title))
+                .setMessage(getString(R.string.delete_thingy_message))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((ConfirmThingyDeletionListener) requireContext()).deleteThingy(mDevice);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null);
         return alertDialogBuilder.create();
     }
 }

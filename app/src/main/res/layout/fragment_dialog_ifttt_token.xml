@@ -75,32 +75,32 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/alert_dialog_padding_left"
-    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="visible"
-        android:layout_marginBottom="@dimen/alert_dialog_padding">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/clear_token" />
+            android:text="@string/clear_token"/>
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_clear_token"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="end"
             android:checked="true"/>
 
     </LinearLayout>
@@ -108,13 +108,16 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_cloud_token"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="@string/ifttt_token_hint"
+        app:counterEnabled="true"
+        app:counterMaxLength="100">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/cloud_token_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/ifttt_token_hint"
-            android:inputType="text" />
+            android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 </LinearLayout>

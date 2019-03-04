@@ -37,32 +37,31 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="@dimen/alert_dialog_padding_left"
-    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="visible"
-        android:layout_marginBottom="@dimen/alert_dialog_padding">
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/disable_physical_web_url" />
+            android:text="@string/disable_physical_web_url"/>
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_physical_web"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="end"
             android:checked="true"/>
 
     </LinearLayout>
@@ -71,27 +70,28 @@
         android:id="@+id/eddystone_url_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:layout_marginTop="8dp">
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/url_types"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/url_types" />
+            android:layout_marginEnd="8dp"
+            android:entries="@array/url_types"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_url_data"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/url_data_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/url_hint"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"/>
+
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
@@ -99,23 +99,26 @@
         android:id="@+id/short_url_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/alert_dialog_padding"
         android:orientation="horizontal"
         android:visibility="gone"
-        android:layout_marginTop="@dimen/alert_dialog_padding">
+        tools:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/shortened_url" />
+            android:text="@string/shortened_url"/>
 
         <TextView
             android:id="@+id/short_url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:gravity="end"
             android:autoLink="web"
-            android:linksClickable="true" />
+            android:gravity="end"
+            android:ellipsize="end"
+            android:linksClickable="true"/>
 
     </LinearLayout>
 

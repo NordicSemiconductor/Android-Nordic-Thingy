@@ -38,18 +38,18 @@
   -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:minWidth="400dp"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="400dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:padding="6dp">
+        android:padding="8dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
@@ -62,14 +62,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:padding="5dp"
-            android:text="@string/about_text" />
+            android:text="@string/about_text"/>
 
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Version 2.0"
-            android:layout_gravity="right" />
+            android:layout_gravity="end"
+            tools:text="Version 2.0"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,8 +78,7 @@
             android:layout_marginTop="20dp"
             android:autoLink="web"
             android:linksClickable="true"
-            android:text="@string/about_link"
-            android:textColorLink="@color/vibrant" />
+            android:text="@string/about_link"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/action_facebook"
-                android:src="@drawable/ic_facebook" />
+                android:src="@drawable/ic_facebook"/>
 
             <ImageView
                 android:id="@+id/action_twitter"
@@ -100,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:contentDescription="@string/action_twitter"
-                android:src="@drawable/ic_twitter" />
+                android:src="@drawable/ic_twitter"/>
 
             <ImageView
                 android:id="@+id/action_linkedin"
@@ -108,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:contentDescription="@string/action_linkedin"
-                android:src="@drawable/ic_linkedin" />
+                android:src="@drawable/ic_linkedin"/>
 
             <ImageView
                 android:id="@+id/action_youtube"
@@ -116,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
                 android:contentDescription="@string/action_youtube"
-                android:src="@drawable/ic_youtube" />
+                android:src="@drawable/ic_youtube"/>
 
             <ImageView
                 android:id="@+id/action_devzone"
@@ -124,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:contentDescription="@string/action_devzone"
-                android:src="@drawable/ic_devzone" />
+                android:src="@drawable/ic_devzone"/>
 
         </LinearLayout>
     </LinearLayout>

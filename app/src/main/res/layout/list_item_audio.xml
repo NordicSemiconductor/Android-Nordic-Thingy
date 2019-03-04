@@ -36,40 +36,39 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/audio_list_item_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/audio_list_item_container"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:background="?selectableItemBackground"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin">
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="@dimen/cardview_action_padding"
-        android:layout_marginRight="@dimen/cardview_action_padding"
+        android:background="@drawable/ic_device_bg_blue"
+        android:importantForAccessibility="no"
         android:scaleType="center"
-        app:srcCompat="@drawable/ic_music_note"
-        android:background="@drawable/ic_device_bg_blue" />
+        app:srcCompat="@drawable/ic_music_note"/>
 
     <TextView
         android:id="@+id/audio_file_name"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_weight="1"
         android:textSize="14sp"
-        android:text="star wars"
-        android:layout_gravity="center_vertical" />
+        tools:text="Polka Polka"/>
 
     <RadioButton
         android:id="@+id/rb_audio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:clickable="false" />
+        android:clickable="false"/>
 </LinearLayout>

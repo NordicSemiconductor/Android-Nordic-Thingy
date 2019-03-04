@@ -127,7 +127,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private LinearLayout mLocationServicesContainer;
 
     private TextInputEditText mDeviceInfo;
-    private TextView mEnableLocationServices;
+    private Button mEnableLocationServices;
 
     private Button mConfirmThingy;
     private Button mConfirmDeviceName;
@@ -140,7 +140,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private TextView mStepOneSummary;
 
     private View mView;
-    private Space mSpace;
 
     private ScrollView mScrollView;
 
@@ -344,8 +343,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
         mDeviceInfo = findViewById(R.id.device_name);
         mNfcContainer = findViewById(R.id.nfc_container);
-        final TextView mEnableNfc = findViewById(R.id.enable_nfc);
-        final TextView mNfcMore = findViewById(R.id.dismiss_nfc);
+        final Button mEnableNfc = findViewById(R.id.enable_nfc);
+        final Button mNfcMore = findViewById(R.id.more_nfc_info);
         mConfirmThingy = findViewById(R.id.confirm_thingy);
         mConfirmDeviceName = findViewById(R.id.confirm_device_name);
         mSkipDeviceName = findViewById(R.id.skip_device_name);
@@ -355,7 +354,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mStepTwo = findViewById(R.id.step_two);
         mStepOneSummary = findViewById(R.id.step_one_summary);
         mView = findViewById(R.id.vertical_line);
-        mSpace = findViewById(R.id.space);
 
         loadNfcAdapter();
 
@@ -742,7 +740,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                         }
                         mDeviceNameContainer.setVisibility(View.GONE);
                         mView.setVisibility(View.GONE);
-                        mSpace.setVisibility(View.GONE);
 
                         //Resetting the animation parameters, if not the views are not visible in case they are made visible
                         mDeviceNameContainer.setAlpha(1.0f);
@@ -934,7 +931,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
     private void showConnectionProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), getString(R.string.state_connecting));
+            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.state_connecting));
         }
 
         final Dialog dialog = mProgressDialog.getDialog();

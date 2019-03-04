@@ -71,6 +71,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.content.ContextCompat;
@@ -85,6 +86,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -96,7 +98,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import no.nordicsemi.android.nrfthingy.common.AboutActivity;
-import no.nordicsemi.android.nrfthingy.common.DismissNfcWarningDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.EnableNFCDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.NFCTagFoundDialogFragment;
@@ -111,7 +112,6 @@ import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.dfu.DfuUpdateAvailableDialogFragment;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
-import no.nordicsemi.android.nrfthingy.thingy.ThingyAdapter;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.support.v18.scanner.BluetoothLeScannerCompat;
 import no.nordicsemi.android.support.v18.scanner.ScanCallback;
@@ -126,11 +126,11 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         EnvironmentServiceFragment.EnvironmentServiceListener,
         ConfirmThingyDeletionDialogFragment.ConfirmThingyDeletionListener,
-        ThingyAdapter.ActionListener,
         ThingySdkManager.ServiceConnectionListener,
         PermissionRationaleDialogFragment.PermissionDialogListener,
         DfuUpdateAvailableDialogFragment.DfuUpdateAvailableListener,
-        NFCTagFoundDialogFragment.OnNfcTagFound, EnableNFCDialogFragment.EnableNFCDialogFragmentListener, DismissNfcWarningDialogFragment.NfcWarningDismissListener {
+        NFCTagFoundDialogFragment.OnNfcTagFound,
+        EnableNFCDialogFragment.EnableNFCDialogFragmentListener {
 
     private static final int SCAN_DURATION = 15000;
     private LinearLayout mLocationServicesContainer;
@@ -387,11 +387,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mBatteryLevel100 = ContextCompat.getDrawable(this, R.drawable.ic_battery_100);
 
         mLocationServicesContainer = findViewById(R.id.location_services_container);
-        mNoThingyConnectedContainer = findViewById(R.id.no_thingee_connected);
+        mNoThingyConnectedContainer = findViewById(R.id.no_thingy_connected);
         mNfcContainer = findViewById(R.id.nfc_container);
-        final TextView mEnableNfc = findViewById(R.id.enable_nfc);
-        final ImageView mNfcInfo = findViewById(R.id.more_nfc_info);
-        final ImageView mDismissNfcMessage = findViewById(R.id.dismiss_nfc);
+        final Button enableNfc = findViewById(R.id.enable_nfc);
+        final Button nfcInfo = findViewById(R.id.more_nfc_info);
         final FloatingActionButton connectThingy = findViewById(R.id.connect_thingy);
         mNavigationView = findViewById(R.id.navigation);
         mDrawerLayout = findViewById(R.id.drawer_layout);
@@ -413,22 +412,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mConnectedBleDeviceList = new ArrayList<>();
         loadNfcAdapter();
 
-        mEnableNfc.setOnClickListener(new View.OnClickListener() {
+        enableNfc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 requestNfcFeature();
             }
         });
-
-        mDismissNfcMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                final DismissNfcWarningDialogFragment fragment = DismissNfcWarningDialogFragment.newInstance();
-                fragment.show(getSupportFragmentManager(), null);
-            }
-        });
-
-        mNfcInfo.setOnClickListener(new View.OnClickListener() {
+        nfcInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
                 showNfcDialogRationale();
@@ -639,8 +629,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final int id = item.getItemId();
         switch (id) {
             case R.id.action_delete_device:
-                ConfirmThingyDeletionDialogFragment confirmThingyDeletionDialogFragment = new ConfirmThingyDeletionDialogFragment().newInstance(mDevice);
-                confirmThingyDeletionDialogFragment.show(getSupportFragmentManager(), null);
+                final DialogFragment dialog = new ConfirmThingyDeletionDialogFragment().newInstance(mDevice);
+                dialog.show(getSupportFragmentManager(), null);
                 break;
             case R.id.action_connect:
                 prepareForScanning(false);
@@ -991,13 +981,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mThingySdkManager.setSelectedDevice(device);
         updateSelectionInDb(thingy, true);
         updateUiOnBind();
-    }
-
-    @Override
-    public void onAddNewThingy() {
-        Intent intent = new Intent(this, InitialConfigurationActivity.class);
-        intent.putExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, true);
-        startActivity(intent);
     }
 
     private void enableSelection() {
@@ -1698,13 +1681,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showConnectionProgressDialog(final String message) {
         if (mProgressDialog != null) {
             if (!mProgressDialog.isAdded()) {
-                mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), message);
+                mProgressDialog = ProgressDialogFragment.newInstance(message);
                 mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
             } else {
                 return;
             }
         } else {
-            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), message);
+            mProgressDialog = ProgressDialogFragment.newInstance(message);
             mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
         }
 
@@ -1822,9 +1805,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void loadNfcAdapter() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        final TextView addThingySumary = findViewById(R.id.add_thingy_summary);
+        final TextView addThingySummary = findViewById(R.id.add_thingy_summary);
         if (mNfcAdapter != null) {
-            addThingySumary.setText(R.string.add_thingy_nfc_summary);
+            addThingySummary.setText(R.string.add_thingy_nfc_summary);
             mNfcPendingIntent = PendingIntent.getActivity(
                     this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
@@ -1832,7 +1815,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ndef.addDataAuthority("ext", null);
             mIntentFiltersArray = new IntentFilter[]{ndef};
         } else {
-            addThingySumary.setText(R.string.add_thingy_summary);
+            addThingySummary.setText(R.string.add_thingy_summary);
         }
     }
 
@@ -1971,10 +1954,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             return mBatteryLevel100;
         }
-    }
-
-    @Override
-    public void onNfcWarningDismissed() {
-        mNfcContainer.setVisibility(View.GONE);
     }
 }

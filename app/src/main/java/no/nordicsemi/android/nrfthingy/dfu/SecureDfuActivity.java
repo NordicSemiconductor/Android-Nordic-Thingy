@@ -79,6 +79,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -130,9 +131,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private static final int SCAN_DURATION = 15000;
     private LinearLayout mLocationServicesContainer;
 
-    private TextView mEnableLocationServices;
-    private TextView mNordicFirmware;
-    private TextView mCustomFirmware;
+    private Button mNordicFirmware;
+    private Button mCustomFirmware;
     private TextView mFileNameView;
     private TextView mFileSizeView;
     private TextView mDfuTargetNameView;
@@ -363,13 +363,13 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         mDfuSpeed = findViewById(R.id.dfu_upload_speed);
         mDfuSpeedUnit = findViewById(R.id.dfu_speed_unit);
-        final Toolbar mDfuStatusToolbar = findViewById(R.id.dfu_status_toolbar);
-        mDfuStatusToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_dfu_gray));
-        mDfuStatusToolbar.setTitle(R.string.dfu_status);
+        final Toolbar dfuStatusToolbar = findViewById(R.id.dfu_status_toolbar);
+        dfuStatusToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_dfu_gray));
+        dfuStatusToolbar.setTitle(R.string.dfu_status);
 
         mLocationServicesContainer = findViewById(R.id.location_services_container);
-        mEnableLocationServices = findViewById(R.id.enable_location_services);
-        mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
+        final Button enableLocationServices = findViewById(R.id.enable_location_services);
+        enableLocationServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -1488,13 +1488,13 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private void showConnectionProgressDialog(final String message) {
         if (mProgressDialog != null) {
             if (!mProgressDialog.isAdded()) {
-                mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), message);
+                mProgressDialog = ProgressDialogFragment.newInstance(message);
                 mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
             } else {
                 return;
             }
         } else {
-            mProgressDialog = ProgressDialogFragment.newInstance(getString(R.string.thingy_please_wait), message);
+            mProgressDialog = ProgressDialogFragment.newInstance(message);
             mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
         }
 

@@ -50,7 +50,7 @@
         android:id="@+id/temperature_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -58,13 +58,13 @@
             android:id="@+id/layout_temperature"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/time">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="5"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -72,7 +72,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
             android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
@@ -80,7 +80,7 @@
         android:id="@+id/pressure_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -88,13 +88,13 @@
             android:id="@+id/layout_pressure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/time">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_pressure"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="5"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -102,7 +102,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
             android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
@@ -110,7 +110,7 @@
         android:id="@+id/humidity_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -118,13 +118,13 @@
             android:id="@+id/layout_humidity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/time">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_humidity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="5"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -132,7 +132,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
             android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
@@ -140,7 +140,7 @@
         android:id="@+id/color_intensity_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:visibility="gone"
         tools:visibility="visible">
 
@@ -148,13 +148,13 @@
             android:id="@+id/layout_color_intensity"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:hint="@string/time">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_color_intensity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/time"
                 android:inputType="number"
                 android:maxLength="5"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -162,7 +162,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
             android:text="@string/time_unit_ms"/>
     </LinearLayout>
 

@@ -69,7 +69,7 @@ public class AboutDialogFragment extends DialogFragment {
         final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_about, null);
 
         final AlertDialog alertDialog = alertDialogBuilder.setView(view)
-                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.ok, null)
                 .create();
 
         view.findViewById(R.id.action_facebook).setOnClickListener(new View.OnClickListener() {

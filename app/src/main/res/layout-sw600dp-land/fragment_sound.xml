@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/microphone_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +69,7 @@
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:title="@string/microphone_title"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"/>
+                    app:titleTextAppearance="@style/CardView.TitleText"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -154,9 +154,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/piano_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:title="@string/speaker_title"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"/>
+                    app:titleTextAppearance="@style/CardView.TitleText"/>
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/sliding_tabs"
@@ -187,11 +187,8 @@
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:layout_marginRight="@dimen/activity_horizontal_margin"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/vibrant"
                     app:tabIndicatorHeight="3dp"
-                    app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/accent"
-                    app:tabTextColor="@color/vibrant"/>
+                    app:tabMode="fixed"/>
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/view_pager"
@@ -200,6 +197,6 @@
                     android:layout_marginBottom="@dimen/activity_vertical_margin"/>
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 </ScrollView>

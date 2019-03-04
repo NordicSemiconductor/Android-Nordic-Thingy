@@ -77,12 +77,10 @@ public class ThingyMicrophoneService extends IntentService {
     };
 
     /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
+     * Default constructor, required to instantiate the service.
      */
-    public ThingyMicrophoneService(final String name) {
-        super(name);
+    public ThingyMicrophoneService() {
+        super("Thingy Microphone Service");
     }
 
     @Override
@@ -103,11 +101,6 @@ public class ThingyMicrophoneService extends IntentService {
         filter.addAction(Utils.STOP_RECORDING);
         LocalBroadcastManager.getInstance(this).registerReceiver(mAudioBroadcastReceiver, filter);
         mThingySdkManager = ThingySdkManager.getInstance();
-    }
-
-    @Override
-    public int onStartCommand(@Nullable final Intent intent, final int flags, final int startId) {
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

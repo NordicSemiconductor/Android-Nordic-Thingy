@@ -40,7 +40,6 @@
 <ScrollView android:id="@+id/main_container"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:card_view="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -51,7 +50,7 @@
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
 
-		<androidx.cardview.widget.CardView
+		<com.google.android.material.card.MaterialCardView
 			android:id="@+id/feature_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -75,7 +74,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/feature_control"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/Cardview.TitleText"/>
+					app:titleTextAppearance="@style/CardView.TitleText"/>
 
 				<TextView
 					android:id="@+id/temperature_title"
@@ -133,7 +132,7 @@
 					app:layout_constraintStart_toStartOf="@+id/temperature_title"
 					app:layout_constraintTop_toBottomOf="@+id/button_state_title"/>
 
-				<Switch
+				<androidx.appcompat.widget.SwitchCompat
 					android:id="@+id/switch_temperature"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
 					app:layout_constraintTop_toTopOf="@+id/temperature_title"
 					tools:layout_editor_absoluteY="64dp"/>
 
-				<Switch
+				<androidx.appcompat.widget.SwitchCompat
 					android:id="@+id/switch_pressure"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -151,7 +150,7 @@
 					app:layout_constraintEnd_toEndOf="@+id/switch_temperature"
 					app:layout_constraintTop_toTopOf="@+id/pressure_title"/>
 
-				<Switch
+				<androidx.appcompat.widget.SwitchCompat
 					android:id="@+id/switch_button"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
@@ -160,9 +159,9 @@
 					app:layout_constraintTop_toTopOf="@+id/button_state_title"/>
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
-		</androidx.cardview.widget.CardView>
+		</com.google.android.material.card.MaterialCardView>
 
-		<androidx.cardview.widget.CardView
+		<com.google.android.material.card.MaterialCardView
 			android:id="@+id/feature_info_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -170,7 +169,7 @@
 			android:layout_marginLeft="@dimen/cardview_horizontal_padding"
 			android:layout_marginRight="@dimen/cardview_horizontal_padding"
 			android:layout_marginTop="@dimen/cardview_vertical_padding"
-			card_view:cardCornerRadius="2dp">
+			app:cardCornerRadius="2dp">
 
 			<androidx.constraintlayout.widget.ConstraintLayout
 				android:layout_width="match_parent"
@@ -187,7 +186,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/feature_info"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/Cardview.TitleText"/>
+					app:titleTextAppearance="@style/CardView.TitleText"/>
 
 				<TextView
 					android:id="@+id/temperature_title_info"
@@ -305,9 +304,9 @@
 					app:layout_constraintTop_toBottomOf="@+id/pressure_interval"/>
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
-		</androidx.cardview.widget.CardView>
+		</com.google.android.material.card.MaterialCardView>
 
-		<androidx.cardview.widget.CardView
+		<com.google.android.material.card.MaterialCardView
 			android:id="@+id/data_statistics_view"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -332,7 +331,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/data_statistics"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/Cardview.TitleText"/>
+					app:titleTextAppearance="@style/CardView.TitleText"/>
 
 				<TextView
 					android:id="@+id/uploaded_title"
@@ -375,6 +374,6 @@
 					app:layout_constraintTop_toBottomOf="@+id/uploaded"/>
 
 			</androidx.constraintlayout.widget.ConstraintLayout>
-		</androidx.cardview.widget.CardView>
+		</com.google.android.material.card.MaterialCardView>
 	</LinearLayout>
 </ScrollView>
