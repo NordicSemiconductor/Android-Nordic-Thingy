@@ -117,6 +117,7 @@
     <string name="motion_freq_hz">Hz</string>
     <string name="time_unit_ms">ms</string>
     <string name="time_unit_s">s</string>
+    <string name="degrees_2">%.2f °</string>
     <string name="interval_ms">%d ms</string>
     <string name="interval_s">%d s</string>
     <string name="interval_hz">%d Hz</string>
