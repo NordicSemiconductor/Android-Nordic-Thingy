@@ -269,18 +269,10 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              @Nullable final ViewGroup container,
                              @Nullable final Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_sound, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_sound, container, false);
 
         final Toolbar speakerToolbar = rootView.findViewById(R.id.speaker_toolbar);
-        speakerToolbar.setLogo(R.drawable.ic_sound);
-        speakerToolbar.setTitle(R.string.speaker_title);
         speakerToolbar.inflateMenu(R.menu.audio_warning);
-
-        final Toolbar microphoneToolbar = rootView.findViewById(R.id.microphone_toolbar);
-        microphoneToolbar.setLogo(R.drawable.ic_mic_grey);
-        microphoneToolbar.setTitle(R.string.microphone_title);
-        microphoneToolbar.inflateMenu(R.menu.audio_warning);
-
         speakerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -295,6 +287,8 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             }
         });
 
+        final Toolbar microphoneToolbar = rootView.findViewById(R.id.microphone_toolbar);
+        microphoneToolbar.inflateMenu(R.menu.audio_warning);
         microphoneToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

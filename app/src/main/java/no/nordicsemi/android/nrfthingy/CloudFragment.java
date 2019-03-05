@@ -65,6 +65,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -179,7 +180,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                     case ThingyUtils.BUTTON_STATE_RELEASED:
                         mButtonReleasedTime = System.currentTimeMillis();
                         final float duration = (float) (mButtonReleasedTime - mButtonPressedTime) / 1000;
-                        mButtonStateView.setText(getString(R.string.button_state_released) + "(" + duration + " sec)");
+                        mButtonStateView.setText(getString(R.string.button_state_released_time, duration));
                         if (mDatabaseHelper.getButtonUploadState(bluetoothDevice.getAddress())) {
                             uploadData(BUTTON_STATE_UPDATE_EVENT, createButtonStateJson(duration));
                         }
@@ -273,15 +274,13 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_cloud, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             final ViewGroup container,
+                             final Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_cloud, container, false);
 
         final Toolbar toolbarFeatureControl = rootView.findViewById(R.id.card_toolbar_feature_control);
-        toolbarFeatureControl.setLogo(R.drawable.ic_remote);
-        toolbarFeatureControl.setTitle(R.string.feature_control);
         toolbarFeatureControl.inflateMenu(R.menu.menu_cloud_info);
-
         toolbarFeatureControl.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -300,13 +299,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        final Toolbar toolbarFeatureInfo = rootView.findViewById(R.id.card_toolbar_feature_info);
-        toolbarFeatureInfo.setLogo(R.drawable.ic_info_grey);
-        toolbarFeatureInfo.setTitle(R.string.feature_info);
-
-        final Toolbar toolbarDataStatistics = rootView.findViewById(R.id.card_toolbar_data_statistics);
-        toolbarDataStatistics.setLogo(R.drawable.ic_data_usage);
-        toolbarDataStatistics.setTitle(R.string.data_statistics);
 
         mTemperatureView = rootView.findViewById(R.id.temperature);
         mPressureView = rootView.findViewById(R.id.pressure);
@@ -321,7 +313,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         mPressureSwitch = rootView.findViewById(R.id.switch_pressure);
         mButtonStateSwitch = rootView.findViewById(R.id.switch_button);
 
-        mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
+        mTemperatureSwitch.setChecked(mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(requireContext()).isEmpty());
         mTemperatureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -331,7 +323,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                     mThingySdkManager.enableTemperatureNotifications(mDevice, isChecked);
                     return;
                 }
-                final String iftttToken = Utils.getIFTTTToken(getContext());
+                final String iftttToken = Utils.getIFTTTToken(requireContext());
                 if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
@@ -342,7 +334,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        mPressureSwitch.setChecked(mDatabaseHelper.getPressureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
+        mPressureSwitch.setChecked(mDatabaseHelper.getPressureUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(requireContext()).isEmpty());
         mPressureSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -352,7 +344,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                     mThingySdkManager.enablePressureNotifications(mDevice, isChecked);
                     return;
                 }
-                final String iftttToken = Utils.getIFTTTToken(getContext());
+                final String iftttToken = Utils.getIFTTTToken(requireContext());
                 if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
@@ -363,7 +355,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             }
         });
 
-        mButtonStateSwitch.setChecked(mDatabaseHelper.getButtonUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(getContext()).isEmpty());
+        mButtonStateSwitch.setChecked(mDatabaseHelper.getButtonUploadState(mDevice.getAddress()) && !Utils.getIFTTTToken(requireContext()).isEmpty());
         mButtonStateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -372,7 +364,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                     mThingySdkManager.enableButtonStateNotification(mDevice, isChecked);
                     return;
                 }
-                final String iftttToken = Utils.getIFTTTToken(getContext());
+                final String iftttToken = Utils.getIFTTTToken(requireContext());
                 if (iftttToken.isEmpty()) {
                     IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
                     ifttTokenDialogFragment.show(getChildFragmentManager(), null);
@@ -396,7 +388,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("UPLOADED", mUploadedSize);
         outState.putLong("DOWNLOADED", mDownloadedSize);

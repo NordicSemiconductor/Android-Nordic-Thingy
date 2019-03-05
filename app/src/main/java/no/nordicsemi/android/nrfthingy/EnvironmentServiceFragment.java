@@ -328,8 +328,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         mDatabaseHelper = new DatabaseHelper(getActivity());
 
         if (toolbarEnvironment != null) {
-            toolbarEnvironment.setLogo(R.drawable.ic_weather);
-            toolbarEnvironment.setTitle(getString(R.string.environment_current_conditions_title));
             toolbarEnvironment.inflateMenu(R.menu.environment_card_menu);
 
             if (mDevice != null) {
