@@ -40,8 +40,6 @@ package no.nordicsemi.android.nrfthingy.sound;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,9 +47,11 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class FrequencyModeFragment extends Fragment implements View.OnTouchListener {
@@ -59,7 +59,6 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
     private TextView mVolume;
     private SeekBar mSeekbar;
     private BluetoothDevice mDevice;
-    private DatabaseHelper mDatabaseHelper;
     private ThingySdkManager mThingySdkManager;
 
     public FrequencyModeFragment() {
@@ -80,14 +79,14 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
         }
         mThingySdkManager = ThingySdkManager.getInstance();
-        mDatabaseHelper = new DatabaseHelper(getActivity());
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_frequency_mode, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_frequency_mode, container, false);
         mSeekbar = rootView.findViewById(R.id.seek_bar_volume);
         mVolume = rootView.findViewById(R.id.frequency_volume);
         final View view1 = rootView.findViewById(R.id.label_1);
@@ -118,17 +117,17 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
 
         mSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(final SeekBar seekBar, final int progress, final boolean fromUser) {
                 mVolume.setText(String.valueOf(progress));
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(final SeekBar seekBar) {
 
             }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(final SeekBar seekBar) {
 
             }
         });
@@ -137,17 +136,7 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
+    public boolean onTouch(final View view, final MotionEvent event) {
         final int id = view.getId();
         int frequency;
         final int duration = 0xFFFF;

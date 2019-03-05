@@ -38,8 +38,8 @@
 
 package no.nordicsemi.android.nrfthingy.configuration;
 
-public interface ThingeeBasicSettingsChangeListener {
-    void updateThingeeName();
+public interface ThingyBasicSettingsChangeListener {
+    void updateThingyName();
 
     void updatePhysicalWebUrl();
 

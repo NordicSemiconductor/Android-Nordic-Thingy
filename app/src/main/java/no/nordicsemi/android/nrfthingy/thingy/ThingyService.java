@@ -41,7 +41,6 @@ package no.nordicsemi.android.nrfthingy.thingy;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
-import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
@@ -49,16 +48,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -80,20 +79,16 @@ public class ThingyService extends BaseThingyService {
     private NotificationChannel mNotificationChannel;
 
     public class ThingyBinder extends BaseThingyBinder {
-        //You can create your own functionality related to the application in side the binder here
-        private static final int SCANNING = 1;
-        private static final int CONNECTING = 2;
         private boolean mIsScanning;
         private String mLastVisibleFragment = Utils.ENVIRONMENT_FRAGMENT;
-        private int mState;
 
         /**
          * Saves the activity state.
          *
-         * @param activitFinishing if the activity is finishing or not
+         * @param activityFinishing if the activity is finishing or not
          */
-        public final void setActivityFinishing(final boolean activitFinishing) {
-            mIsActivityFinishing = activitFinishing;
+        public final void setActivityFinishing(final boolean activityFinishing) {
+            mIsActivityFinishing = activityFinishing;
         }
 
         /**
@@ -111,9 +106,9 @@ public class ThingyService extends BaseThingyService {
         }
 
         public final int getLastSelectedAudioTrack(final BluetoothDevice device) {
-            if (mLastSelectedAudioTrack.containsKey(device)) {
-                return mLastSelectedAudioTrack.get(device);
-            }
+            final Integer track = mLastSelectedAudioTrack.get(device);
+            if (track != null)
+                return track;
             return 0;
         }
 
@@ -155,12 +150,9 @@ public class ThingyService extends BaseThingyService {
         return MainActivity.class;
     }
 
-
     @Override
     public void onDeviceConnected(final BluetoothDevice device, final int connectionState) {
         createBackgroundNotification();
-        /*if (!mBound) {
-        }*/
     }
 
     @Override
@@ -173,7 +165,7 @@ public class ThingyService extends BaseThingyService {
 
     @Nullable
     @Override
-    public ThingyBinder onBind(Intent intent) {
+    public ThingyBinder onBind(final Intent intent) {
         return new ThingyBinder();
     }
 
@@ -187,7 +179,7 @@ public class ThingyService extends BaseThingyService {
     protected void onUnbind() {
         if (mIsActivityFinishing) {
             final ArrayList<BluetoothDevice> devices = mDevices;
-            if(devices != null && devices.size() == 0){
+            if (devices != null && devices.size() == 0) {
                 stopForegroundThingyService();
                 return;
             }
@@ -217,7 +209,7 @@ public class ThingyService extends BaseThingyService {
         stopForegroundThingyService();
     }
 
-    private void stopForegroundThingyService(){
+    private void stopForegroundThingyService() {
         stopForeground(true);
         stopSelf();
     }
@@ -243,10 +235,10 @@ public class ThingyService extends BaseThingyService {
         }
     };
 
-    private void createNotificationPrerequisites(){
+    private void createNotificationPrerequisites() {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if(Utils.checkIfVersionIsOreoOrAbove()) {
-            if(mNotificationChannel == null) {
+        if (Utils.checkIfVersionIsOreoOrAbove()) {
+            if (mNotificationChannel == null) {
                 mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
             }
             mNotificationManager.createNotificationChannel(mNotificationChannel);
@@ -258,7 +250,7 @@ public class ThingyService extends BaseThingyService {
      */
     private Notification createForegroundNotification() {
         final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
-        builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryDark));
+        builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.nordicBlue));
         builder.setContentTitle(("Tap to launch Nordic Thingy."));
 
         return builder.build();
@@ -269,7 +261,7 @@ public class ThingyService extends BaseThingyService {
      */
     private void createNotificationForConnectedDevice(final BluetoothDevice device, final String deviceName) {
         final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
-        builder.setColor(ContextCompat.getColor(getApplicationContext(), no.nordicsemi.android.thingylib.R.color.colorPrimaryDark));
+        builder.setColor(ContextCompat.getColor(getApplicationContext(), R.color.nordicBlue));
         builder.setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
         builder.setGroup(PRIMARY_GROUP_ID).setGroupSummary(true);
         builder.setContentTitle(getString(R.string.thingy_notification_text, deviceName));
@@ -311,11 +303,11 @@ public class ThingyService extends BaseThingyService {
         // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
         final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if(Utils.checkIfVersionIsOreoOrAbove()) {
+        if (Utils.checkIfVersionIsOreoOrAbove()) {
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL);
             builder.setContentIntent(pendingIntent).setAutoCancel(true);
             builder.setSmallIcon(R.drawable.ic_thingy_white);
-            if(mNotificationChannel == null) {
+            if (mNotificationChannel == null) {
                 mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
                 builder.setChannelId(PRIMARY_CHANNEL_ID);
                 NotificationManager notificationManager =
@@ -336,7 +328,7 @@ public class ThingyService extends BaseThingyService {
      */
     private void createSummaryNotification() {
         final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
-        builder.setColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        builder.setColor(ContextCompat.getColor(this, R.color.nordicBlue));
         builder.setShowWhen(false).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
         builder.setGroup(Utils.THINGY_GROUP_ID).setGroupSummary(true);
 

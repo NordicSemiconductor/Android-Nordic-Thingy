@@ -52,13 +52,12 @@ import java.io.InputStream;
 public class FileHelper {
     private static final String TAG = "FileHelper";
 
-    public static final String NORDIC_FOLDER = "Nordic Semiconductor";
+    private static final String NORDIC_FOLDER = "Nordic Semiconductor";
 
     public static void copyAudioFiles(final Context context) {
-
-		/*
+        /*
          * Copy example HEX files to the external storage. Files will be copied if the DFU Applications folder is missing
-		 */
+         */
         final File root = new File(String.valueOf(context.getFilesDir()));
 
         File audioFile;
@@ -73,10 +72,9 @@ public class FileHelper {
     }
 
     public static boolean copyAudioFilesToLocalAppStorage(final Context context, final Uri uri, final String audioFileName) {
-
-		/*
+        /*
          * Copy example HEX files to the external storage. Files will be copied if the DFU Applications folder is missing
-		 */
+         */
         final File root = new File(String.valueOf(context.getFilesDir()));
 
         File audioFile;
@@ -89,10 +87,9 @@ public class FileHelper {
     }
 
     public static boolean copyAudioFilesToLocalAppStorage(final Context context, final String path, final String audioFileName) {
-
-		/*
+        /*
          * Copy example HEX files to the external storage. Files will be copied if the DFU Applications folder is missing
-		 */
+         */
         final File root = new File(Environment.getExternalStorageDirectory(), NORDIC_FOLDER);
 
         File audioFile = new File(root, audioFileName);
@@ -180,7 +177,6 @@ public class FileHelper {
             Log.e(TAG, "Error while copying HEX file " + e.toString());
         }
     }
-
 
     /**
      * Copies the file from res/raw with given id to given destination file. If dest does not exist it will be created.

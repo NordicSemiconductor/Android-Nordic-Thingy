@@ -39,11 +39,8 @@
 
 <resources>
     <dimen name="activity_horizontal_margin">32dp</dimen>
-    <dimen name="margin_setup_complete_button">60dp</dimen>
     <dimen name="margin_bottom_setup_complete_container">10dp</dimen>
     <dimen name="toolbar_image_height">350dp</dimen>
-    <dimen name="stepper_title_text_size">14sp</dimen>
-    <dimen name="motion_view_height">350dp</dimen>
     <dimen name="black_key_width">50dp</dimen>
     <dimen name="black_key_height">160dp</dimen>
     <dimen name="white_key_height">275dp</dimen>
@@ -52,4 +49,5 @@
     <dimen name="sound_pager_height">400dp</dimen>
     <dimen name="margin_troubleshoot">50dp</dimen>
     <dimen name="add_thingy_margin_top">26dp</dimen>
+    <dimen name="cardview_horizontal_padding">32dp</dimen>
 </resources>

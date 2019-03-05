@@ -43,16 +43,19 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,34 +86,33 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
-    //If you're setting up the Nordc Thingy example app project from GitHub make sure to create your own project
+    //If you're setting up the Nordic Thingy example app project from GitHub make sure to create your own project
     //on the Google Developer Console and enable the URLShortener API and use the API key in your project.
     private LinearLayout mShortUrlContainer;
 
     private Spinner mEddystoneUrlTypesView;
-    private TextInputLayout mEddystonUrlLayout;
+    private TextInputLayout mEddystoneUrlLayout;
     private TextInputEditText mEddystoneUrlView;
     private TextView mShortUrl;
-    private Switch mSwitchPhysicalWeb;
+    private SwitchCompat mSwitchPhysicalWeb;
 
     private String mUrl;
 
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
-    public EddystoneUrlConfigurationDialogFragment() {
-
-    }
 
     public static EddystoneUrlConfigurationDialogFragment newInstance(final BluetoothDevice device) {
-        EddystoneUrlConfigurationDialogFragment fragment = new EddystoneUrlConfigurationDialogFragment();
+        final EddystoneUrlConfigurationDialogFragment fragment = new EddystoneUrlConfigurationDialogFragment();
+
         Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -121,13 +123,13 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.physcial_web_url_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_eddystone_url, null);
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
+        alertDialogBuilder.setTitle(getString(R.string.physical_web_url_title));
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_eddystone_url, null);
 
         mShortUrlContainer = view.findViewById(R.id.short_url_container);
-        mEddystonUrlLayout = view.findViewById(R.id.layout_url_data);
+        mEddystoneUrlLayout = view.findViewById(R.id.layout_url_data);
         mEddystoneUrlTypesView = view.findViewById(R.id.url_types);
         mEddystoneUrlView = view.findViewById(R.id.url_data_view);
         mShortUrl = view.findViewById(R.id.short_url);
@@ -146,7 +148,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                mEddystonUrlLayout.setError(null);
+                mEddystoneUrlLayout.setError(null);
                 mShortUrlContainer.setVisibility(View.GONE);
             }
         });
@@ -192,7 +194,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                         if (validateInput()) {
                             if (mThingySdkManager.setEddystoneUrl(mDevice, getValueFromView())) {
                                 dismiss();
-                                ((ThingeeBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
+                                ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
                             } else {
                                 Utils.showToast(getActivity(), getString(R.string.error_configuring_char));
                             }
@@ -200,7 +202,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                     } else {
                         mThingySdkManager.disableEddystoneUrl(mDevice);
                         dismiss();
-                        ((ThingeeBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
+                        ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
                     }
                 }
             }
@@ -242,40 +244,28 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private boolean validateInput() {
-
         if (mShortUrlContainer.getVisibility() == View.VISIBLE) {
             return true;
         }
 
         final String urlText = mEddystoneUrlView.getText().toString().trim();
         if (urlText.isEmpty()) {
-            mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+            mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
             return false;
         }
 
         final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + urlText;
         if (url.isEmpty()) {
-            mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+            mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
             return false;
         } else {
 
             if (!Patterns.WEB_URL.matcher(url).matches()) {
-                mEddystonUrlLayout.setError(getString(R.string.error_empty_url_text));
+                mEddystoneUrlLayout.setError(getString(R.string.error_empty_url_text));
                 return false;
             } else if (Utils.encodeUri(url).length > 18) {
-                mEddystonUrlLayout.setError(getString(R.string.url_shortener_message));
+                mEddystoneUrlLayout.setError(getString(R.string.url_shortener_message));
                 return false;
             }
         }
@@ -283,7 +273,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         return true;
     }
 
-    public String getValueFromView() {
+    private String getValueFromView() {
         final String urlText;
         if (mShortUrlContainer.getVisibility() != View.VISIBLE) {
             urlText = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
@@ -294,9 +284,9 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
         return urlText;
     }
 
-    private void shortenUrl(final String longUrl){
-        String jsonBody = "{'longUrl':'" + longUrl + "'}";
-        CloudTask task = new CloudTask(jsonBody);
+    private void shortenUrl(final String longUrl) {
+        final String jsonBody = "{'longUrl':'" + longUrl + "'}";
+        final CloudTask task = new CloudTask(jsonBody);
         task.execute();
     }
 
@@ -307,18 +297,18 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                 if (jsonResponse.has("error")) {
                     final JSONObject errorObject = jsonResponse.getJSONObject("error");
                     final JSONArray errorArray = errorObject.getJSONArray("errors");
-                    for(int i = 0; i < errorArray.length(); i++){
+                    for (int i = 0; i < errorArray.length(); i++) { // FIXME not a loop?
                         final JSONObject error = errorArray.getJSONObject(i);
                         final String errorMessage;
-                        if(error.has("reason") && error.has("message")){
+                        if (error.has("reason") && error.has("message")) {
                             final String reason = "Reason: " + error.getString("reason");
-                            final String message =  "Message: " + error.getString("message");
+                            final String message = "Message: " + error.getString("message");
                             errorMessage = message + " " + reason;
                         } else {
                             errorMessage = "Unknown error";
                         }
 
-                        getActivity().runOnUiThread(new Runnable() {
+                        requireActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Utils.showToast(getActivity(), errorMessage);
@@ -328,7 +318,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                     }
                 } else {
                     final String newUrl = jsonResponse.getString("id");
-                    getActivity().runOnUiThread(new Runnable() {
+                    requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             mShortUrlContainer.setVisibility(View.VISIBLE);
@@ -359,10 +349,11 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             }
         }
     }
+
     private void readStream(final InputStream inputStream) {
         BufferedReader br = null;
         try {
-            StringBuffer sb = new StringBuffer();
+            final StringBuilder sb = new StringBuilder();
             br = new BufferedReader(new InputStreamReader(inputStream));
             String inputLine;
             while ((inputLine = br.readLine()) != null) {
@@ -370,30 +361,26 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             }
             final String result = sb.toString();
             handleJsonResponse(result);
-        } catch (IOException e) {
-
-            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("EddystoneConfig", "Error while reading stream", e);
         } finally {
             try {
-                if(br != null) {
+                if (br != null) {
                     br.close();
                 }
                 inputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("EddystoneConfig", "Error while closing stream", e);
             }
         }
     }
 
     public class CloudTask extends AsyncTask<Void, Void, Void> {
-
         private static final String URL_SHORTENER_API_KEY = "URL_SHORTENER_API_KEY";
         private static final String URL = "https://www.googleapis.com/urlshortener/v1/url?key=" + URL_SHORTENER_API_KEY;
         private final String json;
 
-        public CloudTask(final String json) {
+        CloudTask(final String json) {
             this.json = json;
         }
 
@@ -413,14 +400,14 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 writeStream(out, json);
 
-                final int reponseCode = urlConnection.getResponseCode();
-                //Check for the reposnse code before reading the error stream, if not causes an exception with stream closed as there may not be an error
-                if(reponseCode !=  HttpURLConnection.HTTP_OK){
+                final int responseCode = urlConnection.getResponseCode();
+                // Check for the response code before reading the error stream, if not causes an
+                // exception with stream closed as there may not be an error
+                if (responseCode != HttpURLConnection.HTTP_OK) {
                     readStream(new BufferedInputStream(urlConnection.getErrorStream()));
                 } else {
                     readStream(new BufferedInputStream(urlConnection.getInputStream()));
                 }
-
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {

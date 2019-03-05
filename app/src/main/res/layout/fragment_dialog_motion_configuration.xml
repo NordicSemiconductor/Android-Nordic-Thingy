@@ -37,157 +37,154 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <LinearLayout
         android:id="@+id/pedometer_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_pedometer"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_pedometer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="4"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:maxLength="4"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_unit_ms"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"
+            android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/temperature_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_temperature"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="4"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:maxLength="4"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_unit_ms"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"
+            android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/compass_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_compass"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:hint="@string/time">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_compass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/time"
                 android:inputType="number"
-                android:maxLength="4"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:maxLength="4"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_unit_ms"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"
+            android:text="@string/time_unit_ms"/>
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/motion_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_motion"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/interval_motion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/frequency"
                 android:inputType="number"
-                android:maxLength="3"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:maxLength="3"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/motion_freq_hz"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"
+            android:text="@string/motion_freq_hz"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/motion_wake_container"
+    <RadioGroup
+        android:id="@+id/rg_motion_wake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <RadioGroup
-            android:id="@+id/rg_motion_wake"
+        <RadioButton
+            android:id="@+id/rb_motion_wake_on"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:text="@string/on"/>
 
-            <RadioButton
-                android:id="@+id/rb_motion_wake_on"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/on" />
-
-            <RadioButton
-                android:id="@+id/rb_motion_wake_off"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/off" />
-        </RadioGroup>
-    </LinearLayout>
+        <RadioButton
+            android:id="@+id/rb_motion_wake_off"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/off"/>
+    </RadioGroup>
 </LinearLayout>

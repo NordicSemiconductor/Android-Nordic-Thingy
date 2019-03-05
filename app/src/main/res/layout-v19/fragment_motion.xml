@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/animation_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -59,18 +59,20 @@
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
             android:layout_marginTop="@dimen/cardview_vertical_padding"
             card_view:cardCornerRadius="2dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical" >
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_euler"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/euler_title"
+                    app:logo="@drawable/ic_animation"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -86,9 +88,9 @@
                         surfaceview:renderMode="RENDERMODE_WHEN_DIRTY"/>
                 </LinearLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/motion_view"
             android:layout_gravity="center"
             android:layout_width="match_parent"
@@ -103,13 +105,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_motion"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:title="@string/motion_title"
+                    app:logo="@drawable/ic_motion"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -126,7 +129,8 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/steps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_pedometer"
@@ -145,7 +149,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -182,7 +186,8 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/tap_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_tap"
@@ -201,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -231,13 +236,15 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/title_heading"
                             android:id="@+id/heading_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -258,7 +265,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="30sp"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
                                 android:text="@string/motion_default"/>
 
                             <LinearLayout
@@ -295,7 +302,8 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/orientation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_transform"
@@ -307,14 +315,16 @@
                             android:textSize="30sp"
                             android:text=""
                             android:gravity="right"/>
-                        <ImageView
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:importantForAccessibility="no"
                             android:id="@+id/portrait_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/ic_portrait_black_36px"
                             android:layout_gravity="center"/>
 
-                        <android.support.v4.widget.Space
+                        <android.widget.Space
                             android:layout_width="@dimen/activity_horizontal_margin"
                             android:layout_height="match_parent" />
 
@@ -349,13 +359,13 @@
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/gravity_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding"
             android:layout_marginStart="@dimen/cardview_horizontal_padding"
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
             android:layout_marginBottom="@dimen/activity_vertical_margin"
@@ -366,13 +376,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_gravity"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
+                    app:title="@string/title_gravity_vector"
+                    app:logo="@drawable/ic_apple"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -401,7 +412,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorRed"
+                            android:background="@color/red"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>
@@ -415,7 +426,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorGreen"
+                            android:background="@color/green"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>
@@ -429,7 +440,7 @@
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorBlue"
+                            android:background="@color/blue"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"/>
@@ -437,7 +448,7 @@
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

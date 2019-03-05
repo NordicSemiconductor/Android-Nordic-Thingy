@@ -39,23 +39,17 @@
 package no.nordicsemi.android.nrfthingy.common;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 
 import no.nordicsemi.android.nrfthingy.R;
 
 public class MessageDialogFragment extends DialogFragment {
 
-    public MessageDialogFragment() {
-
-    }
-
     public static MessageDialogFragment newInstance(final String title, final String message) {
-        MessageDialogFragment fragment = new MessageDialogFragment();
+        final MessageDialogFragment fragment = new MessageDialogFragment();
         final Bundle args = new Bundle();
         args.putString(Utils.EXTRA_DATA_TITLE, title);
         args.putString(Utils.EXTRA_DATA, message);
@@ -63,38 +57,16 @@ public class MessageDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         if (getArguments() != null) {
             alertDialogBuilder.setIcon(R.drawable.ic_warning_grey);
             alertDialogBuilder.setTitle(getArguments().getString(Utils.EXTRA_DATA_TITLE));
             alertDialogBuilder.setMessage(getArguments().getString(Utils.EXTRA_DATA));
         }
-
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
+        alertDialogBuilder.setPositiveButton(getString(R.string.ok), null);
+        return alertDialogBuilder.create();
     }
 }

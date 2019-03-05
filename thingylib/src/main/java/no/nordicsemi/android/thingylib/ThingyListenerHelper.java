@@ -44,7 +44,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,6 @@ public class ThingyListenerHelper {
                 return;
 
             final String action = intent.getAction();
-
             switch (action) {
                 case ThingyUtils.ACTION_DEVICE_CONNECTED:
                     if(globalListener != null) {
@@ -286,11 +285,11 @@ public class ThingyListenerHelper {
                 case ThingyUtils.ROTATION_MATRIX_NOTIFICATION:
                     final byte [] rotationMatrix = intent.getExtras().getByteArray(ThingyUtils.EXTRA_DATA_ROTATION_MATRIX);
                     if(globalListener != null) {
-                        globalListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        globalListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
 
                     if(thingyListener != null) {
-                        thingyListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        thingyListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
                     break;
                 case ThingyUtils.HEADING_NOTIFICATION:

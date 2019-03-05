@@ -37,40 +37,55 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#009CDE</color>
-    <color name="colorPrimaryDark">#0081B7</color>
-    <color name="colorAccent">#0081B7</color>
-    <color name="colorNordicOrange">#DC582A</color>
-    <color name="colorBackground">#F5F5F5</color>
-    <color name="textColorWhite">#FFFFFF</color>
-    <color name="colorRed">#FFFF0000</color>
-    <color name="colorGreen">#FF00FF00</color>
-    <color name="colorBlue">#FF0000FF</color>
-    <color name="tabSelectedTextColor">@android:color/white</color>
-    <color name="tabTextColor">#AAFFFFFF</color>
-    <color name="tabIndicatorColor">@android:color/white</color>
-    <color name="greyBg">#9A9A9A</color>
-    <color name="textColorSecondary">#727272</color>
-    <color name="actionMode">#7e7e7e</color>
-    <color name="textColorBlack">#000000</color>
-    <color name="disabledBgColouor">#BDBDBD</color>
+    <color name="background">#F5F5F5</color>
+    <color name="onBackground">@color/nordicLightGray</color>
+    <color name="selectedMenuBackground">@color/nordicLightGray</color>
+    <color name="accent">@color/nordicLake</color>
 
-    <!-- A light Holo shade of blue -->
-    <color name="holo_blue_light">#ff33b5e5</color>
-    <color name="holo_gray_light">#33999999</color>
-    <color name="holo_green_light">#ff99cc00</color>
-    <color name="holo_red_light">#ffff4444</color>
-    <color name="holo_blue_dark">#ff0099cc</color>
-    <color name="holo_green_dark">#ff669900</color>
-    <color name="holo_red_dark">#ffcc0000</color>
-    <color name="holo_purple">#ffaa66cc</color>
-    <color name="holo_orange_light">#ffffbb33</color>
-    <color name="holo_orange_dark">#ffff8800</color>
-    <color name="holo_blue_bright">#ff00ddff</color>
-    <color name="holo_gray_bright">#33CCCCCC</color>
-    <color name="teal">#009688</color>
-    <color name="cyan">#00BCD4</color>
-    <color name="brown">#795548</color>
-    <color name="selectedMenuBackground">#FFEEEEEE</color>
-    <color name="textColorUnselected">#FF212121</color>
+    <!--
+		Nordic logo on splash screen.
+		When using light/dark top background, consider changing status bar to light/dark
+		in styles-v23.
+	-->
+    <color name="colorNordicLogo">@color/white</color>
+    <color name="colorNordicLogoText">@color/white</color>
+    <color name="colorNordicLogoBottom">@color/nordicBlue</color>
+    <color name="colorNordicLogoTop">@color/nordicBlueslate</color>
+
+    <color name="welcomeNordicLogo">@color/nordicBlue</color>
+    <color name="welcomeBackground">@color/background</color>
+
+    <color name="aboutNordicLogo">@color/nordicBlue</color>
+    <color name="aboutNordicLogoText">@color/black</color>
+
+    <!-- Nordic colors -->
+    <color name="nordicBlue">#FF00A9CE</color>
+    <color name="nordicBlueDark">#FF0090B0</color>
+    <color name="nordicSky">#FF6AD1E3</color>
+    <color name="nordicBlueslate">#FF0033A0</color>
+    <color name="nordicLake">#FF0077C8</color>
+    <color name="nordicLightGray">#FFD9E1E2</color>
+    <color name="nordicMediumGray">#FF768692</color>
+    <color name="nordicDarkGray">#FF333F48</color>
+    <color name="nordicGrass">#FFD0DF00</color>
+    <color name="nordicSun">#FFFFCD00</color>
+    <color name="nordicRed">#FFEE2F4E</color>
+    <color name="nordicFall">#FFF58220</color>
+
+    <!-- Common -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="lightGray">#FFF5F5F5</color>
+    <color name="grey">#FF9A9A9A</color>
+    <color name="red">#FFFF0000</color>
+    <color name="dark_blue">#FF2323F1</color>
+    <color name="orange">#FFC8841A</color>
+    <color name="green">#FF27C32B</color>
+    <color name="blue">#FF45A1FF</color>
+    <color name="gold">#FFACB117</color>
+    <color name="purple">#FFB1179D</color>
+    <color name="yellow">#FFDCE31F</color>
+    <color name="brown">#FF47392D</color>
+    <color name="celadon">#FF1AC8B1</color>
+    <color name="bordo">#FFA42A2A</color>
 </resources>

@@ -39,22 +39,16 @@ package no.nordicsemi.android.nrfthingy.common;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,7 +94,7 @@ public class ScannerFragment extends DialogFragment {
      * Static implementation of fragment so that it keeps data when phone orientation is changed For standard BLE Service UUID, we can filter devices using normal android provided command
      * startScanLe() with required BLE Service UUID For custom BLE Service UUID, we will use class ScannerServiceParser to filter out required device
      */
-    public static ScannerFragment getInstance(final UUID uuid) {
+    public static ScannerFragment getInstance(@Nullable final UUID uuid) {
         final ScannerFragment fragment = new ScannerFragment();
 
         final Bundle args = new Bundle();
@@ -108,6 +102,7 @@ public class ScannerFragment extends DialogFragment {
             args.putParcelable(PARAM_UUID, new ParcelUuid(uuid));
         }
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -120,14 +115,9 @@ public class ScannerFragment extends DialogFragment {
 
     @Override
     public void onStop() {
-        //Stop scan moved from onDestroyView to onStop
+        // Stop scan moved from onDestroyView to onStop
         stopScan();
         super.onStop();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     /**
@@ -136,43 +126,43 @@ public class ScannerFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final View dialogView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_scanner_device_selection, null);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        final View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_scanner_device_selection, null);
         final ListView listview = dialogView.findViewById(android.R.id.list);
 
         troubleshootView = dialogView.findViewById(R.id.troubleshoot_guide);
 
         listview.setEmptyView(dialogView.findViewById(android.R.id.empty));
         listview.setAdapter(mAdapter = new DeviceListAdapter());
-
-        builder.setTitle(R.string.scanner_title);
-        final AlertDialog dialog = builder.setView(dialogView).create();
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
                 stopScan();
                 dismiss();
 
-                final ScannerFragmentListener listener = (ScannerFragmentListener) getActivity();
+                final ScannerFragmentListener listener = (ScannerFragmentListener) requireActivity();
                 final ExtendedBluetoothDevice device = (ExtendedBluetoothDevice) mAdapter.getItem(position);
                 listener.onDeviceSelected(device.device, device.name != null ? device.name : getString(R.string.not_available));
-
             }
         });
 
-        mScanButton = dialogView.findViewById(R.id.action_cancel);
+        final AlertDialog dialog = builder
+                .setTitle(R.string.scanner_title)
+                .setView(dialogView)
+                .setPositiveButton(R.string.scanner_action_scan, null)
+                .show();
+
+        // Button listener needs to be set like this, otherwise it would always dismiss the dialog.
+        mScanButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.action_cancel) {
-                    if (mIsScanning) {
-                        final ScannerFragmentListener listener = (ScannerFragmentListener) getActivity();
-                        listener.onNothingSelected();
-                        dialog.cancel();
-
-                    } else {
-                        startScan();
-                    }
+            public void onClick(final View v) {
+                if (mIsScanning) {
+                    final ScannerFragmentListener listener = (ScannerFragmentListener) requireActivity();
+                    listener.onNothingSelected();
+                    dialog.cancel();
+                } else {
+                    startScan();
                 }
             }
         });
@@ -205,9 +195,9 @@ public class ScannerFragment extends DialogFragment {
         // Since Android 6.0 we need to obtain either Manifest.permission.ACCESS_COARSE_LOCATION or Manifest.permission.ACCESS_FINE_LOCATION to be able to scan for
         // Bluetooth LE devices. This is related to beacons as proximity devices.
         // On API older than Marshmallow the following code does nothing.
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // When user pressed Deny and still wants to use this functionality, show the rationale
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 return;
             }
 
@@ -253,7 +243,7 @@ public class ScannerFragment extends DialogFragment {
 
     private ScanCallback scanCallback = new ScanCallback() {
         @Override
-        public void onScanResult(final int callbackType, final ScanResult result) {
+        public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
             // do nothing
         }
 

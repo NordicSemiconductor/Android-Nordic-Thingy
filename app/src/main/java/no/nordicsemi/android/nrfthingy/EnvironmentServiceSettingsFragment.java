@@ -42,12 +42,12 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -73,16 +73,7 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
 
     private BluetoothDevice mDevice;
 
-    private EnvironmentServiceSettingsFragmentListener mListener;
     private ThingySdkManager mThingySdkManager;
-
-    public interface EnvironmentServiceSettingsFragmentListener {
-        void configureEnvironmentServiceSettings(final byte[] data);
-    }
-
-    public EnvironmentServiceSettingsFragment() {
-        // Required empty public constructor
-    }
 
     public static EnvironmentServiceSettingsFragment newInstance(final BluetoothDevice device) {
         EnvironmentServiceSettingsFragment fragment = new EnvironmentServiceSettingsFragment();
@@ -93,7 +84,7 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -103,8 +94,8 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.environment_settings_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_environment_settings, null);
 
@@ -250,18 +241,7 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
         return alertDialog;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private boolean validateInput() {
-
         final String tempInterval = mTemperatureIntervalView.getText().toString().trim();
         if (tempInterval.isEmpty()) {
             mTemperatureIntervalLayout.setError(getString(R.string.error_temp_interval_empty));

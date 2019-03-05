@@ -769,10 +769,9 @@ public class ThingySdkManager {
         if (device != null) {
             Log.v(ThingyUtils.TAG, "BINDER: " + mBinder);
             if (mBinder != null) {
-                //mBinder.enableEnvironmentNotifications(device, flag);
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
                 if (thingyConnection != null) {
-                    thingyConnection.enableBatteryLevelNotifcations(flag);
+                    thingyConnection.enableBatteryLevelNotifications(flag);
                 }
             }
         }
@@ -1606,13 +1605,13 @@ public class ThingySdkManager {
                 if (thingyConnection != null) {
                     thingyConnection.playSoundFrequency(frequency, duration, volume);
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
     }
 
@@ -1629,13 +1628,13 @@ public class ThingySdkManager {
                 if (thingyConnection != null) {
                     thingyConnection.playSoundSample(sample);
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
     }
 
@@ -1653,13 +1652,13 @@ public class ThingySdkManager {
                     thingyConnection.setAudioStreamingInProgress(true);
                     return thingyConnection.playPcmAudio(audioFile);
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
         return false;
     }
@@ -1678,13 +1677,13 @@ public class ThingySdkManager {
                     thingyConnection.setAudioStreamingInProgress(true);
                     thingyConnection.playPcmSample(sample);
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
     }
 
@@ -1734,13 +1733,13 @@ public class ThingySdkManager {
                     //thingyConnection.setAudioStreamingInProgress(true);
                     thingyConnection.playVoiceInput(sample);
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
     }
 
@@ -1758,13 +1757,13 @@ public class ThingySdkManager {
                     //thingyConnection.setAudioStreamingInProgress(true);
                     thingyConnection.stopPlayingVoiceInput();
                 } else {
-                    ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+                    ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
                 }
             } else {
-                ThingyUtils.showToast(context, context.getString(R.string.service_not_bound));
+                ThingyUtils.showToast(context, context.getString(R.string.thingy_error_service_not_bound));
             }
         } else {
-            ThingyUtils.showToast(context, context.getString(R.string.no_thingy_connected));
+            ThingyUtils.showToast(context, context.getString(R.string.thingy_not_connected));
         }
     }
 

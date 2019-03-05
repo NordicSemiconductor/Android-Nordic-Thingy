@@ -39,6 +39,6 @@
 
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true" android:drawable="@color/selectedMenuBackground" />
+    <item android:drawable="@color/selectedMenuBackground" android:state_checked="true"/>
     <item android:drawable="@android:color/transparent"/>
 </selector>

@@ -49,18 +49,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -69,6 +57,8 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -76,12 +66,22 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.FileBrowserAppsAdapter;
 import no.nordicsemi.android.nrfthingy.common.FileHelper;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.nrfthingy.widgets.AudioFileRecyclerAdapter;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -96,14 +96,10 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
 
     private boolean mIsPlaying = false;
 
-    private int mFileType;
-    private int mFileTypeTemp;
-
     private String mFilePath;
 
     private Uri mFileStreamUri;
 
-    private DatabaseHelper mDatabaseHelper;
     private BluetoothDevice mDevice;
 
     private AudioFileRecyclerAdapter mAudioFileAdapter;
@@ -136,9 +132,6 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         }
     };
 
-    public PcmModeFragment() {
-    }
-
     public static PcmModeFragment newInstance(final BluetoothDevice device) {
         PcmModeFragment fragment = new PcmModeFragment();
         final Bundle args = new Bundle();
@@ -154,22 +147,22 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
         }
         mThingySdkManager = ThingySdkManager.getInstance();
-        mDatabaseHelper = new DatabaseHelper(getActivity());
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_pcm_mode, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_pcm_mode, container, false);
         mFabPlay = rootView.findViewById(R.id.fab_play);
         mFabImport = rootView.findViewById(R.id.fab_import);
         mAudioRecyclerView = rootView.findViewById(R.id.audio_recycler_view);
         mAudioFileAdapter = new AudioFileRecyclerAdapter(getActivity());
         mAudioRecyclerView.setAdapter(mAudioFileAdapter);
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false);
         mAudioRecyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), layoutManager.getOrientation());
+        final DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(requireContext(), layoutManager.getOrientation());
         mAudioRecyclerView.addItemDecoration(dividerItemDecoration, 0);
         mAudioFileAdapter.notifyDataSetChanged();
         listFiles();
@@ -201,7 +194,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                         mIsPlaying = false;
                     }
                 } else {
-                    Utils.showToast(getActivity(), getString(R.string.no_thingy_connected));
+                    Utils.showToast(getActivity(), getString(R.string.thingy_not_connected));
                 }
             }
         });
@@ -232,15 +225,10 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("SELECTED_FILE_POSITION", mAudioFileAdapter.getSelectedItemPosition());
         outState.putBoolean("AUDIO_STATE", mIsPlaying);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -249,16 +237,15 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         if (mThingySdkManager.isThingyStreamingAudio(mDevice)) {
             ((ThingyService.ThingyBinder) (mThingySdkManager.getThingyBinder())).setLastSelectedAudioTrack(mDevice, mAudioFileAdapter.getSelectedItemPosition());
         }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mConnectionBroadcastReceiver);
+        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(mConnectionBroadcastReceiver);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Utils.SELECT_FILE_REQ: {
                 // clear previous data
-                mFileType = mFileTypeTemp;
                 mFilePath = null;
                 mFileStreamUri = null;
                 Uri uri;
@@ -273,10 +260,10 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                     Utils.showToast(getActivity(), getString(R.string.audio_file_import_aborted));
                     break;
                 }
-            /*
-             * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
-			 * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
-			 */
+                /*
+                 * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
+                 * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
+                 */
                 if (uri.getScheme().equals("file")) {
                     // the direct path to the file has been returned
                     mFilePath = uri.getPath();
@@ -302,7 +289,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     }
 
     @Override
-    public void onRequestPermission(String permission, int requestCode) {
+    public void onRequestPermission(final String permission, final int requestCode) {
         //Since the nested child fragment (activity > fragment > fragment) wasn't getting called the exact fragment index has to be used to get the fragment.
         //Also super.onRequestPermissionResult had to be used in both the main activity, fragment  inorder to propogate the request permission callback to the nested fragment
         getParentFragment().getChildFragmentManager().getFragments().get(1).requestPermissions(new String[]{permission}, requestCode);
@@ -326,22 +313,21 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         }
     }
 
-
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
         final Uri uri = args.getParcelable(Utils.EXTRA_URI);
         /*
-		 * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
-		 * all columns and than check which columns are present.
-		 */
+         * Some apps, f.e. Google Drive allow to select file that is not on the device. There is no "_data" column handled by that provider. Let's try to obtain
+         * all columns and than check which columns are present.
+         */
         // final String[] projection = new String[] { MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.DATA };
-        return new CursorLoader(getActivity(), uri, null /* all columns, instead of projection */, null, null, null);
+        return new CursorLoader(requireContext(), uri, null /* all columns, instead of projection */, null, null, null);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToNext()) {
-
             // Here we have to check the column indexes by name as we have requested for all. The order may be different.
             File file;
             String fileName = null;
@@ -375,8 +361,6 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 } else {
                     Utils.showToast(getActivity(), getString(R.string.invalid_audio_file_format));
                 }
-
-
             }
         } else {
             mFilePath = null;
@@ -385,14 +369,14 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         mFilePath = null;
         mFileStreamUri = null;
     }
 
     private void listFiles() {
-        FileHelper.copyAudioFiles(getActivity());
-        final File root = new File(String.valueOf(getActivity().getFilesDir()));
+        FileHelper.copyAudioFiles(requireContext());
+        final File root = new File(String.valueOf(requireActivity().getFilesDir()));
         File[] files = root.listFiles();
         for (File f : files) {
             if (f.getName().endsWith(".wav")) {
@@ -463,7 +447,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             appsList.setAdapter(new FileBrowserAppsAdapter(getActivity()));
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);
-            new AlertDialog.Builder(getActivity()).setTitle(R.string.dfu_alert_no_filebrowser_title).setView(customView)
+            new AlertDialog.Builder(getActivity()).setTitle(R.string.dfu_alert_no_file_browser_title).setView(customView)
                     .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialog, final int which) {

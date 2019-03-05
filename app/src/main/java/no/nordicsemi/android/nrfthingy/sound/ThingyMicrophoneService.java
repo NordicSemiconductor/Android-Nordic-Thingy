@@ -47,8 +47,8 @@ import android.content.IntentFilter;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -76,21 +76,15 @@ public class ThingyMicrophoneService extends IntentService {
         }
     };
 
-    public ThingyMicrophoneService() {
-        super("ThingyMicrophoneService");
-    }
-
     /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     * @param name Used to name the worker thread, important only for debugging.
+     * Default constructor, required to instantiate the service.
      */
-    public ThingyMicrophoneService(String name) {
-        super(name);
+    public ThingyMicrophoneService() {
+        super("Thingy Microphone Service");
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent(@Nullable final Intent intent) {
         final String action = intent.getAction();
         switch (action) {
             case Utils.START_RECORDING:
@@ -98,21 +92,15 @@ public class ThingyMicrophoneService extends IntentService {
                 startRecordingAudio(mDevice);
                 break;
         }
-
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        IntentFilter filter = new IntentFilter();
+        final IntentFilter filter = new IntentFilter();
         filter.addAction(Utils.STOP_RECORDING);
         LocalBroadcastManager.getInstance(this).registerReceiver(mAudioBroadcastReceiver, filter);
         mThingySdkManager = ThingySdkManager.getInstance();
-    }
-
-    @Override
-    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -122,7 +110,6 @@ public class ThingyMicrophoneService extends IntentService {
     }
 
     public void startRecordingAudio(final BluetoothDevice device) {
-
         if (mStartRecordingAudio) {
             return;
         }
@@ -130,7 +117,7 @@ public class ThingyMicrophoneService extends IntentService {
 
         final ThingyConnection thingyConnection = mThingySdkManager.getThingyConnection(device);
         final AudioRecord audioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER);
-        if(audioRecorder != null && audioRecorder.getState() != AudioRecord.STATE_UNINITIALIZED) {
+        if (audioRecorder.getState() != AudioRecord.STATE_UNINITIALIZED) {
             byte audioData[] = new byte[AUDIO_BUFFER];
             audioRecorder.startRecording();
             while (mStartRecordingAudio) {
@@ -154,9 +141,8 @@ public class ThingyMicrophoneService extends IntentService {
         }
     }
 
-    public boolean stopRecordingAudio() {
+    public void stopRecordingAudio() {
         mStartRecordingAudio = false;
-        return true;
     }
 
     private byte[] downSample(final byte[] data) {
@@ -177,8 +163,6 @@ public class ThingyMicrophoneService extends IntentService {
         intent.putExtra(ThingyUtils.EXTRA_DATA, status);
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
-
-
 
     private void sendAudioRecordErrorBroadcast(final BluetoothDevice device, final int error) {
         final Intent intent = new Intent(Utils.ERROR_AUDIO_RECORD + device.getAddress());

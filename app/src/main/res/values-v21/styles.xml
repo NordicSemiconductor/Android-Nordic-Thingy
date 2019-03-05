@@ -37,22 +37,13 @@
   -->
 
 <resources>
-    <style name="AppTheme" parent="@style/AppThemeBase">
-        <item name="android:colorPrimary">@color/colorPrimary</item>
-        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="android:colorAccent">@color/colorAccent</item>
-        <item name="android:windowTransitionBackgroundFadeDuration">5000</item>
-    </style>
-
-    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">30sp</item>
-        <item name="android:paddingLeft">100dp</item>
-    </style>
 
     <style name="AppTheme.TranslucentStatusBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <!-- About screen -->
 
     <style name="PreferenceCategoryLayout">
         <item name="android:layout_width">match_parent</item>
@@ -61,12 +52,5 @@
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:elevation">5dp</item>
-    </style>
-
-    <style name="ActionBarThemeOverlay">
-        <item name="android:textColorPrimary">#fff</item>
-        <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/textColorWhite</item>
-        <item name="colorControlHighlight">#3fff</item>
     </style>
 </resources>

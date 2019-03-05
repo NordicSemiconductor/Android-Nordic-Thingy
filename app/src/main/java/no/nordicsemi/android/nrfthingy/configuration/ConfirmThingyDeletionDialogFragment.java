@@ -43,9 +43,10 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 
@@ -53,12 +54,12 @@ public class ConfirmThingyDeletionDialogFragment extends DialogFragment {
 
     private BluetoothDevice mDevice;
 
-    public interface ConfirmThingeeDeletionListener {
-        void deleteThingee(final BluetoothDevice device);
+    public interface ConfirmThingyDeletionListener {
+        void deleteThingy(final BluetoothDevice device);
     }
 
     public ConfirmThingyDeletionDialogFragment newInstance(final BluetoothDevice device) {
-        ConfirmThingyDeletionDialogFragment confirmThingyDeletionDialogFragment = new ConfirmThingyDeletionDialogFragment();
+        final ConfirmThingyDeletionDialogFragment confirmThingyDeletionDialogFragment = new ConfirmThingyDeletionDialogFragment();
         final Bundle args = new Bundle();
         args.putParcelable(Utils.EXTRA_DEVICE, device);
         confirmThingyDeletionDialogFragment.setArguments(args);
@@ -66,31 +67,26 @@ public class ConfirmThingyDeletionDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.EXTRA_DEVICE);
         }
     }
 
+    @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.delete_thingy_title));
-        alertDialogBuilder.setMessage(getString(R.string.delete_thingy_message));
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-                ((ConfirmThingeeDeletionListener) getActivity()).deleteThingee(mDevice);
-            }
-        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-        return alertDialog;
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.delete_thingy_title))
+                .setMessage(getString(R.string.delete_thingy_message))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((ConfirmThingyDeletionListener) requireContext()).deleteThingy(mDevice);
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null);
+        return alertDialogBuilder.create();
     }
 }

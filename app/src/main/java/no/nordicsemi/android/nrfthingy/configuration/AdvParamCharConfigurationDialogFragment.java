@@ -43,12 +43,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -76,10 +76,6 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
 
-    public AdvParamCharConfigurationDialogFragment() {
-
-    }
-
     public static AdvParamCharConfigurationDialogFragment newInstance(final BluetoothDevice device) {
         AdvParamCharConfigurationDialogFragment fragment = new AdvParamCharConfigurationDialogFragment();
         Bundle args = new Bundle();
@@ -103,7 +99,7 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.adv_param_title));
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_adv_param, null);
 
@@ -193,18 +189,7 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
         return alertDialog;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
     private boolean validateInput() {
-
         final String advertisingInterval = mAdvertisingIntervalView.getText().toString().trim();
         if (advertisingInterval.isEmpty()) {
             mAdvertisingIntervalLayout.setError(getString(R.string.error_empty_adv_interval));
@@ -245,7 +230,7 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if (i < Utils.BLE_GAP_ADV_TIMEOUT_MIN && i > Utils.BLE_GAP_ADV_TIMEOUT_MAX) {
+            if (i < Utils.BLE_GAP_ADV_TIMEOUT_MIN || i > Utils.BLE_GAP_ADV_TIMEOUT_MAX) {
                 mAdvertisingTimeoutLayout.setError(getString(R.string.error_adv_interval));
                 return false;
             }

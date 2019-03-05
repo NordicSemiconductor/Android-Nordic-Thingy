@@ -38,8 +38,13 @@
   -->
 
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
     <solid android:color="#FFFFFFFF"/>
-    <size android:width="@dimen/sound_icon_size" android:height="@dimen/sound_icon_size"/>
-    <stroke android:width="2px" android:color="#000000"/>
+    <size
+        android:width="@dimen/sound_icon_size"
+        android:height="@dimen/sound_icon_size"/>
+    <stroke
+        android:width="2px"
+        android:color="#000000"/>
 </shape>

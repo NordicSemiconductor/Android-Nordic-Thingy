@@ -51,7 +51,6 @@ import no.nordicsemi.android.nrfthingy.database.DatabaseContract.ThingyDbColumns
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 
 public class DatabaseHelper {
-
     private static final String TEXT_TYPE = " TEXT";
     private static final String BOOLEAN_TYPE = " INTEGER";
     private static final String NOT_NULL = " NOT NULL";
@@ -87,8 +86,8 @@ public class DatabaseHelper {
             CloudDbColumns.COLUMN_PRESSURE_UPLOAD + BOOLEAN_TYPE + COMMA_SEP +
             CloudDbColumns.COLUMN_BUTTON_STATE_UPLOAD + BOOLEAN_TYPE + ")";
 
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "ThingyDbColumns.db";
+    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "ThingyDbColumns.db";
 
     private static final String[] THINGY_DEVICES = new String[]{ThingyDbColumns._ID, ThingyDbColumns.COLUMN_ADDRESS,
             ThingyDbColumns.COLUMN_DEVICE_NAME, ThingyDbColumns.COLUMN_LAST_SELECTED, ThingyDbColumns.COLUMN_LOCATION,
@@ -238,7 +237,6 @@ public class DatabaseHelper {
             content.put(ThingyDbColumns.COLUMN_DEVICE_NAME, deviceName);
             sqLiteDatabase.update(ThingyDbColumns.TABLE_NAME, content, ThingyDbColumns.COLUMN_ADDRESS + "=?", new String[]{String.valueOf(address)});
         }
-
     }
 
     public String getDeviceName(final String address) {

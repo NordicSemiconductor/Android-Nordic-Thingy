@@ -116,7 +116,6 @@ public class Renderer extends RajawaliRenderer {
             mObjectModel = objParser.getParsedObject();
 
             getCurrentScene().addChild(mObjectModel);
-
         } catch (ParsingException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -134,7 +133,6 @@ public class Renderer extends RajawaliRenderer {
 
     }
 
-
     @Override
     protected void onRender(long ellapsedRealtime, double deltaTime) {
         super.onRender(ellapsedRealtime, deltaTime);
@@ -147,6 +145,5 @@ public class Renderer extends RajawaliRenderer {
             q.setAll(1, 0, 0, 0);
             mObjectModel.setOrientation(q);
         }
-
     }
 }

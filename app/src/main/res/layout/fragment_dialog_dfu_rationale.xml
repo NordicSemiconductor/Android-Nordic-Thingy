@@ -40,14 +40,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <TextView
-        android:id="@+id/dfu_rationale"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/please_wait" />
+        android:text="@string/dfu_rationale" />
 </LinearLayout>

@@ -37,16 +37,17 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark">
+    android:background="?colorPrimaryDark">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/nordic_logo_horiz_dark"
+        app:srcCompat="@drawable/nordic_logo_horiz_white"
         android:paddingBottom="30dp"
         android:paddingTop="@dimen/navdrawer_padding_top" />
 
@@ -57,15 +58,18 @@
         android:orientation="horizontal"
         android:clickable="true"
         android:visibility="gone"
-        android:paddingLeft="@dimen/navdrawer_padding_left"
-        android:paddingRight="@dimen/navdrawer_padding_right">
+        tools:visibility="visible"
+        android:paddingStart="@dimen/navdrawer_padding_left"
+        android:paddingEnd="@dimen/navdrawer_padding_right"
+        android:focusable="true">
 
         <ImageView
+            android:importantForAccessibility="no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thingy_white"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginRight="32dp" />
+            android:layout_marginRight="14dp" />
 
         <TextView
             android:id="@+id/header_title"
@@ -73,7 +77,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:textSize="14sp"
-            android:textColor="@color/textColorWhite"
+            tools:text="My Thingy"
+            android:textColor="?colorOnPrimary"
             android:gravity="center_vertical" />
 
         <TextView
@@ -83,18 +88,23 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:textSize="14sp"
-            android:textColor="@color/textColorWhite"
-            android:visibility="gone"/>
+            tools:text="100%"
+            android:textColor="?colorOnPrimary"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
+            android:contentDescription="@string/battery"
             android:id="@+id/battery_level_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_battery_100"
+            app:srcCompat="@drawable/ic_battery"
             android:layout_gravity="center_vertical|end"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <ImageView
+            android:importantForAccessibility="no"
             android:id="@+id/header_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

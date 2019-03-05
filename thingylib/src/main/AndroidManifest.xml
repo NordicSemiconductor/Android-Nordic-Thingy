@@ -40,8 +40,9 @@
     package="no.nordicsemi.android.thingylib">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:supportsRtl="true">
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application>
         <service
             android:name=".dfu.DfuService"
             android:exported="false" />

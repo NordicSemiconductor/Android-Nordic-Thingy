@@ -57,14 +57,15 @@
     <string name="scanner_action_cancel">Cancel</string>
     <string name="not_available">n/a</string>
     <string name="scanner_subtitle_not_bonded">AVAILABLE DEVICES:</string>
-    <string name="dev_name_info">Thingy name</string>
-    <string name="dev_name_info_summary">Give a name to your Thingy (optional)</string>
+    <string name="dev_name_info">Name your Thingy:52</string>
+    <string name="dev_name_info_summary">Change the name of your Thingy:52 (optional).</string>
     <string name="user_info">User information</string>
-    <string name="connect_thingy_summary">Click to scan or touch Thingy:52 with the back of your smart phone to connect via NFC</string>
+    <string name="connect_thingy_summary">Status: disconnected.</string>
+    <string name="status_connected_to_device">Status: connected to %s.</string>
     <string name="user_info_hint">Name</string>
     <string name="email_info">Email information</string>
     <string name="email">Email</string>
-    <string name="device_name_hint">10 byte name</string>
+    <string name="device_name_hint">Thingy name</string>
     <string name="initial_configuration">Initial Configuration</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -106,7 +107,6 @@
     <string name="time">Time</string>
     <string name="frequency">Frequency</string>
 
-
     <string name="interval_pedometer">Pedometer interval</string>
     <string name="interval_temperature_compensation">Temp. compensation interval</string>
     <string name="interval_compass">Compass interval</string>
@@ -114,30 +114,31 @@
     <string name="interval_motion">Motion interval</string>
     <string name="interval_wake_on_motion">Wake on motion</string>
 
-    <string name="motion_freq_hz">hz</string>
+    <string name="motion_freq_hz">Hz</string>
     <string name="time_unit_ms">ms</string>
     <string name="time_unit_s">s</string>
+    <string name="degrees_2">%.2f °</string>
     <string name="interval_ms">%d ms</string>
     <string name="interval_s">%d s</string>
-    <string name="interval_hz">%d hz</string>
+    <string name="interval_hz">%d Hz</string>
     <string name="adv_interval_formula">x 0.625 ms =</string>
     <string name="decimal_format_ms"> %.2f ms</string>
     <string name="conn_interval_formula">x 1.25 ms = </string>
     <string name="supervision_timeout_formula">x 10 ms = </string>
     <string name="led_percentage">%d %%</string>
 
-    <string name="error_temp_interval">Interval must be between 100-60000 milliseconds!</string>
-    <string name="error_pressure_interval">Interval cannot be less than 50-60000 milliseconds!</string>
-    <string name="error_humidity_interval">Interval cannot be less than 100-60000 milliseconds!</string>
-    <string name="error_color_intensity_interval">Interval cannot be less than 200-60000 milliseconds!</string>
-    <string name="error_color_interval">Color interval cannot be less than %d seconds!</string>
-    <string name="error_temp_interval_empty">Temperature interval cannot be empty!</string>
-    <string name="error_pressure_interval_empty">Pressure interval cannot be empty!</string>
-    <string name="error_color_intensity_interval_empty">Color intensity interval cannot be empty!</string>
-    <string name="error_humidity_interval_empty">Humidity interval cannot be empty!</string>
-    <string name="error_pedometer_interval_empty">Pedomter interval cannot be empty!</string>
-    <string name="error_compass_interval_empty">Compass interval cannot be empty!</string>
-    <string name="error_motion_interval_empty">Motion frequency cannot be empty!</string>
+    <string name="error_temp_interval">Interval must be between 100 – 60000 milliseconds.</string>
+    <string name="error_pressure_interval">Interval must be between 50 – 60000 milliseconds.</string>
+    <string name="error_humidity_interval">Interval must be between 100 – 60000 milliseconds.</string>
+    <string name="error_color_intensity_interval">Interval must be between 200 – 60000 milliseconds.</string>
+    <string name="error_color_interval">Color interval cannot be less than %d seconds.</string>
+    <string name="error_temp_interval_empty">Temperature interval cannot be empty.</string>
+    <string name="error_pressure_interval_empty">Pressure interval cannot be empty.</string>
+    <string name="error_color_intensity_interval_empty">Color intensity interval cannot be empty.</string>
+    <string name="error_humidity_interval_empty">Humidity interval cannot be empty.</string>
+    <string name="error_pedometer_interval_empty">Pedometer interval cannot be empty.</string>
+    <string name="error_compass_interval_empty">Compass interval cannot be empty.</string>
+    <string name="error_motion_interval_empty">Motion frequency cannot be empty.</string>
     <string name="settings_basic_thingy">Thingy Settings</string>
     <string name="settings_thingy_name">Thingy name</string>
     <string name="settings_adv_param_char">Advertising parameters</string>
@@ -152,10 +153,10 @@
     <string name="settings_share_location">Share location</string>
     <string name="settings_environment">Environment Settings</string>
     <string name="settings_motion">Motion Settings</string>
-    <string name="coming_soon">Coming soon...</string>
-    <string name="gas_mode_one">1s</string>
-    <string name="gas_mode_two">10s</string>
-    <string name="gas_mode_three">60s</string>
+    <string name="coming_soon">Coming soon…</string>
+    <string name="gas_mode_one">1 second</string>
+    <string name="gas_mode_two">10 seconds</string>
+    <string name="gas_mode_three">1 minute</string>
     <string name="barometer_mode">Barometer</string>
     <string name="altimeter_mode">Altimeter</string>
     <string name="appearance_hint">Appearance</string>
@@ -164,43 +165,43 @@
     <string name="slave_latency_hint">Slave latency</string>
     <string name="conn_sup_timeout_hint">Supervision timeout</string>
     <string name="url_hint">URL</string>
-    <string name="ifttt_token_hint">100 Byte token</string>
-    <string name="error_ifttt_token_too_long">Cloud token must be between 1 - 100 bytes</string>
+    <string name="ifttt_token_hint">IFTTT Token</string>
+    <string name="error_ifttt_token_too_long">Cloud token must be between 1 – 100 bytes.</string>
     <string name="url_data_text">Url text</string>
-    <string name="error_empty_device_name">Thingy name cannot be empty!</string>
-    <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes!</string>
-    <string name="error_empty_min_conn_interval">Min. connection interval cannot be empty</string>
-    <string name="error_empty_max_conn_interval">Max. connection interval cannot be empty</string>
-    <string name="error_empty_slave_latency">Slave latency cannot be empty</string>
-    <string name="error_empty_supervision_timeout">Supervision timeout cannot be empty</string>
-    <string name="error_uint16">Value does not match UINT16</string>
-    <string name="error_uint8">Value does not match UINT8</string>
-    <string name="error_configuring_char">Unable to configure characteristic!</string>
-    <string name="error_invalid_conn_interval">Value must be within 7.5ms and 4000ms</string>
-    <string name="error_invalid_slave_latency">Value must be within 0 and 500</string>
-    <string name="error_invalid_supervision_timeout">Value must be within 100ms and 32000ms</string>
-    <string name="error_empty_cloud_token">Cloud token cannot be empty!</string>
-    <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes</string>
-    <string name="error_cloud_token_length">Cloud token must between 1-250 bytes</string>
-    <string name="error_cloud_token">Error, unable to write to cloud token characteristic</string>
+    <string name="error_empty_device_name">Thingy name cannot be empty.</string>
+    <string name="error_long_device_name">Thingy name cannot exceed more than 10 bytes.</string>
+    <string name="error_empty_min_conn_interval">Min. connection interval cannot be empty.</string>
+    <string name="error_empty_max_conn_interval">Max. connection interval cannot be empty.</string>
+    <string name="error_empty_slave_latency">Slave latency cannot be empty.</string>
+    <string name="error_empty_supervision_timeout">Supervision timeout cannot be empty.</string>
+    <string name="error_uint16">Value does not match UINT16.</string>
+    <string name="error_uint8">Value does not match UINT8.</string>
+    <string name="error_configuring_char">Unable to configure characteristic.</string>
+    <string name="error_invalid_conn_interval">Value must be within 7.5 and 4000 ms.</string>
+    <string name="error_invalid_slave_latency">Value must be within 0 and 500.</string>
+    <string name="error_invalid_supervision_timeout">Value must be within 100 and 32000 ms.</string>
+    <string name="error_empty_cloud_token">Cloud token cannot be empty.</string>
+    <string name="error_cloud_token_too_long">Cloud token cannot be longer than 250 bytes.</string>
+    <string name="error_cloud_token_length">Cloud token must between 1 – 250 bytes.</string>
+    <string name="error_cloud_token">Error, unable to write to cloud token characteristic.</string>
     <string name="cloud_token_settings">Cloud Token</string>
-    <string name="adv_interval">Advertisment interval</string>
-    <string name="adv_time_out">Advertisement timeout</string>
+    <string name="adv_interval">Advertising interval</string>
+    <string name="adv_time_out">Timeout</string>
     <string name="error_empty_adv_interval">Error, value cannot be empty</string>
-    <string name="error_adv_interval">Must be between 20ms and 10.24s</string>
-    <string name="error_empty_adv_timeout">Error, avalue cannot be empty</string>
-    <string name="error_adv_timeout">Value must be between 0s and 180 seconds</string>
+    <string name="error_adv_interval">Must be between 20 ms and 10.24 seconds.</string>
+    <string name="error_empty_adv_timeout">Error, value cannot be empty</string>
+    <string name="error_adv_timeout">Value must be between 0 and 180 seconds.</string>
     <string name="adv_param_title">Advertising Interval Parameters</string>
     <string name="thingy_name_title">Thingy Name</string>
     <string name="appearance_title">Appearance</string>
     <string name="connection_parameters_title">Connection Parameters</string>
-    <string name="physcial_web_url_title">Eddystone Web URL</string>
+    <string name="physical_web_url_title">Eddystone Web URL</string>
     <string name="temperature_interval_title">Temperature Interval</string>
     <string name="temperature_compensation_interval_title">Temp. Compensation Interval</string>
     <string name="pressure_interval_title">Pressure Interval</string>
     <string name="humidity_interval_title">Humidity Interval</string>
-    <string name="color_intensity_interval_title">Color Intensity Interval</string>
-    <string name="gas_mode_title">Air quality Interval</string>
+    <string name="color_intensity_interval_title">Color intensity interval</string>
+    <string name="gas_mode_title">Air Quality Interval</string>
     <string name="pressure_mode_title">Pressure Mode</string>
     <string name="shortened_url">Shortened URL</string>
     <string name="shorten_url">Shorten URL</string>
@@ -223,7 +224,7 @@
     <string name="title_tap">Tap sensor</string>
     <string name="title_pedometer">Step counter</string>
     <string name="title_quaternion">Quaternion</string>
-    <string name="title_eular">Euler</string>
+    <string name="title_euler">Euler</string>
     <string name="title_gravity_vector">Gravity Vector</string>
     <string name="title_heading">Heading</string>
     <string name="title_raw_data">Raw Data</string>
@@ -234,15 +235,16 @@
     <string name="eco2_title">Effective CO2</string>
     <string name="tvoc_title">Total volatile organic compound</string>
     <string name="tvoc_title_short">TVOC</string>
+    <string name="color_title">Color</string>
     <string name="color_intensity_title">Color intensity</string>
-    <string name="msg_no_thingy_connected">Please connect to a Thingy first!</string>
+    <string name="msg_no_thingy_connected">Please connect to a Thingy.</string>
     <string name="settings">Settings</string>
     <string name="duration">Duration</string>
     <string name="steps">Steps</string>
-    <string name="quternion_z">Z</string>
-    <string name="quternion_y">Y</string>
-    <string name="quternion_x">X</string>
-    <string name="quternion_w">W</string>
+    <string name="quaternion_z">Z</string>
+    <string name="quaternion_y">Y</string>
+    <string name="quaternion_x">X</string>
+    <string name="quaternion_w">W</string>
     <string name="gravity_vector_x">Gravity X</string>
     <string name="gravity_vector_y">Gravity Y</string>
     <string name="gravity_vector_z">Gravity Z</string>
@@ -258,8 +260,8 @@
     <string name="direction">Direction</string>
     <string name="orientation">Orientation</string>
     <string name="tap_count">Taps</string>
-    <string name="notifcations_off">Disable</string>
-    <string name="notifcations_on">Enable</string>
+    <string name="notifications_off">Disable</string>
+    <string name="notifications_on">Enable</string>
     <string name="thingy_not_found">Unable to connect, Thingy not found!</string>
     <string name="connect">Connect</string>
     <string name="disconnect">Disconnect</string>
@@ -320,10 +322,10 @@
     <string name="dfu_aborted">Uploading of the new application firmware has been canceled.</string>
     <string name="dfu_uploading_percentage_label">0%</string>
     <string name="dfu_uploading_percentage">%d%%</string>
-    <string name="dfu_reconnecting">Reconnecting to Thingy...</string>
+    <string name="dfu_reconnecting">Reconnecting to Thingy…</string>
     <string name="dfu_alert_no_file_selected">File not selected</string>
-    <string name="dfu_alert_no_filebrowser_title">File Browser not found</string>
-    <string name="dfu_alert_no_filebrowser_message">File browser application has not been found on your device. Would you like to download one?</string>
+    <string name="dfu_alert_no_file_browser_title">File Browser not found</string>
+    <string name="dfu_alert_no_file_browser_message">File browser application has not been found on your device. Would you like to download one?</string>
     <string name="error_select_dfu_option">Please select a DFU option to proceed!</string>
     <string name="dfu_bootloader_mode_message">Thingy is still in bootloader mode. Please restart the device to reconnect.</string>
     <string name="dfu_start">Start</string>
@@ -359,8 +361,8 @@
     <string name="action_delete">Delete</string>
     <string name="environment_service_info">Environment Service Info</string>
     <string name="motion_service_info">Motion Service Info</string>
-    <string name="ok">Ok</string>
-    <string name="celcius">%s ℃</string>
+    <string name="ok">OK</string>
+    <string name="celsius">%s ℃</string>
     <string name="hecto_pascal">%s hPa</string>
     <string name="ppm">%d ppm</string>
     <string name="ppb">%d ppb</string>
@@ -394,7 +396,7 @@
     <string name="about_text"><b>Nordic Thingy</b> is an application that lets you connect to Thingy:52 by Nordic.
         This app supports visualising data obtained from the sensors on the Thingy:52.</string>
     <string name="about_info">Info</string>
-    <string name="about_licenes">Open-source Licenses</string>
+    <string name="about_licenses">Open-source Licenses</string>
     <string name="mpchart_license">MPAndroidChart</string>
     <string name="mpchart_license_url">https://github.com/PhilJay/MPAndroidChart/blob/master/README.md#license</string>
     <string name="rajawali_license">Rajawali</string>
@@ -412,6 +414,7 @@
     <string name="button_state_unknown">UNKNOWN</string>
     <string name="button_state_pressed">PRESSED</string>
     <string name="button_state_released">RELEASED</string>
+    <string name="button_state_released_time">RELEASED (%d sec)</string>
     <string name="north">NORTH</string>
     <string name="north_east">N. EAST</string>
     <string name="north_west">N. WEST</string>
@@ -442,7 +445,7 @@
     <string name="location_error">Unable to add/update location for this thingy</string>
     <string name="sign_out">Sign out</string>
     <string name="sign_out_summary">Clicking sign out will disconnect Thingy App from nRF Cloud and will no longer be able to share data captured from thingy.
-        \n\nReovking access will remove the permissions granted for this google account and delete data attached to the thingy app from the nRF Cloud.</string>
+        \n\nRevoking access will remove the permissions granted for this google account and delete data attached to the thingy app from the nRF Cloud.</string>
     <string name="disconnect_google_account">Revoke Access</string>
 
     <string name="mtu_warning">Please note that older or low end devices may encounter interruptions with audio streaming because of lower throughput.
@@ -462,27 +465,33 @@
     <string name="led_duration">Delay</string>
     <string name="microphone_permission_text">Nordic Thingy would like to have access to the microphone to record voice/audio that could be played on your Thingy:52 device.
         This application nor the Thingy:52 will record or save this data for any other purposes.</string>
-    <string name="state_connecting">Connecting...</string>
-    <string name="state_discovering_services">%s connected. Discovering services...</string>
+    <string name="state_connecting">Connecting…</string>
+    <string name="state_discovering_services">%s connected.\nDiscovering services…</string>
 
     <!--IFTTT-->
     <string name="feature_control">Feature Control</string>
-    <string name="freature_info">Feature Info</string>
+    <string name="feature_info">Feature Info</string>
     <string name="data_statistics">Data Statistics</string>
     <string name="uploaded_title">Uploaded</string>
     <string name="downloaded_title">Downloaded</string>
     <string name="intro_ifttt">Step 1/6: IFTTT</string>
     <string name="account_preparation">Step 2/6: Account Preparation</string>
     <string name="maker_webhooks_service">Step 3/6: Maker Webhooks Service</string>
-    <string name="maker_webhooks_servic_key">Step 4/6: Obtaining Webhooks Key</string>
+    <string name="maker_webhooks_service_key">Step 4/6: Obtaining Webhooks Key</string>
     <string name="access_key_to_thingy">Step 5/6: Adding Access Key</string>
     <string name="enable_cloud_features">Step 6/6: Enabling Cloud Features</string>
     <string name="cloud_guide_title">Cloud Guide</string>
+    <string name="cloud_step1_image">IFTTT Logo</string>
     <string name="cloud_step1">Cloud services rely on IFTTT (IF THIS THEN THAT). This service allows to execute a task (like sending a text message, publishing on Facebook or many, many others) on an event received from a Thingy.</string>
+    <string name="cloud_step2_image">IFTTT Website screenshot</string>
     <string name="cloud_step2">Go to <a href="https://ifttt.com">https://ifttt.com</a> and sign up for an account or just sign in if you already have one.</string>
+    <string name="cloud_step3_image">IFTTT Website screenshot</string>
     <string name="cloud_step3">After signing in, tap services and search for Maker Webhooks. Click on Maker Webhooks to enable the service.</string>
+    <string name="cloud_step4_image">Maker Webhooks</string>
     <string name="cloud_step4">In order to get Webhooks service to work an access key is needed. Click on settings in Maker Webhooks and copy the url and open it in a new browser window. You should be able to see your access key here.</string>
+    <string name="cloud_step5_image">Nordic Thingy menu screenshot</string>
     <string name="cloud_step5">Copy the access key and paste it on to the Cloud Token in the thingy configuration service.</string>
+    <string name="cloud_step6_image">Nordic Thingy Cloud configuration screenshot</string>
     <string name="cloud_step6">To use the cloud feature, navigate to cloud view and toggle the button. Pressing and releasing the physical button on the Thingy will display the duration it was pressed for and sends this data to the maker webhook. Data statistics shows the amount of data sent and received during these events</string>
     <string name="website">Visit website</string>
     <string name="privacy">Privacy policy</string>
@@ -517,25 +526,24 @@
         Updating is recommended as it ensures full compatibility with the Thingy app and includes all the latest features and bug fixes.
         Would you like to update the firmware version to %2$s?</string>
     <string name="later">Later</string>
-    <string name="dfu_complete_reconnecting">Device firmware update completed. Reconnecting to device. This may take up to a few seconds...</string>
+    <string name="dfu_complete_reconnecting">Device firmware update completed.\nReconnecting to device. This may take up to a few seconds…</string>
     <string name="dash">-</string>
     <string name="ifttt_error">IFTTT Error</string>
-    <string name="one_connected">%s  is connected</string>
+    <string name="one_connected">%s is connected</string>
     <string name="two_connected">%d are connected</string>
-    <string name="one_disconnected">%s  is disconnected</string>
+    <string name="one_disconnected">%s is disconnected</string>
     <string name="two_disconnected">%d are disconnected</string>
     <string name="enable">ENABLE</string>
-    <string name="nfc_tag_connecting">NFC tag found, connecting to device...</string>
+    <string name="nfc_tag_connecting">NFC tag found, connecting to device…</string>
     <string name="nfc_tag_dialog_title">NFC Tag found</string>
     <string name="nfc_tag_dialog_summary">A new Thingy:52 containing a NFC Tag was found. Would you like to connect to this device?</string>
     <string name="enable_nfc_tag_dialog_title">Enable NFC</string>
     <string name="enable_nfc_tag_dialog_summary">Nordic Thingy:52 firmware version 2.0 contains "Touch to Connect" using NFC.
         In order to make use of this feature your smart phone\'s NFC feature has to be enabled. Would you like to proceed?</string>
-    <string name="status_connected_to_device">Status: Connected to : %s</string>
     <string name="dfu_bootloader_push_error">Unable to push the device to bootloader mode</string>
 
     <string name="add_thingy_summary">Click to add a new Thingy:52</string>
-    <string name="add_thingy_nfc_summary">Click to add a new Thingy:52 or touch Thingy:52 with the back of your smart phone to connect via NFC (FW version 2.0 onwards)</string>
+    <string name="add_thingy_nfc_summary">Click below, or touch Thingy:52 with the back of your smart phone to connect using NFC (FW version 2.0 onwards).</string>
     <string name="do_not_ask_again">Do not ask again</string>
     <string name="nfc_disabled">NFC disabled</string>
     <string name="enable_nfc">Enable NFC</string>
@@ -544,18 +552,24 @@
     <string name="dfu_restarting">Restring DFU</string>
     <string name="extended_error_restarting_dfu">Extended error, restarting DFU with application firmware</string>
     <string name="battery_level_percent">%d%%</string>
-    <string name="eroor_adding_multiple_devices_over_nfc">Unable to configure multiple Thingy:52 devices at the same time</string>
+    <string name="battery">Battery indicator</string>
+    <string name="error_adding_multiple_devices_over_nfc">Unable to configure multiple Thingy:52 devices at the same time</string>
     <string name="never_show_nfc_warning">Do not display NFC disabled message again</string>
     <string name="dismiss_nfc_warning_title">Dismiss NFC warning</string>
     <string name="thingy_already_added">%s is already configured</string>
     <string name="invalid_value">Invalid value</string>
     <string name="error_reading_nfc_tag">Error reading NFC tag</string>
     <string name="error_nfc_tag">Error reading tag, tap the thingy:52 again.</string>
+    <string name="volume">Volume</string>
+    <string name="pcm_files">PCM Files</string>
+    <string name="event_name_temperature_update">Event name: temperature_update</string>
+    <string name="event_name_pressure_update">Event name: pressure_update</string>
+    <string name="event_name_button_press">Event name: button_press</string>
 
     <string-array name="gas_mode">
-        <item>1s interval</item>
-        <item>10s interval</item>
-        <item>60s interval</item>
+        <item>1 second</item>
+        <item>10 seconds</item>
+        <item>1 minute</item>
     </string-array>
     <string-array name="pressure_mode">
         <item>Barometer mode</item>
@@ -591,7 +605,7 @@
     </string-array>
 
     <plurals name="thingy_notification_text">
-        <item quantity="one">%s  is connected</item>
+        <item quantity="one">%s is connected</item>
         <item quantity="two">%d are connected</item>
         <item quantity="few">%d are connected</item>
         <item quantity="other">%d are connected</item>
@@ -599,7 +613,7 @@
     </plurals>
 
     <plurals name="thingy_notification_text_nothing_connected">
-        <item quantity="one">%s  is disconnected</item>
+        <item quantity="one">%s is disconnected</item>
         <item quantity="two">%d are disconnected</item>
         <item quantity="few">%d are disconnected</item>
         <item quantity="other">%d are disconnected</item>
