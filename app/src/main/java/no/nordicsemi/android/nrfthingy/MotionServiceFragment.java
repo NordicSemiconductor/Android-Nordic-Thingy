@@ -41,6 +41,7 @@ package no.nordicsemi.android.nrfthingy;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -510,6 +511,12 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     public void onStart() {
         super.onStart();
         ThingyListenerHelper.registerThingyListener(getContext(), mThingyListener, mDevice);
+    }
+
+    @Override
+    public void onAttach(@NonNull final Context context) {
+        super.onAttach(context);
+        mIsFragmentAttached = true;
     }
 
     @Override
