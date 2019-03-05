@@ -43,7 +43,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="navdrawer_padding_top">30dp</dimen>
-    <dimen name="navdrawer_padding_left">16dp</dimen>
+    <dimen name="navdrawer_padding_left">22dp</dimen>
     <dimen name="navdrawer_padding_right">16dp</dimen>
 
     <dimen name="alert_dialog_padding">16dp</dimen>

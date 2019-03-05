@@ -39,19 +39,8 @@
 <resources>
     <color name="background">#F5F5F5</color>
     <color name="onBackground">@color/nordicLightGray</color>
-    <color name="selectedMenuBackground">#FFEEEEEE</color>
+    <color name="selectedMenuBackground">@color/nordicLightGray</color>
     <color name="accent">@color/nordicLake</color>
-    <!--<color name="actionBar">@color/nordicBlue</color>
-    <color name="actionBarText">@color/white</color>
-    <color name="actionBarTextDisabled">#AAFFFFFF</color>
-    <color name="actionBarDark">@color/nordicBlueDark</color>
-    <color name="accent">@color/nordicLake</color>
-    <color name="vibrant">@color/nordicLake</color>
-    <color name="onVibrant">@color/white</color>
-    <color name="alert">@color/nordicRed</color>
-    <color name="onAlert">@color/white</color>
-    <color name="fab">@color/nordicRed</color>
-    <color name="onFab">@color/white</color>-->
 
     <!--
 		Nordic logo on splash screen.

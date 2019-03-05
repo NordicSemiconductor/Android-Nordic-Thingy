@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_thingy_white"
             android:layout_gravity="center_vertical|end"
-            android:layout_marginRight="32dp" />
+            android:layout_marginRight="14dp" />
 
         <TextView
             android:id="@+id/header_title"
