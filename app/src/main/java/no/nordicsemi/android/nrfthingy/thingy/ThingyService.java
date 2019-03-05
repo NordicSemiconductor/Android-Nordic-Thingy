@@ -48,16 +48,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -79,12 +79,8 @@ public class ThingyService extends BaseThingyService {
     private NotificationChannel mNotificationChannel;
 
     public class ThingyBinder extends BaseThingyBinder {
-        //You can create your own functionality related to the application in side the binder here
-        private static final int SCANNING = 1;
-        private static final int CONNECTING = 2;
         private boolean mIsScanning;
         private String mLastVisibleFragment = Utils.ENVIRONMENT_FRAGMENT;
-        private int mState;
 
         /**
          * Saves the activity state.
@@ -110,9 +106,9 @@ public class ThingyService extends BaseThingyService {
         }
 
         public final int getLastSelectedAudioTrack(final BluetoothDevice device) {
-            if (mLastSelectedAudioTrack.containsKey(device)) {
-                return mLastSelectedAudioTrack.get(device);
-            }
+            final Integer track = mLastSelectedAudioTrack.get(device);
+            if (track != null)
+                return track;
             return 0;
         }
 
@@ -157,8 +153,6 @@ public class ThingyService extends BaseThingyService {
     @Override
     public void onDeviceConnected(final BluetoothDevice device, final int connectionState) {
         createBackgroundNotification();
-        /*if (!mBound) {
-        }*/
     }
 
     @Override
@@ -171,7 +165,7 @@ public class ThingyService extends BaseThingyService {
 
     @Nullable
     @Override
-    public ThingyBinder onBind(Intent intent) {
+    public ThingyBinder onBind(final Intent intent) {
         return new ThingyBinder();
     }
 

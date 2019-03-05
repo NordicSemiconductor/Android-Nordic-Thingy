@@ -263,14 +263,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_ui, container, false);
 
-        final Toolbar toolbarLed = rootView.findViewById(R.id.card_toolbar_led);
-        toolbarLed.setLogo(R.drawable.ic_led);
-        toolbarLed.setTitle(R.string.led_title);
-
-        final Toolbar toolbarButton = rootView.findViewById(R.id.card_toolbar_button);
-        toolbarButton.setLogo(R.drawable.ic_button);
-        toolbarButton.setTitle(R.string.button_title);
-
         mLedRgbColorContainer = rootView.findViewById(R.id.led_rgb_color_container);
         mLedControllerContainer = rootView.findViewById(R.id.led_controller_container);
         mRgbIntensityControllerContainer = rootView.findViewById(R.id.led_rgb_container);

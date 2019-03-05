@@ -121,7 +121,7 @@ public class Utils {
     public static final String PROGRESS_DIALOG_TAG = "PROG_DIALOG";
     public static final String NFC_DIALOG_TAG = "NFC_DIALOG";
 
-    //Drawer menu groupids and item ids
+    //Drawer menu group ids and item ids
     public static final int GROUP_ID_SAVED_THINGIES = 100;
     public static final int GROUP_ID_ADD_THINGY = 101;
     public static final int GROUP_ID_ABOUT = 102;
@@ -168,7 +168,7 @@ public class Utils {
 
     public static final String EXTRA_URI = "uri";
 
-    public static final String[] AUDIO_FILES = new String[]{"ievan_polkka.wav", "bensound_ukulele_8khz.wav", "evil_laugh_8khz.wav", "learning_computer_8khz.wav"};
+    static final String[] AUDIO_FILES = new String[]{"ievan_polkka.wav", "bensound_ukulele_8khz.wav", "evil_laugh_8khz.wav", "learning_computer_8khz.wav"};
 
     /**
      * URI Scheme maps a byte code into the scheme and an optional scheme specific prefix.
@@ -423,7 +423,7 @@ public class Utils {
     }
 
     private static byte[] encodeUrnUuid(String urn, int position, ByteBuffer bb) {
-        String uuidString = urn.substring(position, urn.length());
+        String uuidString = urn.substring(position);
         UUID uuid;
         try {
             uuid = UUID.fromString(uuidString);

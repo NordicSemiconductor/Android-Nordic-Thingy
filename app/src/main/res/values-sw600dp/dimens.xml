@@ -41,8 +41,6 @@
     <dimen name="activity_horizontal_margin">32dp</dimen>
     <dimen name="margin_bottom_setup_complete_container">10dp</dimen>
     <dimen name="toolbar_image_height">350dp</dimen>
-    <dimen name="stepper_title_text_size">14sp</dimen>
-    <dimen name="motion_view_height">350dp</dimen>
     <dimen name="black_key_width">50dp</dimen>
     <dimen name="black_key_height">160dp</dimen>
     <dimen name="white_key_height">275dp</dimen>

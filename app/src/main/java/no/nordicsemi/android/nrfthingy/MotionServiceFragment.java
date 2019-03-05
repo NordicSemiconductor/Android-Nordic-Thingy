@@ -38,10 +38,12 @@
 
 package no.nordicsemi.android.nrfthingy;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -413,6 +415,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                     return true;
                 }
             });
+            loadFeatureDiscoverySequence();
         }
 
         if (mMotionToolbar != null) {
@@ -500,7 +503,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
 
         prepareGravityVectorChart();
-        loadFeatureDiscoverySequence();
         return rootView;
     }
 
@@ -802,6 +804,7 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), notificationEnabled, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER);
     }
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private void loadFeatureDiscoverySequence() {
         if (!Utils.checkIfSequenceIsCompleted(requireContext(), Utils.INITIAL_MOTION_TUTORIAL)) {
 

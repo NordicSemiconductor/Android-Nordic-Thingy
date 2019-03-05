@@ -353,19 +353,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
         setSupportActionBar(dfuToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Toolbar dfuFwInfoToolbar = findViewById(R.id.dfu_fw_info_toolbar);
-        dfuFwInfoToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_format_list_bulleted));
-        dfuFwInfoToolbar.setTitle(R.string.dfu_fw_info);
-
-        final Toolbar dfuTargetInfoToolbar = findViewById(R.id.dfu_target_toolbar);
-        dfuTargetInfoToolbar.setLogo(R.drawable.ic_thingy_gray);
-        dfuTargetInfoToolbar.setTitle(R.string.dfu_target);
-
         mDfuSpeed = findViewById(R.id.dfu_upload_speed);
         mDfuSpeedUnit = findViewById(R.id.dfu_speed_unit);
-        final Toolbar dfuStatusToolbar = findViewById(R.id.dfu_status_toolbar);
-        dfuStatusToolbar.setLogo(ContextCompat.getDrawable(this, R.drawable.ic_dfu_gray));
-        dfuStatusToolbar.setTitle(R.string.dfu_status);
 
         mLocationServicesContainer = findViewById(R.id.location_services_container);
         final Button enableLocationServices = findViewById(R.id.enable_location_services);

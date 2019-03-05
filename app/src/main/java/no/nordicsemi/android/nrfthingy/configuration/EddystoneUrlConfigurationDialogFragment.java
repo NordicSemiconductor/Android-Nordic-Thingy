@@ -47,6 +47,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
@@ -92,7 +94,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
     private TextInputLayout mEddystoneUrlLayout;
     private TextInputEditText mEddystoneUrlView;
     private TextView mShortUrl;
-    private Switch mSwitchPhysicalWeb;
+    private SwitchCompat mSwitchPhysicalWeb;
 
     private String mUrl;
 

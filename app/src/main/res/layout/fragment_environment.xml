@@ -70,7 +70,7 @@
                     app:logo="@drawable/ic_weather"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText" />
+                    app:titleTextAppearance="@style/Widget.Toolbar" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/temperature_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/pressure_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/humidity_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -166,7 +166,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/eco2_title"
                             android:id="@+id/carbon_img"
                             android:layout_width="match_parent"
@@ -190,7 +190,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/tvoc_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -271,7 +271,7 @@
                     app:title="@string/temperature_title"
                     app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -306,7 +306,7 @@
                     app:title="@string/pressure_title"
                     app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <com.github.mikephil.charting.charts.LineChart
@@ -342,7 +342,7 @@
                     app:title="@string/humidity_title"
                     app:logo="@drawable/ic_graph"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <com.github.mikephil.charting.charts.LineChart

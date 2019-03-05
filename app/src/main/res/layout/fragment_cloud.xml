@@ -74,7 +74,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/feature_control"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/CardView.TitleText"/>
+					app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 				<TextView
 					android:id="@+id/temperature_title"
@@ -124,8 +124,8 @@
 				<TextView
 					android:id="@+id/button_event"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_marginBottom="@dimen/activity_vertical_margin"
+					android:layout_height="0dp"
+					android:layout_marginBottom="8dp"
 					android:text="@string/event_name_button_press"
 					android:textSize="12sp"
 					app:layout_constraintBottom_toBottomOf="parent"
@@ -186,7 +186,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/feature_info"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/CardView.TitleText"/>
+					app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 				<TextView
 					android:id="@+id/temperature_title_info"
@@ -331,7 +331,7 @@
 					app:popupTheme="@style/ActionBarPopupThemeOverlay"
 					app:title="@string/data_statistics"
 					app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-					app:titleTextAppearance="@style/CardView.TitleText"/>
+					app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 				<TextView
 					android:id="@+id/uploaded_title"

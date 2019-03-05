@@ -172,13 +172,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout mNfcContainer;
     private boolean mIsDrawerOpened;
 
-    private Drawable mBatteryLevel20;
-    private Drawable mBatteryLevel30;
-    private Drawable mBatteryLevel50;
-    private Drawable mBatteryLevel60;
-    private Drawable mBatteryLevel80;
-    private Drawable mBatteryLevel90;
-    private Drawable mBatteryLevel100;
     private TextView mBatteryLevel;
     private ImageView mBatteryLevelImg;
     private NFCTagFoundDialogFragment mNfcTagFoundDialogFragment;
@@ -372,19 +365,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         setContentView(R.layout.activity_main);
+
         mActivityToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mActivityToolbar);
 
         mThingySdkManager = ThingySdkManager.getInstance();
-
         mDatabaseHelper = new DatabaseHelper(this);
-        mBatteryLevel20 = ContextCompat.getDrawable(this, R.drawable.ic_battery_20);
-        mBatteryLevel30 = ContextCompat.getDrawable(this, R.drawable.ic_battery_30);
-        mBatteryLevel50 = ContextCompat.getDrawable(this, R.drawable.ic_battery_50);
-        mBatteryLevel60 = ContextCompat.getDrawable(this, R.drawable.ic_battery_60);
-        mBatteryLevel80 = ContextCompat.getDrawable(this, R.drawable.ic_battery_80);
-        mBatteryLevel90 = ContextCompat.getDrawable(this, R.drawable.ic_battery_90);
-        mBatteryLevel100 = ContextCompat.getDrawable(this, R.drawable.ic_battery_100);
 
         mLocationServicesContainer = findViewById(R.id.location_services_container);
         mNoThingyConnectedContainer = findViewById(R.id.no_thingy_connected);
@@ -1932,27 +1918,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateBatteryLevel(final int batteryLevel) {
         if (batteryLevel > -1) {
             updateBatteryLevelVisibility(View.VISIBLE);
-            final Drawable drawable = getBatteryLevelDrawable(batteryLevel);
             mBatteryLevel.setText(getString(R.string.battery_level_percent, batteryLevel));
-            mBatteryLevelImg.setImageDrawable(drawable);
-        }
-    }
-
-    private Drawable getBatteryLevelDrawable(int batteryLevel) {
-        if (batteryLevel >= 0 && batteryLevel <= 20) {
-            return mBatteryLevel20;
-        } else if (batteryLevel > 20 && batteryLevel <= 30) {
-            return mBatteryLevel30;
-        } else if (batteryLevel > 30 && batteryLevel <= 50) {
-            return mBatteryLevel50;
-        } else if (batteryLevel > 50 && batteryLevel <= 60) {
-            return mBatteryLevel60;
-        } else if (batteryLevel > 60 && batteryLevel <= 80) {
-            return mBatteryLevel80;
-        } else if (batteryLevel > 80 && batteryLevel <= 99) {
-            return mBatteryLevel90;
-        } else {
-            return mBatteryLevel100;
+            mBatteryLevelImg.setImageLevel(batteryLevel);
         }
     }
 }

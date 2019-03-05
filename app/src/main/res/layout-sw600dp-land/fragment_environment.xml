@@ -80,7 +80,7 @@
 						android:background="@android:color/white"
 						app:popupTheme="@style/ActionBarPopupThemeOverlay"
 						app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-						app:titleTextAppearance="@style/CardView.TitleText"/>
+						app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 					<LinearLayout
 						android:layout_width="match_parent"
@@ -99,7 +99,7 @@
 							android:layout_weight="1"
 							android:orientation="vertical">
 
-							<ImageView
+							<androidx.appcompat.widget.AppCompatImageView
 								android:contentDescription="@string/temperature_title"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
@@ -121,7 +121,7 @@
 							android:layout_weight="1"
 							android:orientation="vertical">
 
-							<ImageView
+							<androidx.appcompat.widget.AppCompatImageView
 								android:contentDescription="@string/pressure_title"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
 							android:layout_weight="1"
 							android:orientation="vertical">
 
-							<ImageView
+							<androidx.appcompat.widget.AppCompatImageView
 								android:contentDescription="@string/humidity_title"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
 							android:layout_weight="1"
 							android:orientation="vertical">
 
-							<ImageView
+							<androidx.appcompat.widget.AppCompatImageView
 								android:contentDescription="@string/eco2_title"
 								android:id="@+id/carbon_img"
 								android:layout_width="match_parent"
@@ -202,7 +202,7 @@
 							android:layout_weight="1"
 							android:orientation="vertical">
 
-							<ImageView
+							<androidx.appcompat.widget.AppCompatImageView
 								android:contentDescription="@string/tvoc_title"
 								android:layout_width="match_parent"
 								android:layout_height="wrap_content"
@@ -284,7 +284,7 @@
 						android:background="@android:color/white"
 						app:popupTheme="@style/ActionBarPopupThemeOverlay"
 						app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-						app:titleTextAppearance="@style/CardView.TitleText"/>
+						app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 					<com.github.mikephil.charting.charts.LineChart
 						android:id="@+id/line_chart_temperature"
@@ -327,7 +327,7 @@
 						android:background="@android:color/white"
 						app:popupTheme="@style/ActionBarPopupThemeOverlay"
 						app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-						app:titleTextAppearance="@style/CardView.TitleText"/>
+						app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 					<com.github.mikephil.charting.charts.LineChart
 						android:id="@+id/line_chart_pressure"
@@ -363,7 +363,7 @@
 						android:background="@android:color/white"
 						app:popupTheme="@style/ActionBarPopupThemeOverlay"
 						app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-						app:titleTextAppearance="@style/CardView.TitleText"/>
+						app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 					<com.github.mikephil.charting.charts.LineChart
 						android:id="@+id/line_chart_humidity"

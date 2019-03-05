@@ -65,10 +65,10 @@ public class CustomPagerAdapter extends PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull final ViewGroup collection, final int position) {
-        CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
-        ImageView imageView = layout.findViewById(R.id.image);
+        final CustomPagerEnum customPagerEnum = CustomPagerEnum.values()[position];
+        final LayoutInflater inflater = LayoutInflater.from(mContext);
+        final ViewGroup layout = (ViewGroup) inflater.inflate(customPagerEnum.getLayoutResId(), collection, false);
+        final ImageView imageView = layout.findViewById(R.id.image);
         viewMap.put(position, imageView);
         collection.addView(layout);
         return layout;

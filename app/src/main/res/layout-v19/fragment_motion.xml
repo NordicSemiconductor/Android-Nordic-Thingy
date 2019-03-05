@@ -59,6 +59,7 @@
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
             android:layout_marginTop="@dimen/cardview_vertical_padding"
             card_view:cardCornerRadius="2dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -71,7 +72,7 @@
                     app:title="@string/euler_title"
                     app:logo="@drawable/ic_animation"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -111,7 +112,7 @@
                     app:title="@string/motion_title"
                     app:logo="@drawable/ic_motion"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay" />
 
                 <LinearLayout
@@ -128,7 +129,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/steps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -185,7 +186,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/tap_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -242,7 +243,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/title_heading"
                             android:id="@+id/heading_image"
                             android:layout_width="wrap_content"
@@ -301,7 +302,7 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="@dimen/cardview_action_padding">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:contentDescription="@string/orientation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -315,7 +316,7 @@
                             android:text=""
                             android:gravity="right"/>
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:importantForAccessibility="no"
                             android:id="@+id/portrait_image"
                             android:layout_width="wrap_content"
@@ -382,7 +383,7 @@
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
                     app:title="@string/title_gravity_vector"
                     app:logo="@drawable/ic_apple"
-                    app:titleTextAppearance="@style/CardView.TitleText"
+                    app:titleTextAppearance="@style/Widget.Toolbar"
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
                 <com.github.mikephil.charting.charts.LineChart

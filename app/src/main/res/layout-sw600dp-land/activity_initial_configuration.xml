@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~ Copyright (c) 2010 - 2017, Nordic Semiconductor ASA
   ~ All rights reserved.
   ~
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatImageView
+        <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_image_height"
             android:background="#46D8FD"
@@ -133,7 +134,6 @@
                 app:backgroundTint="?colorError"/>
 
         </LinearLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
@@ -228,10 +228,10 @@
                                 android:orientation="horizontal">
 
                                 <com.google.android.material.button.MaterialButton
-                                    style="@style/Widget.MaterialComponents.Button"
                                     android:id="@+id/confirm_thingy"
+                                    style="@style/Widget.MaterialComponents.Button"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="48dp"
+                                    android:layout_height="wrap_content"
                                     android:text="@string/scan_thingy"/>
                             </LinearLayout>
                         </LinearLayout>
@@ -333,16 +333,16 @@
                                     android:orientation="horizontal">
 
                                     <com.google.android.material.button.MaterialButton
-                                        style="@style/Widget.MaterialComponents.Button"
                                         android:id="@+id/confirm_device_name"
+                                        style="@style/Widget.MaterialComponents.Button"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:enabled="false"
                                         android:text="@string/confirm"/>
 
                                     <com.google.android.material.button.MaterialButton
-                                        style="@style/Widget.MaterialComponents.Button"
                                         android:id="@+id/skip_device_name"
+                                        style="@style/Widget.MaterialComponents.Button"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="8dp"
@@ -370,8 +370,8 @@
                     android:text="@string/initial_setup_complete"/>
 
                 <com.google.android.material.button.MaterialButton
-                    style="@style/Widget.MaterialComponents.Button"
                     android:id="@+id/get_started"
+                    style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_setup_complete_button"

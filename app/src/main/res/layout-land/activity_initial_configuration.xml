@@ -50,14 +50,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_image_height"
-            android:background="#46D8FD"
-            android:importantForAccessibility="no"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_settings_title"/>
-
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -172,7 +164,7 @@
                             android:layout_width="@dimen/stepper_circle_width"
                             android:layout_height="@dimen/stepper_circle_height"
                             android:layout_marginBottom="8dp"
-                            android:background="@drawable/ic_blue_bg"
+                            android:background="@drawable/ic_step_bg"
                             android:gravity="center"
                             android:text="@string/step_one"
                             android:textColor="?colorOnPrimary"/>
@@ -253,7 +245,7 @@
                             android:layout_width="@dimen/stepper_circle_width"
                             android:layout_height="@dimen/stepper_circle_height"
                             android:layout_marginBottom="8dp"
-                            android:background="@drawable/ic_blue_bg"
+                            android:background="@drawable/ic_step_bg"
                             android:gravity="center"
                             android:text="@string/step_two"
                             android:textColor="?colorOnPrimary"/>

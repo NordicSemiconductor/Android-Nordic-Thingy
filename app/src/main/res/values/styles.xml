@@ -67,7 +67,10 @@
         <item name="colorError">@color/nordicRed</item>
         <!-- Text on error views -->
         <item name="colorOnError">@color/white</item>
-        <!-- Toolbar's titles color, AlertDialog title and message -->
+        <!--
+             Toolbar's titles color, AlertDialog title and message, android:textAppearanceLarge color,
+             EditText text color, PagerTitleStrip titles, Spinner view
+         -->
         <!--<item name="android:textColorPrimary">...</item>-->
         <!-- Toolbar overflow menu color, also used in @color/selectable for unselected buttons -->
         <!--<item name="android:textColorSecondary">...</item>-->
@@ -102,12 +105,11 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="CardView.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#000</item>
+    <style name="Widget" />
+
+    <style name="Widget.Toolbar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">14sp</item>
     </style>
-
-    <style name="Widget" />
 
     <style name="Widget.ScannerSubtitle">
         <item name="android:textColor">?colorPrimaryVariant</item>
@@ -130,6 +132,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>

@@ -36,12 +36,12 @@
   ~ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:background="@color/background">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <RelativeLayout
         android:id="@+id/container"
@@ -58,26 +58,26 @@
                 android:id="@+id/dfu_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:theme="@style/ActionBarThemeOverlay"
-                app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+                app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                app:theme="@style/ActionBarThemeOverlay"/>
 
-			<LinearLayout
-				android:id="@+id/location_services_container"
-				android:layout_width="match_parent"
-				android:layout_height="36dp"
-				android:background="?colorError"
-				android:visibility="gone"
-				tools:visibility="visible">
+            <LinearLayout
+                android:id="@+id/location_services_container"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="?colorError"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-				<TextView
-					android:layout_width="0dp"
-					android:layout_height="match_parent"
-					android:layout_weight="1"
-					android:gravity="center_vertical"
-					android:paddingEnd="@dimen/activity_horizontal_margin"
-					android:paddingStart="@dimen/activity_horizontal_margin"
-					android:text="@string/location_services_disabled"
-					android:textColor="?colorOnError"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingEnd="@dimen/activity_horizontal_margin"
+                    android:paddingStart="@dimen/activity_horizontal_margin"
+                    android:text="@string/location_services_disabled"
+                    android:textColor="?colorOnError"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/enable_location_services"
@@ -89,14 +89,14 @@
                     android:textColor="?colorOnError"
                     app:backgroundTint="?colorError"/>
 
-			</LinearLayout>
+            </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
             android:id="@+id/scroll_view"
-            android:layout_below="@id/app_bar_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@id/app_bar_layout">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -121,20 +121,19 @@
                             android:id="@+id/dfu_fw_info_toolbar"
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
-                            android:background="@android:color/white"
+                            app:logo="@drawable/ic_format_list_bulleted"
+                            app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                            app:title="@string/dfu_fw_info"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-							app:title="@string/dfu_fw_info"
-							app:logo="@drawable/ic_format_list_bulleted"
-                            app:titleTextAppearance="@style/CardView.TitleText"
-                            app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+                            app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:layout_marginLeft="@dimen/activity_vertical_margin"
                             android:layout_marginRight="@dimen/activity_vertical_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin">
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -145,13 +144,13 @@
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:text="@string/dfu_file_name"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"/>
 
                                 <TextView
                                     android:id="@+id/file_name"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    tools:text="Easter Egg.zip" />
+                                    tools:text="Easter Egg.zip"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -172,7 +171,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    tools:text="Application" />
+                                    tools:text="Application"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -183,16 +182,16 @@
                                 <TextView
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_size"
                                     android:paddingTop="@dimen/activity_vertical_margin"
-                                    android:textStyle="bold" />
+                                    android:text="@string/dfu_file_size"
+                                    android:textStyle="bold"/>
 
                                 <TextView
                                     android:id="@+id/file_size"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    tools:text="123456 bytes" />
+                                    tools:text="123456 bytes"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -205,16 +204,16 @@
                                 <TextView
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/dfu_file_version"
                                     android:paddingTop="@dimen/activity_vertical_margin"
-                                    android:textStyle="bold" />
+                                    android:text="@string/dfu_file_version"
+                                    android:textStyle="bold"/>
 
                                 <TextView
                                     android:id="@+id/file_version"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
-                                    tools:text="0.2.2" />
+                                    tools:text="0.2.2"/>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -222,33 +221,33 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/onBackground" />
+                            android:background="@color/onBackground"/>
 
                         <RelativeLayout
+                            style="?buttonBarStyle"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            style="?buttonBarStyle"
                             android:paddingEnd="8dp"
                             android:paddingStart="0dp">
 
                             <com.google.android.material.button.MaterialButton
-                                style="?buttonBarButtonStyle"
                                 android:id="@+id/nordic_fw"
+                                style="?buttonBarButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_alignParentEnd="true"
                                 android:text="@string/nordic_fw"
-                                android:textColor="@color/selectable"
-                                android:layout_alignParentEnd="true" />
+                                android:textColor="@color/selectable"/>
 
                             <com.google.android.material.button.MaterialButton
-                                style="?buttonBarButtonStyle"
                                 android:id="@+id/custom_fw"
+                                style="?buttonBarButtonStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
-                                android:text="@string/custom_fw"
-                                android:textColor="@color/selectable"
+                                android:layout_marginEnd="@dimen/cardview_action_padding"
                                 android:layout_toStartOf="@id/nordic_fw"
-                                android:layout_marginEnd="@dimen/cardview_action_padding" />
+                                android:text="@string/custom_fw"
+                                android:textColor="@color/selectable"/>
 
                         </RelativeLayout>
                     </LinearLayout>
@@ -275,31 +274,31 @@
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
+                            app:logo="@drawable/ic_thingy_gray"
+                            app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                            app:title="@string/dfu_target"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-							app:title="@string/dfu_target"
-							app:logo="@drawable/ic_thingy_gray"
-                            app:titleTextAppearance="@style/CardView.TitleText"
-                            app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+                            app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:layout_marginLeft="@dimen/activity_vertical_margin"
                             android:layout_marginRight="@dimen/activity_vertical_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin">
+                            android:orientation="horizontal">
 
                             <TextView
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:text="@string/dfu_target_name"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"/>
 
                             <TextView
                                 android:id="@+id/dfu_target_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                tools:text="My Thingy" />
+                                tools:text="My Thingy"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -309,12 +308,12 @@
                     android:id="@+id/dfu_status_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/dfu_target_view"
+                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:layout_marginLeft="@dimen/cardview_horizontal_padding"
                     android:layout_marginRight="@dimen/cardview_horizontal_padding"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
                     android:layout_marginTop="7dp"
-                    tools:cardCornerRadius="2dp"
-                    android:layout_below="@+id/dfu_target_view">
+                    tools:cardCornerRadius="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -326,32 +325,32 @@
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
                             android:background="@android:color/white"
+                            app:logo="@drawable/ic_dfu_gray"
+                            app:title="@string/dfu_status"
                             app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-							app:title="@string/dfu_status"
-							app:logo="@drawable/ic_dfu_gray"
-                            app:titleTextAppearance="@style/CardView.TitleText" />
+                            app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"
+                            android:layout_marginBottom="@dimen/activity_vertical_margin"
                             android:layout_marginLeft="@dimen/activity_vertical_margin"
                             android:layout_marginRight="@dimen/activity_vertical_margin"
-                            android:layout_marginBottom="@dimen/activity_vertical_margin">
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <ImageView
-                                    android:importantForAccessibility="no"
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/dfu_step_one_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
                                     android:layout_gravity="center_vertical"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    android:importantForAccessibility="no"
+                                    app:srcCompat="@drawable/ic_done_grey"/>
 
                                 <TextView
                                     android:id="@+id/dfu_step_one"
@@ -359,27 +358,27 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_one"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    android:text="@string/dfu_step_one"/>
                             </LinearLayout>
 
                             <android.widget.Space
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding" />
+                                android:layout_height="@dimen/cardview_action_padding"/>
 
                             <LinearLayout
-                                android:importantForAccessibility="no"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:importantForAccessibility="no"
                                 android:orientation="horizontal">
 
-                                <ImageView
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/dfu_step_two_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
                                     android:layout_gravity="center_vertical"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    app:srcCompat="@drawable/ic_done_grey"/>
 
                                 <TextView
                                     android:id="@+id/dfu_step_two"
@@ -387,84 +386,84 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_two"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    android:text="@string/dfu_step_two"/>
                             </LinearLayout>
 
                             <android.widget.Space
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding" />
+                                android:layout_height="@dimen/cardview_action_padding"/>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:importantForAccessibility="no"
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/dfu_step_three_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
-                                    android:layout_gravity="center_vertical"
                                     android:layout_alignParentLeft="true"
-                                    android:alpha="0.20" />
+                                    android:layout_gravity="center_vertical"
+                                    android:alpha="0.20"
+                                    android:importantForAccessibility="no"
+                                    app:srcCompat="@drawable/ic_done_grey"/>
 
                                 <TextView
                                     android:id="@+id/dfu_speed_unit"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
                                     android:layout_gravity="center_vertical"
+                                    android:alpha="0.20"
                                     android:gravity="right"
                                     android:paddingLeft="4dp"
-                                    android:text="@string/kbps"
-                                    android:layout_alignParentRight="true"
-                                    android:alpha="0.20" />
+                                    android:text="@string/kbps"/>
 
                                 <TextView
                                     android:id="@+id/dfu_step_three"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/dfu_step_three"
-                                    android:layout_toRightOf="@id/dfu_step_three_img"
                                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:alpha="0.20" />
+                                    android:layout_toRightOf="@id/dfu_step_three_img"
+                                    android:alpha="0.20"
+                                    android:text="@string/dfu_step_three"/>
 
                                 <ProgressBar
-                                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                                    android:progressTint="?colorPrimaryVariant"
                                     android:id="@+id/dfu_status_bar"
+                                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_below="@id/dfu_step_three"
                                     android:layout_alignLeft="@id/dfu_step_three"
-                                    android:max="100" />
+                                    android:layout_below="@id/dfu_step_three"
+                                    android:max="100"
+                                    android:progressTint="?colorPrimaryVariant"/>
 
                                 <TextView
                                     android:id="@+id/dfu_upload_speed"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_toLeftOf="@id/dfu_speed_unit" />
+                                    android:layout_toLeftOf="@id/dfu_speed_unit"/>
 
                             </RelativeLayout>
 
                             <android.widget.Space
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/cardview_action_padding" />
+                                android:layout_height="@dimen/cardview_action_padding"/>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
-                                <ImageView
-                                    android:importantForAccessibility="no"
+                                <androidx.appcompat.widget.AppCompatImageView
                                     android:id="@+id/dfu_step_four_img"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_done_grey"
                                     android:layout_gravity="center_vertical"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    android:importantForAccessibility="no"
+                                    app:srcCompat="@drawable/ic_done_grey"/>
 
                                 <TextView
                                     android:id="@+id/dfu_step_four"
@@ -472,8 +471,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                                    android:text="@string/dfu_step_completed"
-                                    android:alpha="0.20" />
+                                    android:alpha="0.20"
+                                    android:text="@string/dfu_step_completed"/>
 
                             </LinearLayout>
 
@@ -489,11 +488,11 @@
         android:id="@+id/dfu_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_action_dfu_white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:elevation="6dp"
         app:layout_anchor="@id/container"
-        app:layout_anchorGravity="bottom|right|end"/>
+        app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_action_dfu_white"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

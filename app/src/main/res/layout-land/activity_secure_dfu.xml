@@ -131,7 +131,7 @@
 							app:popupTheme="@style/ActionBarPopupThemeOverlay"
 							app:title="@string/dfu_fw_info"
 							app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-							app:titleTextAppearance="@style/CardView.TitleText"/>
+							app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 						<LinearLayout
 							android:layout_width="match_parent"
@@ -187,7 +187,7 @@
 								app:popupTheme="@style/ActionBarPopupThemeOverlay"
 								app:title="@string/dfu_target"
 								app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-								app:titleTextAppearance="@style/CardView.TitleText"/>
+								app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 							<LinearLayout
 								android:layout_width="match_parent"
@@ -341,7 +341,7 @@
 								app:logo="@drawable/ic_dfu_gray"
 								app:title="@string/dfu_status"
 								app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-								app:titleTextAppearance="@style/CardView.TitleText"/>
+								app:titleTextAppearance="@style/Widget.Toolbar"/>
 
 							<LinearLayout
 								android:layout_width="match_parent"
@@ -355,7 +355,7 @@
 									android:layout_height="wrap_content"
 									android:orientation="horizontal">
 
-									<ImageView
+									<androidx.appcompat.widget.AppCompatImageView
 										android:importantForAccessibility="no"
 										android:id="@+id/dfu_step_one_img"
 										android:layout_width="wrap_content"
@@ -383,7 +383,7 @@
 									android:layout_height="wrap_content"
 									android:orientation="horizontal">
 
-									<ImageView
+									<androidx.appcompat.widget.AppCompatImageView
 										android:importantForAccessibility="no"
 										android:id="@+id/dfu_step_two_img"
 										android:layout_width="wrap_content"
@@ -411,7 +411,7 @@
 									android:layout_width="match_parent"
 									android:layout_height="wrap_content">
 
-									<ImageView
+									<androidx.appcompat.widget.AppCompatImageView
 										android:importantForAccessibility="no"
 										android:id="@+id/dfu_step_three_img"
 										android:layout_width="wrap_content"
@@ -470,7 +470,7 @@
 									android:layout_height="wrap_content"
 									android:orientation="horizontal">
 
-									<ImageView
+									<androidx.appcompat.widget.AppCompatImageView
 										android:importantForAccessibility="no"
 										android:id="@+id/dfu_step_four_img"
 										android:layout_width="wrap_content"

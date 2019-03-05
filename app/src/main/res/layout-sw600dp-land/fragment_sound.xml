@@ -69,7 +69,7 @@
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:title="@string/microphone_title"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"/>
+                    app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -95,7 +95,7 @@
                             android:background="@drawable/ic_device_bg_grey"
                             android:scaleType="center"/>
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
                             android:id="@+id/microphone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
                     app:popupTheme="@style/ActionBarPopupThemeOverlay"
                     app:title="@string/speaker_title"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/CardView.TitleText"/>
+                    app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/sliding_tabs"

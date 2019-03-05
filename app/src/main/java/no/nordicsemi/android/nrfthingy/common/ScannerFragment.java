@@ -148,20 +148,21 @@ public class ScannerFragment extends DialogFragment {
 
         final AlertDialog dialog = builder
                 .setTitle(R.string.scanner_title)
-                .setView(dialogView).create();
+                .setView(dialogView)
+                .setPositiveButton(R.string.scanner_action_scan, null)
+                .show();
 
-        mScanButton = dialogView.findViewById(R.id.action_cancel);
+        // Button listener needs to be set like this, otherwise it would always dismiss the dialog.
+        mScanButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         mScanButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.action_cancel) {
-                    if (mIsScanning) {
-                        final ScannerFragmentListener listener = (ScannerFragmentListener) getActivity();
-                        listener.onNothingSelected();
-                        dialog.cancel();
-                    } else {
-                        startScan();
-                    }
+            public void onClick(final View v) {
+                if (mIsScanning) {
+                    final ScannerFragmentListener listener = (ScannerFragmentListener) requireActivity();
+                    listener.onNothingSelected();
+                    dialog.cancel();
+                } else {
+                    startScan();
                 }
             }
         });

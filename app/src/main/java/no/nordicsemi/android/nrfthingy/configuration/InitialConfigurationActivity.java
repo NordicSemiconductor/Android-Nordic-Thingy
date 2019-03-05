@@ -67,7 +67,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -80,7 +79,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Space;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -312,10 +310,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_configuration);
-
-        //this line is required if needed to set drawables within the activity if they are vectors.
-        //However setting a drawable as an ImageResource will not require this line
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         mThingySdkManager = ThingySdkManager.getInstance();
 
@@ -695,9 +689,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     private void animateStepOne() {
-        mStepOne.setText("");
-        mStepOne.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(InitialConfigurationActivity.this, R.drawable.ic_done_white), null, null, null);
-        mStepTwo.setBackground(ContextCompat.getDrawable(InitialConfigurationActivity.this, R.drawable.ic_blue_bg));
+        mStepOne.setText("✔");
         mThingyInfoContainer.animate()
                 .translationX(mThingyInfoContainer.getHeight())
                 .alpha(0.0f)
@@ -721,8 +713,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
     private void animateStepTwo() {
         mStepTwoComplete = true;
-        mStepTwo.setText("");
-        mStepTwo.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(InitialConfigurationActivity.this, R.drawable.ic_done_white), null, null, null);
+        mStepTwo.setText("✔");
 
         mDeviceNameContainer.animate()
                 .translationX(mDeviceNameContainer.getHeight())
