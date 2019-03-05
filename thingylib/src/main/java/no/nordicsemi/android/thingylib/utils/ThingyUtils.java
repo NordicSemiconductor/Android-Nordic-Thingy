@@ -291,8 +291,8 @@ public class ThingyUtils {
 
     public static final int MAX_VISISBLE_GRAPH_ENTRIES                                          = 300;
 
-    public static final SimpleDateFormat TIME_FORMAT                                            = new SimpleDateFormat("HH:mm:ss:SSS");
-    public static final SimpleDateFormat TIME_FORMAT_PEDOMETER                                  = new SimpleDateFormat("mm:ss:SS");
+    public static final SimpleDateFormat TIME_FORMAT                                            = new SimpleDateFormat("HH:mm:ss:SSS", Locale.US);
+    public static final SimpleDateFormat TIME_FORMAT_PEDOMETER                                  = new SimpleDateFormat("mm:ss:SS", Locale.US);
     public static final DecimalFormat GRAVITY_VECTOR_DECIMAL_FORMAT                             = new DecimalFormat("#.##");
     public static final int CLOUD_TOKEN_LENGTH                                                  = 250;
 
