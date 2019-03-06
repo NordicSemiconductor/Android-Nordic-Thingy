@@ -40,27 +40,22 @@ package no.nordicsemi.android.nrfthingy.sound;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class SampleModeFragment extends Fragment {
-
     private BluetoothDevice mDevice;
-    private DatabaseHelper mDatabaseHelper;
     private ThingySdkManager mThingySdkManager;
-
-    public SampleModeFragment() {
-    }
 
     public static SampleModeFragment newInstance(final BluetoothDevice device) {
         SampleModeFragment fragment = new SampleModeFragment();
@@ -71,20 +66,20 @@ public class SampleModeFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
         }
         mThingySdkManager = ThingySdkManager.getInstance();
-        mDatabaseHelper = new DatabaseHelper(getActivity());
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_sample_mode, container, false);
+    public View onCreateView(@NonNull final LayoutInflater inflater,
+                             @Nullable final ViewGroup container,
+                             @Nullable final Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_sample_mode, container, false);
         final TextView sample1 = rootView.findViewById(R.id.sound_sample_1);
         final TextView sample2 = rootView.findViewById(R.id.sound_sample_2);
         final TextView sample3 = rootView.findViewById(R.id.sound_sample_3);
@@ -158,15 +153,5 @@ public class SampleModeFragment extends Fragment {
             }
         });
         return rootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 }

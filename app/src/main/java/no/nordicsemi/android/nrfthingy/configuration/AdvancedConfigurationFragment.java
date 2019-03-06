@@ -40,8 +40,9 @@ package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,10 +55,8 @@ import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
-public class AdvancedConfigurationFragment extends Fragment implements ThingeeAdvancedSettingsChangeListener {
-
+public class AdvancedConfigurationFragment extends Fragment implements ThingyAdvancedSettingsChangeListener {
     private BluetoothDevice mDevice;
-    private boolean mBound;
     private int mSettingsMode;
     private ThingySdkManager mThingySdkManager;
 
@@ -72,20 +71,18 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
     private TextView mMotionIntervalSummary;
     private TextView mWakeOnMotionSummary;
 
-    public AdvancedConfigurationFragment() {
-
-    }
-
     public static AdvancedConfigurationFragment getInstance(final BluetoothDevice device) {
-        AdvancedConfigurationFragment fragment = new AdvancedConfigurationFragment();
+        final AdvancedConfigurationFragment fragment = new AdvancedConfigurationFragment();
+
         final Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(final @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -95,8 +92,10 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_advanced_configuration, container, false);
+    public View onCreateView(final @NonNull LayoutInflater inflater,
+                             final @Nullable ViewGroup container,
+                             final @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_advanced_configuration, container, false);
         final LinearLayout temperature = rootView.findViewById(R.id.category_temp_interval);
         mTemperatureIntervalSummary = rootView.findViewById(R.id.category_temp_interval_summary);
         final LinearLayout pressure = rootView.findViewById(R.id.category_pressure_interval);
@@ -123,7 +122,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         temperature.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 0;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -137,7 +136,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         pressure.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 1;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -151,7 +150,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         humidity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 2;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -165,7 +164,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         colorIntensity.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 3;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -179,7 +178,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         gasMode.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 4;
                     final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -193,7 +192,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         pedometer.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 0;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -207,7 +206,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         temperatureMotion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 1;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -221,7 +220,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         compass.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 2;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -235,7 +234,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         motion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 3;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -249,7 +248,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
         wakeOnMotion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
                     mSettingsMode = 4;
                     final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
@@ -276,46 +275,31 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         //LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mConfigurationBroadcastReceiver);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     public void updateTemperatureInterval() {
-        final int interval =  mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
-        if(interval > 0) {
+        final int interval = mThingySdkManager.getEnvironmentTemperatureInterval(mDevice);
+        if (interval > 0) {
             mTemperatureIntervalSummary.setText(getString(R.string.interval_ms, interval));
         }
     }
 
     @Override
     public void updatePressureInterval() {
-        final int interval =  mThingySdkManager.getPressureInterval(mDevice);
-        if(interval > 0) {
+        final int interval = mThingySdkManager.getPressureInterval(mDevice);
+        if (interval > 0) {
             mPressureIntervalSummary.setText(getString(R.string.interval_ms, interval));
         }
     }
 
     @Override
     public void updateHumidityInterval() {
-        final int interval =  mThingySdkManager.getHumidityInterval(mDevice);
-        if(interval > 0) {
+        final int interval = mThingySdkManager.getHumidityInterval(mDevice);
+        if (interval > 0) {
             mHumidityIntervalSummary.setText(getString(R.string.interval_ms, interval));
         }
     }
@@ -331,7 +315,7 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
     @Override
     public void updateGasMode() {
         final int gasMode = mThingySdkManager.getGasMode(mDevice);
-        if(gasMode > 0) {
+        if (gasMode > 0) {
             if (gasMode == 1) {
                 mGasModeSummary.setText(R.string.gas_mode_one);
             } else if (gasMode == 2) {
@@ -344,16 +328,16 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingeeAd
 
     @Override
     public void updatePedometerInterval() {
-        final int interval =  mThingySdkManager.getPedometerInterval(mDevice);
-        if(interval > 0) {
+        final int interval = mThingySdkManager.getPedometerInterval(mDevice);
+        if (interval > 0) {
             mPedometerIntervalSummary.setText(getString(R.string.interval_ms, interval));
         }
     }
 
     @Override
     public void updateMotionTemperatureInterval() {
-        final int interval =  mThingySdkManager.getMotionTemperatureInterval(mDevice);
-        if(interval > 0) {
+        final int interval = mThingySdkManager.getMotionTemperatureInterval(mDevice);
+        if (interval > 0) {
             mMotionTemperatureIntervalSummary.setText(getString(R.string.interval_ms, interval));
         }
     }

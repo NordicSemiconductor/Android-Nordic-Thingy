@@ -51,7 +51,8 @@
         android:text="1"
         android:gravity="center"
         android:background="@drawable/ic_bg_sound"
-        android:layout_margin="@dimen/sample_picker_padding" />
+        android:layout_margin="@dimen/sample_picker_padding"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_2"
@@ -62,7 +63,8 @@
         android:gravity="center"
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
-        android:layout_toRightOf="@id/sound_sample_1" />
+        android:layout_toRightOf="@id/sound_sample_1"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_3"
@@ -73,7 +75,8 @@
         android:gravity="center"
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
-        android:layout_toRightOf="@id/sound_sample_2" />
+        android:layout_toRightOf="@id/sound_sample_2"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_4"
@@ -84,7 +87,8 @@
         android:gravity="center"
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
-        android:layout_below="@id/sound_sample_1" />
+        android:layout_below="@id/sound_sample_1"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_5"
@@ -96,7 +100,8 @@
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
         android:layout_below="@id/sound_sample_2"
-        android:layout_toRightOf="@id/sound_sample_4" />
+        android:layout_toRightOf="@id/sound_sample_4"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_6"
@@ -108,7 +113,8 @@
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
         android:layout_below="@id/sound_sample_3"
-        android:layout_toRightOf="@id/sound_sample_5" />
+        android:layout_toRightOf="@id/sound_sample_5"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_7"
@@ -119,7 +125,8 @@
         android:gravity="center"
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
-        android:layout_below="@id/sound_sample_4" />
+        android:layout_below="@id/sound_sample_4"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_8"
@@ -131,7 +138,8 @@
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
         android:layout_below="@id/sound_sample_5"
-        android:layout_toRightOf="@id/sound_sample_7" />
+        android:layout_toRightOf="@id/sound_sample_7"
+        android:focusable="true"/>
 
     <TextView
         android:id="@+id/sound_sample_9"
@@ -143,6 +151,7 @@
         android:background="@drawable/ic_bg_sound"
         android:layout_margin="@dimen/sample_picker_padding"
         android:layout_below="@id/sound_sample_6"
-        android:layout_toRightOf="@id/sound_sample_8" />
+        android:layout_toRightOf="@id/sound_sample_8"
+        android:focusable="true"/>
 
 </RelativeLayout>

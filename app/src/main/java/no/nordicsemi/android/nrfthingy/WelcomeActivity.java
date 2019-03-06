@@ -46,7 +46,7 @@ import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -66,7 +66,6 @@ public class WelcomeActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences(Utils.PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         final boolean initialSetupStateComplete = sp.getBoolean(Utils.INITIAL_CONFIG_STATE, false);
         if (!initialSetupStateComplete) {
-
             setContentView(R.layout.activity_welcome);
 
             final TextView tv = findViewById(R.id.continue_tv);
@@ -77,7 +76,6 @@ public class WelcomeActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
                     finish();
-
                 }
             });
         }
@@ -86,30 +84,29 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void loadNfcAdapter() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mNfcPendingIntent = PendingIntent.getActivity(
                     this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);
-            mIntentFiltersArray = new IntentFilter[] {ndef };
+            mIntentFiltersArray = new IntentFilter[]{ndef};
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][] { new String[] { NfcF.class.getName() } });
+        if (mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][]{new String[]{NfcF.class.getName()}});
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
         }
     }
-
 }

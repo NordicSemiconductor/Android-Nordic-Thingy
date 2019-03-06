@@ -41,5 +41,5 @@
     <!--<gradient android:startColor="#FFFF0000" android:endColor="#80FF00FF"
         android:angle="270"/>-->
     <size android:height="24dp" android:width="24dp"/>
-    <solid android:color="@color/colorPrimary"/>
+    <solid android:color="#99000000"/>
 </shape>

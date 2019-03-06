@@ -38,7 +38,6 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -48,49 +47,50 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/motion_view"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/cardview_horizontal_padding"
+            android:layout_gravity="center"
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
-            android:layout_marginTop="@dimen/cardview_vertical_padding"
-            card_view:cardCornerRadius="2dp">
+            android:layout_marginStart="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_motion"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:background="@android:color/white"
+                    app:logo="@drawable/ic_motion"
+                    app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                    app:title="@string/motion_title"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
-                    app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+                    app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"
                     android:layout_marginLeft="@dimen/activity_vertical_margin"
-                    android:layout_marginRight="@dimen/activity_vertical_margin">
+                    android:layout_marginRight="@dimen/activity_vertical_margin"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/cardview_action_padding">
+                        android:layout_marginTop="@dimen/cardview_action_padding"
+                        android:orientation="horizontal">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/steps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_pedometer"
-                            android:layout_gravity="center" />
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_pedometer"/>
 
                         <LinearLayout
                             android:id="@+id/container_pedometer"
@@ -101,36 +101,36 @@
                             <TextView
                                 android:id="@+id/step_count"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:textSize="30sp"
+                                android:layout_weight="1"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
-                                android:text="@string/motion_default" />
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
+                                android:text="@string/motion_default"
+                                android:textSize="30sp"/>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:gravity="right"
-                                android:orientation="vertical"
-                                android:minWidth="80dp">
+                                android:minWidth="80dp"
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:text="@string/duration" />
+                                    android:text="@string/duration"
+                                    android:textSize="12sp"/>
 
                                 <TextView
                                     android:id="@+id/duration"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:textStyle="bold"
-                                    android:text="@string/motion_default_duration" />
+                                    android:text="@string/motion_default_duration"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -139,14 +139,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/cardview_action_padding">
+                        android:layout_marginTop="@dimen/cardview_action_padding"
+                        android:orientation="horizontal">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/tap_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_tap"
-                            android:layout_gravity="center" />
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_tap"/>
 
                         <LinearLayout
                             android:id="@+id/container_tap"
@@ -157,12 +158,12 @@
                             <TextView
                                 android:id="@+id/tap_count"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:textSize="30sp"
+                                android:layout_weight="1"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
-                                android:text="@string/motion_default" />
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
+                                android:text="@string/motion_default"
+                                android:textSize="30sp"/>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -175,18 +176,18 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:text="@string/direction" />
+                                    android:text="@string/direction"
+                                    android:textSize="12sp"/>
 
                                 <TextView
                                     android:id="@+id/tap_direction"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:textStyle="bold"
-                                    android:text="@string/motion_default_tap" />
+                                    android:text="@string/motion_default_tap"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -195,16 +196,17 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/cardview_action_padding">
+                        android:layout_marginTop="@dimen/cardview_action_padding"
+                        android:orientation="horizontal">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/title_heading"
                             android:id="@+id/heading_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_explore"
+                            android:layout_gravity="center"
                             android:rotation="-45.0"
-                            android:layout_gravity="center" />
+                            app:srcCompat="@drawable/ic_explore"/>
 
                         <LinearLayout
                             android:id="@+id/container_heading"
@@ -215,12 +217,12 @@
                             <TextView
                                 android:id="@+id/heading"
                                 android:layout_width="0dp"
-                                android:layout_weight="1"
                                 android:layout_height="wrap_content"
-                                android:textSize="30sp"
+                                android:layout_weight="1"
                                 android:gravity="right"
-                                android:paddingRight="@dimen/motion_card_horiztonal_margin"
-                                android:text="@string/motion_default" />
+                                android:paddingRight="@dimen/motion_card_horizontal_margin"
+                                android:text="@string/motion_default"
+                                android:textSize="30sp"/>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -233,18 +235,18 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:text="@string/direction" />
+                                    android:text="@string/direction"
+                                    android:textSize="12sp"/>
 
                                 <TextView
                                     android:id="@+id/heading_direction"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textSize="12sp"
                                     android:gravity="left"
-                                    android:textStyle="bold"
-                                    android:text="@string/north" />
+                                    android:text="@string/north"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"/>
 
                             </LinearLayout>
                         </LinearLayout>
@@ -254,57 +256,58 @@
                         android:id="@+id/container_orientation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/cardview_action_padding">
+                        android:layout_marginTop="@dimen/cardview_action_padding"
+                        android:orientation="horizontal">
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:contentDescription="@string/orientation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_transform"
-                            android:layout_gravity="center" />
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_transform"/>
 
                         <TextView
                             android:layout_width="0dp"
-                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:textSize="30sp"
-                            android:text=""
-                            android:gravity="right" />
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textSize="30sp"/>
 
-                        <ImageView
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:importantForAccessibility="no"
                             android:id="@+id/portrait_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_portrait_black_36px"
-                            android:layout_gravity="center" />
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_portrait_black_36px"/>
 
-                        <android.support.v4.widget.Space
+                        <android.widget.Space
                             android:layout_width="@dimen/activity_horizontal_margin"
-                            android:layout_height="match_parent" />
+                            android:layout_height="match_parent"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minWidth="80dp"
                             android:layout_gravity="center"
                             android:gravity="right"
+                            android:minWidth="80dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="12sp"
                                 android:gravity="left"
-                                android:text="@string/orientation" />
+                                android:text="@string/orientation"
+                                android:textSize="12sp"/>
 
                             <TextView
                                 android:id="@+id/orientation"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="12sp"
                                 android:gravity="left"
-                                android:textStyle="bold"
-                                android:text="@string/motion_default_orientation" />
+                                android:text="@string/motion_default_orientation"
+                                android:textSize="12sp"
+                                android:textStyle="bold"/>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -313,46 +316,47 @@
 
             </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <android.support.v7.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/gravity_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/cardview_horizontal_padding"
-            android:layout_marginStart="@dimen/cardview_horizontal_padding"
             android:layout_marginEnd="@dimen/cardview_horizontal_padding"
-            card_view:cardCornerRadius="2dp">
+            android:layout_marginStart="@dimen/cardview_horizontal_padding"
+            android:layout_marginTop="@dimen/cardview_vertical_padding">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     android:id="@+id/card_toolbar_gravity"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
                     android:background="@android:color/white"
+                    app:logo="@drawable/ic_apple"
+                    app:popupTheme="@style/ActionBarPopupThemeOverlay"
+                    app:title="@string/title_gravity_vector"
                     app:titleMarginStart="@dimen/card_view_toolbar_title_margin"
-                    app:titleTextAppearance="@style/Cardview.TitleText"
-                    app:popupTheme="@style/ActionBarPopupThemeOverlay" />
+                    app:titleTextAppearance="@style/Widget.Toolbar"/>
 
                 <com.github.mikephil.charting.charts.LineChart
                     android:id="@+id/line_chart_gravity_vector"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:layout_marginStart="@dimen/cardview_horizontal_padding"
+                    android:layout_marginBottom="@dimen/cardview_horizontal_padding"
                     android:layout_marginEnd="@dimen/cardview_horizontal_padding"
-                    android:layout_marginBottom="@dimen/cardview_horizontal_padding" />
+                    android:layout_marginStart="@dimen/cardview_horizontal_padding"/>
 
                 <TableLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/cardview_horizontal_padding"
-                    android:layout_marginEnd="@dimen/cardview_horizontal_padding"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="@dimen/cardview_horizontal_padding"
-                    android:layout_gravity="center_horizontal">
+                    android:layout_marginEnd="@dimen/cardview_horizontal_padding"
+                    android:layout_marginStart="@dimen/cardview_horizontal_padding">
 
                     <TableRow>
 
@@ -360,48 +364,48 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/gravity_vector_x"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"/>
 
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorRed"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp" />
+                            android:layout_marginRight="10dp"
+                            android:background="@color/red"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/gravity_vector_y"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"/>
 
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorGreen"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp" />
+                            android:layout_marginRight="10dp"
+                            android:background="@color/green"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/gravity_vector_z"
-                            android:textSize="10sp" />
+                            android:textSize="10sp"/>
 
                         <View
                             android:layout_width="15dp"
                             android:layout_height="1dp"
-                            android:background="@color/colorBlue"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp" />
+                            android:layout_marginRight="10dp"
+                            android:background="@color/blue"/>
 
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </ScrollView>

@@ -42,12 +42,12 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -60,7 +60,6 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
-
     private TextInputLayout mMinConnectionIntervalLayout;
     private TextInputLayout mMaxConnectionIntervalLayout;
     private TextInputLayout mSlaveLatencyLayout;
@@ -82,10 +81,6 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
     private int mSlaveLatency;
     private int mSupervisionTimeoutUnits;
 
-    public ConnParamCharConfigurationDialogFragment() {
-
-    }
-
     public static ConnParamCharConfigurationDialogFragment newInstance(final BluetoothDevice device) {
         ConnParamCharConfigurationDialogFragment fragment = new ConnParamCharConfigurationDialogFragment();
         Bundle args = new Bundle();
@@ -95,7 +90,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -109,10 +104,10 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.connection_parameters_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_conn_params, null);
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_conn_params, null);
 
         mMinConnectionIntervalLayout = view.findViewById(R.id.layout_min_connection_params);
         mMaxConnectionIntervalLayout = view.findViewById(R.id.layout_max_connection_params);
@@ -222,7 +217,6 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 } else {
                     mSlaveLatencyLayout.setError(getString(R.string.error_empty_slave_latency));
                 }
-
             }
 
             @Override
@@ -245,13 +239,13 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                     mConnSupervisionTimeout.setText(getString(R.string.interval_ms, superVisionTimeOut));
                     if (supervisionTimeoutUnits >= ThingyUtils.MIN_SUPERVISION_TIMEOUT && supervisionTimeoutUnits <= ThingyUtils.MAX_SUPERVISION_TIMEOUT) {
                         final String sLatency = mSlaveLatencyView.getText().toString().trim();
-                        if(sLatency.isEmpty()) {
+                        if (sLatency.isEmpty()) {
                             return;
                         }
                         final int slaveLatency = Integer.parseInt(sLatency);
 
                         final String mConnInterval = mMaxConnectionIntervalView.getText().toString().trim();
-                        if(mConnInterval.isEmpty()){
+                        if (mConnInterval.isEmpty()) {
                             return;
                         }
                         final int maxConnIntervalUnits = Integer.parseInt(mConnInterval);
@@ -266,7 +260,6 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 } else {
                     mSupervisionTimeoutLayout.setError(getString(R.string.error_empty_supervision_timeout));
                 }
-
             }
 
             @Override
@@ -299,16 +292,6 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
         });
 
         return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     private void updateUi() {
@@ -348,7 +331,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-            if(i > ThingyUtils.MAX_CONN_VALUE){
+            if (i > ThingyUtils.MAX_CONN_VALUE) {
                 mMinConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
                 return false;
             }
@@ -372,22 +355,15 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 return false;
             }
 
-
             if (i < ThingyUtils.MIN_CONN_VALUE) {
                 mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
                 return false;
             }
 
-            if(i > ThingyUtils.MAX_CONN_VALUE){
+            if (i > ThingyUtils.MAX_CONN_VALUE) {
                 mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
                 return false;
             }
-
-            /*if (ThingyUtils.MIN_CONN_INTERVAL >= i * ThingyUtils.CONN_INT_UNIT && ThingyUtils.MAX_CONN_INTERVAL <= i * ThingyUtils.CONN_INT_UNIT) {
-                mMaxConnectionIntervalLayout.setError(getString(R.string.error_invalid_conn_interval));
-                return false;
-            }*/
-
         }
 
         final String slaveLatency = mSlaveLatencyView.getText().toString().trim();
@@ -436,7 +412,6 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
                 mSupervisionTimeoutLayout.setError(getString(R.string.error_invalid_supervision_timeout));
                 return false;
             }
-
         }
         return true;
     }

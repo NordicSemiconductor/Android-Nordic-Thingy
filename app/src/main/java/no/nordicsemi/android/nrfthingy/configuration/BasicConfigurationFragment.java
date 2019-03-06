@@ -41,8 +41,9 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,8 @@ import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
-import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
-public class BasicConfigurationFragment extends Fragment implements ThingeeBasicSettingsChangeListener, FirmwareVersionDialogFragment.FimrwareVersionDialogFragmentListener {
+public class BasicConfigurationFragment extends Fragment implements ThingyBasicSettingsChangeListener, FirmwareVersionDialogFragment.FirmwareVersionDialogFragmentListener {
 
     private BluetoothDevice mDevice;
 
@@ -80,7 +80,7 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(final @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -90,8 +90,10 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_basic_configuration, container, false);
+    public View onCreateView(final @NonNull LayoutInflater inflater,
+                             final @Nullable ViewGroup container,
+                             final @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.fragment_basic_configuration, container, false);
         final LinearLayout name = rootView.findViewById(R.id.category_device_name);
         mNameSummary = rootView.findViewById(R.id.category_device_name_summary);
         final LinearLayout advParams = rootView.findViewById(R.id.category_adv_param_char);
@@ -169,7 +171,7 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
             }
         });
 
-        updateThingeeName();
+        updateThingyName();
         updatePhysicalWebUrl();
         updateCloudToken();
         updateFirmwareVersion();
@@ -177,20 +179,9 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void updateThingeeName() {
-        final String name  = mThingySdkManager.getDeviceName(mDevice);
-        if(name != null) {
+    public void updateThingyName() {
+        final String name = mThingySdkManager.getDeviceName(mDevice);
+        if (name != null) {
             mNameSummary.setText(name);
         }
     }
@@ -198,7 +189,7 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     @Override
     public void updatePhysicalWebUrl() {
         final String url = mThingySdkManager.getEddystoneUrl(mDevice);
-        if(url != null) {
+        if (url != null) {
             if (url.isEmpty()) {
                 mPhysicalWebUrlSummary.setText(R.string.physical_web_disabled);
             } else {
@@ -214,14 +205,14 @@ public class BasicConfigurationFragment extends Fragment implements ThingeeBasic
     @Override
     public void updateFirmwareVersion() {
         final String firmwareVersion = mThingySdkManager.getFirmwareVersion(mDevice);
-        if(firmwareVersion != null) {
+        if (firmwareVersion != null) {
             mFirmwareVersionSummary.setText(firmwareVersion);
         }
     }
 
     @Override
     public void onUpdateFirmwareClickListener() {
-        Intent intent = new Intent(getActivity(), SecureDfuActivity.class);
+        final Intent intent = new Intent(getActivity(), SecureDfuActivity.class);
         intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
         startActivity(intent);
     }

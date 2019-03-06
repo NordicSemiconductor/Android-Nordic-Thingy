@@ -40,70 +40,70 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/alert_dialog_padding_left"
-    android:paddingRight="@dimen/alert_dialog_padding_right"
+    android:paddingStart="@dimen/alert_dialog_padding_left"
+    android:paddingEnd="@dimen/alert_dialog_padding_right"
     android:paddingBottom="@dimen/alert_dialog_padding_bottom"
     android:paddingTop="@dimen/alert_dialog_padding_top">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_adv_interval"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:hint="@string/adv_interval">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/adv_interval_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/adv_interval"
                 android:inputType="number"
-                android:maxLength="5"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:maxLength="5" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/adv_interval_formula"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"/>
 
         <TextView
             android:id="@+id/adv_interval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="4dp"/>
+            android:layout_marginStart="4dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_adv_timeout"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/adv_timeout_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/adv_time_out"
-                android:inputType="number"
-                style="@style/EditTextHintStyle" />
-        </android.support.design.widget.TextInputLayout>
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/time_unit_s"
-            android:layout_gravity="center_vertical" />
+            android:layout_marginStart="8dp"/>
     </LinearLayout>
 </LinearLayout>

@@ -44,7 +44,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,6 @@ public class ThingyListenerHelper {
                 return;
 
             final String action = intent.getAction();
-
             switch (action) {
                 case ThingyUtils.ACTION_DEVICE_CONNECTED:
                     if(globalListener != null) {
@@ -286,11 +285,11 @@ public class ThingyListenerHelper {
                 case ThingyUtils.ROTATION_MATRIX_NOTIFICATION:
                     final byte [] rotationMatrix = intent.getExtras().getByteArray(ThingyUtils.EXTRA_DATA_ROTATION_MATRIX);
                     if(globalListener != null) {
-                        globalListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        globalListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
 
                     if(thingyListener != null) {
-                        thingyListener.onRotationMatixValueChangedEvent(device, rotationMatrix);
+                        thingyListener.onRotationMatrixValueChangedEvent(device, rotationMatrix);
                     }
                     break;
                 case ThingyUtils.HEADING_NOTIFICATION:
@@ -315,8 +314,8 @@ public class ThingyListenerHelper {
                         thingyListener.onGravityVectorChangedEvent(device, gravityX, gravityY, gravityZ);
                     }
                     break;
-                case ThingyUtils.SPEAKER_STATUS_NOTITIFCATION:
-                    final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
+                case ThingyUtils.SPEAKER_STATUS_NOTIFICATION:
+                    final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
                     if(globalListener != null) {
                         globalListener.onSpeakerStatusValueChangedEvent(device, status);
                     }
@@ -325,7 +324,7 @@ public class ThingyListenerHelper {
                         thingyListener.onSpeakerStatusValueChangedEvent(device, status);
                     }
                     break;
-                case ThingyUtils.MICROPHONE_NOTITIFCATION:
+                case ThingyUtils.MICROPHONE_NOTIFICATION:
                     final byte [] data = intent.getExtras().getByteArray(ThingyUtils.EXTRA_DATA_PCM);
                     if(globalListener != null) {
                         globalListener.onMicrophoneValueChangedEvent(device, data);
@@ -369,8 +368,8 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.ROTATION_MATRIX_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.HEADING_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.GRAVITY_NOTIFICATION);
-            intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTITIFCATION);
-            intentFilter.addAction(ThingyUtils.MICROPHONE_NOTITIFCATION);
+            intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTIFICATION);
+            intentFilter.addAction(ThingyUtils.MICROPHONE_NOTIFICATION);
 
             LocalBroadcastManager.getInstance(context).registerReceiver(mThingyBroadcastReceiver, intentFilter);
         }
@@ -407,8 +406,8 @@ public class ThingyListenerHelper {
             intentFilter.addAction(ThingyUtils.ROTATION_MATRIX_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.HEADING_NOTIFICATION);
             intentFilter.addAction(ThingyUtils.GRAVITY_NOTIFICATION);
-            intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTITIFCATION);
-            intentFilter.addAction(ThingyUtils.MICROPHONE_NOTITIFCATION);
+            intentFilter.addAction(ThingyUtils.SPEAKER_STATUS_NOTIFICATION);
+            intentFilter.addAction(ThingyUtils.MICROPHONE_NOTIFICATION);
 
             LocalBroadcastManager.getInstance(context).registerReceiver(mThingyBroadcastReceiver, intentFilter);
         }

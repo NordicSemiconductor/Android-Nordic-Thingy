@@ -39,10 +39,6 @@
 package no.nordicsemi.android.thingylib;
 
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
-
-import java.util.List;
 
 public interface ThingyListener  {
     //Connection state listener callbacks
@@ -82,7 +78,7 @@ public interface ThingyListener  {
 
     void onEulerAngleChangedEvent(final BluetoothDevice bluetoothDevice, final float roll, final float pitch, final float yaw);
 
-    void onRotationMatixValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] matrix);
+    void onRotationMatrixValueChangedEvent(final BluetoothDevice bluetoothDevice, final byte [] matrix);
 
     void onHeadingValueChangedEvent(final BluetoothDevice bluetoothDevice, final float heading);
 

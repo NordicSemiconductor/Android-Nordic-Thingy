@@ -40,56 +40,37 @@ package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.bluetooth.BluetoothDevice;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 
 import no.nordicsemi.android.nrfthingy.R;
 
 public class CancelInitialConfigurationDialogFragment extends DialogFragment {
 
-
-    public interface CancleInitialConfigurationListener {
-        void cancleInitialConfiguration();
+    public interface CancelInitialConfigurationListener {
+        void cancelInitialConfiguration();
     }
 
-    public CancelInitialConfigurationDialogFragment newInstance(final BluetoothDevice device) {
-        CancelInitialConfigurationDialogFragment confirmThingyDeletionDialogFragment = new CancelInitialConfigurationDialogFragment();
-        return confirmThingyDeletionDialogFragment;
+    public CancelInitialConfigurationDialogFragment newInstance() {
+        return new CancelInitialConfigurationDialogFragment();
     }
 
+    @NonNull
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle(getString(R.string.cancel_initial_configuration_process_title));
-        alertDialogBuilder.setMessage(getString(R.string.cancel_initial_configuration_process_message));
-        alertDialogBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-                ((CancleInitialConfigurationListener) getActivity()).cancleInitialConfiguration();
-            }
-        }).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-        return alertDialog;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        return new AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.cancel_initial_configuration_process_title))
+                .setMessage(getString(R.string.cancel_initial_configuration_process_message))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ((CancelInitialConfigurationListener) requireActivity()).cancelInitialConfiguration();
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .create();
     }
 }

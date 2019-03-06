@@ -41,34 +41,22 @@ package no.nordicsemi.android.nrfthingy;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
 public class EnvironmentServiceInfoDialogFragment extends DialogFragment {
 
-
-    public EnvironmentServiceInfoDialogFragment() {
-
-    }
-
     public static EnvironmentServiceInfoDialogFragment newInstance() {
-        EnvironmentServiceInfoDialogFragment fragment = new EnvironmentServiceInfoDialogFragment();
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        return new EnvironmentServiceInfoDialogFragment();
     }
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.environment_service_info));
         final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_environment_service_info, null);
         alertDialogBuilder.setView(rootView).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
@@ -77,8 +65,6 @@ public class EnvironmentServiceInfoDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-        final AlertDialog alertDialog = alertDialogBuilder.show();
-
-        return alertDialog;
+        return alertDialogBuilder.create();
     }
 }

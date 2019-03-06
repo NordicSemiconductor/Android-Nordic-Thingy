@@ -38,7 +38,6 @@
   -->
 
 <resources>
-    <dimen name="margin_setup_complete_button">20dp</dimen>
     <dimen name="margin_bottom_setup_complete_container">20dp</dimen>
     <dimen name="toolbar_image_height">192dp</dimen>
     <dimen name="stepper_title_text_size">14sp</dimen>

@@ -42,7 +42,7 @@ import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Binder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -75,20 +75,14 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
 
     @Override
     public void onDeviceDisconnected(BluetoothDevice device, int connectionState) {
-        if (mThingyConnections.containsKey(device)) {
-            mThingyConnections.remove(device);
-        }
-
-        if (mDevices.contains(device)) {
-            mDevices.remove(device);
-        }
+        mThingyConnections.remove(device);
+        mDevices.remove(device);
     }
 
     public abstract class BaseThingyBinder extends Binder {
 
         /**
-         * Disconnects from all connected devices
-         *
+         * Disconnects from all connected devices.
          */
         /*package access*/ final void disconnectFromAllDevices(){
             if (mDevices.size() > 0){
@@ -104,15 +98,14 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
         }
 
         /**
-         * Returns the list of connected devices
-         *
+         * Returns the list of connected devices.
          */
         /*package access*/ final List<BluetoothDevice> getConnectedDevices() {
             return Collections.unmodifiableList(mDevices);
         }
 
         /**
-         * Returns the remote connection for the particualr bluetooth device.
+         * Returns the remote connection for the particular bluetooth device.
          *
          * @param device bluetooth device
          */
@@ -130,8 +123,8 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
         }
 
         /**
-         * Returns the current bluetooth device which was selected from {@link #setSelectedDevice(BluetoothDevice)}.
-         *
+         * Returns the current bluetooth device which was selected from
+         * {@link #setSelectedDevice(BluetoothDevice)}.
          */
         /*package access*/ final BluetoothDevice getSelectedDevice() {
             return mDevice;
@@ -191,7 +184,9 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
     }
 
     /**
-     * Called when the activity has rebinded to the service after being recreated. This method is not called when the activity was killed and recreated just to change the phone orientation.
+     * Called when the activity has rebinded to the service after being recreated.
+     * This method is not called when the activity was killed and recreated just to change the
+     * phone orientation.
      */
     protected void onRebind(){
     }
@@ -200,7 +195,6 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
      * Called when the activity has unbound from the service after being bound.
      */
     protected void onUnbind(){
-
     }
 
     /**
@@ -220,9 +214,8 @@ public abstract class BaseThingyService extends Service implements ThingyConnect
         }
     }
 
-    /**
+    /* *
      * Create your own notification target class to display notifications
      */
     /*protected abstract Class<? extends Activity> getNotificationTarget();*/
-
 }

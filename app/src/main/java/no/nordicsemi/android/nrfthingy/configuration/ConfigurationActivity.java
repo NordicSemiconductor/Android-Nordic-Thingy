@@ -38,7 +38,6 @@
 
 package no.nordicsemi.android.nrfthingy.configuration;
 
-
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -46,13 +45,15 @@ import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import no.nordicsemi.android.nrfthingy.R;
@@ -64,14 +65,12 @@ import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class ConfigurationActivity extends AppCompatActivity implements ThingySdkManager.ServiceConnectionListener {
-
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
     private DatabaseHelper mDatabaseHelper;
     private NfcAdapter mNfcAdapter;
     private PendingIntent mNfcPendingIntent;
     private IntentFilter[] mIntentFiltersArray;
-
 
     private ThingyListener mThingyListener = new ThingyListener() {
 
@@ -166,7 +165,7 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         }
 
         @Override
-        public void onRotationMatixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
+        public void onRotationMatrixValueChangedEvent(BluetoothDevice bluetoothDevice, byte[] matrix) {
 
         }
 
@@ -238,15 +237,15 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
     @Override
     protected void onResume() {
         super.onResume();
-        if(mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][] { new String[] { NfcF.class.getName() } });
+        if (mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mIntentFiltersArray, new String[][]{new String[]{NfcF.class.getName()}});
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mNfcAdapter.disableForegroundDispatch(this);
         }
     }
@@ -264,14 +263,9 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
         switch (id) {
             case android.R.id.home:
                 onBackPressed();
-                break;
+                return true;
         }
-        return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+        return false;
     }
 
     @Override
@@ -281,10 +275,11 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
 
     private class FragmentAdapter extends FragmentPagerAdapter {
 
-        public FragmentAdapter(FragmentManager fm) {
+        FragmentAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -309,13 +304,13 @@ public class ConfigurationActivity extends AppCompatActivity implements ThingySd
 
     private void loadNfcAdapter() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if(mNfcAdapter != null) {
+        if (mNfcAdapter != null) {
             mNfcPendingIntent = PendingIntent.getActivity(
                     this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-            IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+            final IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);
-            mIntentFiltersArray = new IntentFilter[] {ndef };
+            mIntentFiltersArray = new IntentFilter[] { ndef };
         }
     }
 }

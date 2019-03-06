@@ -41,12 +41,11 @@ package no.nordicsemi.android.nrfthingy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.RelativeLayout;
 
 import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
@@ -54,21 +53,15 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
     private static final String TAG = "SplashScreenActivity";
     private static final int DURATION = 1000;
     private ThingySdkManager mThingySdkManager;
-    private DatabaseHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mThingySdkManager = ThingySdkManager.getInstance();
-        mDatabaseHelper = new DatabaseHelper(this);
 
         if (Utils.isAppInitialisedBefore(this)) {
             setContentView(R.layout.activity_splash_screen);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
     }
 
     @Override
@@ -97,12 +90,12 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
     private void startCorrespondingActivity(final Class<? extends AppCompatActivity> activityClass) {
         final AlphaAnimation alpha = new AlphaAnimation(1, 0);
         alpha.setDuration(200);
-        final RelativeLayout relativeLayout = findViewById(R.id.relative_splash);
+        final View view = findViewById(R.id.relative_splash);
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                relativeLayout.setAnimation(alpha);
+                view.setAnimation(alpha);
             }
         }, 700);
         handler.postDelayed(new Runnable() {

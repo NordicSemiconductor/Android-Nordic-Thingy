@@ -38,8 +38,8 @@
 
 <resources>
     <string name="rationale_title">Permission required</string>
-    <string name="rationale_message_location">Since Android 6.0 Marshmallow system requires granting access to device\'s location in order to scan for Bluetooth low energy devices.</string>
-    <string name="rationale_message_contacts">Please grant permission access to device\'s contacts. This allows the app to retrieve the primary account in order to register with the proximity api.</string>
+    <string name="rationale_message_location">Since Android 6.0 Marshmallow system requires granting access to device\'s location in order to scan for Bluetooth Low Energy devices.</string>
+    <string name="rationale_message_contacts">Please grant permission access to device\'s contacts. This allows the app to retrieve the primary account in order to register with the proximity API.</string>
     <string name="rationale_request">Proceed</string>
     <string name="rationale_cancel">Cancel</string>
     <string name="rationale_permission_denied">Permission denied.</string>

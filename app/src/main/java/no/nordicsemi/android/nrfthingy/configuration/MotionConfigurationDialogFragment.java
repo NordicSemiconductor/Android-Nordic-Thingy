@@ -43,16 +43,17 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -63,14 +64,12 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class MotionConfigurationDialogFragment extends DialogFragment {
-
     private static final String CONFIGURATION_DATA = "CONFIGURATION_DATA";
 
-    private LinearLayout mPedometerContainer = null;
-    private LinearLayout mTemperatureContainer = null;
-    private LinearLayout mCompassContainer = null;
-    private LinearLayout mMotionContainer = null;
-    private LinearLayout mWakeOnMotionContainer = null;
+    private ViewGroup mPedometerContainer = null;
+    private ViewGroup mTemperatureContainer = null;
+    private ViewGroup mCompassContainer = null;
+    private ViewGroup mMotionContainer = null;
 
     private TextInputLayout mPedometerIntervalLayout;
     private TextInputLayout mTemperatureIntervalLayout;
@@ -98,21 +97,19 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
 
     private ThingySdkManager mThingySdkManager;
 
-    public MotionConfigurationDialogFragment() {
-        // Required empty public constructor
-    }
-
     public static MotionConfigurationDialogFragment newInstance(final int settingsMode, final BluetoothDevice device) {
-        MotionConfigurationDialogFragment fragment = new MotionConfigurationDialogFragment();
+        final MotionConfigurationDialogFragment fragment = new MotionConfigurationDialogFragment();
+
         final Bundle args = new Bundle();
         args.putInt(Utils.SETTINGS_MODE, settingsMode);
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mSettingsMode = getArguments().getInt(Utils.SETTINGS_MODE);
@@ -124,15 +121,17 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_motion_configuration, null);
+    public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_motion_configuration, null);
 
         updateUi(view, alertDialogBuilder);
 
-        alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
-        final AlertDialog alertDialog = alertDialogBuilder.show();
+        alertDialogBuilder.setView(view)
+                .setPositiveButton(getString(R.string.confirm), null)
+                .setNegativeButton(getString(R.string.cancel), null);
 
+        final AlertDialog alertDialog = alertDialogBuilder.show();
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,24 +149,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
         return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     private boolean validateInput() {
@@ -232,29 +214,19 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     }
 
     private void configureMotionService() {
-
         if (mPedometerContainer != null && mPedometerContainer.getVisibility() == View.VISIBLE) {
-
             final int pedometerInterval = Integer.parseInt(mPedometerIntervalView.getText().toString());
             mThingySdkManager.setPedometerInterval(mDevice, pedometerInterval);
-
         } else if (mTemperatureContainer != null && mTemperatureContainer.getVisibility() == View.VISIBLE) {
-
             final int temperatureInterval = Integer.parseInt(mTemperatureIntervalView.getText().toString());
             mThingySdkManager.setTemperatureCompensationInterval(mDevice, temperatureInterval);
-
         } else if (mCompassContainer != null && mCompassContainer.getVisibility() == View.VISIBLE) {
-
             final int compassInterval = Integer.parseInt(mCompassIntervalView.getText().toString());
             mThingySdkManager.setMagnetometerCompensationInterval(mDevice, compassInterval);
-
         } else if (mMotionContainer != null && mMotionContainer.getVisibility() == View.VISIBLE) {
-
             final int motionInterval = Integer.parseInt(mMotionIntervalView.getText().toString());
             mThingySdkManager.setMotionProcessingFrequency(mDevice, motionInterval);
-
-        } else if (mWakeOnMotionContainer != null && mWakeOnMotionContainer.getVisibility() == View.VISIBLE) {
-
+        } else if (mWakeOnMotionView != null && mWakeOnMotionView.getVisibility() == View.VISIBLE) {
             int mode;
             if (mOn.isChecked()) {
                 mode = 1;
@@ -414,9 +386,8 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 break;
             case 4:
                 alertDialog.setTitle(getString(R.string.wake_on_motion_title));
-                mWakeOnMotionContainer = view.findViewById(R.id.motion_wake_container);
                 mWakeOnMotionView = view.findViewById(R.id.rg_motion_wake);
-                mWakeOnMotionContainer.setVisibility(View.VISIBLE);
+                mWakeOnMotionView.setVisibility(View.VISIBLE);
 
                 mOn = view.findViewById(R.id.rb_motion_wake_on);
                 mOff = view.findViewById(R.id.rb_motion_wake_off);
@@ -433,19 +404,19 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     private void updateParentFragmentUi() {
         switch (mSettingsMode) {
             case 0:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updatePedometerInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updatePedometerInterval();
                 break;
             case 1:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateMotionTemperatureInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateMotionTemperatureInterval();
                 break;
             case 2:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateCompassInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateCompassInterval();
                 break;
             case 3:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateMotionInterval();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateMotionInterval();
                 break;
             case 4:
-                ((ThingeeAdvancedSettingsChangeListener) getParentFragment()).updateWakeOnMotion();
+                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateWakeOnMotion();
                 break;
         }
     }

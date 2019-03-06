@@ -42,12 +42,12 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AlertDialog;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -60,7 +60,6 @@ import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class ThingyNameConfigurationDialogFragment extends DialogFragment {
 
-
     private TextInputLayout mDeviceNameLayout;
     private TextInputEditText mDeviceNameView;
 
@@ -71,20 +70,18 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
 
     private ThingySdkManager mThingySdkManager;
 
-    public ThingyNameConfigurationDialogFragment() {
-
-    }
-
     public static ThingyNameConfigurationDialogFragment newInstance(final BluetoothDevice device) {
-        ThingyNameConfigurationDialogFragment fragment = new ThingyNameConfigurationDialogFragment();
+        final ThingyNameConfigurationDialogFragment fragment = new ThingyNameConfigurationDialogFragment();
+
         Bundle args = new Bundle();
         args.putParcelable(Utils.CURRENT_DEVICE, device);
         fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mDevice = getArguments().getParcelable(Utils.CURRENT_DEVICE);
@@ -97,10 +94,10 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+    public Dialog onCreateDialog(final Bundle savedInstanceState) {
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.thingy_name_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_thingee_name, null);
+        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_thingy_name, null);
 
 
         alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
@@ -140,30 +137,13 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
                         mThingySdkManager.setDeviceName(mDevice, name);
                         mDatabaseHelper.updateDeviceName(mDevice.getAddress(), name);
                         dismiss();
-                        ((ThingeeBasicSettingsChangeListener) getParentFragment()).updateThingeeName();
+                        ((ThingyBasicSettingsChangeListener) getParentFragment()).updateThingyName();
                     }
                 }
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
         return alertDialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
     }
 
     private boolean validateInput() {

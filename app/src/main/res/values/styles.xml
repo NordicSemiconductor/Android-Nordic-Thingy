@@ -38,121 +38,84 @@
 
 <resources>
 
+    <!-- Base application theme. -->
     <style name="AppTheme" parent="@style/AppThemeBase">
         <!-- Empty -->
     </style>
-    <!-- Base application theme. -->
-    <style name="AppThemeBase" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/textColorSecondary</item>
-        <item name="actionMenuTextColor">@color/actionBarMenuTextColor</item>
-        <item name="alertDialogTheme">@style/AppTheme.DialogTheme</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+
+    <style name="AppTheme.TranslucentStatusBar">
+        <!-- Empty -->
     </style>
 
-    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionMenuTextColor">@color/textColorSecondary</item>
+    <style name="AppThemeBase" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Buttons (AppBarLayout color has been overridden by ActionBarThemeOverlay)-->
+        <item name="colorPrimary">@color/nordicLake</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Status bar color -->
+        <item name="colorPrimaryDark">@color/nordicBlueDark</item>
+        <!-- Set in @color/selectable -->
+        <item name="colorPrimaryVariant">@color/nordicLake</item>
+        <!-- FABs -->
+        <item name="colorSecondary">@color/nordicLake</item>
+        <!-- FABs icons and ripples -->
+        <item name="colorOnSecondary">@color/white</item>
+        <!-- MaterialCardView background -->
+        <item name="colorSurface">@color/white</item>
+        <!-- Checkboxes, Radio buttons, ProgressBar, SeekBar, links (clickable URLs) -->
+        <item name="colorAccent">@color/nordicLake</item>
+        <!-- Error views -->
+        <item name="colorError">@color/nordicRed</item>
+        <!-- Text on error views -->
+        <item name="colorOnError">@color/white</item>
+        <!--
+             Toolbar's titles color, AlertDialog title and message, android:textAppearanceLarge color,
+             EditText text color, PagerTitleStrip titles, Spinner view
+         -->
+        <!--<item name="android:textColorPrimary">...</item>-->
+        <!-- Toolbar overflow menu color, also used in @color/selectable for unselected buttons -->
+        <!--<item name="android:textColorSecondary">...</item>-->
+        <!-- TextViews text color -->
+        <item name="android:textColorTertiary">@color/nordicDarkGray</item>
+        <!-- All buttons should not have border, except specified otherwise -->
+        <item name="materialButtonStyle">?borderlessButtonStyle</item>
+        <!-- All TextInputLayout should use OutlinedBox style  -->
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
     </style>
-    `
 
-    <color name="actionBarMenuTextColor">#ffffff</color>
-
-    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="ActionBarThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">#000</item>
-        <item name="android:textColorSecondary">#8fff</item>
-        <item name="colorControlNormal">@color/textColorWhite</item>
-        <item name="colorControlHighlight">#3fff</item>
+    <!--
+    Style for the App Bar Layouts.
+    colorPrimary is used by Buttons and other components which we want to have a different color.
+    -->
+    <style name="ActionBarThemeOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <!-- Background for TabLayouts -->
+        <item name="colorPrimary">@color/nordicBlue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Title and Hamburger menu -->
+        <item name="android:textColorPrimary">?colorOnPrimary</item>
+        <!-- Toolbar's text buttons -->
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
     </style>
 
-    <style name="ActionBarThemeOverlayCard" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">#000</item>
-    </style>
+    <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
 
-    <style name="HeaderBar">
-        <item name="android:background">?colorPrimary</item>
-    </style>
-
-    <style name="HeaderBarCardView">
-        <item name="android:background">@android:color/white</item>
-    </style>
     <!-- Style used by the Toolbar -->
     <style name="ActionBar.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Cardview.TitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#000</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="Cardview.TitleTextDisabled" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/disabledBgColouor</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="CardviewData" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/textColorBlack</item>
-        <item name="android:textSize">@dimen/card_view_data_text_size</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="AppTheme.TranslucentStatusBar">
-        <!-- Empty -->
-    </style>
-
-    <style name="AppTheme.Translucent">
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation.Translucent</item>
-    </style>
-
     <style name="Widget" />
 
+    <style name="Widget.Toolbar" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Widget.ScannerSubtitle">
-        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textColor">?colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="android:textColor">@color/textColorWhite</item>
-    </style>
-
-    <style name="EditTextHintStyle">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="StepperTitleTextStyle">
-        <item name="android:color">@color/textColorBlack</item>
-        <item name="android:textSize">@dimen/stepper_title_text_size</item>
-    </style>
-
-    <style name="AppTheme.DialogTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionModeBackground">@color/actionMode</item>
-        <item name="actionMenuTextColor">@color/textColorWhite</item>
-        <item name="actionBarTheme">@style/ActionModeThemeOverlay</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="android:keyTextSize">50sp</item>
-    </style>
-
-    <style name="ActionModeThemeOverlay" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="android:textColorPrimary">@color/textColorWhite</item>
-    </style>
+    <!-- About screen -->
 
     <style name="PreferenceCategoryLayout">
         <item name="android:layout_width">match_parent</item>
@@ -165,17 +128,16 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">48dp</item>
-        <item name="android:textColor">?attr/colorAccent</item>
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
     </style>
 
     <style name="PreferenceCategory">
-        <item name="android:textColor">#757575</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:textSize">16sp</item>
@@ -195,7 +157,7 @@
     </style>
 
     <style name="PreferenceCategorySummary">
-        <item name="android:textColor">#757575</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">12sp</item>
@@ -204,21 +166,6 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>
-    </style>
-
-    <style name="DfuDivider">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@drawable/list_divider_holo_light</item>
-    </style>
-
-    <style name="DfuProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
-        <item name="android:minHeight">8dip</item>
-        <item name="android:maxHeight">8dip</item>
-    </style>
-
-    <style name="RedSlider" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorAccent">#FFFF0000</item>
     </style>
 
 </resources>
