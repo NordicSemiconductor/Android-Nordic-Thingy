@@ -40,11 +40,9 @@
 <resources>
     <dimen name="margin_bottom_setup_complete_container">20dp</dimen>
     <dimen name="toolbar_image_height">192dp</dimen>
-    <dimen name="stepper_title_text_size">14sp</dimen>
     <dimen name="black_key_width">56dp</dimen>
     <dimen name="black_key_height">150dp</dimen>
     <dimen name="white_key_height">270dp</dimen>
-    <dimen name="frequency_mode_padding">48dp</dimen>
     <dimen name="device_icon_size">48dp</dimen>
     <dimen name="motion_card_view_height">400dp</dimen>
     <dimen name="guide_summary_width">500dp</dimen>

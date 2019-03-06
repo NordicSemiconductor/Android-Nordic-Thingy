@@ -67,6 +67,8 @@
     <dimen name="card_view_label_text_size">18sp</dimen>
 
     <dimen name="preference_category_height">72dp</dimen>
+    <!-- Not used, unless in landscape. Requires to avoid lint errors. -->
+    <dimen name="guide_summary_width">300dp</dimen>
 
     <dimen name="motion_card_horizontal_margin">18dp</dimen>
     <dimen name="card_view_toolbar_title_margin">32dp</dimen>
