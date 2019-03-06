@@ -8,8 +8,8 @@ android {
         applicationId "no.nordicsemi.android.nrfthingy"
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 32
-        versionName "1.3.4"
+        versionCode 33
+        versionName "1.4.0"
         vectorDrawables.useSupportLibrary = true
         //Enabling multidex support.
         multiDexEnabled true
@@ -44,12 +44,9 @@ dependencies {
     // Scanner Compat library
     implementation 'no.nordicsemi.android.support.v18:scanner:1.4.0'
     // Material Tutorial views
-    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.9.1'
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.12.0'
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:v2.2.5'
     // 3D engine
     implementation 'org.rajawali3d:rajawali:1.0.325@aar'
-
-    // Tests
-    testImplementation 'junit:junit:4.12'
 }

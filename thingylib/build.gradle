@@ -6,11 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.2"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
+        versionCode 4
+        versionName "1.1.0"
     }
     buildTypes {
         release {
@@ -21,13 +18,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
     // Device Firmware Update
     api 'no.nordicsemi.android:dfu:1.9.0'
-
-    // Tests
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testImplementation 'junit:junit:4.12'
 }
