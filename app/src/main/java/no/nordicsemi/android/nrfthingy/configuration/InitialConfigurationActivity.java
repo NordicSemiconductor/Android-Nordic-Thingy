@@ -65,7 +65,6 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import com.google.android.material.textfield.TextInputEditText;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
@@ -93,6 +92,7 @@ import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.nrfthingy.dfu.DfuHelper;
 import no.nordicsemi.android.nrfthingy.dfu.DfuUpdateAvailableDialogFragment;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
@@ -145,7 +145,6 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private boolean mStepTwoComplete;
 
     private String mDeviceName;
-    private String mFirmwareFileVersion;
 
     private boolean mConfig;
     private BluetoothDevice mDevice;
@@ -958,44 +957,18 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
-    private boolean checkIfFirmwareUpdateAvailable() {
-        final String[] fwVersion = mThingySdkManager.getFirmwareVersion(mDevice).split("\\.");
-
-        final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
-        final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
-        final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
-        final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
-        final String[] resourceEntryNames = name.split("_");
-
-        final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
-        final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
-        final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
-
-        mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
-                resourceEntryNames[resourceEntryNames.length - 2] + "." +
-                resourceEntryNames[resourceEntryNames.length - 1];
-
-        if (fwFileVersionMajor > fwVersionMajor) {
-            return true;
-        } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor) {
-            return true;
-        } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch) {
-            return true;
-        }
-        return false;
-    }
-
     private void checkForFwUpdates() {
-        if (checkIfFirmwareUpdateAvailable()) {
-            DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, mFirmwareFileVersion);
+        final String currentVersion = mThingySdkManager.getFirmwareVersion(mDevice);
+        if (DfuHelper.isFirmwareUpdateAvailable(this, currentVersion)) {
+            final String newestVersion = DfuHelper.getCurrentFwVersion(this);
+            final DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, newestVersion);
             fragment.show(getSupportFragmentManager(), null);
-            mFirmwareFileVersion = null;
         }
     }
 
     @Override
     public void onDfuRequested() {
-        Intent intent = new Intent(this, SecureDfuActivity.class);
+        final Intent intent = new Intent(this, SecureDfuActivity.class);
         intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
         startActivity(intent);
     }

@@ -64,16 +64,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
@@ -88,6 +78,7 @@ import android.widget.TextView;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,6 +86,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import no.nordicsemi.android.dfu.DfuBaseService;
 import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
@@ -427,7 +426,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mIsNordicFw = true;
                 mCustomFirmware.setSelected(!mIsNordicFw);
                 mNordicFirmware.setSelected(mIsNordicFw);
-                mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0);
+                mFileName = DfuHelper.getCurrentFwFileName(SecureDfuActivity.this, false);
                 mFileNameView.setText(mFileName);
                 mFileStreamUri = null;
             }
@@ -774,7 +773,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                                 Utils.showToast(this, getString(R.string.dfu_bootloader_push_error));
                             }
                         } else {
-                            initiateDfu(mDevice, R.raw.thingy_dfu_pkg_app_v2_1_0);
+                            initiateDfu(mDevice, DfuHelper.CURRENT_FW_ID);
                         }
                     }
                 } else {
@@ -832,7 +831,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         scanner.startScan(filters, settings, scanCallback);
         mIsScanning = true;
 
-        //Hanlder to stop scan after the duration time out
+        //Handler to stop scan after the duration time out
         mScanHandler.postDelayed(mBleScannerTimeoutRunnable, SCAN_DURATION);
     }
 
@@ -872,7 +871,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                         @Override
                         public void run() {
                             stopScan();
-                            initiateDfu(result.getDevice());
+                            initiateDfu(result.getDevice(), DfuHelper.CURRENT_FW_FULL_ID);
                         }
                     });
                 }
@@ -884,26 +883,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
             // should never be called
         }
     };
-
-    private void initiateDfu(final BluetoothDevice device) {
-        if (!mIsNordicFw) {
-            if (mFilePath == null && mFileStreamUri == null) {
-                Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
-                return;
-            }
-        }
-        mNordicFirmware.setEnabled(false);
-        mCustomFirmware.setEnabled(false);
-        mFabStartStop.setImageResource(R.drawable.ic_close_white);
-        mStartDfu = true;
-        if (mIsNordicFw) {
-            mThingySdkManager.startDFUWithNordicFW(this, device, R.raw.thingy_dfu_sd_bl_app_v2_1_0, mFileType);
-        } else {
-            mThingySdkManager.startDFUWithCustomFW(this, device, mFileType, mFilePath, mFileStreamUri);
-        }
-        mEnabledBootloaderAlpha = 1.0f;
-        mEnableBootloaderMsg.setAlpha(mEnabledBootloaderAlpha);
-    }
 
     private void initiateDfu(final BluetoothDevice device, final int fileResource) {
         if (!mIsNordicFw) {
@@ -1113,10 +1092,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
     };
 
-    private String parseError(final int error, final int errorType, final String message) {
-        return SecureDfuError.parse(error);
-    }
-
     private void refreshUI(final boolean dfuCompleted) {
         mNordicFirmware.setEnabled(true);
         mCustomFirmware.setEnabled(true);
@@ -1172,7 +1147,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
             mNordicFirmware.setEnabled(false);
             mCustomFirmware.setEnabled(false);
             if (mIsNordicFw) {
-                initiateDfu(getBluetoothDevice(deviceAddress), R.raw.thingy_dfu_pkg_app_v2_1_0);
+                initiateDfu(getBluetoothDevice(deviceAddress), DfuHelper.CURRENT_FW_ID);
             }
         }
     }
@@ -1201,7 +1176,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mTargetName = name;
         mDfuTargetNameView.setText(mTargetName);
         resetUi();
-        initiateDfu(device);
+        initiateDfu(device, DfuHelper.CURRENT_FW_FULL_ID);
     }
 
     @Override
@@ -1421,14 +1396,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         if (TextUtils.isEmpty(mFilePath)) {
             InputStream is = null;
             try {
-                if (!mThingySdkManager.checkIfDfuWithoutBondSharingIsSupported(mDevice)) {
-                    mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0);
-                    is = getResources().openRawResource(R.raw.thingy_dfu_sd_bl_app_v2_1_0);
-                } else {
-                    mFileName = getResources().getResourceEntryName(R.raw.thingy_dfu_pkg_app_v2_1_0);
-                    is = getResources().openRawResource(R.raw.thingy_dfu_pkg_app_v2_1_0);
-                }
-
+                final boolean requiresUpdatingSdAndBl = !mThingySdkManager.checkIfDfuWithoutBondSharingIsSupported(mDevice);
+                mFileName = DfuHelper.getCurrentFwFileName(this, requiresUpdatingSdAndBl);
+                is = DfuHelper.getCurrentFwStream(this, requiresUpdatingSdAndBl);
                 int size = is.available();
                 mFileSize = String.valueOf(Utils.humanReadableByteCount(size, true));
             } catch (IOException e) {

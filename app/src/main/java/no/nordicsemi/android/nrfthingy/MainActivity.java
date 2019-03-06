@@ -67,20 +67,6 @@ import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -93,10 +79,25 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import no.nordicsemi.android.nrfthingy.common.AboutActivity;
 import no.nordicsemi.android.nrfthingy.common.EnableNFCDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
@@ -109,6 +110,7 @@ import no.nordicsemi.android.nrfthingy.configuration.ConfirmThingyDeletionDialog
 import no.nordicsemi.android.nrfthingy.configuration.InitialConfigurationActivity;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
+import no.nordicsemi.android.nrfthingy.dfu.DfuHelper;
 import no.nordicsemi.android.nrfthingy.dfu.DfuUpdateAvailableDialogFragment;
 import no.nordicsemi.android.nrfthingy.dfu.SecureDfuActivity;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
@@ -1723,46 +1725,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Utils.showToast(this, getString(R.string.requested_permission_not_granted_rationale));
     }
 
-    private boolean checkIfFirmwareUpdateAvailable() {
-        final String version = mThingySdkManager.getFirmwareVersion(mDevice);
-        if (version != null && !version.isEmpty()) {
-            final String[] fwVersion = version.split("\\.");
-            if (fwVersion != null) {
-                final int fwVersionMajor = Integer.parseInt(fwVersion[fwVersion.length - 3]);
-                final int fwVersionMinor = Integer.parseInt(fwVersion[fwVersion.length - 2]);
-                final int fwVersionPatch = Integer.parseInt(fwVersion[fwVersion.length - 1]);
-
-                final String name = getResources().getResourceEntryName(R.raw.thingy_dfu_sd_bl_app_v2_1_0).replace("v", "");
-                final String[] resourceEntryNames = name.split("_");
-
-                final int fwFileVersionMajor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 3]);
-                final int fwFileVersionMinor = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 2]);
-                final int fwFileVersionPatch = Integer.parseInt(resourceEntryNames[resourceEntryNames.length - 1]);
-
-                mFirmwareFileVersion = resourceEntryNames[resourceEntryNames.length - 3] + "." +
-                        resourceEntryNames[resourceEntryNames.length - 2] + "." +
-                        resourceEntryNames[resourceEntryNames.length - 1];
-
-                if (fwFileVersionMajor > fwVersionMajor) {
-                    return true;
-                } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor > fwVersionMinor) {
-                    return true;
-                } else if (fwFileVersionMajor == fwVersionMajor && fwFileVersionMinor == fwVersionMinor && fwFileVersionPatch > fwVersionPatch) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private void checkForFwUpdates() {
-        if (checkIfFirmwareUpdateAvailable()) {
-            DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, mFirmwareFileVersion);
+        final String currentVersion = mThingySdkManager.getFirmwareVersion(mDevice);
+        if (DfuHelper.isFirmwareUpdateAvailable(this, currentVersion)) {
+            final String newestVersion = DfuHelper.getCurrentFwVersion(this);
+            final DfuUpdateAvailableDialogFragment fragment = DfuUpdateAvailableDialogFragment.newInstance(mDevice, newestVersion);
             fragment.show(getSupportFragmentManager(), null);
-            mFirmwareFileVersion = null;
         }
     }
+
 
     @Override
     public void onDfuRequested() {
@@ -1890,7 +1861,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void onServiceDiscoveryCompletion(final BluetoothDevice device) {
         hideProgressDialog();
-        mThingySdkManager.enableBatteryLevelNotifcations(device, true);
+        mThingySdkManager.enableBatteryLevelNotifications(device, true);
         switch (mFragmentTag) {
             case Utils.MOTION_FRAGMENT:
                 enableMotionNotifications();
