@@ -83,6 +83,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     private BluetoothGattCharacteristic mEddystoneUrlCharacteristic;
     private BluetoothGattCharacteristic mCloudTokenCharacteristic;
     private BluetoothGattCharacteristic mFirmwareVersionCharacteristic;
+    private BluetoothGattCharacteristic mNfcCharacteristic;
 
     private BluetoothGattCharacteristic mBatteryLevelCharacteristic;
 
@@ -286,7 +287,8 @@ public class ThingyConnection extends BluetoothGattCallback {
             mConnectionParamCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.CONNECTION_PARAM_CHARACTERISTIC_UUID);
             mEddystoneUrlCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.EDDYSTONE_URL_CHARACTERISTIC_UUID);
             mCloudTokenCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.CLOUD_TOKEN_CHARACTERISTIC_UUID);
-            mFirmwareVersionCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.FIRMWARE_VERSION_CHARACERISTIC_UUID);
+            mFirmwareVersionCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.FIRMWARE_VERSION_CHARACTERISTIC_UUID);
+            mNfcCharacteristic = mThingyConfigurationService.getCharacteristic(ThingyUtils.NFC_CHARACTERISTIC_UUID);
             Log.v(TAG, "Reading thingy config chars");
         }
 
@@ -932,6 +934,10 @@ public class ThingyConnection extends BluetoothGattCallback {
             if (mFirmwareVersionCharacteristic != null) {
                 add(RequestType.READ_CHARACTERISTIC, mFirmwareVersionCharacteristic);
             }
+
+            if (mNfcCharacteristic != null) {
+                add(RequestType.READ_CHARACTERISTIC, mNfcCharacteristic);
+            }
         }
 
         if (mBatteryLevelCharacteristic != null) {
@@ -1291,6 +1297,30 @@ public class ThingyConnection extends BluetoothGattCallback {
             return major + "." + minor + "." + patch;
         }
         return null;
+    }
+
+    /**
+     * Returns NFC content of thingy.
+     */
+    final byte[] getNfcContent() {
+        if (mNfcCharacteristic != null) {
+            return mNfcCharacteristic.getValue();
+        }
+        return null;
+    }
+
+    /**
+     * Sets the NFC content. Available form fw version 2.2.0 onwards.
+     *
+     * @param content the exact content that will be available through NFC.
+     * @return True, if the request has been queued, false if there is no NFC characteristic.
+     */
+    final boolean setNfcContent(final byte[] content) {
+        if (mNfcCharacteristic != null) {
+            add(RequestType.WRITE_CHARACTERISTIC, mNfcCharacteristic, content, BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+            return true;
+        }
+        return false;
     }
 
     /**
