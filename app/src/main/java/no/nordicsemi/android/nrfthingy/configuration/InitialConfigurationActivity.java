@@ -125,12 +125,9 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private LinearLayout mLocationServicesContainer;
 
     private TextInputEditText mDeviceInfo;
-    private Button mEnableLocationServices;
 
     private Button mConfirmThingy;
     private Button mConfirmDeviceName;
-    private Button mSkipDeviceName;
-    private Button mGetStarted;
     private LinearLayout mNfcContainer;
 
     private TextView mStepOne;
@@ -330,7 +327,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mDeviceNameContainer = findViewById(R.id.device_name_container);
         mSetupCompleteContainer = findViewById(R.id.setup_complete_container);
         mLocationServicesContainer = findViewById(R.id.location_services_container);
-        mEnableLocationServices = findViewById(R.id.enable_location_services);
+        Button enableLocationServices = findViewById(R.id.enable_location_services);
 
         mScrollView = findViewById(R.id.scroll_view);
 
@@ -340,8 +337,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         final Button mNfcMore = findViewById(R.id.more_nfc_info);
         mConfirmThingy = findViewById(R.id.confirm_thingy);
         mConfirmDeviceName = findViewById(R.id.confirm_device_name);
-        mSkipDeviceName = findViewById(R.id.skip_device_name);
-        mGetStarted = findViewById(R.id.get_started);
+        Button skipDeviceName = findViewById(R.id.skip_device_name);
+        Button getStarted = findViewById(R.id.get_started);
 
         mStepOne = findViewById(R.id.step_one);
         mStepTwo = findViewById(R.id.step_two);
@@ -364,7 +361,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             }
         });
 
-        mEnableLocationServices.setOnClickListener(new View.OnClickListener() {
+        enableLocationServices.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
@@ -424,18 +421,18 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mConfirmDeviceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                animateStepTwo();
+                animateStepTwo(true);
             }
         });
 
-        mSkipDeviceName.setOnClickListener(new View.OnClickListener() {
+        skipDeviceName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                animateStepTwo();
+                animateStepTwo(false);
             }
         });
 
-        mGetStarted.setOnClickListener(new View.OnClickListener() {
+        getStarted.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getStarted();
@@ -477,7 +474,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             }
 
             if (mStepTwoComplete) {
-                animateStepTwo();
+                animateStepTwo(true);
             }
         }
 
@@ -710,7 +707,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mStepOneComplete = true;
     }
 
-    private void animateStepTwo() {
+    private void animateStepTwo(final boolean confirmName) {
         mStepTwoComplete = true;
         mStepTwo.setText("✔");
 
@@ -722,10 +719,12 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         super.onAnimationEnd(animation);
-                        mDeviceName = mDeviceInfo.getText().toString();
-                        if (mDevice != null && !mDeviceName.isEmpty()) {
-                            if (mThingySdkManager != null) {
-                                mThingySdkManager.setDeviceName(mDevice, mDeviceName);
+                        if (confirmName) {
+                            mDeviceName = mDeviceInfo.getText().toString();
+                            if (mDevice != null && !mDeviceName.isEmpty()) {
+                                if (mThingySdkManager != null) {
+                                    mThingySdkManager.setDeviceName(mDevice, mDeviceName);
+                                }
                             }
                         }
                         mDeviceNameContainer.setVisibility(View.GONE);
@@ -842,8 +841,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
     private void getStarted() {
         if (!Utils.isAppInitialisedBefore(this)) {
-            SharedPreferences sp = getSharedPreferences(Utils.PREFS_INITIAL_SETUP, MODE_PRIVATE);
-            sp.edit().putBoolean(Utils.INITIAL_CONFIG_STATE, true).commit();
+            final SharedPreferences sp = getSharedPreferences(Utils.PREFS_INITIAL_SETUP, MODE_PRIVATE);
+            sp.edit().putBoolean(Utils.INITIAL_CONFIG_STATE, true).apply();
         }
 
         final String address = mDevice.getAddress();
@@ -865,13 +864,11 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         updateSelectionInDb(new Thingy(mDevice), true);
 
         if (!mConfig) {
-            finish();
-            Intent intent = new Intent(InitialConfigurationActivity.this, MainActivity.class);
+            final Intent intent = new Intent(InitialConfigurationActivity.this, MainActivity.class);
             intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
             startActivity(intent);
-        } else {
-            finish();
         }
+        finish();
     }
 
     private void updateSelectionInDb(final no.nordicsemi.android.nrfthingy.thingy.Thingy thingy, final boolean selected) {
