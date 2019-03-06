@@ -130,8 +130,8 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
         alertDialogBuilder.setView(view)
                 .setPositiveButton(getString(R.string.confirm), null)
                 .setNegativeButton(getString(R.string.cancel), null);
-        final AlertDialog alertDialog = alertDialogBuilder.show();
 
+        final AlertDialog alertDialog = alertDialogBuilder.show();
         alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

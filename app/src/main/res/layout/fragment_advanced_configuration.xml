@@ -425,7 +425,7 @@
 
                     <TextView
                         style="@style/PreferenceCategory"
-                        android:text="@string/wake_on_motion_title"/>
+                        android:text="@string/interval_wake_on_motion"/>
 
                     <TextView
                         android:id="@+id/category_wake_on_motion_summary"
