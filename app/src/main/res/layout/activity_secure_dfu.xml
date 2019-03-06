@@ -58,8 +58,9 @@
                 android:id="@+id/dfu_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                app:popupTheme="@style/ActionBarPopupThemeOverlay"
-                app:theme="@style/ActionBarThemeOverlay"/>
+                android:theme="@style/ActionBarThemeOverlay"
+                android:background="?colorPrimary"
+                app:popupTheme="@style/ActionBarPopupThemeOverlay"/>
 
             <LinearLayout
                 android:id="@+id/location_services_container"

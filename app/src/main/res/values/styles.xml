@@ -87,14 +87,13 @@
     colorPrimary is used by Buttons and other components which we want to have a different color.
     -->
     <style name="ActionBarThemeOverlay" parent="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <!-- Toolbar's background -->
-        <item name="android:background">@color/nordicBlue</item>
-        <!-- Title and Hamburger menu -->
-        <item name="android:textColorPrimary">@color/white</item>
         <!-- Background for TabLayouts -->
         <item name="colorPrimary">@color/nordicBlue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Title and Hamburger menu -->
+        <item name="android:textColorPrimary">?colorOnPrimary</item>
         <!-- Toolbar's text buttons -->
-        <item name="actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
     </style>
 
     <style name="ActionBarPopupThemeOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
