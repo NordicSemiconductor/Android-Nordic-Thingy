@@ -224,7 +224,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
             mThingySdkManager.setPressureInterval(mDevice, interval);
         } else if (mHumidityContainer != null && mHumidityContainer.getVisibility() == View.VISIBLE) {
             interval = Integer.parseInt(mHumidityIntervalView.getText().toString().trim());
-            mThingySdkManager.setHumidityInteval(mDevice, interval);
+            mThingySdkManager.setHumidityInterval(mDevice, interval);
         } else if (mColorIntensityContainer != null && mColorIntensityContainer.getVisibility() == View.VISIBLE) {
             interval = Integer.parseInt(mColorIntervalView.getText().toString().trim());
             mThingySdkManager.setColorIntensityInterval(mDevice, interval);

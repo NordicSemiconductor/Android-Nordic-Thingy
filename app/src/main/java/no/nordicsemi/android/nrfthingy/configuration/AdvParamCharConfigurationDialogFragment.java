@@ -92,8 +92,8 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
         }
 
         mThingySdkManager = ThingySdkManager.getInstance();
-        mAdvIntervalTimeoutUnits = mThingySdkManager.getAdvertisignIntervalUnits(mDevice);
-        mAdvTimeoutUnits = mThingySdkManager.getAdvertisignIntervalTimeoutUnits(mDevice);
+        mAdvIntervalTimeoutUnits = mThingySdkManager.getAdvertisingIntervalUnits(mDevice);
+        mAdvTimeoutUnits = mThingySdkManager.getAdvertisingIntervalTimeoutUnits(mDevice);
     }
 
     @NonNull

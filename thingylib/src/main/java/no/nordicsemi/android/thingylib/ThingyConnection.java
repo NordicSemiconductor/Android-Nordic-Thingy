@@ -1785,7 +1785,6 @@ public class ThingyConnection extends BluetoothGattCallback {
                                                        final int magnetoMeterCompensationInterval,
                                                        final int motionInterval, final int wakeOnMotion) {
         if (mMotionConfigurationCharacteristic != null) {
-
             if ((pedometerInterval < ThingyUtils.PEDOMETER_MIN_INTERVAL || pedometerInterval > ThingyUtils.NOTIFICATION_MAX_INTERVAL)) {
                 Log.v(ThingyUtils.TAG, "Invalid pedometer interval");
                 return false;
