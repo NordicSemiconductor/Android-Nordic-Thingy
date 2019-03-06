@@ -39,14 +39,9 @@
 <resources>
     <dimen name="margin_setup_complete_button">5dp</dimen>
     <dimen name="margin_bottom_setup_complete_container">15dp</dimen>
-    <dimen name="margin_bottom_bg_title">2dp</dimen>
     <dimen name="toolbar_image_height">160dp</dimen>
-    <dimen name="card_view_data_text_size">16sp</dimen>
     <dimen name="card_view_label_text_size">16sp</dimen>
 
-    <dimen name="sign_in_google_margin">15dp</dimen>
-    <dimen name="sign_in_facebook_margin">20dp</dimen>
-    <dimen name="sign_in_devzone_margin">20dp</dimen>
     <dimen name="motion_card_view_height">220dp</dimen>
     <dimen name="add_thingy_margin_top">26dp</dimen>
 </resources>
