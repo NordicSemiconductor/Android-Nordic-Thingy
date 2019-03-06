@@ -42,7 +42,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.Context;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.ParcelUuid;
@@ -65,9 +64,6 @@ import java.util.UUID;
 public class ThingyUtils {
 
     public static final String TAG                                                              = "THINGY:52";
-    public static final String PREFS_INITIAL_SETUP                                              = "INITIAL_SETUP";
-    public static final String INITIAL_CONFIG_STATE                                             = "INITIAL_CONFIG_STATE";
-    public static final String SIGN_IN_OPTED                                                    = "SIGN_IN_OPTED";
 
     public static final UUID THINGY_BASE_UUID                                                   = new UUID(0xEF6801009B354933L, 0x9B1052FFA9740042L);
     public static final UUID THINGY_CONFIGURATION_SERVICE                                       = new UUID(0xEF6801009B354933L, 0x9B1052FFA9740042L);
@@ -118,9 +114,9 @@ public class ThingyUtils {
 
     public final static ParcelUuid PARCEL_SECURE_DFU_SERVICE                                    = ParcelUuid.fromString("0000FE59-0000-1000-8000-00805F9B34FB");
     public final static UUID SECURE_DFU_SERVICE                                                 = UUID.fromString("0000FE59-0000-1000-8000-00805F9B34FB");
-    public static final UUID THINGY_BUTTONLESS_DFU_SERVICE                                      = new UUID(0x8E400001F3154F60l, 0x9FB8838830DAEA50L);
-    public static final UUID DFU_DEFAULT_CONTROL_POINT_CHARACTERISTIC                           = new UUID(0x8EC90001F3154F60l, 0x9FB8838830DAEA50L);
-    public static final UUID DFU_CONTROL_POINT_CHARACTERISTIC_WITHOUT_BOND_SHARING              = new UUID(0x8EC90003F3154F60l, 0x9FB8838830DAEA50L);
+    public static final UUID THINGY_BUTTONLESS_DFU_SERVICE                                      = new UUID(0x8E400001F3154F60L, 0x9FB8838830DAEA50L);
+    public static final UUID DFU_DEFAULT_CONTROL_POINT_CHARACTERISTIC                           = new UUID(0x8EC90001F3154F60L, 0x9FB8838830DAEA50L);
+    public static final UUID DFU_CONTROL_POINT_CHARACTERISTIC_WITHOUT_BOND_SHARING              = new UUID(0x8EC90003F3154F60L, 0x9FB8838830DAEA50L);
 
     public static final String ACTION_DEVICE_CONNECTED                                          = "ACTION_DEVICE_CONNECTED_";
     public static final String ACTION_DEVICE_DISCONNECTED                                       = "ACTION_DEVICE_DISCONNECTED_";
@@ -150,7 +146,6 @@ public class ThingyUtils {
     public static final String COLOR_NOTIFICATION                                               = "COLOR_NOTIFICATION_";
     public static final String CONFIGURATION_DATA                                               = "CONFIGURATION_DATA_";
 
-
     public static final String BUTTON_STATE_NOTIFICATION                                        = "BUTTON_STATE_NOTIFICATION_";
 
     public static final String TAP_NOTIFICATION                                                 = "TAP_NOTIFICATION_";
@@ -163,8 +158,8 @@ public class ThingyUtils {
     public static final String HEADING_NOTIFICATION                                             = "HEADING_NOTIFICATION_";
     public static final String GRAVITY_NOTIFICATION                                             = "GRAVITY_NOTIFICATION_";
 
-    public static final String SPEAKER_STATUS_NOTITIFCATION                                     = "SPEAKER_STATUS_NOTITIFCATION_";
-    public static final String MICROPHONE_NOTITIFCATION                                         = "MICROPHONE_NOTITIFCATION_";
+    public static final String SPEAKER_STATUS_NOTIFICATION                                      = "SPEAKER_STATUS_NOTIFICATION";
+    public static final String MICROPHONE_NOTIFICATION                                          = "MICROPHONE_NOTIFICATION";
 
     public static final String EXTRA_DATA                                                       = "EXTRA_DATA";
     public static final String EXTRA_DATA_TIME_STAMP                                            = "EXTRA_DATA_TIME_STAMP";
@@ -210,10 +205,10 @@ public class ThingyUtils {
 
     public static final String EXTRA_DATA_ROTATION_MATRIX                                       = "EXTRA_DATA_COMPASS_Z";
 
-    public static final String EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION                          = "EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION";
+    public static final String EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION                           = "EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION";
     public static final String EXTRA_DATA_SPEAKER_MODE                                          = "EXTRA_DATA_SPEAKER_MODE";
 
-    public static final String EXTRA_DATA_MICROPHONE_NOTITIFCATION                              = "EXTRA_DATA_MICROPHONE_NOTITIFCATION";
+    public static final String EXTRA_DATA_MICROPHONE_NOTIFICATION                               = "EXTRA_DATA_MICROPHONE_NOTIFICATION";
     public static final String EXTRA_DATA_PCM                                                   = "EXTRA_DATA_PCM";
 
     public static final String INITIAL_CONFIG_FROM_ACTIVITY                                     = "INITIAL_CONFIG_FROM_ACTIVITY";
@@ -395,7 +390,7 @@ public class ThingyUtils {
         final IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_SERVICE_DISCOVERY_COMPLETED);
         intentFilter.addAction(ACTION_DEVICE_DISCONNECTED);
-        intentFilter.addAction(EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
+        intentFilter.addAction(EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
         return intentFilter;
     }
 

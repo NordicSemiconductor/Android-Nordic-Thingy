@@ -117,11 +117,11 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 }
             } else if (action.startsWith(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED)) {
 
-            } else if (action.startsWith(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION)) {
+            } else if (action.startsWith(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION)) {
                 final int mode = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_MODE);
                 switch (mode) {
                     case ThingyUtils.PCM_MODE:
-                        final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
+                        final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
                         if (ThingyUtils.SPEAKER_STATUS_FINISHED == status) {
                             mIsPlaying = false;
                             mFabPlay.setImageResource(R.drawable.ic_play_white);

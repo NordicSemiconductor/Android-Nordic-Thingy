@@ -532,9 +532,9 @@ public class ThingyConnection extends BluetoothGattCallback {
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         } else if (characteristic.equals(mSpeakerStatusCharacteristic)) {
             final int speakerStatus = mSpeakerStatusCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 0);
-            final Intent intent = new Intent(ThingyUtils.SPEAKER_STATUS_NOTITIFCATION);
+            final Intent intent = new Intent(ThingyUtils.SPEAKER_STATUS_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
-            intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION, speakerStatus);
+            intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION, speakerStatus);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
             switch (speakerStatus) {
@@ -2746,10 +2746,10 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     @SuppressWarnings("SameParameterValue")
     private void sendPcmBroadcast(final int status) {
-        final Intent intent = new Intent(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION);
+        final Intent intent = new Intent(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
         intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
         intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_MODE, mSpeakerMode);
-        intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTITIFCATION, status);
+        intent.putExtra(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION, status);
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
@@ -2822,7 +2822,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     private void sendMicrophoneBroadcast(final byte[] data, final int status) {
-        final Intent intent = new Intent(ThingyUtils.MICROPHONE_NOTITIFCATION);
+        final Intent intent = new Intent(ThingyUtils.MICROPHONE_NOTIFICATION);
         intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
         intent.putExtra(ThingyUtils.EXTRA_DATA_PCM, data);
         intent.putExtra(ThingyUtils.EXTRA_DATA, status);
