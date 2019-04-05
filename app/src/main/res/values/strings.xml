@@ -317,7 +317,7 @@
     <string name="button_state_unknown">UNKNOWN</string>
     <string name="button_state_pressed">PRESSED</string>
     <string name="button_state_released">RELEASED</string>
-    <string name="button_state_released_time">RELEASED (%d sec)</string>
+    <string name="button_state_released_time">RELEASED (%.2f sec)</string>
     <string name="north">NORTH</string>
     <string name="north_east">N. EAST</string>
     <string name="north_west">N. WEST</string>
