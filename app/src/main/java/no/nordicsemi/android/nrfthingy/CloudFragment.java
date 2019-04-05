@@ -39,6 +39,7 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -109,6 +110,40 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
     private DatabaseHelper mDatabaseHelper;
     private Handler mHandler = new Handler();
+
+    private final CloudTask.CloudTaskCallbacks cloudTaskCallbacks = new CloudTask.CloudTaskCallbacks() {
+        @Override
+        public void onUploadCompleted(final int dataLength) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mUploadedSize += dataLength;
+                    mUploadedView.setText(Utils.humanReadableByteCount(mUploadedSize, true));
+                }
+            });
+        }
+
+        @Override
+        public void onDownloadCompleted(final int dataLength) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mDownloadedSize += dataLength;
+                    mDownloadedView.setText(Utils.humanReadableByteCount(mDownloadedSize, true));
+                }
+            });
+        }
+
+        @Override
+        public void onReadCompleted(final JSONObject resultJson) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    handleErrors(resultJson);
+                }
+            });
+        }
+    };
 
     private ThingyListener mThingyListener = new ThingyListener() {
         private long mButtonPressedTime;
@@ -388,6 +423,12 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     }
 
     @Override
+    public void onAttach(@NonNull final Context context) {
+        super.onAttach(context);
+        mIsFragmentAttached = true;
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong("UPLOADED", mUploadedSize);
@@ -467,7 +508,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     }
 
     private void uploadData(final int eventType, final String jsonData) {
-        CloudTask cloudTask = new CloudTask(eventType, jsonData);
+        CloudTask cloudTask = new CloudTask(mCloudToken, eventType, jsonData, cloudTaskCallbacks);
         cloudTask.execute();
     }
 
@@ -507,63 +548,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         return jsonObject.toString();
     }
 
-    private void writeStream(final OutputStream outputStream, final String jsonData) {
-        try {
-            outputStream.write(jsonData.getBytes());
-            outputStream.flush();
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mUploadedSize += jsonData.getBytes().length;
-                    mUploadedView.setText(Utils.humanReadableByteCount(mUploadedSize, true));
-                }
-            });
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void readStream(final InputStream inputStream) {
-        BufferedReader br = null;
-        try {
-            StringBuffer sb = new StringBuffer();
-            br = new BufferedReader(new InputStreamReader(inputStream));
-            String inputLine;
-            while ((inputLine = br.readLine()) != null) {
-                sb.append(inputLine);
-            }
-            final String result = sb.toString();
-            final JSONObject resultJson = new JSONObject(result);
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    handleErrors(resultJson);
-                }
-            });
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null) {
-                    br.close();
-                }
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private void handleErrors(final JSONObject resultJson) {
         try {
             if (resultJson.has("errors")) {
@@ -586,16 +570,29 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
     }
 
-    public class CloudTask extends AsyncTask<Void, Void, Void> {
+    public static class CloudTask extends AsyncTask<Void, Void, Void> {
         private static final String TEMPERATURE_BASE_URL = "https://maker.ifttt.com/trigger/temperature_update/with/key/";
         private static final String PRESSURE_BASE_URL = "https://maker.ifttt.com/trigger/pressure_update/with/key/";
         private static final String BUTTON_STATE_BASE_URL = "https://maker.ifttt.com/trigger/button_press/with/key/";
         private final String json;
         private final int eventType;
+        private final String cloudToken;
+        private final CloudTaskCallbacks callbacks;
 
-        CloudTask(final int eventType, final String json) {
+        interface CloudTaskCallbacks {
+
+            void onUploadCompleted(final int dataLength);
+
+            void onDownloadCompleted(final int dataLength);
+
+            void onReadCompleted(final JSONObject resultJson);
+        }
+
+        CloudTask(final String cloudToken, final int eventType, final String json, final CloudTaskCallbacks callbacks) {
+            this.cloudToken = cloudToken;
             this.eventType = eventType;
             this.json = json;
+            this.callbacks = callbacks;
         }
 
         @Override
@@ -605,13 +602,13 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             try {
                 switch (eventType) {
                     case TEMPERATURE_UPDATE_EVENT:
-                        url = new URL(TEMPERATURE_BASE_URL + mCloudToken);
+                        url = new URL(TEMPERATURE_BASE_URL + cloudToken);
                         break;
                     case PRESSURE_UPDATE_EVENT:
-                        url = new URL(PRESSURE_BASE_URL + mCloudToken);
+                        url = new URL(PRESSURE_BASE_URL + cloudToken);
                         break;
                     case BUTTON_STATE_UPDATE_EVENT:
-                        url = new URL(BUTTON_STATE_BASE_URL + mCloudToken);
+                        url = new URL(BUTTON_STATE_BASE_URL + cloudToken);
                         break;
                 }
 
@@ -624,21 +621,22 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                 OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
                 writeStream(out, json);
 
-                final int reponseCode = urlConnection.getResponseCode();
-                //Check for the reposnse code before reading the error stream, if not causes an exception with stream closed as there may not be an error
-                if (reponseCode != HttpURLConnection.HTTP_OK) {
+                final int responseCode = urlConnection.getResponseCode();
+                //Check for the response code before reading the error stream, if not causes an exception with stream closed as there may not be an error
+                if (responseCode != HttpURLConnection.HTTP_OK) {
                     InputStream stream = new BufferedInputStream(urlConnection.getErrorStream());
                     readStream(stream);
                 }
 
                 final String message = urlConnection.getResponseMessage();
-                mHandler.post(new Runnable() {
+                callbacks.onDownloadCompleted(message.getBytes().length);
+                /*mHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         mDownloadedSize += message.getBytes().length;
                         mDownloadedView.setText(Utils.humanReadableByteCount(mDownloadedSize, true));
                     }
-                });
+                });*/
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -648,6 +646,60 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                     urlConnection.disconnect();
             }
             return null;
+        }
+
+        private void writeStream(final OutputStream outputStream, final String jsonData) {
+            try {
+                outputStream.write(jsonData.getBytes());
+                outputStream.flush();
+                callbacks.onUploadCompleted(jsonData.getBytes().length);
+
+                /*mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mUploadedSize += jsonData.getBytes().length;
+                        mUploadedView.setText(Utils.humanReadableByteCount(mUploadedSize, true));
+                    }
+                });*/
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            } finally {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        private void readStream(final InputStream inputStream) {
+            BufferedReader br = null;
+            try {
+                StringBuffer sb = new StringBuffer();
+                br = new BufferedReader(new InputStreamReader(inputStream));
+                String inputLine;
+                while ((inputLine = br.readLine()) != null) {
+                    sb.append(inputLine);
+                }
+                final String result = sb.toString();
+                final JSONObject resultJson = new JSONObject(result);
+                callbacks.onReadCompleted(resultJson);
+            } catch (IOException e) {
+
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (br != null) {
+                        br.close();
+                    }
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }
