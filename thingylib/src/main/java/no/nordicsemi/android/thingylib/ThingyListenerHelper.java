@@ -255,8 +255,8 @@ public class ThingyListenerHelper {
                     final float gyroscopeZ = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_GYROSCOPE_Z);
 
                     final float compassX = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_COMPASS_X);
-                    final float compassY = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_GYROSCOPE_Y);
-                    final float compassZ = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_GYROSCOPE_Z);
+                    final float compassY = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_COMPASS_Y);
+                    final float compassZ = intent.getExtras().getFloat(ThingyUtils.EXTRA_DATA_COMPASS_Z);
 
                     if(globalListener != null) {
                         globalListener.onAccelerometerValueChangedEvent(device, accelerometerX, accelerometerY, accelerometerZ);
