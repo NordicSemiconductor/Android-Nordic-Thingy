@@ -104,7 +104,6 @@ import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.NFCTagFoundDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.ProgressDialogFragment;
-import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.configuration.ConfigurationActivity;
 import no.nordicsemi.android.nrfthingy.configuration.ConfirmThingyDeletionDialogFragment;
 import no.nordicsemi.android.nrfthingy.configuration.InitialConfigurationActivity;
@@ -124,6 +123,37 @@ import no.nordicsemi.android.thingylib.ThingyListener;
 import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
+
+import static no.nordicsemi.android.nrfthingy.common.Utils.CLOUD_FRAGMENT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.CURRENT_DEVICE;
+import static no.nordicsemi.android.nrfthingy.common.Utils.ENVIRONMENT_FRAGMENT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.EXTRA_ADDRESS_DATA;
+import static no.nordicsemi.android.nrfthingy.common.Utils.EXTRA_DEVICE;
+import static no.nordicsemi.android.nrfthingy.common.Utils.GROUP_ID_ABOUT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.GROUP_ID_ADD_THINGY;
+import static no.nordicsemi.android.nrfthingy.common.Utils.GROUP_ID_DFU;
+import static no.nordicsemi.android.nrfthingy.common.Utils.GROUP_ID_SAVED_THINGIES;
+import static no.nordicsemi.android.nrfthingy.common.Utils.INITIAL_CONFIG_FROM_ACTIVITY;
+import static no.nordicsemi.android.nrfthingy.common.Utils.ITEM_ID_ADD_THINGY;
+import static no.nordicsemi.android.nrfthingy.common.Utils.ITEM_ID_DFU;
+import static no.nordicsemi.android.nrfthingy.common.Utils.ITEM_ID_SETTINGS;
+import static no.nordicsemi.android.nrfthingy.common.Utils.MOTION_FRAGMENT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.NFC_DIALOG_TAG;
+import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
+import static no.nordicsemi.android.nrfthingy.common.Utils.PROGRESS_DIALOG_TAG;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_COARSE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ENABLE_BT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.SOUND_FRAGMENT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
+import static no.nordicsemi.android.nrfthingy.common.Utils.UI_FRAGMENT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
+import static no.nordicsemi.android.nrfthingy.common.Utils.getBluetoothDevice;
+import static no.nordicsemi.android.nrfthingy.common.Utils.isConnected;
+import static no.nordicsemi.android.nrfthingy.common.Utils.readAddressPayload;
+import static no.nordicsemi.android.nrfthingy.common.Utils.showNfcDisabledWarning;
+import static no.nordicsemi.android.nrfthingy.common.Utils.showToast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         EnvironmentServiceFragment.EnvironmentServiceListener,
@@ -152,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BluetoothDevice mDevice;
     private BluetoothDevice mOldDevice;
 
-    private String mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
+    private String mFragmentTag = ENVIRONMENT_FRAGMENT;
     private boolean isHeaderExpanded = true;
 
     private DatabaseHelper mDatabaseHelper;
@@ -163,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Handler mProgressHandler = new Handler();
     private boolean mIsScanning;
-    private String mFirmwareFileVersion;
 
     private ThingyService.ThingyBinder mBinder;
 
@@ -425,7 +454,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
-                initialConfiguration.putExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, true);
+                initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
                 startActivity(initialConfiguration);
             }
         });
@@ -482,8 +511,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         registerNfcBroadcastReceiver();
         if (savedInstanceState != null) {
-            mProgressDialog = (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(Utils.PROGRESS_DIALOG_TAG);
-            mNfcTagFoundDialogFragment = (NFCTagFoundDialogFragment) getSupportFragmentManager().findFragmentByTag(Utils.NFC_DIALOG_TAG);
+            mProgressDialog = (ProgressDialogFragment) getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG_TAG);
+            mNfcTagFoundDialogFragment = (NFCTagFoundDialogFragment) getSupportFragmentManager().findFragmentByTag(NFC_DIALOG_TAG);
         }
     }
 
@@ -501,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onNewIntent(final Intent intent) {
-        //super.onNewIntent(intent);
+        super.onNewIntent(intent);
         handleNfcForegroundDispatch(intent);
     }
 
@@ -548,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             final boolean isFinishing = isFinishing();
             mBinder.setActivityFinishing(isFinishing);
             if (isFinishing) {
-                mBinder.setLastVisibleFragment(Utils.ENVIRONMENT_FRAGMENT);
+                mBinder.setLastVisibleFragment(ENVIRONMENT_FRAGMENT);
             }
         }
         stopScanOnRotation();
@@ -583,16 +612,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case Utils.REQUEST_ENABLE_BT:
-                if (resultCode == RESULT_OK) {
-                    if (!isNfcEnabled()) {
-                        updateNfcUi(false);
-                    } else {
-                        updateNfcUi(true);
-                    }
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (resultCode == RESULT_OK) {
+                if (!isNfcEnabled()) {
+                    updateNfcUi(false);
+                } else {
+                    updateNfcUi(true);
                 }
-                break;
+            }
         }
     }
 
@@ -605,7 +632,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (mDatabaseHelper.isExist(mDevice.getAddress())) {
                     getMenuInflater().inflate(R.menu.main_menu_connect, menu);
                 } else {
-                    Log.v(Utils.TAG, "DELETED");
+                    Log.v(TAG, "DELETED");
                 }
             }
         }
@@ -651,26 +678,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.configuration_menu:
                 if (mThingySdkManager.isConnected(mDevice)) {
                     Intent configurationIntent = new Intent(this, ConfigurationActivity.class);
-                    configurationIntent.putExtra(Utils.CURRENT_DEVICE, mDevice);
+                    configurationIntent.putExtra(CURRENT_DEVICE, mDevice);
                     startActivity(configurationIntent);
                 } else {
-                    Utils.showToast(this, getString(R.string.no_thingy_connected_configuration, mDatabaseHelper.getDeviceName(mDevice.getAddress())));
+                    showToast(this, getString(R.string.no_thingy_connected_configuration, mDatabaseHelper.getDeviceName(mDevice.getAddress())));
                 }
                 break;
-            case Utils.GROUP_ID_SAVED_THINGIES:
+            case GROUP_ID_SAVED_THINGIES:
                 performDeviceSelection(item);
                 break;
-            case Utils.GROUP_ID_ADD_THINGY:
+            case GROUP_ID_ADD_THINGY:
                 Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
-                initialConfiguration.putExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, true);
+                initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
                 startActivity(initialConfiguration);
                 break;
-            case Utils.GROUP_ID_DFU:
+            case GROUP_ID_DFU:
                 Intent intent = new Intent(this, SecureDfuActivity.class);
-                intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
+                intent.putExtra(EXTRA_DEVICE, mDevice);
                 startActivity(intent);
                 break;
-            case Utils.GROUP_ID_ABOUT:
+            case GROUP_ID_ABOUT:
                 Intent aboutActivity = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(aboutActivity);
                 break;
@@ -694,7 +721,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (thingyList.size() > 0) {
             final Thingy thingy = thingyList.get(itemId);
             if (thingy != null) {
-                BluetoothDevice device = Utils.getBluetoothDevice(this, thingy.getDeviceAddress());
+                BluetoothDevice device = getBluetoothDevice(this, thingy.getDeviceAddress());
                 //Save the selected device on the base service so that it can be accessed from anywhere in the app.
                 if (mThingySdkManager != null) {
                     mThingySdkManager.setSelectedDevice(device);
@@ -744,7 +771,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (itemId) {
             case R.id.navigation_environment:
-                if (fragmentManager.findFragmentByTag(Utils.ENVIRONMENT_FRAGMENT) == null) {
+                if (fragmentManager.findFragmentByTag(ENVIRONMENT_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
                         mThingySdkManager.enableUiNotifications(mDevice, false);
@@ -754,14 +781,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
+                    mFragmentTag = ENVIRONMENT_FRAGMENT;
 
                     EnvironmentServiceFragment environmentServiceFragment = EnvironmentServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, environmentServiceFragment, mFragmentTag).commit();
                 }
                 break;
             case R.id.navigation_motion:
-                if (fragmentManager.findFragmentByTag(Utils.MOTION_FRAGMENT) == null) {
+                if (fragmentManager.findFragmentByTag(MOTION_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableUiNotifications(mDevice, false);
@@ -771,13 +798,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.MOTION_FRAGMENT;
+                    mFragmentTag = MOTION_FRAGMENT;
                     MotionServiceFragment motionServiceFragment = MotionServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, motionServiceFragment, mFragmentTag).commit();
                 }
                 break;
             case R.id.navigation_ui:
-                if (fragmentManager.findFragmentByTag(Utils.UI_FRAGMENT) == null) {
+                if (fragmentManager.findFragmentByTag(UI_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
@@ -787,13 +814,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.UI_FRAGMENT;
+                    mFragmentTag = UI_FRAGMENT;
                     UiFragment uiFragment = UiFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, uiFragment, mFragmentTag).commit();
                 }
                 break;
             case R.id.navigation_sound:
-                if (fragmentManager.findFragmentByTag(Utils.SOUND_FRAGMENT) == null) {
+                if (fragmentManager.findFragmentByTag(SOUND_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
@@ -802,13 +829,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.SOUND_FRAGMENT;
+                    mFragmentTag = SOUND_FRAGMENT;
                     SoundFragment soundFragment = SoundFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, soundFragment, mFragmentTag).commit();
                 }
                 break;
             case R.id.navigation_cloud:
-                if (fragmentManager.findFragmentByTag(Utils.CLOUD_FRAGMENT) == null) {
+                if (fragmentManager.findFragmentByTag(CLOUD_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()));
                         mThingySdkManager.enablePressureNotifications(mDevice, mDatabaseHelper.getPressureUploadState(mDevice.getAddress()));
@@ -822,7 +849,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.CLOUD_FRAGMENT;
+                    mFragmentTag = CLOUD_FRAGMENT;
                     CloudFragment mapFragment = CloudFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment, mFragmentTag).commit();
                 }
@@ -838,8 +865,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void performFragmentNavigation() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (mFragmentTag) {
-            case Utils.ENVIRONMENT_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.ENVIRONMENT_FRAGMENT) == null) {
+            case ENVIRONMENT_FRAGMENT:
+                if (fragmentManager.findFragmentByTag(ENVIRONMENT_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
                         mThingySdkManager.enableUiNotifications(mDevice, false);
@@ -849,13 +876,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
+                    mFragmentTag = ENVIRONMENT_FRAGMENT;
                     EnvironmentServiceFragment environmentServiceFragment = EnvironmentServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, environmentServiceFragment, mFragmentTag).commit();
                 }
                 break;
-            case Utils.MOTION_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.MOTION_FRAGMENT) == null) {
+            case MOTION_FRAGMENT:
+                if (fragmentManager.findFragmentByTag(MOTION_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableUiNotifications(mDevice, false);
@@ -865,13 +892,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.MOTION_FRAGMENT;
+                    mFragmentTag = MOTION_FRAGMENT;
                     MotionServiceFragment motionServiceFragment = MotionServiceFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, motionServiceFragment, mFragmentTag).commit();
                 }
                 break;
-            case Utils.UI_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.UI_FRAGMENT) == null) {
+            case UI_FRAGMENT:
+                if (fragmentManager.findFragmentByTag(UI_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
@@ -881,13 +908,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.UI_FRAGMENT;
+                    mFragmentTag = UI_FRAGMENT;
                     UiFragment uiFragment = UiFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, uiFragment, mFragmentTag).commit();
                 }
                 break;
-            case Utils.SOUND_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.SOUND_FRAGMENT) == null) {
+            case SOUND_FRAGMENT:
+                if (fragmentManager.findFragmentByTag(SOUND_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         mThingySdkManager.enableEnvironmentNotifications(mDevice, false);
                         mThingySdkManager.enableMotionNotifications(mDevice, false);
@@ -896,13 +923,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.SOUND_FRAGMENT;
+                    mFragmentTag = SOUND_FRAGMENT;
                     SoundFragment soundFragment = SoundFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, soundFragment, mFragmentTag).commit();
                 }
                 break;
-            case Utils.CLOUD_FRAGMENT:
-                if (fragmentManager.findFragmentByTag(Utils.CLOUD_FRAGMENT) == null) {
+            case CLOUD_FRAGMENT:
+                if (fragmentManager.findFragmentByTag(CLOUD_FRAGMENT) == null) {
                     if (mThingySdkManager.isConnected(mDevice)) {
                         if (mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress())) {
                             mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getTemperatureUploadState(mDevice.getAddress()));
@@ -918,7 +945,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     final String fragmentTag = mFragmentTag;
                     clearFragments(fragmentTag);
-                    mFragmentTag = Utils.CLOUD_FRAGMENT;
+                    mFragmentTag = CLOUD_FRAGMENT;
                     CloudFragment mapFragment = CloudFragment.newInstance(mDevice);
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mapFragment, mFragmentTag).commit();
                 }
@@ -953,7 +980,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void enableBle() {
         final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enableIntent, Utils.REQUEST_ENABLE_BT);
+        startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
     }
 
     private void connect() {
@@ -983,8 +1010,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void createDrawerMenu() {
         if (mThingySdkManager != null) {
-            final List<BluetoothDevice> devices = new ArrayList<>();
-            devices.addAll(mThingySdkManager.getConnectedDevices());
+            final List<BluetoothDevice> devices = new ArrayList<>(mThingySdkManager.getConnectedDevices());
             ArrayList<Thingy> thingyList = mDatabaseHelper.getSavedDevices();
             if ((devices.size() > 0) || (thingyList != null && thingyList.size() > 0)) {
                 updateHeaderView(View.VISIBLE);
@@ -1025,13 +1051,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Thingy thingy;
         for (int i = 0; i < thingyList.size(); i++) {
             thingy = thingyList.get(i);
-            if (mThingySdkManager.isConnected(Utils.getBluetoothDevice(this, thingy.getDeviceAddress()))) {
+            if (mThingySdkManager.isConnected(getBluetoothDevice(this, thingy.getDeviceAddress()))) {
                 if (!mDatabaseHelper.getLastSelected(thingy.getDeviceAddress())) {
-                    mNavigationView.getMenu().add(Utils.GROUP_ID_SAVED_THINGIES, i, i, thingyList.get(i).getDeviceName()).setIcon(R.drawable.ic_thingy_blue);
+                    mNavigationView.getMenu().add(GROUP_ID_SAVED_THINGIES, i, i, thingyList.get(i).getDeviceName()).setIcon(R.drawable.ic_thingy_blue);
                 }
             } else {
                 if (!mDatabaseHelper.getLastSelected(thingy.getDeviceAddress())) {
-                    mNavigationView.getMenu().add(Utils.GROUP_ID_SAVED_THINGIES, i, i, thingyList.get(i).getDeviceName()).setIcon(R.drawable.ic_thingy_gray);
+                    mNavigationView.getMenu().add(GROUP_ID_SAVED_THINGIES, i, i, thingyList.get(i).getDeviceName()).setIcon(R.drawable.ic_thingy_gray);
                 }
             }
             total = i;
@@ -1042,29 +1068,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         total = total + 1;
-        mNavigationView.getMenu().add(Utils.GROUP_ID_ADD_THINGY, Utils.ITEM_ID_ADD_THINGY, total, getString(R.string.action_add)).setIcon(R.drawable.ic_add_black);
+        mNavigationView.getMenu().add(GROUP_ID_ADD_THINGY, ITEM_ID_ADD_THINGY, total, getString(R.string.action_add)).setIcon(R.drawable.ic_add_black);
         total += total;
-        mNavigationView.getMenu().add(Utils.GROUP_ID_DFU, Utils.ITEM_ID_DFU, total, getString(R.string.settings_dfu)).setIcon(R.drawable.ic_dfu_gray);
+        mNavigationView.getMenu().add(GROUP_ID_DFU, ITEM_ID_DFU, total, getString(R.string.settings_dfu)).setIcon(R.drawable.ic_dfu_gray);
         total += total;
-        mNavigationView.getMenu().add(Utils.GROUP_ID_ABOUT, Utils.ITEM_ID_SETTINGS, total, getString(R.string.action_about)).setIcon(R.drawable.ic_info_grey);
+        mNavigationView.getMenu().add(GROUP_ID_ABOUT, ITEM_ID_SETTINGS, total, getString(R.string.action_about)).setIcon(R.drawable.ic_info_grey);
     }
 
     private void checkFragmentDrawerItem() {
         final String fragmentTag = mFragmentTag;
         switch (fragmentTag) {
-            case Utils.ENVIRONMENT_FRAGMENT:
+            case ENVIRONMENT_FRAGMENT:
                 checkSelection(mNavigationView.getMenu().findItem(R.id.navigation_environment));
                 break;
-            case Utils.UI_FRAGMENT:
+            case UI_FRAGMENT:
                 checkSelection(mNavigationView.getMenu().findItem(R.id.navigation_ui));
                 break;
-            case Utils.MOTION_FRAGMENT:
+            case MOTION_FRAGMENT:
                 checkSelection(mNavigationView.getMenu().findItem(R.id.navigation_motion));
                 break;
-            case Utils.SOUND_FRAGMENT:
+            case SOUND_FRAGMENT:
                 checkSelection(mNavigationView.getMenu().findItem(R.id.navigation_sound));
                 break;
-            case Utils.CLOUD_FRAGMENT:
+            case CLOUD_FRAGMENT:
                 checkSelection(mNavigationView.getMenu().findItem(R.id.navigation_cloud));
                 break;
         }
@@ -1141,6 +1167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void updateActionbarTitle(final BluetoothDevice device) {
         if (device != null) {
             final String address = device.getAddress();
@@ -1180,7 +1207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 } else {
                     if (savedDevices.size() > 0) {
                         final Thingy thingy = savedDevices.get(0);//
-                        mThingySdkManager.setSelectedDevice(Utils.getBluetoothDevice(this, thingy.getDeviceAddress()));
+                        mThingySdkManager.setSelectedDevice(getBluetoothDevice(this, thingy.getDeviceAddress()));
                         updateSelectionInDb(thingy, true);
                         mDevice = mThingySdkManager.getSelectedDevice();
                         updateActionbarTitle(mDevice);
@@ -1206,7 +1233,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 if (savedDevices.size() > 0) {
                     final Thingy thingy = savedDevices.get(0);//
-                    mThingySdkManager.setSelectedDevice(Utils.getBluetoothDevice(this, thingy.getDeviceAddress()));
+                    mThingySdkManager.setSelectedDevice(getBluetoothDevice(this, thingy.getDeviceAddress()));
                     updateSelectionInDb(thingy, true);
                     mDevice = mThingySdkManager.getSelectedDevice();
                 }
@@ -1239,16 +1266,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (mBinder != null) {
                 mFragmentTag = mBinder.getLastVisibleFragment();
             } else {
-                mFragmentTag = Utils.ENVIRONMENT_FRAGMENT;
+                mFragmentTag = ENVIRONMENT_FRAGMENT;
             }
             if (device == null) {
                 Thingy thingy = mDatabaseHelper.getLastSelected();
                 if (thingy != null) {
-                    device = Utils.getBluetoothDevice(this, thingy.getDeviceAddress());
+                    device = getBluetoothDevice(this, thingy.getDeviceAddress());
                 } else {
                     if (savedDevices.size() > 0) {
                         thingy = savedDevices.get(0);
-                        device = Utils.getBluetoothDevice(this, thingy.getDeviceAddress());
+                        device = getBluetoothDevice(this, thingy.getDeviceAddress());
                         mDevice = device;
                     }
                 }
@@ -1494,27 +1521,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return mActivityToolbar;
     }
 
-    private String getDeviceName(final BluetoothDevice device) {
-        if (device != null) {
-            final String deviceName = device.getName();
-            if (!TextUtils.isEmpty(deviceName)) {
-                return deviceName;
-            }
-        }
-        return getString(R.string.default_thingy_name);
-    }
-
     /**
      * Cancels the existing mNotification. If there is no active mNotification this method does nothing
      */
     private void cancelNotifications() {
         final NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.cancel(Utils.NOTIFICATION_ID);
+        if (nm != null) {
+            nm.cancel(NOTIFICATION_ID);
 
-        final List<BluetoothDevice> devices = new ArrayList<>();
-        devices.addAll(mThingySdkManager.getConnectedDevices());
-        for (int i = 0; i < devices.size(); i++) {
-            nm.cancel(devices.get(i).getAddress(), Utils.NOTIFICATION_ID);
+
+            final List<BluetoothDevice> devices = new ArrayList<>(mThingySdkManager.getConnectedDevices());
+            for (int i = 0; i < devices.size(); i++) {
+                nm.cancel(devices.get(i).getAddress(), NOTIFICATION_ID);
+            }
         }
     }
 
@@ -1529,15 +1548,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             updateUiOnDeviceDeletion(device);
         }
 
-        Utils.showToast(this, getString(R.string.device_deleted));
+        showToast(this, getString(R.string.device_deleted));
     }
 
     private boolean checkIfRequiredPermissionsGranted() {
-        if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
-            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (checkIfVersionIsQ()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
-                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, Utils.REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_ACCESS_FINE_LOCATION, getString(R.string.rationale_message_location));
+                dialog.show(getSupportFragmentManager(), null);
+                return false;
+            }
+        } else if (checkIfVersionIsMarshmallowOrAbove()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
                 dialog.show(getSupportFragmentManager(), null);
                 return false;
             }
@@ -1591,7 +1618,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (mIsScanning) {
-            Log.v(Utils.TAG, "Stopping scan");
+            Log.v(TAG, "Stopping scan");
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
             mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
@@ -1604,7 +1631,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if (mBinder != null) {
                 mBinder.setScanningState(true);
             }
-            Log.v(Utils.TAG, "Stopping scan on rotation");
+            Log.v(TAG, "Stopping scan on rotation");
             mProgressHandler.removeCallbacks(mBleScannerTimeoutRunnable);
             final BluetoothLeScannerCompat scanner = BluetoothLeScannerCompat.getScanner();
             scanner.stopScan(mScanCallback);
@@ -1653,14 +1680,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final String action = intent.getAction();
-            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+            if (action != null && action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                         BluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        Utils.showToast(MainActivity.this, getString(R.string.ble_turned_off));
-                        enableBle();
-                        break;
+                if (state == BluetoothAdapter.STATE_OFF) {
+                    showToast(MainActivity.this, getString(R.string.ble_turned_off));
+                    enableBle();
                 }
             }
         }
@@ -1670,13 +1695,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mProgressDialog != null) {
             if (!mProgressDialog.isAdded()) {
                 mProgressDialog = ProgressDialogFragment.newInstance(message);
-                mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
+                mProgressDialog.show(getSupportFragmentManager(), PROGRESS_DIALOG_TAG);
             } else {
                 return;
             }
         } else {
             mProgressDialog = ProgressDialogFragment.newInstance(message);
-            mProgressDialog.show(getSupportFragmentManager(), Utils.PROGRESS_DIALOG_TAG);
+            mProgressDialog.show(getSupportFragmentManager(), PROGRESS_DIALOG_TAG);
         }
 
         mProgressHandler.postDelayed(mProgressDialogRunnable, SCAN_DURATION);
@@ -1722,7 +1747,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onCancellingPermissionRationale() {
-        Utils.showToast(this, getString(R.string.requested_permission_not_granted_rationale));
+        showToast(this, getString(R.string.requested_permission_not_granted_rationale));
     }
 
     private void checkForFwUpdates() {
@@ -1738,7 +1763,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onDfuRequested() {
         Intent intent = new Intent(this, SecureDfuActivity.class);
-        intent.putExtra(Utils.EXTRA_DEVICE, mDevice);
+        intent.putExtra(EXTRA_DEVICE, mDevice);
         startActivity(intent);
     }
 
@@ -1784,7 +1809,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (isNfcEnabled) {
             mNfcContainer.setVisibility(View.GONE);
         } else {
-            if (Utils.showNfcDisabledWarning(this)) {
+            if (showNfcDisabledWarning(this)) {
                 mNfcContainer.setVisibility(View.VISIBLE);
             }
         }
@@ -1799,32 +1824,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             final Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
             if (rawMsgs != null) {
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    final NdefMessage msg = (NdefMessage) rawMsgs[i];
+                for (final Parcelable rawMsg : rawMsgs) {
+                    final NdefMessage msg = (NdefMessage) rawMsg;
                     final NdefRecord[] records = msg.getRecords();
 
                     for (NdefRecord record : records) {
                         if (record.getTnf() == NdefRecord.TNF_WELL_KNOWN) {
                             final String mimeType = record.toMimeType();
-                            if (mimeType != null && mimeType.equals(Utils.EXTRA_ADDRESS_DATA)) {
-                                final String address = Utils.readAddressPayload(record.getPayload());
+                            if (mimeType != null && mimeType.equals(EXTRA_ADDRESS_DATA)) {
+                                final String address = readAddressPayload(record.getPayload());
                                 if (TextUtils.isEmpty(address)) {
-                                    Utils.showToast(this, getString(R.string.error_reading_nfc_tag));
+                                    showToast(this, getString(R.string.error_reading_nfc_tag));
                                     return;
                                 }
 
                                 if (mDatabaseHelper.isExist(address)) {
                                     if (isBleEnabled()) {
-                                        final BluetoothDevice device = Utils.getBluetoothDevice(this, address);
+                                        final BluetoothDevice device = getBluetoothDevice(this, address);
                                         if (device != null) {
-                                            if (!Utils.isConnected(device, mThingySdkManager.getConnectedDevices())) {
+                                            if (!isConnected(device, mThingySdkManager.getConnectedDevices())) {
                                                 mAddress = address;
                                                 prepareForScanning(true);
                                             } else {
-                                                Utils.showToast(this, getString(R.string.thingy_already_connected, mDatabaseHelper.getDeviceName(address)));
+                                                showToast(this, getString(R.string.thingy_already_connected, mDatabaseHelper.getDeviceName(address)));
                                             }
                                         } else {
-                                            Utils.showToast(this, getString(R.string.error_nfc_tag));
+                                            showToast(this, getString(R.string.error_nfc_tag));
                                         }
                                     }
                                 } else {
@@ -1841,8 +1866,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void configureThingy(final String address) {
         final Intent intent = new Intent(this, InitialConfigurationActivity.class);
-        intent.putExtra(Utils.INITIAL_CONFIG_FROM_ACTIVITY, true);
-        intent.putExtra(Utils.EXTRA_ADDRESS_DATA, address);
+        intent.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
+        intent.putExtra(EXTRA_ADDRESS_DATA, address);
         startActivity(intent);
     }
 
@@ -1856,23 +1881,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             mNfcTagFoundDialogFragment = NFCTagFoundDialogFragment.newInstance(address);
         }
-        mNfcTagFoundDialogFragment.show(getSupportFragmentManager(), Utils.NFC_DIALOG_TAG);
+        mNfcTagFoundDialogFragment.show(getSupportFragmentManager(), NFC_DIALOG_TAG);
     }
 
     private void onServiceDiscoveryCompletion(final BluetoothDevice device) {
         hideProgressDialog();
         mThingySdkManager.enableBatteryLevelNotifications(device, true);
         switch (mFragmentTag) {
-            case Utils.MOTION_FRAGMENT:
+            case MOTION_FRAGMENT:
                 enableMotionNotifications();
                 break;
-            case Utils.UI_FRAGMENT:
+            case UI_FRAGMENT:
                 enableUiNotifications();
                 break;
-            case Utils.SOUND_FRAGMENT:
+            case SOUND_FRAGMENT:
                 enableSoundNotifications(device, true);
                 break;
-            case Utils.CLOUD_FRAGMENT:
+            case CLOUD_FRAGMENT:
                 enableNotificationsForCloudUpload();
                 break;
             default:

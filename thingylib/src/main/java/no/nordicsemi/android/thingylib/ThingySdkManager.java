@@ -54,9 +54,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import no.nordicsemi.android.dfu.DfuServiceInitiator;
+import no.nordicsemi.android.thingylib.BaseThingyService.BaseThingyBinder;
 import no.nordicsemi.android.thingylib.dfu.DfuService;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
-import no.nordicsemi.android.thingylib.BaseThingyService.BaseThingyBinder;
 
 public class ThingySdkManager {
 
@@ -160,9 +160,8 @@ public class ThingySdkManager {
      * Returns a Binder object for the specific Bluetooth device (Thingy).
      * Use this binder to access your own implementation after extending the
      * {@link no.nordicsemi.android.thingylib.BaseThingyService.BaseThingyBinder}.
-     *
      */
-    public BaseThingyBinder getThingyBinder(){
+    public BaseThingyBinder getThingyBinder() {
         return mBinder;//.getThingyServiceBinder();
     }
 
@@ -171,7 +170,7 @@ public class ThingySdkManager {
      *
      * @param device is the unique id for a ThingyConnection stored in a map
      */
-    public ThingyConnection getThingyConnection(final BluetoothDevice device){
+    public ThingyConnection getThingyConnection(final BluetoothDevice device) {
         return mBinder.getThingyConnection(device);
     }
 
@@ -218,10 +217,10 @@ public class ThingySdkManager {
      * Returns the connections state a device.
      */
     public boolean isConnected(final BluetoothDevice device) {
-        if(device != null) {
+        if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
-                if(thingyConnection != null) {
+                if (thingyConnection != null) {
                     return thingyConnection.getConnectionState();
                 }
             }
@@ -233,13 +232,12 @@ public class ThingySdkManager {
      * Returns if the initial service discovery for the connected device is completed.
      *
      * @param device Bluetooth device
-     *
      */
     public boolean hasInitialServiceDiscoverCompleted(final BluetoothDevice device) {
-        if(device != null) {
+        if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
-                if(thingyConnection != null) {
+                if (thingyConnection != null) {
                     return thingyConnection.hasInitialServiceDiscoverCompleted();
                 }
             }
@@ -318,12 +316,12 @@ public class ThingySdkManager {
     /**
      * Configures the environment characteristic for a particular thingy.
      *
-     * @param device Bluetooth device
-     * @param temperatureInterval in ms
-     * @param pressureInterval in ms
-     * @param humidityInterval in ms
+     * @param device                 Bluetooth device
+     * @param temperatureInterval    in ms
+     * @param pressureInterval       in ms
+     * @param humidityInterval       in ms
      * @param colorIntensityInterval in ms
-     * @param gasMode as an interval in ms
+     * @param gasMode                as an interval in ms
      */
     public boolean setEnvironmentConfigurationCharacteristic(final BluetoothDevice device,
                                                              final int temperatureInterval,
@@ -347,7 +345,7 @@ public class ThingySdkManager {
     /**
      * Configures Temperature interval.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in ms
      */
     public boolean setTemperatureInterval(final BluetoothDevice device, final int interval) {
@@ -365,7 +363,7 @@ public class ThingySdkManager {
     /**
      * Configures pressure interval.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in ms
      */
     public boolean setPressureInterval(final BluetoothDevice device, final int interval) {
@@ -383,7 +381,7 @@ public class ThingySdkManager {
     /**
      * Configure humidity interval.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in ms
      */
     public boolean setHumidityInterval(final BluetoothDevice device, final int interval) {
@@ -395,13 +393,13 @@ public class ThingySdkManager {
                 }
             }
         }
-        return  false;
+        return false;
     }
 
     /**
      * Configures the color intensity intervals for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in ms
      */
     public boolean setColorIntensityInterval(final BluetoothDevice device, final int interval) {
@@ -419,7 +417,7 @@ public class ThingySdkManager {
     /**
      * Configures the gas mode for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device  Bluetooth device
      * @param gasMode mode
      */
     public void setGasMode(final BluetoothDevice device, final int gasMode) {
@@ -468,9 +466,9 @@ public class ThingySdkManager {
     /**
      * Configures the advertising parameters for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device              Bluetooth device
      * @param advertisingInterval in millisecond units
-     * @param advertisingTimeout in millisecond units
+     * @param advertisingTimeout  in millisecond units
      */
     public boolean setAdvertisingParameters(final BluetoothDevice device, final int advertisingInterval, final int advertisingTimeout) {
         if (device != null)
@@ -486,7 +484,7 @@ public class ThingySdkManager {
     /**
      * Configures the advertising parameters for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device              Bluetooth device
      * @param advertisingInterval in millisecond units
      */
     public boolean setAdvertisingIntervalUnits(final BluetoothDevice device, final int advertisingInterval) {
@@ -503,7 +501,7 @@ public class ThingySdkManager {
     /**
      * Configures the advertising parameters for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device             Bluetooth device
      * @param advertisingTimeout in millisecond units
      */
     public boolean setAdvertisingTimeoutUnits(final BluetoothDevice device, final int advertisingTimeout) {
@@ -520,11 +518,11 @@ public class ThingySdkManager {
     /**
      * Configures the Connection parameters for a particular thingy.
      *
-     * @param device Bluetooth device
-     * @param minConnectionIntervalUnits min connection interval
-     * @param maxConnectionIntervalUnits max connection interval
-     * @param slaveLatency
-     * @param connectionSupervisionTimeout
+     * @param device                       Bluetooth device
+     * @param minConnectionIntervalUnits   min connection interval
+     * @param maxConnectionIntervalUnits   max connection interval
+     * @param slaveLatency                 Slave latency of device
+     * @param connectionSupervisionTimeout Connection supervision time out
      */
     public boolean setConnectionParameters(final BluetoothDevice device,
                                            final int minConnectionIntervalUnits,
@@ -546,7 +544,7 @@ public class ThingySdkManager {
      * Sets the minimum connection interval units.
      *
      * @param device Bluetooth device
-     * @param units connection interval in units
+     * @param units  connection interval in units
      */
     public boolean setMinimumConnectionIntervalUnits(final BluetoothDevice device, final int units) {
         if (device != null) {
@@ -581,7 +579,7 @@ public class ThingySdkManager {
      * Sets the maximum connection interval units.
      *
      * @param device Bluetooth device
-     * @param units connection interval in units
+     * @param units  connection interval in units
      */
     public boolean setMaximumConnectionIntervalUnits(final BluetoothDevice device, final int units) {
         if (device != null) {
@@ -692,7 +690,7 @@ public class ThingySdkManager {
      * Configures the Eddystone URL for a particular thingy.
      *
      * @param device Bluetooth device
-     * @param url   Eddystone url
+     * @param url    Eddystone url
      */
     public boolean setEddystoneUrl(final BluetoothDevice device, final String url) {
         if (device != null) {
@@ -710,7 +708,6 @@ public class ThingySdkManager {
      * Disables the Eddystone URL for a particular thingy.
      *
      * @param device Bluetooth device
-     *
      */
     public boolean disableEddystoneUrl(final BluetoothDevice device) {
         if (device != null) {
@@ -744,7 +741,7 @@ public class ThingySdkManager {
     /**
      * Saves the cloud token for a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device     Bluetooth device
      * @param cloudToken the IFTTT token
      */
     public boolean setCloudToken(final BluetoothDevice device, final String cloudToken) {
@@ -1005,12 +1002,12 @@ public class ThingySdkManager {
     /**
      * Configures the Motion configuration characteristic for a particular thingy.
      *
-     * @param device Bluetooth device
-     * @param pedometerInterval in ms
-     * @param temperatureCompensationInterval in ms
+     * @param device                           Bluetooth device
+     * @param pedometerInterval                in ms
+     * @param temperatureCompensationInterval  in ms
      * @param magnetoMeterCompensationInterval in ms
-     * @param motionInterval in ms
-     * @param wakeOnMotion as an interval in ms
+     * @param motionInterval                   in ms
+     * @param wakeOnMotion                     as an interval in ms
      */
     public boolean setMotionConfigurationCharacteristic(final BluetoothDevice device,
                                                         final int pedometerInterval,
@@ -1034,7 +1031,7 @@ public class ThingySdkManager {
     /**
      * Configures the pedometer interval for thingy.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in milliseconds
      */
     public boolean setPedometerInterval(final BluetoothDevice device, final int interval) {
@@ -1052,7 +1049,7 @@ public class ThingySdkManager {
     /**
      * Configures the Temperature compensation interval for thingy.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in milliseconds
      */
     public boolean setTemperatureCompensationInterval(final BluetoothDevice device, final int interval) {
@@ -1070,7 +1067,7 @@ public class ThingySdkManager {
     /**
      * Configures the magnetometer compensation interval for thingy.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in milliseconds
      */
     public boolean setMagnetometerCompensationInterval(final BluetoothDevice device, final int interval) {
@@ -1088,7 +1085,7 @@ public class ThingySdkManager {
     /**
      * Configures the motion processing frequency for thingy.
      *
-     * @param device Bluetooth device
+     * @param device   Bluetooth device
      * @param interval in milliseconds
      */
     public boolean setMotionProcessingFrequency(final BluetoothDevice device, final int interval) {
@@ -1107,7 +1104,7 @@ public class ThingySdkManager {
      * Configures the wake on motion mode for thingy.
      *
      * @param device Bluetooth device
-     * @param mode on/off where 1 is for on and 0 is off
+     * @param mode   on/off where 1 is for on and 0 is off
      */
     public boolean setWakeOnMotion(final BluetoothDevice device, final int mode) {
         if (device != null) {
@@ -1418,10 +1415,10 @@ public class ThingySdkManager {
     /**
      * Sets the LED color of a particular thingy.
      *
-     * @param device Bluetooth device
-     * @param redIntensity for the led
+     * @param device         Bluetooth device
+     * @param redIntensity   for the led
      * @param greenIntensity for the led
-     * @param blueIntensity for the led
+     * @param blueIntensity  for the led
      */
     public void setConstantLedMode(final BluetoothDevice device, final int redIntensity, final int greenIntensity, final int blueIntensity) {
         if (device != null) {
@@ -1437,11 +1434,10 @@ public class ThingySdkManager {
     /**
      * Sets the LED color of a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device     Bluetooth device
      * @param colorIndex to set the led color
-     * @param intensity of the led
-     * @param delay for LED breathe
-     *
+     * @param intensity  of the led
+     * @param delay      for LED breathe
      */
     public void setBreatheLedMode(final BluetoothDevice device,
                                   final int colorIndex, final int intensity, final int delay) {
@@ -1458,7 +1454,7 @@ public class ThingySdkManager {
     /**
      * Sets the LED color of a particular thingy.
      *
-     * @param device Bluetooth device
+     * @param device     Bluetooth device
      * @param colorIndex to set the led color
      */
     public void setOneShotLedMode(final BluetoothDevice device, final int colorIndex, final int intensity) {
@@ -1476,7 +1472,6 @@ public class ThingySdkManager {
      * Turns off the LED of a particular thingy.
      *
      * @param device Bluetooth device
-     *
      */
     public void turnOffLed(final BluetoothDevice device) {
         if (device != null) {
@@ -1618,12 +1613,13 @@ public class ThingySdkManager {
             }
         }
     }
+
     /**
      * Plays the selected frequency sample for a particular thingy.
      *
      * @param frequency to be played
-     * @param duration to be played for
-     * @param volume of the sound
+     * @param duration  to be played for
+     * @param volume    of the sound
      */
     public void playSoundFrequency(final Context context, final BluetoothDevice device,
                                    final int frequency, final int duration, final int volume) {
@@ -1668,11 +1664,12 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy.
-     * @param context activity context
-     * @param device Bluetooth device
+     *
+     * @param context   activity context
+     * @param device    Bluetooth device
      * @param audioFile to be played
      */
-    public boolean playPcmSample(final Context context, final BluetoothDevice device, final File audioFile){
+    public boolean playPcmSample(final Context context, final BluetoothDevice device, final File audioFile) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
@@ -1693,11 +1690,12 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy.
+     *
      * @param context activity context
-     * @param device Bluetooth device
-     * @param sample sample sound to be played
+     * @param device  Bluetooth device
+     * @param sample  sample sound to be played
      */
-    public void playPcmSample(final Context context, final BluetoothDevice device, byte [] sample) {
+    public void playPcmSample(final Context context, final BluetoothDevice device, byte[] sample) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
@@ -1717,8 +1715,8 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy.
-     *  @param device Bluetooth device
      *
+     * @param device Bluetooth device
      */
     public void stopPcmSample(final BluetoothDevice device) {
         if (device != null) {
@@ -1733,6 +1731,7 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy.
+     *
      * @param device Bluetooth device
      * @param enable sound to be played
      */
@@ -1749,11 +1748,12 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy.
+     *
      * @param context activity context
-     * @param device Bluetooth device
-     * @param sample sample sound to be played
+     * @param device  Bluetooth device
+     * @param sample  sample sound to be played
      */
-    public void playVoiceInput(final Context context, final BluetoothDevice device, byte [] sample) {
+    public void playVoiceInput(final Context context, final BluetoothDevice device, byte[] sample) {
         if (device != null) {
             if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
@@ -1773,9 +1773,9 @@ public class ThingySdkManager {
 
     /**
      * Plays the selected sound sample for a particular thingy
-     * @param context activity context
-     * @param device Bluetooth device
      *
+     * @param context activity context
+     * @param device  Bluetooth device
      */
     public void stopPlayingVoiceInput(final Context context, final BluetoothDevice device) {
         if (device != null) {
@@ -1886,12 +1886,10 @@ public class ThingySdkManager {
      * @param device to validated with
      */
     public boolean isThingyStreamingAudio(final BluetoothDevice device) {
-        if(device != null) {
-            if(mBinder != null) {
+        if (device != null) {
+            if (mBinder != null) {
                 final ThingyConnection thingyConnection = mBinder.getThingyConnection(device);
-                if (thingyConnection != null && thingyConnection.isAudioStreamingInProgress()) {
-                    return true;
-                }
+                return thingyConnection != null && thingyConnection.isAudioStreamingInProgress();
             }
         }
         return false;
@@ -1909,6 +1907,7 @@ public class ThingySdkManager {
         }
         return false;
     }
+
     /**
      * Trigger boot loader mode on the thingy to initiate DFU.
      *
@@ -1946,17 +1945,16 @@ public class ThingySdkManager {
     /**
      * Start a dfu process with the nordic fw bundled in the thingy application.
      *
-     *  @param context of the activity or fragment
-     *  @param device to be updated
-     *  @param fileType of the fw and zip file is used by default
-     *
+     * @param context  of the activity or fragment
+     * @param device   to be updated
+     * @param fileType of the fw and zip file is used by default
      */
-    public boolean startDFUWithNordicFW(final Context context, final BluetoothDevice device, final int resFileId, final int fileType){
+    public boolean startDFUWithNordicFW(final Context context, final BluetoothDevice device, final int resFileId, final int fileType) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(device.getAddress())
                 .setDeviceName(device.getName())
                 .setKeepBond(false);
 
-        if(ThingyUtils.checkIfVersionIsOreoOrAbove()){
+        if (ThingyUtils.checkIfVersionIsOreoOrAbove()) {
             DfuServiceInitiator.createDfuNotificationChannel(context);
         }
 
@@ -1966,26 +1964,26 @@ public class ThingySdkManager {
             starter.setZip(resFileId);
         }
 
-        /*mDfuServiceController = */starter.start(context, DfuService.class);
+        /*mDfuServiceController = */
+        starter.start(context, DfuService.class);
         return true;
     }
 
     /**
      * Start a dfu process with a fw of user selection. Here the user will have to select the file and send the file path or the uri as a parameter
      *
-     *  @param context
-     *  @param device
-     *  @param fileType of the fw and zip file is used by default
-     *  @param mFilePath
-     *  @param mFileStreamUri
-     *
+     * @param context        Context
+     * @param device         Bluetooth device
+     * @param fileType       of the fw and zip file is used by default
+     * @param mFilePath      Path of the file
+     * @param mFileStreamUri URI
      */
-    public boolean startDFUWithCustomFW(final Context context, final BluetoothDevice device, final int fileType, final String mFilePath, final Uri mFileStreamUri){
+    public boolean startDFUWithCustomFW(final Context context, final BluetoothDevice device, final int fileType, final String mFilePath, final Uri mFileStreamUri) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(device.getAddress())
                 .setDeviceName(device.getName())
                 .setKeepBond(false);
 
-        if(ThingyUtils.checkIfVersionIsOreoOrAbove()){
+        if (ThingyUtils.checkIfVersionIsOreoOrAbove()) {
             DfuServiceInitiator.createDfuNotificationChannel(context);
         }
         // Init packet is required by Bootloader/DFU from SDK 7.0+ if HEX or BIN file is given above.
@@ -1996,14 +1994,15 @@ public class ThingySdkManager {
             starter.setBinOrHex(fileType, mFileStreamUri, mFilePath);
         }
 
-        /*mDfuServiceController = */starter.start(context, DfuService.class);
+        /*mDfuServiceController = */
+        starter.start(context, DfuService.class);
         return true;
     }
+
     /**
      * Checks the DFU service is already in progress
      *
-     *  @param context of activity or fragment
-     *
+     * @param context of activity or fragment
      */
     public boolean isDfuServiceRunning(final Context context) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

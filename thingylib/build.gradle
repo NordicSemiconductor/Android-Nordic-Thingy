@@ -6,8 +6,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 29
-        versionCode 5
-        versionName "1.1.1"
+        versionCode 6
+        versionName "1.1.2"
     }
     buildTypes {
         release {
@@ -19,6 +19,6 @@ android {
 
 dependencies {
     // Device Firmware Update
-    api 'no.nordicsemi.android:dfu:1.9.0'
+    api 'no.nordicsemi.android:dfu:1.9.2'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }
