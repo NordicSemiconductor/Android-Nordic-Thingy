@@ -38,6 +38,7 @@
 
 package no.nordicsemi.android.nrfthingy.common;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -45,8 +46,7 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,11 +58,11 @@ import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
+import androidx.core.app.ActivityCompat;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 
 public class Utils {
@@ -74,8 +74,8 @@ public class Utils {
     public static final String INITIAL_ENV_TUTORIAL = "INITIAL_ENV_TUTORIAL";
     public static final String INITIAL_MOTION_TUTORIAL = "INITIAL_MOTION_TUTORIAL";
     public static final String INITIAL_SOUND_TUTORIAL = "INITIAL_SOUND_TUTORIAL";
-    public static final String KEY_IFTTT_TOKEN = "KEY_IFTTT_TOKEN";
-    public static final String KEY_NFC_FEATURE_REQ = "KEY_NFC_FEATURE_REQ";
+    private static final String KEY_IFTTT_TOKEN = "KEY_IFTTT_TOKEN";
+    private static final String KEY_NFC_FEATURE_REQ = "KEY_NFC_FEATURE_REQ";
     public static final String INITIAL_DFU_TUTORIAL = "INITIAL_DFU_TUTORIAL";
 
     public static final String START_RECORDING = "START_RECORDING";
@@ -134,7 +134,7 @@ public class Utils {
     public static final int BLE_GAP_ADV_INTERVAL_MAX = 10240;//ms
     public static final int BLE_GAP_ADV_TIMEOUT_MIN = 0;//ms
     public static final int BLE_GAP_ADV_TIMEOUT_MAX = 180;//ms
-    public static final String EXTRA_DATA_TITLE = "EXTRA_DATA_TITLE";
+    static final String EXTRA_DATA_TITLE = "EXTRA_DATA_TITLE";
     public static final String EXTRA_DATA_DESCRIPTION = "EXTRA_DATA_DESCRIPTION";
     public static final String EXTRA_DEVICE_CONNECTION_STATE = "EXTRA_DEVICE_CONNECTION_STATE";
     public static final String EXTRA_DEVICE_DFU_COMPLETED = "EXTRA_DEVICE_DFU_COMPLETED";
@@ -507,6 +507,14 @@ public class Utils {
         return Build.VERSION.SDK_INT >= 25;
     }
 
+    public static boolean checkIfVersionIsPie() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
+    }
+
+    public static boolean checkIfVersionIsQ() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+    }
+
     public static boolean isAppInitialisedBefore(Context context) {
         SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         return sp.getBoolean(INITIAL_CONFIG_STATE, false);
@@ -545,7 +553,7 @@ public class Utils {
 
     public static String incrementAddress(final String address) {
         String macAddr = address.substring(0, address.length() - 2);
-        final String hex = address.substring(address.length() - 2, address.length());
+        final String hex = address.substring(address.length() - 2);
         int hexAsInt = Integer.parseInt(hex, 16);
         hexAsInt++;
         //return macAddr + String.format("%02x", Integer.toHexString(hexAsInt).toUpperCase(Locale.US));
@@ -554,7 +562,7 @@ public class Utils {
 
     public static String decrementAddress(final String address) {
         String macAddr = address.substring(0, address.length() - 2);
-        final String hex = address.substring(address.length() - 2, address.length());
+        final String hex = address.substring(address.length() - 2);
         int hexAsInt = Integer.parseInt(hex, 16);
         hexAsInt--;
         //return macAddr + Long.toHexString(hexAsInt).toUpperCase(Locale.US);
@@ -567,29 +575,6 @@ public class Utils {
         int exp = (int) (Math.log(bytes) / Math.log(unit));
         String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
         return String.format(Locale.US, "%.1f %sB", bytes / Math.pow(unit, exp), pre);
-    }
-
-    public static double getDataSize(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return bytes;
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        return bytes / Math.pow(unit, exp);
-    }
-
-    public static String getUnits(long bytes, boolean si) {
-        int unit = si ? 1000 : 1024;
-        if (bytes < unit) return " B";
-        int exp = (int) (Math.log(bytes) / Math.log(unit));
-        String pre = (si ? "kMGTPE" : "KMGTPE").charAt(exp - 1) + (si ? "" : "i");
-        return String.format(Locale.US, "%.1f %sB", pre);
-    }
-
-    public static boolean hasConnectivity(final Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     public static boolean checkIfSequenceIsCompleted(final Context context, final String key) {
@@ -643,29 +628,6 @@ public class Utils {
             }
         }
         return null; //ideally shouldn't go here
-    }
-
-    /**
-     * Returns the user selection if the user is to be prompted again for NFC
-     *
-     * @param context Context
-     * @return true if do not show again was opted and false otherwise
-     */
-    public static boolean getNfcFeatureRequestState(final Context context) {
-        final SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
-        return sp.getBoolean(KEY_NFC_FEATURE_REQ, false);
-    }
-
-    public static boolean saveNfcFeatureRequestState(final Context context, final boolean flag) {
-        final SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sp.edit();
-        editor.putBoolean(KEY_NFC_FEATURE_REQ, flag);
-        return editor.commit();
-    }
-
-    public static void saveNfcMessageWarningState(final Context context, final boolean flag) {
-        SharedPreferences sp = context.getSharedPreferences(Utils.PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
-        sp.edit().putBoolean(Utils.NFC_WARNING, flag).commit();
     }
 
     public static boolean showNfcDisabledWarning(final Context context) {
