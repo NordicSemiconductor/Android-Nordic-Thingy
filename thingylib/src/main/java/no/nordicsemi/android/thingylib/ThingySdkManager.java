@@ -1952,7 +1952,6 @@ public class ThingySdkManager {
     public boolean startDFUWithNordicFW(final Context context, final BluetoothDevice device, final int resFileId, final int fileType) {
         final DfuServiceInitiator starter = new DfuServiceInitiator(device.getAddress())
                 .setDeviceName(device.getName())
-                .disableResume()
                 .setKeepBond(false);
 
         if (ThingyUtils.checkIfVersionIsOreoOrAbove()) {
