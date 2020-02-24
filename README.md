@@ -36,4 +36,4 @@ project on the Google Developer Console and enable URLShortener API and use the 
 Pixel XL with lollipop, Marshmallow and Nougat.
 
 * Location Services need to be enabled for scanning from android 6.0 Marshmallow and in addition, 
-runtime permission ACCESS_COARSE_LOCATION is also required.
+runtime permission ACCESS_FINE_LOCATION is also required.

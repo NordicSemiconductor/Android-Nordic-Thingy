@@ -99,6 +99,7 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import no.nordicsemi.android.error.SecureDfuError;
+import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.FileBrowserAppsAdapter;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
@@ -119,6 +120,11 @@ import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.dfu.DfuService;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
+
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_COARSE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
 
 public class SecureDfuActivity extends AppCompatActivity implements
         ThingySdkManager.ServiceConnectionListener,
@@ -328,11 +334,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                         BluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        Utils.showToast(SecureDfuActivity.this, getString(R.string.ble_turned_off));
-                        enableBle();
-                        break;
+                if (state == BluetoothAdapter.STATE_OFF) {
+                    Utils.showToast(SecureDfuActivity.this, getString(R.string.ble_turned_off));
+                    enableBle();
                 }
             }
         }
@@ -384,11 +388,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
                         Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
                     }
                 }
-                /*} else {
-                    if(mDeviceWasConnected){
-                        Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_complete_reconnecting));
-                    }
-                }*/
             }
         });
 
@@ -805,11 +804,19 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private boolean checkIfRequiredPermissionsGranted() {
-        if (Utils.checkIfVersionIsMarshmallowOrAbove()) {
-            if (ActivityCompat.checkSelfPermission(SecureDfuActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (checkIfVersionIsQ()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
-                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, Utils.REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_ACCESS_FINE_LOCATION, getString(R.string.rationale_message_location));
+                dialog.show(getSupportFragmentManager(), null);
+                return false;
+            }
+        } else if (checkIfVersionIsMarshmallowOrAbove()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
                 dialog.show(getSupportFragmentManager(), null);
                 return false;
             }
@@ -1400,7 +1407,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 mFileName = DfuHelper.getCurrentFwFileName(this, requiresUpdatingSdAndBl);
                 is = DfuHelper.getCurrentFwStream(this, requiresUpdatingSdAndBl);
                 int size = is.available();
-                mFileSize = String.valueOf(Utils.humanReadableByteCount(size, true));
+                mFileSize = Utils.humanReadableByteCount(size, true);
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {

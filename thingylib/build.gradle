@@ -19,6 +19,6 @@ android {
 
 dependencies {
     // Device Firmware Update
-    api 'no.nordicsemi.android:dfu:1.9.0'
+    api 'no.nordicsemi.android:dfu:1.9.2'
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
 }
