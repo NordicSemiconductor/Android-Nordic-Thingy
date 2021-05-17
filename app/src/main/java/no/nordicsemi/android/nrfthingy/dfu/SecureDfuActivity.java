@@ -1253,7 +1253,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON)) {
             mThingySdkManager.enableButtonStateNotification(mDevice, true);
         } else {
-            mThingySdkManager.enableColorNotifications(mDevice, false);
+            mThingySdkManager.enableButtonStateNotification(mDevice, false);
         }
     }
 
