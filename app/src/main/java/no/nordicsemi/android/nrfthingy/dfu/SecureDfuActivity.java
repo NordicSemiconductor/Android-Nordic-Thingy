@@ -1238,7 +1238,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
             mThingySdkManager.enableHumidityNotifications(mDevice, false);
         }
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
+        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY)) {
             mThingySdkManager.enableAirQualityNotifications(mDevice, true);
         } else {
             mThingySdkManager.enableAirQualityNotifications(mDevice, false);
