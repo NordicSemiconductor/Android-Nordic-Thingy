@@ -41,6 +41,7 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
@@ -62,11 +63,6 @@ import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.Parcelable;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import com.google.android.material.textfield.TextInputEditText;
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -79,9 +75,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.EnableNFCDialogFragment;
@@ -107,14 +109,26 @@ import no.nordicsemi.android.thingylib.ThingyListenerHelper;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
-import static no.nordicsemi.android.nrfthingy.common.Utils.*;
+import static no.nordicsemi.android.nrfthingy.common.Utils.EXTRA_ADDRESS_DATA;
+import static no.nordicsemi.android.nrfthingy.common.Utils.EXTRA_DEVICE;
+import static no.nordicsemi.android.nrfthingy.common.Utils.INITIAL_CONFIG_FROM_ACTIVITY;
+import static no.nordicsemi.android.nrfthingy.common.Utils.INITIAL_CONFIG_STATE;
+import static no.nordicsemi.android.nrfthingy.common.Utils.PREFS_INITIAL_SETUP;
+import static no.nordicsemi.android.nrfthingy.common.Utils.PROGRESS_DIALOG_TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_COARSE_LOCATION;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_CONNECT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_SCAN;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ENABLE_BT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsSandAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.getBluetoothDevice;
+import static no.nordicsemi.android.nrfthingy.common.Utils.isAppInitialisedBefore;
 import static no.nordicsemi.android.nrfthingy.common.Utils.isConnected;
+import static no.nordicsemi.android.nrfthingy.common.Utils.readAddressPayload;
+import static no.nordicsemi.android.nrfthingy.common.Utils.showToast;
 
 public class InitialConfigurationActivity extends AppCompatActivity implements ScannerFragmentListener,
         PermissionRationaleDialogFragment.PermissionDialogListener,
@@ -155,7 +169,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
     private ThingySdkManager mThingySdkManager;
 
-    private Handler mProgressHandler = new Handler();
+    private final Handler mProgressHandler = new Handler();
     private ProgressDialogFragment mProgressDialog;
 
     private ScannerFragment mScannerFragment;
@@ -167,7 +181,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     private PendingIntent mNfcPendingIntent;
     private String mAddressNfc;
 
-    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isLocationEnabled();
@@ -179,7 +193,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     };
 
-    private BroadcastReceiver mNfcAdapterStateChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mNfcAdapterStateChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isNfcEnabled();
@@ -187,9 +201,10 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     };
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
 
         @Override
+        @SuppressLint("MissingPermission")
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
             if (device.equals(mDevice)) {
                 updateProgressDialogState(getString(R.string.state_discovering_services, device.getName()));
@@ -198,6 +213,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
 
         @Override
+        @SuppressLint("MissingPermission")
         public void onDeviceDisconnected(BluetoothDevice device, int connectionState) {
             if (device.equals(mDevice)) {
                 mStepOneSummary.setText(R.string.connect_thingy_summary);
@@ -352,116 +368,63 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
 
         loadNfcAdapter();
 
-        mEnableNfc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                requestNfcFeature();
-            }
+        mEnableNfc.setOnClickListener(view -> requestNfcFeature());
+
+        mNfcMore.setOnClickListener(view -> showNfcDialogRationale());
+
+        enableLocationServices.setOnClickListener(v -> {
+            final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
         });
 
-        mNfcMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                showNfcDialogRationale();
-            }
-        });
+        mStepOne.setOnClickListener(v -> animateOnStepOneComplete());
 
-        enableLocationServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
-        });
+        mStepTwo.setOnClickListener(v -> animateOnStepTwoComplete());
 
-        mStepOne.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateOnStepOneComplete();
-            }
-        });
-
-        mStepTwo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateOnStepTwoComplete();
-            }
-        });
-
-        mConfirmThingy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Utils.checkIfVersionIsQ()) {
-                    if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        if (isLocationEnabled()) {
-                            if (isBleEnabled()) {
-                                final String title = mConfirmThingy.getText().toString().trim();
-                                if (title.contains("Disconnect")) {
-                                    mAddressNfc = null;
-                                    mThingySdkManager.disconnectFromThingy(mDevice);
-                                    mConfirmThingy.setText(R.string.scan_thingy);
-                                }
-                                mScannerFragment.show(getSupportFragmentManager(), null);
-                            } else enableBle();
-                        } else {
-                            showToast(InitialConfigurationActivity.this, getString(R.string.location_services_disabled));
-                        }
+        mConfirmThingy.setOnClickListener(v -> {
+            if(Utils.checkIfVersionIsSandAbove()){
+                if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+                    if(ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                        onPermissionGranted();
                     } else {
-                        final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_ACCESS_FINE_LOCATION, getString(R.string.rationale_message_location));
-                        dialog.show(getSupportFragmentManager(), null);
-                    }
-                } else if (checkIfVersionIsMarshmallowOrAbove()) {
-                    if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        if (isLocationEnabled()) {
-                            if (isBleEnabled()) {
-                                final String title = mConfirmThingy.getText().toString().trim();
-                                if (title.contains("Disconnect")) {
-                                    mAddressNfc = null;
-                                    mThingySdkManager.disconnectFromThingy(mDevice);
-                                    mConfirmThingy.setText(R.string.scan_thingy);
-                                }
-                                mScannerFragment.show(getSupportFragmentManager(), null);
-                            } else enableBle();
-                        } else {
-                            showToast(InitialConfigurationActivity.this, getString(R.string.location_services_disabled));
-                        }
-                    } else {
-                        final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
+                        final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
                         dialog.show(getSupportFragmentManager(), null);
                     }
                 } else {
-                    if (isBleEnabled()) {
-                        final String title = mConfirmThingy.getText().toString().trim();
-                        if (title.contains("Disconnect")) {
-                            mAddressNfc = null;
-                            mThingySdkManager.disconnectFromThingy(mDevice);
-                        }
-                        mScannerFragment.show(getSupportFragmentManager(), null);
-                    } else enableBle();
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+                    dialog.show(getSupportFragmentManager(), null);
                 }
+            } else if (Utils.checkIfVersionIsQ()) {
+                if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    onPermissionGranted();
+                } else {
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_ACCESS_FINE_LOCATION, getString(R.string.rationale_message_location));
+                    dialog.show(getSupportFragmentManager(), null);
+                }
+            } else if (checkIfVersionIsMarshmallowOrAbove()) {
+                if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    onPermissionGranted();
+                } else {
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
+                    dialog.show(getSupportFragmentManager(), null);
+                }
+            } else {
+                if (isBleEnabled()) {
+                    final String title = mConfirmThingy.getText().toString().trim();
+                    if (title.contains("Disconnect")) {
+                        mAddressNfc = null;
+                        mThingySdkManager.disconnectFromThingy(mDevice);
+                    }
+                    mScannerFragment.show(getSupportFragmentManager(), null);
+                } else enableBle();
             }
         });
 
-        mConfirmDeviceName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateStepTwo(true);
-            }
-        });
+        mConfirmDeviceName.setOnClickListener(v -> animateStepTwo(true));
 
-        skipDeviceName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateStepTwo(false);
-            }
-        });
+        skipDeviceName.setOnClickListener(view -> animateStepTwo(false));
 
-        getStarted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getStarted();
-            }
-        });
+        getStarted.setOnClickListener(v -> getStarted());
 
         mDeviceInfo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -506,6 +469,26 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             registerReceiver(mLocationProviderChangedReceiver, new IntentFilter(LocationManager.MODE_CHANGED_ACTION));
         }
         registerReceiver(mNfcAdapterStateChangedReceiver, new IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED));
+    }
+
+    private void onPermissionGranted() {
+        if (isLocationEnabled()) {
+            updateUi();
+        } else {
+            showToast(InitialConfigurationActivity.this, getString(R.string.location_services_disabled));
+        }
+    }
+
+    private void updateUi() {
+        if (isBleEnabled()) {
+            final String title = mConfirmThingy.getText().toString().trim();
+            if (title.contains("Disconnect")) {
+                mAddressNfc = null;
+                mThingySdkManager.disconnectFromThingy(mDevice);
+                mConfirmThingy.setText(R.string.scan_thingy);
+            }
+            mScannerFragment.show(getSupportFragmentManager(), null);
+        } else enableBle();
     }
 
     @Override
@@ -676,6 +659,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     /**
      * Tries to start Bluetooth adapter.
      */
+    @SuppressLint("MissingPermission")
     private void enableBle() {
         final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
@@ -851,6 +835,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void getStarted() {
         if (!isAppInitialisedBefore(this)) {
             final SharedPreferences sp = getSharedPreferences(PREFS_INITIAL_SETUP, MODE_PRIVATE);
@@ -919,10 +904,8 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                         BluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        enableBle();
-                        break;
+                if (state == BluetoothAdapter.STATE_OFF) {
+                    enableBle();
                 }
             }
         }
@@ -941,12 +924,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mProgressHandler.postDelayed(mProgressDialogRunnable, SCAN_DURATION);
     }
 
-    final Runnable mProgressDialogRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideProgressDialog();
-        }
-    };
+    final Runnable mProgressDialogRunnable = this::hideProgressDialog;
 
     private void hideProgressDialog() {
         if (mProgressDialog != null) {
@@ -1025,7 +1003,14 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     private void prepareForScanning(final String address) {
-        if (checkIfVersionIsMarshmallowOrAbove()) {
+        if(checkIfVersionIsSandAbove()){
+            if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+                handleStartScan(address);
+            } else {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
+                dialog.show(getSupportFragmentManager(), null);
+            }
+        } else if (checkIfVersionIsMarshmallowOrAbove()) {
             if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 if (isLocationEnabled()) {
                     if (isBleEnabled()) {
@@ -1109,21 +1094,18 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
-    private ScanCallback mScanCallback = new ScanCallback() {
+    private final ScanCallback mScanCallback = new ScanCallback() {
 
         @Override
         public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
             // do nothing
             final BluetoothDevice device = result.getDevice();
             if (device.equals(mDevice)) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgressHandler.removeCallbacks(mProgressDialogRunnable);
-                        stopScan();
-                        onDeviceSelected(result.getDevice(), result.getScanRecord().getDeviceName());
-                        Log.v(TAG, "Connect?");
-                    }
+                new Handler().post(() -> {
+                    mProgressHandler.removeCallbacks(mProgressDialogRunnable);
+                    stopScan();
+                    onDeviceSelected(result.getDevice(), result.getScanRecord().getDeviceName());
+                    Log.v(TAG, "Connect?");
                 });
             }
         }
@@ -1138,19 +1120,14 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     };
 
-    final Runnable mBleScannerTimeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            stopScan();
-        }
-    };
+    final Runnable mBleScannerTimeoutRunnable = this::stopScan;
 
     private void loadNfcAdapter() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             mStepOneSummary.setText(R.string.add_thingy_nfc_summary);
             mNfcPendingIntent = PendingIntent.getActivity(
-                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);
@@ -1177,6 +1154,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         fragment.show(getSupportFragmentManager(), null);
     }
 
+    @SuppressLint("MissingPermission")
     private void handleNfcForegroundDispatch(final Intent intent) {
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
             final Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
@@ -1229,25 +1207,27 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         }
     }
 
-    private boolean checkIfRequiredPermissionsGranted() {
-        if (checkIfVersionIsQ()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                return true;
+    private void checkIfRequiredPermissionsGranted() {
+        if (checkIfVersionIsSandAbove()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
+                dialog.show(getSupportFragmentManager(), null);
             } else {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+                    dialog.show(getSupportFragmentManager(), null);
+                }
+            }
+        } else if (checkIfVersionIsQ()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_ACCESS_FINE_LOCATION, getString(R.string.rationale_message_location));
                 dialog.show(getSupportFragmentManager(), null);
-                return false;
             }
         } else if (checkIfVersionIsMarshmallowOrAbove()) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                return true;
-            } else {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_ACCESS_COARSE_LOCATION, getString(R.string.rationale_message_location));
                 dialog.show(getSupportFragmentManager(), null);
-                return false;
             }
-        } else {
-            return true;
         }
     }
 

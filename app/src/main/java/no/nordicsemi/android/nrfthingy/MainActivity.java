@@ -39,6 +39,7 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -143,12 +144,15 @@ import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
 import static no.nordicsemi.android.nrfthingy.common.Utils.PROGRESS_DIALOG_TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_COARSE_LOCATION;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_CONNECT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_SCAN;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ENABLE_BT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.SOUND_FRAGMENT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.UI_FRAGMENT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsSandAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.getBluetoothDevice;
 import static no.nordicsemi.android.nrfthingy.common.Utils.isConnected;
 import static no.nordicsemi.android.nrfthingy.common.Utils.readAddressPayload;
@@ -191,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Drawable mNavigationViewBackground;
     private ProgressDialogFragment mProgressDialog;
 
-    private Handler mProgressHandler = new Handler();
+    private final Handler mProgressHandler = new Handler();
     private boolean mIsScanning;
 
     private ThingyService.ThingyBinder mBinder;
@@ -207,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView mBatteryLevelImg;
     private NFCTagFoundDialogFragment mNfcTagFoundDialogFragment;
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
             final String deviceName = mDatabaseHelper.getDeviceName(device.getAddress());
@@ -224,9 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onDeviceDisconnected(BluetoothDevice device, int connectionState) {
             updateBatteryLevelVisibility(View.GONE);
             hideProgressDialog();
-            if (mConnectedBleDeviceList.contains(device)) {
-                mConnectedBleDeviceList.remove(device);
-            }
+            mConnectedBleDeviceList.remove(device);
             updateUiOnDeviceDisconnected(device);
         }
 
@@ -371,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mBatteryLevelImg.setVisibility(visibility);
     }
 
-    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isLocationEnabled();
@@ -383,7 +385,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
-    private BroadcastReceiver mNfcAdapterStateChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mNfcAdapterStateChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isNfcEnabled();
@@ -429,34 +431,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mConnectedBleDeviceList = new ArrayList<>();
         loadNfcAdapter();
 
-        enableNfc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                requestNfcFeature();
-            }
-        });
-        nfcInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                showNfcDialogRationale();
-            }
-        });
+        enableNfc.setOnClickListener(view -> requestNfcFeature());
+        nfcInfo.setOnClickListener(view -> showNfcDialogRationale());
 
         final TextView enableLocationServices = findViewById(R.id.enable_location_services);
-        enableLocationServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
+        enableLocationServices.setOnClickListener(v -> {
+            final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
         });
-        connectThingy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
-                initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
-                startActivity(initialConfiguration);
-            }
+        connectThingy.setOnClickListener(view -> {
+            Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
+            initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
+            startActivity(initialConfiguration);
         });
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mActivityToolbar, R.string.open, R.string.close) {
@@ -490,19 +476,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        mHeaderTitleContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableSelection();
-            }
-        });
+        mHeaderTitleContainer.setOnClickListener(view -> enableSelection());
 
-        mHeaderToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableSelection();
-            }
-        });
+        mHeaderToggle.setOnClickListener(view -> enableSelection());
 
         createDrawerMenu();
 
@@ -614,11 +590,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == RESULT_OK) {
-                if (!isNfcEnabled()) {
-                    updateNfcUi(false);
-                } else {
-                    updateNfcUi(true);
-                }
+                enableBle();
+                updateNfcUi(isNfcEnabled());
             }
         }
     }
@@ -642,21 +615,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item.getItemId();
-        switch (id) {
-            case R.id.action_delete_device:
-                final DialogFragment dialog = new ConfirmThingyDeletionDialogFragment().newInstance(mDevice);
-                dialog.show(getSupportFragmentManager(), null);
-                break;
-            case R.id.action_connect:
-                prepareForScanning(false);
-                break;
-            case R.id.action_disconnect:
-                if (mThingySdkManager != null) {
-                    mThingySdkManager.disconnectFromThingy(mDevice);
-                }
-                break;
-            case R.id.action_settings:
-                break;
+        if (id == R.id.action_delete_device) {
+            final DialogFragment dialog = new ConfirmThingyDeletionDialogFragment().newInstance(mDevice);
+            dialog.show(getSupportFragmentManager(), null);
+        } else if (id == R.id.action_connect) {
+            prepareForScanning(false);
+        } else if (id == R.id.action_disconnect) {
+            if (mThingySdkManager != null) {
+                mThingySdkManager.disconnectFromThingy(mDevice);
+            }
         }
         return true;
     }
@@ -671,47 +638,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         final int id = item.getGroupId();
-        switch (id) {
-            case R.id.navigation_menu:
-                performFragmentNavigation(item);
-                break;
-            case R.id.configuration_menu:
-                if (mThingySdkManager.isConnected(mDevice)) {
-                    Intent configurationIntent = new Intent(this, ConfigurationActivity.class);
-                    configurationIntent.putExtra(CURRENT_DEVICE, mDevice);
-                    startActivity(configurationIntent);
-                } else {
-                    showToast(this, getString(R.string.no_thingy_connected_configuration, mDatabaseHelper.getDeviceName(mDevice.getAddress())));
-                }
-                break;
-            case GROUP_ID_SAVED_THINGIES:
-                performDeviceSelection(item);
-                break;
-            case GROUP_ID_ADD_THINGY:
-                Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
-                initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
-                startActivity(initialConfiguration);
-                break;
-            case GROUP_ID_DFU:
-                Intent intent = new Intent(this, SecureDfuActivity.class);
-                intent.putExtra(EXTRA_DEVICE, mDevice);
-                startActivity(intent);
-                break;
-            case GROUP_ID_ABOUT:
-                Intent aboutActivity = new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(aboutActivity);
-                break;
-            default:
-
-                break;
+        if (id == R.id.navigation_menu) {
+            performFragmentNavigation(item);
+        } else if (id == R.id.configuration_menu) {
+            if (mThingySdkManager.isConnected(mDevice)) {
+                Intent configurationIntent = new Intent(this, ConfigurationActivity.class);
+                configurationIntent.putExtra(CURRENT_DEVICE, mDevice);
+                startActivity(configurationIntent);
+            } else {
+                showToast(this, getString(R.string.no_thingy_connected_configuration, mDatabaseHelper.getDeviceName(mDevice.getAddress())));
+            }
+        } else if (id == GROUP_ID_SAVED_THINGIES) {
+            performDeviceSelection(item);
+        } else if (id == GROUP_ID_ADD_THINGY) {
+            Intent initialConfiguration = new Intent(MainActivity.this, InitialConfigurationActivity.class);
+            initialConfiguration.putExtra(INITIAL_CONFIG_FROM_ACTIVITY, true);
+            startActivity(initialConfiguration);
+        } else if (id == GROUP_ID_DFU) {
+            Intent intent = new Intent(this, SecureDfuActivity.class);
+            intent.putExtra(EXTRA_DEVICE, mDevice);
+            startActivity(intent);
+        } else if (id == GROUP_ID_ABOUT) {
+            Intent aboutActivity = new Intent(MainActivity.this, AboutActivity.class);
+            startActivity(aboutActivity);
         }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-            }
-        }, 200);
+        new Handler().postDelayed(() -> mDrawerLayout.closeDrawer(GravityCompat.START), 200);
         return true;
     }
 
@@ -766,6 +718,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         item.setChecked(true);
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void performFragmentNavigation(final MenuItem item) {
         final int itemId = item.getItemId();
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -979,23 +932,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Tries to start Bluetooth adapter.
      */
     private void enableBle() {
-        final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        if (checkIfRequiredPermissionsGranted()) {
+            final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+        }
     }
 
     private void connect() {
-        mThingySdkManager.connectToThingy(this, mDevice, ThingyService.class);
-        final Thingy thingy = new Thingy(mDevice);
-        mThingySdkManager.setSelectedDevice(mDevice);
-        updateSelectionInDb(thingy, true);
+        if (checkIfRequiredPermissionsGranted()) {
+            mThingySdkManager.connectToThingy(this, mDevice, ThingyService.class);
+            final Thingy thingy = new Thingy(mDevice);
+            mThingySdkManager.setSelectedDevice(mDevice);
+            updateSelectionInDb(thingy, true);
+        }
     }
 
     private void connect(final BluetoothDevice device) {
-        mThingySdkManager.connectToThingy(this, device, ThingyService.class);
-        final Thingy thingy = new Thingy(device);
-        mThingySdkManager.setSelectedDevice(device);
-        updateSelectionInDb(thingy, true);
-        updateUiOnBind();
+        if (checkIfRequiredPermissionsGranted()) {
+            mThingySdkManager.connectToThingy(this, device, ThingyService.class);
+            final Thingy thingy = new Thingy(device);
+            mThingySdkManager.setSelectedDevice(device);
+            updateSelectionInDb(thingy, true);
+            updateUiOnBind();
+        }
     }
 
     private void enableSelection() {
@@ -1096,6 +1055,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void selectDeviceFromDb() {
         final BluetoothDevice device = mDevice;
         if (device != null) {
@@ -1153,6 +1113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void updateHeaderView(final int visibility) {
         if (mDevice != null) {
             String deviceName = mDatabaseHelper.getDeviceName(mDevice.getAddress());
@@ -1167,6 +1128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @SuppressLint("MissingPermission")
     @SuppressWarnings("ConstantConditions")
     private void updateActionbarTitle(final BluetoothDevice device) {
         if (device != null) {
@@ -1194,8 +1156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mNoThingyConnectedContainer.setVisibility(View.VISIBLE);
             mConnectedBleDeviceList.clear();
         } else {
-            final List<BluetoothDevice> connectedDevices = new ArrayList<>();
-            connectedDevices.addAll(mThingySdkManager.getConnectedDevices());
+            final List<BluetoothDevice> connectedDevices = new ArrayList<>(mThingySdkManager.getConnectedDevices());
             if (mDevice != null && mDevice.equals(device)) {
                 if (connectedDevices.size() > 0) {
                     mThingySdkManager.setSelectedDevice(connectedDevices.get(0));
@@ -1222,8 +1183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void updateUiOnDeviceConnected(final BluetoothDevice device) {
-        final List<BluetoothDevice> connectedDevices = new ArrayList<>();
-        connectedDevices.addAll(mThingySdkManager.getConnectedDevices());
+        final List<BluetoothDevice> connectedDevices = new ArrayList<>(mThingySdkManager.getConnectedDevices());
         final ArrayList<Thingy> savedDevices = mDatabaseHelper.getSavedDevices();
         if (mDevice != null && mDevice.equals(device)) {
             if (connectedDevices.size() > 0) {
@@ -1327,35 +1287,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void enableEnvironmentNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE)) {
-            mThingySdkManager.enableTemperatureNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableTemperatureNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE)) {
-            mThingySdkManager.enablePressureNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enablePressureNotifications(mDevice, false);
-        }
+        mThingySdkManager.enablePressureNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
-            mThingySdkManager.enableHumidityNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableHumidityNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableHumidityNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
-            mThingySdkManager.enableAirQualityNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableAirQualityNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableAirQualityNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_COLOR)) {
-            mThingySdkManager.enableColorNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableColorNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableColorNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_COLOR));
 
         if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON)) {
             mThingySdkManager.enableButtonStateNotification(mDevice, true);
@@ -1366,62 +1306,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void enableUiNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON)) {
-            mThingySdkManager.enableButtonStateNotification(mDevice, true);
-        } else {
-            mThingySdkManager.enableButtonStateNotification(mDevice, false);
-        }
+        mThingySdkManager.enableButtonStateNotification(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON));
     }
 
     private void enableMotionNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER)) {
-            enableEulerNotifications(true);
-        } else {
-            enableEulerNotifications(false);
-        }
+        enableEulerNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP)) {
-            enableTapNotifications(true);
-        } else {
-            enableTapNotifications(false);
-        }
+        enableTapNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING)) {
-            enableHeadingNotifications(true);
-        } else {
-            enableHeadingNotifications(false);
-        }
+        enableHeadingNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR)) {
-            enableGravityVectorNotifications(true);
-        } else {
-            enableGravityVectorNotifications(false);
-        }
+        enableGravityVectorNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION)) {
-            enableOrientationNotifications(true);
-        } else {
-            enableOrientationNotifications(false);
-        }
+        enableOrientationNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
-            enableQuaternionNotifications(true);
-        } else {
-            enableQuaternionNotifications(false);
-        }
+        enableQuaternionNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER)) {
-            enablePedometerNotifications(true);
-        } else {
-            enablePedometerNotifications(false);
-        }
+        enablePedometerNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA)) {
-            enableRawDataNotifications(true);
-        } else {
-            enableRawDataNotifications(false);
-        }
+        enableRawDataNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA));
     }
 
     public void enableOrientationNotifications(final boolean flag) {
@@ -1552,7 +1456,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private boolean checkIfRequiredPermissionsGranted() {
-        if (checkIfVersionIsQ()) {
+        if (checkIfVersionIsSandAbove()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                } else {
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+                    dialog.show(getSupportFragmentManager(), null);
+                    return false;
+                }
+            } else {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
+                dialog.show(getSupportFragmentManager(), null);
+                return false;
+            }
+        } else if (checkIfVersionIsQ()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
@@ -1576,15 +1494,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void prepareForScanning(final boolean nfcInitiated) {
         if (checkIfRequiredPermissionsGranted()) {
             if (isLocationEnabled()) {
-                if (mBinder != null) {
-                    mBinder.setScanningState(true);
-                    if (nfcInitiated) {
-                        showConnectionProgressDialog(getString(R.string.nfc_tag_connecting));
-                    } else {
-                        showConnectionProgressDialog(getString(R.string.state_connecting));
+                if (isBleEnabled()) {
+                    if (mBinder != null) {
+                        mBinder.setScanningState(true);
+                        if (nfcInitiated) {
+                            showConnectionProgressDialog(getString(R.string.nfc_tag_connecting));
+                        } else {
+                            showConnectionProgressDialog(getString(R.string.state_connecting));
+                        }
+                        startScan();
                     }
-                    startScan();
-                }
+                } else enableBle();
             } else {
                 final MessageDialogFragment messageDialogFragment = MessageDialogFragment.newInstance(getString(R.string.location_services_title), getString(R.string.rationale_message_location));
                 messageDialogFragment.show(getSupportFragmentManager(), null);
@@ -1640,7 +1560,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private String mAddress;
-    private ScanCallback mScanCallback = new ScanCallback() {
+    private final ScanCallback mScanCallback = new ScanCallback() {
 
         @Override
         public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
@@ -1655,13 +1575,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             if (device.equals(mDevice)) {
-                new Handler().post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mProgressHandler.removeCallbacks(mProgressDialogRunnable);
-                        stopScan();
-                        connect();
-                    }
+                new Handler().post(() -> {
+                    mProgressHandler.removeCallbacks(mProgressDialogRunnable);
+                    stopScan();
+                    connect();
                 });
             }
         }
@@ -1707,19 +1624,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mProgressHandler.postDelayed(mProgressDialogRunnable, SCAN_DURATION);
     }
 
-    final Runnable mProgressDialogRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideProgressDialog();
-        }
-    };
+    final Runnable mProgressDialogRunnable = this::hideProgressDialog;
 
-    final Runnable mBleScannerTimeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            stopScan();
-            hideProgressDialog();
-        }
+    final Runnable mBleScannerTimeoutRunnable = () -> {
+        stopScan();
+        hideProgressDialog();
     };
 
     private void hideProgressDialog() {
@@ -1791,7 +1700,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (mNfcAdapter != null) {
             addThingySummary.setText(R.string.add_thingy_nfc_summary);
             mNfcPendingIntent = PendingIntent.getActivity(
-                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);

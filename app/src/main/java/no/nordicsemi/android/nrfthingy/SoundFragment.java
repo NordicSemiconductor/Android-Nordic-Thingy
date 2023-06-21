@@ -48,20 +48,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.core.content.ContextCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -69,7 +57,18 @@ import android.widget.Toast;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.viewpager.widget.ViewPager;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -102,8 +101,8 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
     private boolean mStartRecordingAudio = false;
     private boolean mStartPlayingAudio = false;
 
-    private ThingyListener mThingyListener = new ThingyListener() {
-        private Handler mHandler = new Handler();
+    private final ThingyListener mThingyListener = new ThingyListener() {
+        private final Handler mHandler = new Handler();
 
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
@@ -217,18 +216,13 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         public void onMicrophoneValueChangedEvent(BluetoothDevice bluetoothDevice, final byte[] data) {
             if (data != null) {
                 if (data.length != 0) {
-                    mHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mVoiceVisualizer.draw(data);
-                        }
-                    });
+                    mHandler.post(() -> mVoiceVisualizer.draw(data));
                 }
             }
         }
     };
 
-    private BroadcastReceiver mAudioRecordBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mAudioRecordBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -273,34 +267,24 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
 
         final Toolbar speakerToolbar = rootView.findViewById(R.id.speaker_toolbar);
         speakerToolbar.inflateMenu(R.menu.audio_warning);
-        speakerToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_audio_warning:
-                        MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.info), getString(R.string.mtu_warning));
-                        fragment.show(getChildFragmentManager(), null);
-                        break;
-                }
-                return false;
+        speakerToolbar.setOnMenuItemClickListener(item -> {
+            final int id = item.getItemId();
+            if (id == R.id.action_audio_warning) {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.info), getString(R.string.mtu_warning));
+                fragment.show(getChildFragmentManager(), null);
             }
+            return false;
         });
 
         final Toolbar microphoneToolbar = rootView.findViewById(R.id.microphone_toolbar);
         microphoneToolbar.inflateMenu(R.menu.audio_warning);
-        microphoneToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_audio_warning:
-                        MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.info), getString(R.string.mtu_warning));
-                        fragment.show(getChildFragmentManager(), null);
-                        break;
-                }
-                return false;
+        microphoneToolbar.setOnMenuItemClickListener(item -> {
+            final int id = item.getItemId();
+            if (id == R.id.action_audio_warning) {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.info), getString(R.string.mtu_warning));
+                fragment.show(getChildFragmentManager(), null);
             }
+            return false;
         });
 
         mMicrophone = rootView.findViewById(R.id.microphone);
@@ -319,13 +303,10 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
 
             @Override
             public void onPageSelected(final int position) {
-                switch (position) {
-                    case 1:
-                        mFragmentAdapter.setSelectedFragment(position);
-                        break;
-                    default:
-                        mFragmentAdapter.setSelectedFragment(position);
-                        break;
+                if (position == 1) {
+                    mFragmentAdapter.setSelectedFragment(position);
+                } else {
+                    mFragmentAdapter.setSelectedFragment(position);
                 }
             }
 
@@ -338,32 +319,26 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             }
         });
 
-        mMicrophone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager.isConnected(mDevice)) {
-                    if (!mStartRecordingAudio) {
-                        checkMicrophonePermissions();
-                    } else {
-                        stopRecording();
-                    }
+        mMicrophone.setOnClickListener(v -> {
+            if (mThingySdkManager.isConnected(mDevice)) {
+                if (!mStartRecordingAudio) {
+                    checkMicrophonePermissions();
+                } else {
+                    stopRecording();
                 }
             }
         });
 
-        mThingy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager.isConnected(mDevice)) {
-                    if (!mStartPlayingAudio) {
-                        mStartPlayingAudio = true;
-                        startThingyOverlayAnimation();
-                        mThingySdkManager.enableThingyMicrophone(mDevice, true);
-                    } else {
-                        mThingySdkManager.enableThingyMicrophone(mDevice, false);
-                        stopThingyOverlayAnimation();
-                        mStartPlayingAudio = false;
-                    }
+        mThingy.setOnClickListener(v -> {
+            if (mThingySdkManager.isConnected(mDevice)) {
+                if (!mStartPlayingAudio) {
+                    mStartPlayingAudio = true;
+                    startThingyOverlayAnimation();
+                    mThingySdkManager.enableThingyMicrophone(mDevice, true);
+                } else {
+                    mThingySdkManager.enableThingyMicrophone(mDevice, false);
+                    stopThingyOverlayAnimation();
+                    mStartPlayingAudio = false;
                 }
             }
         });
@@ -393,7 +368,7 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         Intent startAudioRecording = new Intent(getActivity(), ThingyMicrophoneService.class);
         startAudioRecording.setAction(Utils.START_RECORDING);
         startAudioRecording.putExtra(Utils.EXTRA_DEVICE, mDevice);
-        getActivity().startService(startAudioRecording);
+        requireActivity().startService(startAudioRecording);
     }
 
     private void stop() {
@@ -448,13 +423,12 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
     public void onRequestPermissionsResult(final int requestCode,
                                            @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Utils.REQ_PERMISSION_RECORD_AUDIO:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Utils.showToast(getActivity(), getString(R.string.rationale_permission_denied));
-                } else {
-                    startRecording();
-                }
+        if (requestCode == Utils.REQ_PERMISSION_RECORD_AUDIO) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Utils.showToast(getActivity(), getString(R.string.rationale_permission_denied));
+            } else {
+                startRecording();
+            }
         }
     }
 
@@ -529,7 +503,6 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
     }
 
     private class FragmentAdapter extends FragmentPagerAdapter {
-        private int mSelectedFragmentTab = 0;
 
         FragmentAdapter(FragmentManager fm) {
             super(fm);
@@ -560,12 +533,8 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
         }
 
         void setSelectedFragment(final int selectedTab) {
-            mSelectedFragmentTab = selectedTab;
         }
 
-        public int getSelectedFragment() {
-            return mSelectedFragmentTab;
-        }
     }
 
     private static IntentFilter createAudioRecordIntentFilter(final String address) {

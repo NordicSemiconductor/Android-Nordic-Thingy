@@ -39,6 +39,7 @@
 package no.nordicsemi.android.nrfthingy.dfu;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.LoaderManager;
 import android.app.NotificationManager;
@@ -49,7 +50,6 @@ import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
@@ -64,7 +64,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.SpannableString;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -99,7 +98,6 @@ import no.nordicsemi.android.dfu.DfuProgressListener;
 import no.nordicsemi.android.dfu.DfuProgressListenerAdapter;
 import no.nordicsemi.android.dfu.DfuServiceListenerHelper;
 import no.nordicsemi.android.error.SecureDfuError;
-import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.FileBrowserAppsAdapter;
 import no.nordicsemi.android.nrfthingy.common.PermissionRationaleDialogFragment;
@@ -177,7 +175,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private boolean mStartDfu;
     private boolean mIsNordicFw = true;
 
-    private Handler mScanHandler = new Handler();
+    private final Handler mScanHandler = new Handler();
 
     private ThingySdkManager mThingySdkManager;
     private BluetoothDevice mDevice;
@@ -193,7 +191,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     private boolean mReconnectingToDevice;
     private ProgressDialogFragment mProgressDialog;
 
-    private BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mLocationProviderChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final boolean enabled = isLocationEnabled();
@@ -205,9 +203,10 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
     };
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
 
         @Override
+        @SuppressLint("MissingPermission")
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
             if (mStartDfu) {
                 String targetName = mDatabaseHelper.getDeviceName(device.getAddress());
@@ -342,6 +341,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
     };
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -361,32 +361,26 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         mLocationServicesContainer = findViewById(R.id.location_services_container);
         final Button enableLocationServices = findViewById(R.id.enable_location_services);
-        enableLocationServices.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivity(intent);
-            }
+        enableLocationServices.setOnClickListener(v -> {
+            final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
         });
 
         mFabStartStop = findViewById(R.id.dfu_fab);
-        mFabStartStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //if(!mOnDfuCompleted) {
-                if (mIsNordicFw || mFileStreamUri != null) {
-                    if (!mThingySdkManager.isDfuServiceRunning(getBaseContext())) {
-                        resetUi();
-                        mStartDfu = true;
-                        startDfuMode();
-                    } else {
-                        DfuRationaleDialogFragment fragment = DfuRationaleDialogFragment.newInstance();
-                        fragment.show(getSupportFragmentManager(), null);
-                    }
+        mFabStartStop.setOnClickListener(view -> {
+            //if(!mOnDfuCompleted) {
+            if (mIsNordicFw || mFileStreamUri != null) {
+                if (!mThingySdkManager.isDfuServiceRunning(getBaseContext())) {
+                    resetUi();
+                    mStartDfu = true;
+                    startDfuMode();
                 } else {
-                    if (!mIsNordicFw) {
-                        Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
-                    }
+                    DfuRationaleDialogFragment fragment = DfuRationaleDialogFragment.newInstance();
+                    fragment.show(getSupportFragmentManager(), null);
+                }
+            } else {
+                if (!mIsNordicFw) {
+                    Utils.showToast(SecureDfuActivity.this, getString(R.string.dfu_alert_no_file_selected));
                 }
             }
         });
@@ -409,26 +403,20 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mUploadingFwView = findViewById(R.id.dfu_step_three_img);
         mDfuCompletedView = findViewById(R.id.dfu_step_four_img);
 
-        mCustomFirmware.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsNordicFw = false;
-                mCustomFirmware.setSelected(!mIsNordicFw);
-                mNordicFirmware.setSelected(mIsNordicFw);
-                importCustomFirmwareFiles();
-            }
+        mCustomFirmware.setOnClickListener(v -> {
+            mIsNordicFw = false;
+            mCustomFirmware.setSelected(!mIsNordicFw);
+            mNordicFirmware.setSelected(mIsNordicFw);
+            importCustomFirmwareFiles();
         });
 
-        mNordicFirmware.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mIsNordicFw = true;
-                mCustomFirmware.setSelected(!mIsNordicFw);
-                mNordicFirmware.setSelected(mIsNordicFw);
-                mFileName = DfuHelper.getCurrentFwFileName(SecureDfuActivity.this, false);
-                mFileNameView.setText(mFileName);
-                mFileStreamUri = null;
-            }
+        mNordicFirmware.setOnClickListener(v -> {
+            mIsNordicFw = true;
+            mCustomFirmware.setSelected(!mIsNordicFw);
+            mNordicFirmware.setSelected(mIsNordicFw);
+            mFileName = DfuHelper.getCurrentFwFileName(SecureDfuActivity.this, false);
+            mFileNameView.setText(mFileName);
+            mFileStreamUri = null;
         });
 
         if (getIntent().getExtras() != null) {
@@ -603,10 +591,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final int id = item.getItemId();
-        switch (id) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
         }
         return false;
     }
@@ -693,13 +680,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Utils.REQ_PERMISSION_READ_EXTERNAL_STORAGE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Utils.showToast(this, getString(R.string.rationale_permission_denied));
-                } else {
-                    openFileChooser();
-                }
+        if (requestCode == Utils.REQ_PERMISSION_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Utils.showToast(this, getString(R.string.rationale_permission_denied));
+            } else {
+                openFileChooser();
+            }
         }
     }
 
@@ -739,22 +725,14 @@ public class SecureDfuActivity extends AppCompatActivity implements
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);
             new AlertDialog.Builder(this).setTitle(R.string.dfu_alert_no_file_browser_title).setView(customView)
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss()).setPositiveButton(R.string.ok, (dialog, which) -> {
+                        final int pos = appsList.getCheckedItemPosition();
+                        if (pos >= 0) {
+                            final String query = getResources().getStringArray(R.array.dfu_app_file_browser_action)[pos];
+                            final Intent storeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(query));
+                            startActivity(storeIntent);
                         }
-                    }).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(final DialogInterface dialog, final int which) {
-                    final int pos = appsList.getCheckedItemPosition();
-                    if (pos >= 0) {
-                        final String query = getResources().getStringArray(R.array.dfu_app_file_browser_action)[pos];
-                        final Intent storeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(query));
-                        startActivity(storeIntent);
-                    }
-                }
-            }).show();
+                    }).show();
         }
     }
 
@@ -793,12 +771,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
                 showConnectionProgressDialog(getString(R.string.dfu_complete_reconnecting));
                 mReconnectingToDevice = true;
                 Utils.showToast(this, getString(R.string.dfu_complete_reconnecting));
-                mScanHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mThingySdkManager.connectToThingy(getApplicationContext(), device, ThingyService.class);
-                    }
-                }, 5000 /*allowing some time for the thingy to boot up for the app to start reconnecting as Samsung devices seemed to take a long time to reconnect*/);
+                mScanHandler.postDelayed(() -> mThingySdkManager.connectToThingy(getApplicationContext(), device, ThingyService.class), 5000 /*allowing some time for the thingy to boot up for the app to start reconnecting as Samsung devices seemed to take a long time to reconnect*/);
             }
         }
     }
@@ -856,14 +829,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
     }
 
-    final Runnable mBleScannerTimeoutRunnable = new Runnable() {
-        @Override
-        public void run() {
-            stopScan();
-        }
-    };
+    final Runnable mBleScannerTimeoutRunnable = () -> stopScan();
 
-    private ScanCallback scanCallback = new ScanCallback() {
+    private final ScanCallback scanCallback = new ScanCallback() {
 
         @Override
         public void onScanResult(final int callbackType, @NonNull final ScanResult result) {
@@ -874,12 +842,9 @@ public class SecureDfuActivity extends AppCompatActivity implements
         public void onBatchScanResults(final @NonNull List<ScanResult> results) {
             for (final ScanResult result : results) {
                 if (mNewAddress != null && mNewAddress.equals(result.getDevice().getAddress())) {
-                    mScanHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            stopScan();
-                            initiateDfu(result.getDevice(), DfuHelper.CURRENT_FW_FULL_ID);
-                        }
+                    mScanHandler.post(() -> {
+                        stopScan();
+                        initiateDfu(result.getDevice(), DfuHelper.CURRENT_FW_FULL_ID);
                     });
                 }
             }
@@ -1023,28 +988,22 @@ public class SecureDfuActivity extends AppCompatActivity implements
         @Override
         public void onDfuCompleted(@NonNull final String deviceAddress) {
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
-            mScanHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onTransferCompleted(deviceAddress);
-                    // if this activity is still open and upload process was completed, cancel the notification
-                    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.cancel(DfuService.NOTIFICATION_ID);
-                }
+            mScanHandler.postDelayed(() -> {
+                onTransferCompleted(deviceAddress);
+                // if this activity is still open and upload process was completed, cancel the notification
+                final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(DfuService.NOTIFICATION_ID);
             }, 1000); //Increased from 200 to 500 to allow thingy to write all the default settings to nvm
         }
 
         @Override
         public void onDfuAborted(@NonNull final String deviceAddress) {
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    onUploadCanceled(getString(R.string.dfu_status_aborted));
-                    // if this activity is still open and upload procoress was completed, cancel the notification
-                    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.cancel(DfuService.NOTIFICATION_ID);
-                }
+            new Handler().postDelayed(() -> {
+                onUploadCanceled(getString(R.string.dfu_status_aborted));
+                // if this activity is still open and upload procoress was completed, cancel the notification
+                final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(DfuService.NOTIFICATION_ID);
             }, 200);
         }
 
@@ -1088,13 +1047,10 @@ public class SecureDfuActivity extends AppCompatActivity implements
             //final String errorMessage = parseError(error, errorType, message);
             onDfuError(message, error, deviceAddress);
             // We have to wait a bit before canceling notification. This is called before DfuService creates the last notification.
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    // if this activity is still open and upload process was completed, cancel the notification
-                    final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    manager.cancel(DfuService.NOTIFICATION_ID);
-                }
+            new Handler().postDelayed(() -> {
+                // if this activity is still open and upload process was completed, cancel the notification
+                final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.cancel(DfuService.NOTIFICATION_ID);
             }, 200);
         }
     };
@@ -1220,35 +1176,15 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     private void enableEnvironmentNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE)) {
-            mThingySdkManager.enableTemperatureNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableTemperatureNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableTemperatureNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE)) {
-            mThingySdkManager.enablePressureNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enablePressureNotifications(mDevice, false);
-        }
+        mThingySdkManager.enablePressureNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
-            mThingySdkManager.enableHumidityNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableHumidityNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableHumidityNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
-            mThingySdkManager.enableAirQualityNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableAirQualityNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableAirQualityNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_COLOR)) {
-            mThingySdkManager.enableColorNotifications(mDevice, true);
-        } else {
-            mThingySdkManager.enableColorNotifications(mDevice, false);
-        }
+        mThingySdkManager.enableColorNotifications(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_COLOR));
 
         if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON)) {
             mThingySdkManager.enableButtonStateNotification(mDevice, true);
@@ -1259,62 +1195,26 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     private void enableUiNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON)) {
-            mThingySdkManager.enableButtonStateNotification(mDevice, true);
-        } else {
-            mThingySdkManager.enableButtonStateNotification(mDevice, false);
-        }
+        mThingySdkManager.enableButtonStateNotification(mDevice, mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_BUTTON));
     }
 
     private void enableMotionNotifications() {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER)) {
-            enableEulerNotifications(true);
-        } else {
-            enableEulerNotifications(false);
-        }
+        enableEulerNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_EULER));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP)) {
-            enableTapNotifications(true);
-        } else {
-            enableTapNotifications(false);
-        }
+        enableTapNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING)) {
-            enableHeadingNotifications(true);
-        } else {
-            enableHeadingNotifications(false);
-        }
+        enableHeadingNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR)) {
-            enableGravityVectorNotifications(true);
-        } else {
-            enableGravityVectorNotifications(false);
-        }
+        enableGravityVectorNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION)) {
-            enableOrientationNotifications(true);
-        } else {
-            enableOrientationNotifications(false);
-        }
+        enableOrientationNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
-            enableQuaternionNotifications(true);
-        } else {
-            enableQuaternionNotifications(false);
-        }
+        enableQuaternionNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER)) {
-            enablePedometerNotifications(true);
-        } else {
-            enablePedometerNotifications(false);
-        }
+        enablePedometerNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA)) {
-            enableRawdataNotifications(true);
-        } else {
-            enableRawdataNotifications(false);
-        }
+        enableRawdataNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA));
     }
 
     public void enableSoundNotifications(final BluetoothDevice device, final boolean flag) {
@@ -1391,7 +1291,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             mNfcPendingIntent = PendingIntent.getActivity(
-                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);
@@ -1424,8 +1324,6 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
     private void loadFeatureDiscoverySequence() {
         if (!Utils.checkIfSequenceIsCompleted(this, Utils.INITIAL_DFU_TUTORIAL)) {
-
-            final SpannableString desc = new SpannableString(getString(R.string.start_stop_env_sensors));
 
             final TapTargetSequence sequence = new TapTargetSequence(this);
             sequence.continueOnCancel(true);
@@ -1467,12 +1365,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mScanHandler.postDelayed(mProgressDialogRunnable, SCAN_DURATION);
     }
 
-    final Runnable mProgressDialogRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hideProgressDialog();
-        }
-    };
+    final Runnable mProgressDialogRunnable = this::hideProgressDialog;
 
     private void hideProgressDialog() {
         if (mProgressDialog != null) {

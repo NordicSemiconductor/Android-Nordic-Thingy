@@ -46,10 +46,9 @@ import android.content.SharedPreferences;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.configuration.InitialConfigurationActivity;
 
@@ -69,14 +68,11 @@ public class WelcomeActivity extends AppCompatActivity {
             setContentView(R.layout.activity_welcome);
 
             final TextView tv = findViewById(R.id.continue_tv);
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(WelcomeActivity.this, InitialConfigurationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(intent);
-                    finish();
-                }
+            tv.setOnClickListener(v -> {
+                Intent intent = new Intent(WelcomeActivity.this, InitialConfigurationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                finish();
             });
         }
         loadNfcAdapter();
@@ -86,7 +82,7 @@ public class WelcomeActivity extends AppCompatActivity {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter != null) {
             mNfcPendingIntent = PendingIntent.getActivity(
-                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+                    this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
             ndef.addDataScheme("vnd.android.nfc");
             ndef.addDataAuthority("ext", null);

@@ -38,20 +38,14 @@
 
 package no.nordicsemi.android.nrfthingy;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -77,6 +71,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.common.ScannerFragmentListener;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseContract.ThingyDbColumns;
@@ -88,16 +86,12 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class EnvironmentServiceFragment extends Fragment implements ScannerFragmentListener {
 
-    private static final int REQUEST_ENABLE_BT = 1021;
     private TextView mTemperatureView;
     private TextView mPressureView;
     private TextView mHumidityView;
     private TextView mCarbon;
     private TextView mTvoc;
     private TextView mColorView;
-    private TextView mWeatherSettings;
-
-    private ImageView mBlob;
 
     private LineChart mLineChartTemperature;
     private LineChart mLineChartPressure;
@@ -113,11 +107,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
     private boolean mIsFragmentAttached = false;
 
-    private LinkedHashMap<String, Entry> mTemperatureData = new LinkedHashMap<>();
-    private LinkedHashMap<String, Entry> mPressureData = new LinkedHashMap<>();
-    private LinkedHashMap<String, Entry> mHumidityData = new LinkedHashMap<>();
-
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
 
         String mTemperature;
         String mTemperatureTimeStamp;
@@ -155,7 +145,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             if (mIsFragmentAttached) {
                 mTemperatureView.setText(String.format(Locale.US, getString(R.string.celsius), temperature));
                 handleTemperatureGraphUpdates(mLineChartTemperature);
-                addTemperatureEntry(mTemperatureTimeStamp, Float.valueOf(mTemperature));
+                addTemperatureEntry(mTemperatureTimeStamp, Float.parseFloat(mTemperature));
             }
         }
 
@@ -166,7 +156,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             if (mIsFragmentAttached) {
                 mPressureView.setText(getString(R.string.hecto_pascal, mPressure));
                 handleTemperatureGraphUpdates(mLineChartPressure);
-                addPressureEntry(mPressureTimeStamp, Float.valueOf(mPressure));
+                addPressureEntry(mPressureTimeStamp, Float.parseFloat(mPressure));
             }
         }
 
@@ -314,9 +304,9 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         mCarbon = rootView.findViewById(R.id.carbon);
         mTvoc = rootView.findViewById(R.id.tvoc);
         mColorView = rootView.findViewById(R.id.color);
-        mWeatherSettings = rootView.findViewById(R.id.weather_settings);
+        TextView mWeatherSettings = rootView.findViewById(R.id.weather_settings);
 
-        mBlob = rootView.findViewById(R.id.blob);
+        ImageView mBlob = rootView.findViewById(R.id.blob);
         mShape = (GradientDrawable) mBlob.getDrawable();
 
         mLineChartTemperature = rootView.findViewById(R.id.line_chart_temperature);
@@ -334,99 +324,86 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
                 updateEnvironmentCardViewOptionsMenu(toolbarEnvironment.getMenu());
             }
 
-            toolbarEnvironment.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    final int id = item.getItemId();
-                    switch (id) {
-                        case R.id.action_about:
-                            final EnvironmentServiceInfoDialogFragment info = EnvironmentServiceInfoDialogFragment.newInstance();
-                            info.show(getChildFragmentManager(), null);
-                            break;
-                        case R.id.action_temperature_notifications:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE);
-                                mThingySdkManager.enableTemperatureNotifications(mDevice, item.isChecked());
-                                mTemperatureView.setText(R.string.disabled);
-                            } else {
-                                item.setChecked(true);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE);
-                                mThingySdkManager.enableTemperatureNotifications(mDevice, item.isChecked());
-                                mTemperatureView.setText("");
-                            }
-                            break;
-                        case R.id.action_pressure_notifications:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE);
-                                mThingySdkManager.enablePressureNotifications(mDevice, item.isChecked());
-                                mPressureView.setText(R.string.disabled);
-                            } else {
-                                item.setChecked(true);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE);
-                                mThingySdkManager.enablePressureNotifications(mDevice, item.isChecked());
-                                mPressureView.setText("");
-                            }
-                            break;
-                        case R.id.action_humidity_notifications:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY);
-                                mThingySdkManager.enableHumidityNotifications(mDevice, item.isChecked());
-                                mHumidityView.setText(R.string.disabled);
-                            } else {
-                                item.setChecked(true);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY);
-                                mThingySdkManager.enableHumidityNotifications(mDevice, item.isChecked());
-                                mHumidityView.setText("");
-                            }
-                            break;
-                        case R.id.action_air_quality_notifications:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY);
-                                mThingySdkManager.enableAirQualityNotifications(mDevice, item.isChecked());
-                                mCarbon.setText(R.string.disabled);
-                                mTvoc.setText(R.string.disabled);
-                            } else {
-                                item.setChecked(true);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY);
-                                mThingySdkManager.enableAirQualityNotifications(mDevice, item.isChecked());
-                                mCarbon.setText("");
-                                mTvoc.setText("");
-                            }
-                            break;
-                        case R.id.action_color_notifications:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_COLOR);
-                                mThingySdkManager.enableColorNotifications(mDevice, item.isChecked());
-                                mColorView.setText(R.string.disabled);
-                            } else {
-                                item.setChecked(true);
-                                mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_COLOR);
-                                mThingySdkManager.enableColorNotifications(mDevice, item.isChecked());
-                                mColorView.setText("");
-                            }
-                            break;
+            toolbarEnvironment.setOnMenuItemClickListener(item -> {
+                final int id = item.getItemId();
+                if (id == R.id.action_about) {
+                    final EnvironmentServiceInfoDialogFragment info = EnvironmentServiceInfoDialogFragment.newInstance();
+                    info.show(getChildFragmentManager(), null);
+                } else if (id == R.id.action_temperature_notifications) {
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE);
+                        mThingySdkManager.enableTemperatureNotifications(mDevice, item.isChecked());
+                        mTemperatureView.setText(R.string.disabled);
+                    } else {
+                        item.setChecked(true);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE);
+                        mThingySdkManager.enableTemperatureNotifications(mDevice, item.isChecked());
+                        mTemperatureView.setText("");
                     }
-                    return true;
+                } else if (id == R.id.action_pressure_notifications) {
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE);
+                        mThingySdkManager.enablePressureNotifications(mDevice, item.isChecked());
+                        mPressureView.setText(R.string.disabled);
+                    } else {
+                        item.setChecked(true);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE);
+                        mThingySdkManager.enablePressureNotifications(mDevice, item.isChecked());
+                        mPressureView.setText("");
+                    }
+                } else if (id == R.id.action_humidity_notifications) {
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY);
+                        mThingySdkManager.enableHumidityNotifications(mDevice, item.isChecked());
+                        mHumidityView.setText(R.string.disabled);
+                    } else {
+                        item.setChecked(true);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY);
+                        mThingySdkManager.enableHumidityNotifications(mDevice, item.isChecked());
+                        mHumidityView.setText("");
+                    }
+                } else if (id == R.id.action_air_quality_notifications) {
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY);
+                        mThingySdkManager.enableAirQualityNotifications(mDevice, item.isChecked());
+                        mCarbon.setText(R.string.disabled);
+                        mTvoc.setText(R.string.disabled);
+                    } else {
+                        item.setChecked(true);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY);
+                        mThingySdkManager.enableAirQualityNotifications(mDevice, item.isChecked());
+                        mCarbon.setText("");
+                        mTvoc.setText("");
+                    }
+                } else if (id == R.id.action_color_notifications) {
+                    if (item.isChecked()) {
+                        item.setChecked(false);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_COLOR);
+                        mThingySdkManager.enableColorNotifications(mDevice, item.isChecked());
+                        mColorView.setText(R.string.disabled);
+                    } else {
+                        item.setChecked(true);
+                        mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), item.isChecked(), ThingyDbColumns.COLUMN_NOTIFICATION_COLOR);
+                        mThingySdkManager.enableColorNotifications(mDevice, item.isChecked());
+                        mColorView.setText("");
+                    }
                 }
+                return true;
             });
         }
 
-        mWeatherSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mDevice != null) {
-                    if (mThingySdkManager.isConnected(mDevice)) {
-                        EnvironmentServiceSettingsFragment fragment = EnvironmentServiceSettingsFragment.newInstance(mDevice);
-                        fragment.show(getChildFragmentManager(), null);
-                    } else {
-                        final String name = mDatabaseHelper.getDeviceName(mDevice.getAddress());
-                        Utils.showToast(getActivity(), getString(R.string.no_thingy_connected_configuration, name));
-                    }
+        mWeatherSettings.setOnClickListener(v -> {
+            if (mDevice != null) {
+                if (mThingySdkManager.isConnected(mDevice)) {
+                    EnvironmentServiceSettingsFragment fragment = EnvironmentServiceSettingsFragment.newInstance(mDevice);
+                    fragment.show(getChildFragmentManager(), null);
+                } else {
+                    final String name = mDatabaseHelper.getDeviceName(mDevice.getAddress());
+                    Utils.showToast(getActivity(), getString(R.string.no_thingy_connected_configuration, name));
                 }
             }
         });
@@ -453,7 +430,7 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         if (context instanceof EnvironmentServiceListener) {
             mListener = (EnvironmentServiceListener) context;
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(context
                     + " must implement CloudFragmentListener");
         }
     }
@@ -520,35 +497,15 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
 
     private void updateEnvironmentCardViewOptionsMenu(final Menu environmentStatusMenu) {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE)) {
-            environmentStatusMenu.findItem(R.id.action_temperature_notifications).setChecked(true);
-        } else {
-            environmentStatusMenu.findItem(R.id.action_temperature_notifications).setChecked(false);
-        }
+        environmentStatusMenu.findItem(R.id.action_temperature_notifications).setChecked(mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_TEMPERATURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE)) {
-            environmentStatusMenu.findItem(R.id.action_pressure_notifications).setChecked(true);
-        } else {
-            environmentStatusMenu.findItem(R.id.action_pressure_notifications).setChecked(false);
-        }
+        environmentStatusMenu.findItem(R.id.action_pressure_notifications).setChecked(mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_PRESSURE));
 
-        if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY)) {
-            environmentStatusMenu.findItem(R.id.action_humidity_notifications).setChecked(true);
-        } else {
-            environmentStatusMenu.findItem(R.id.action_humidity_notifications).setChecked(false);
-        }
+        environmentStatusMenu.findItem(R.id.action_humidity_notifications).setChecked(mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_HUMIDITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY)) {
-            environmentStatusMenu.findItem(R.id.action_air_quality_notifications).setChecked(true);
-        } else {
-            environmentStatusMenu.findItem(R.id.action_air_quality_notifications).setChecked(false);
-        }
+        environmentStatusMenu.findItem(R.id.action_air_quality_notifications).setChecked(mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_AIR_QUALITY));
 
-        if (mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_COLOR)) {
-            environmentStatusMenu.findItem(R.id.action_color_notifications).setChecked(true);
-        } else {
-            environmentStatusMenu.findItem(R.id.action_color_notifications).setChecked(false);
-        }
+        environmentStatusMenu.findItem(R.id.action_color_notifications).setChecked(mDatabaseHelper.getNotificationsState(address, ThingyDbColumns.COLUMN_NOTIFICATION_COLOR));
     }
 
     private void prepareTemperatureGraph() {
@@ -628,7 +585,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             }
             timeStamps.clear();
             temperatureData.clear();
-            mTemperatureData.clear();
         }
     }
 
@@ -757,7 +713,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             }
             timeStamps.clear();
             pressureData.clear();
-            mPressureData.clear();
         }
     }
 
@@ -863,7 +818,6 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
             }
             timeStamps.clear();
             humidityData.clear();
-            mHumidityData.clear();
         }
     }
 
@@ -896,8 +850,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    class TemperatureYValueFormatter implements YAxisValueFormatter {
-        private DecimalFormat mFormat;
+    static class TemperatureYValueFormatter implements YAxisValueFormatter {
+        private final DecimalFormat mFormat;
 
         TemperatureYValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
@@ -909,8 +863,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    class TemperatureChartValueFormatter implements ValueFormatter {
-        private DecimalFormat mFormat;
+    static class TemperatureChartValueFormatter implements ValueFormatter {
+        private final DecimalFormat mFormat;
 
         TemperatureChartValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
@@ -922,8 +876,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    class PressureChartYValueFormatter implements YAxisValueFormatter {
-        private DecimalFormat mFormat;
+    static class PressureChartYValueFormatter implements YAxisValueFormatter {
+        private final DecimalFormat mFormat;
 
         PressureChartYValueFormatter() {
             mFormat = new DecimalFormat("###,##0.00");
@@ -935,8 +889,8 @@ public class EnvironmentServiceFragment extends Fragment implements ScannerFragm
         }
     }
 
-    class HumidityChartValueFormatter implements ValueFormatter {
-        private DecimalFormat mFormat;
+    static class HumidityChartValueFormatter implements ValueFormatter {
+        private final DecimalFormat mFormat;
 
         HumidityChartValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0");

@@ -109,7 +109,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
     private ThingySdkManager mThingySdkManager;
 
     private DatabaseHelper mDatabaseHelper;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
 
     private final CloudTask.CloudTaskCallbacks cloudTaskCallbacks = new CloudTask.CloudTaskCallbacks() {
         @Override
@@ -145,7 +145,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         }
     };
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
         private long mButtonPressedTime;
         private long mButtonReleasedTime;
 
@@ -320,15 +320,12 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 final int id = item.getItemId();
-                switch (id) {
-                    case R.id.action_info:
-                        Intent intent = new Intent(getActivity(), CloudGuideActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.action_ifttt_token:
-                        IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
-                        ifttTokenDialogFragment.show(getChildFragmentManager(), null);
-                        break;
+                if (id == R.id.action_info) {
+                    Intent intent = new Intent(getActivity(), CloudGuideActivity.class);
+                    startActivity(intent);
+                } else if (id == R.id.action_ifttt_token) {
+                    IFTTTokenDialogFragment ifttTokenDialogFragment = IFTTTokenDialogFragment.newInstance();
+                    ifttTokenDialogFragment.show(getChildFragmentManager(), null);
                 }
                 return false;
             }
@@ -630,13 +627,6 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
 
                 final String message = urlConnection.getResponseMessage();
                 callbacks.onDownloadCompleted(message.getBytes().length);
-                /*mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mDownloadedSize += message.getBytes().length;
-                        mDownloadedView.setText(Utils.humanReadableByteCount(mDownloadedSize, true));
-                    }
-                });*/
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -653,16 +643,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
                 outputStream.write(jsonData.getBytes());
                 outputStream.flush();
                 callbacks.onUploadCompleted(jsonData.getBytes().length);
-
-                /*mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mUploadedSize += jsonData.getBytes().length;
-                        mUploadedView.setText(Utils.humanReadableByteCount(mUploadedSize, true));
-                    }
-                });*/
             } catch (IOException e) {
-
                 e.printStackTrace();
             } finally {
                 try {
@@ -676,7 +657,7 @@ public class CloudFragment extends Fragment implements IFTTTokenDialogFragment.I
         private void readStream(final InputStream inputStream) {
             BufferedReader br = null;
             try {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 br = new BufferedReader(new InputStreamReader(inputStream));
                 String inputLine;
                 while ((inputLine = br.readLine()) != null) {

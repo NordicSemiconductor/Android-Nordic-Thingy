@@ -39,13 +39,12 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 public class EnvironmentServiceInfoDialogFragment extends DialogFragment {
 
@@ -58,13 +57,8 @@ public class EnvironmentServiceInfoDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.environment_service_info));
-        final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_environment_service_info, null);
-        alertDialogBuilder.setView(rootView).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        });
+        final View rootView = getLayoutInflater().inflate(R.layout.fragment_dialog_environment_service_info, null);
+        alertDialogBuilder.setView(rootView).setPositiveButton(getString(R.string.ok), (dialog, which) -> dismiss());
         return alertDialogBuilder.create();
     }
 }
