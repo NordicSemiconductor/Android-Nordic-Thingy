@@ -1,8 +1,10 @@
 *.iml
-/local.properties
 .gradle
 .idea
+/local.properties
+.DS_Store
 /build
 /captures
-libs/
-app/LICENSE.txt
+.externalNativeBuild
+.cxx
+local.properties
