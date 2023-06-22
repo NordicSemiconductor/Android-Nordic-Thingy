@@ -42,6 +42,7 @@
     <string name="rationale_message_contacts">Please grant permission access to device\'s contacts. This allows the app to retrieve the primary account in order to register with the proximity API.</string>
     <string name="rationale_message_bluetooth_scan">Since Android 12.0 R system requires granting Bluetooth Scan permission in order to scan for Bluetooth Low Energy devices.</string>
     <string name="rationale_message_bluetooth_connect">Since Android 12.0 R system requires granting Bluetooth Connect permission in order to connect to Bluetooth Low Energy devices.</string>
+    <string name="rationale_message_post_notifications">Since Android 13.0 S system requires granting Post Notifications permission in order to display notifications.</string>
     <string name="rationale_request">Proceed</string>
     <string name="rationale_cancel">Cancel</string>
     <string name="rationale_permission_denied">Permission denied.</string>

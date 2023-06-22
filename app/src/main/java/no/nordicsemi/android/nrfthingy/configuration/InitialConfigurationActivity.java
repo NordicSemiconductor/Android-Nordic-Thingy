@@ -120,6 +120,7 @@ import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_L
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_CONNECT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_SCAN;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ENABLE_BT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQ_PERMISSION_POST_NOTIFICATIONS;
 import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
@@ -382,9 +383,9 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         mStepTwo.setOnClickListener(v -> animateOnStepTwoComplete());
 
         mConfirmThingy.setOnClickListener(v -> {
-            if(Utils.checkIfVersionIsSandAbove()){
+            if (Utils.checkIfVersionIsSandAbove()) {
                 if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
-                    if(ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                         onPermissionGranted();
                     } else {
                         final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
@@ -509,7 +510,12 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
         if (!isLocationEnabled()) {
             mLocationServicesContainer.setVisibility(View.VISIBLE);
         }
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.POST_NOTIFICATIONS, REQ_PERMISSION_POST_NOTIFICATIONS, getString(R.string.rationale_message_post_notifications));
+                dialog.show(getSupportFragmentManager(), null);
+            }
+        }
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
         registerReceiver(mBleStateChangedReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
@@ -1003,7 +1009,7 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     }
 
     private void prepareForScanning(final String address) {
-        if(checkIfVersionIsSandAbove()){
+        if (checkIfVersionIsSandAbove()) {
             if (ActivityCompat.checkSelfPermission(InitialConfigurationActivity.this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
                 handleStartScan(address);
             } else {

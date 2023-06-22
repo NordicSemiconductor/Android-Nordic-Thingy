@@ -141,6 +141,8 @@ public class Utils {
     public static final int REQ_PERMISSION_READ_EXTERNAL_STORAGE = 1026;
     public static final int REQ_PERMISSION_RECORD_AUDIO = 1027;
 
+    public static final int REQ_PERMISSION_POST_NOTIFICATIONS = 1028;
+
     //DFU Constants
     public static final String NORDIC_FW = "NORDIC_FW";
     public static final String DFU_RECONNECTING = "DFU_RECONNECTING";

@@ -147,6 +147,7 @@ import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_L
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_CONNECT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_SCAN;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ENABLE_BT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQ_PERMISSION_POST_NOTIFICATIONS;
 import static no.nordicsemi.android.nrfthingy.common.Utils.SOUND_FRAGMENT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.UI_FRAGMENT;
@@ -523,6 +524,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mLocationServicesContainer.setVisibility(View.VISIBLE);
         } else {
             mLocationServicesContainer.setVisibility(View.GONE);
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.POST_NOTIFICATIONS, REQ_PERMISSION_POST_NOTIFICATIONS, getString(R.string.rationale_message_post_notifications));
+                dialog.show(getSupportFragmentManager(), null);
+            }
         }
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
@@ -931,6 +938,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * Tries to start Bluetooth adapter.
      */
+    @SuppressLint("MissingPermission")
     private void enableBle() {
         if (checkIfRequiredPermissionsGranted()) {
             final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
