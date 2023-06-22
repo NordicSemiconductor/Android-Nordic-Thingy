@@ -38,6 +38,7 @@
 
 package no.nordicsemi.android.thingylib;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -123,7 +124,6 @@ public class ThingyConnection extends BluetoothGattCallback {
     private BluetoothGatt mBluetoothGatt;
 
     private boolean isConnected = false;
-    private String mDeviceName;
 
     private int mAdvertisingIntervalUnits = -1;
     private int mAdvertisingIntervalTimeoutUnits = -1;
@@ -226,6 +226,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     }
 
     @Override
+    @SuppressLint("MissingPermission")
     public final void onConnectionStateChange(final BluetoothGatt gatt, int status, int newState) {
         if (status != BluetoothGatt.GATT_SUCCESS) {
             Log.v(TAG, "Error " + status + " : " + gatt.getDevice().getAddress());
@@ -682,6 +683,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      *
      * @param device Bluetooth device to connect to
      */
+    @SuppressLint("MissingPermission")
     private void connect(final BluetoothDevice device) {
         mBluetoothGatt = device.connectGatt(mContext, false, this);
     }
@@ -689,6 +691,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Disconnects from a particular thingy
      */
+    @SuppressLint("MissingPermission")
     public final void disconnect() {
         if (mBluetoothGatt != null) {
             mBluetoothGatt.disconnect();
@@ -702,6 +705,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * @param characteristic of which the notifications to be enabled
      * @param value          notification value
      */
+    @SuppressLint("MissingPermission")
     private void enableNotifications(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, final byte[] value) {
         final int notificationValue = value[0]; //Checking if notifications are enabled
         switch (notificationValue) {
@@ -1000,7 +1004,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     /*package access*/
     final String readDeviceName() {
         if (mDeviceNameCharacteristic != null) {
-            return mDeviceName = mDeviceNameCharacteristic.getStringValue(0);
+            return mDeviceNameCharacteristic.getStringValue(0);
         }
 
         return null;
@@ -2724,6 +2728,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     /**
      * Requests the mtu to be changed to the desired max transmission unit
      */
+    @SuppressLint("MissingPermission")
     public void requestMtu() {
         mMtuHandler.postDelayed(new Runnable() {
             @Override
@@ -3000,6 +3005,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             this.writeType = 0;
         }
 
+        @SuppressLint("MissingPermission")
         void start(BluetoothGatt bluetoothGatt) {
             switch (requestType) {
                 case READ_CHARACTERISTIC:

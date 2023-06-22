@@ -42,18 +42,18 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -107,7 +107,7 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.connection_parameters_title));
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_conn_params, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_conn_params, null);
 
         mMinConnectionIntervalLayout = view.findViewById(R.id.layout_min_connection_params);
         mMaxConnectionIntervalLayout = view.findViewById(R.id.layout_max_connection_params);
@@ -267,29 +267,21 @@ public class ConnParamCharConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput() && mThingySdkManager != null) {
-                    final int minConnInterval = Integer.parseInt(mMinConnectionIntervalView.getText().toString().trim());
-                    final int maxConnInterval = Integer.parseInt(mMaxConnectionIntervalView.getText().toString().trim());
-                    final int slaveLatency = Integer.parseInt(mSlaveLatencyView.getText().toString().trim());
-                    final int supervisionTimeout = Integer.parseInt(mSupervisionTimeoutView.getText().toString().trim());
-                    if (mThingySdkManager.setConnectionParameters(mDevice, minConnInterval, maxConnInterval, slaveLatency, supervisionTimeout)) {
-                        dismiss();
-                    } else {
-                        ThingyUtils.showToast(getActivity(), getString(R.string.error_configuring_char));
-                    }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput() && mThingySdkManager != null) {
+                final int minConnInterval = Integer.parseInt(mMinConnectionIntervalView.getText().toString().trim());
+                final int maxConnInterval = Integer.parseInt(mMaxConnectionIntervalView.getText().toString().trim());
+                final int slaveLatency = Integer.parseInt(mSlaveLatencyView.getText().toString().trim());
+                final int supervisionTimeout = Integer.parseInt(mSupervisionTimeoutView.getText().toString().trim());
+                if (mThingySdkManager.setConnectionParameters(mDevice, minConnInterval, maxConnInterval, slaveLatency, supervisionTimeout)) {
+                    dismiss();
+                } else {
+                    ThingyUtils.showToast(getActivity(), getString(R.string.error_configuring_char));
                 }
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> dismiss());
 
         return alertDialog;
     }

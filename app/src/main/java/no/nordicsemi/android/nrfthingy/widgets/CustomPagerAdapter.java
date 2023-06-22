@@ -39,24 +39,19 @@
 package no.nordicsemi.android.nrfthingy.widgets;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.viewpager.widget.PagerAdapter;
-
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import androidx.annotation.NonNull;
+import androidx.viewpager.widget.PagerAdapter;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class CustomPagerAdapter extends PagerAdapter {
-    private Context mContext;
-    private SparseArray<View> viewMap = new SparseArray<>();
+    private final Context mContext;
+    private final SparseArray<View> viewMap = new SparseArray<>();
 
     public CustomPagerAdapter(@NonNull final Context context) {
         mContext = context;
@@ -99,9 +94,7 @@ public class CustomPagerAdapter extends PagerAdapter {
     }
 
     public void clearViews() {
-        if (viewMap != null) {
-            viewMap.clear();
-        }
+        viewMap.clear();
     }
 
     public enum CustomPagerEnum {
@@ -112,8 +105,8 @@ public class CustomPagerAdapter extends PagerAdapter {
         CLOUD_STEP_5(R.string.access_key_to_thingy, R.layout.cloud_step4),
         CLOUD_STEP_6(R.string.enable_cloud_features, R.layout.cloud_step5);
 
-        private int mTitleResId;
-        private int mLayoutResId;
+        private final int mTitleResId;
+        private final int mLayoutResId;
 
         CustomPagerEnum(final int titleResId, final int layoutResId) {
             mTitleResId = titleResId;

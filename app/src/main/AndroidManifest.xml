@@ -94,6 +94,8 @@
                   android:required="false" />
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"

@@ -42,17 +42,17 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
@@ -97,7 +97,7 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.thingy_name_title));
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_thingy_name, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_thingy_name, null);
 
 
         alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
@@ -128,17 +128,14 @@ public class ThingyNameConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    if (mThingySdkManager != null) {
-                        final String name = getValueFromView();
-                        mThingySdkManager.setDeviceName(mDevice, name);
-                        mDatabaseHelper.updateDeviceName(mDevice.getAddress(), name);
-                        dismiss();
-                        ((ThingyBasicSettingsChangeListener) getParentFragment()).updateThingyName();
-                    }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput()) {
+                if (mThingySdkManager != null) {
+                    final String name = getValueFromView();
+                    mThingySdkManager.setDeviceName(mDevice, name);
+                    mDatabaseHelper.updateDeviceName(mDevice.getAddress(), name);
+                    dismiss();
+                    ((ThingyBasicSettingsChangeListener) getParentFragment()).updateThingyName();
                 }
             }
         });

@@ -41,15 +41,15 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -106,68 +106,53 @@ public class BasicConfigurationFragment extends Fragment implements ThingyBasicS
         final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());
 
-        name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    ThingyNameConfigurationDialogFragment fragment = ThingyNameConfigurationDialogFragment.newInstance(mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        name.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                ThingyNameConfigurationDialogFragment fragment = ThingyNameConfigurationDialogFragment.newInstance(mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        advParams.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    AdvParamCharConfigurationDialogFragment fragment = AdvParamCharConfigurationDialogFragment.newInstance(mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        advParams.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                AdvParamCharConfigurationDialogFragment fragment = AdvParamCharConfigurationDialogFragment.newInstance(mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        connectionParams.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    ConnParamCharConfigurationDialogFragment fragment = ConnParamCharConfigurationDialogFragment.newInstance(mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        connectionParams.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                ConnParamCharConfigurationDialogFragment fragment = ConnParamCharConfigurationDialogFragment.newInstance(mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        eddystoneUrl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    EddystoneUrlConfigurationDialogFragment fragment = EddystoneUrlConfigurationDialogFragment.newInstance(mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        eddystoneUrl.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                EddystoneUrlConfigurationDialogFragment fragment = EddystoneUrlConfigurationDialogFragment.newInstance(mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        firmwareVersion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    FirmwareVersionDialogFragment fragment = FirmwareVersionDialogFragment.newInstance(mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        firmwareVersion.setOnClickListener(view -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                FirmwareVersionDialogFragment fragment = FirmwareVersionDialogFragment.newInstance(mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 

@@ -303,11 +303,7 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
 
             @Override
             public void onPageSelected(final int position) {
-                if (position == 1) {
-                    mFragmentAdapter.setSelectedFragment(position);
-                } else {
-                    mFragmentAdapter.setSelectedFragment(position);
-                }
+                mFragmentAdapter.setSelectedFragment();
             }
 
             @Override
@@ -532,7 +528,7 @@ public class SoundFragment extends Fragment implements PermissionRationaleDialog
             return getResources().getStringArray(R.array.sound_tab_title)[position];
         }
 
-        void setSelectedFragment(final int selectedTab) {
+        void setSelectedFragment() {
         }
 
     }

@@ -121,8 +121,11 @@ import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_COARSE_LOCATION;
 import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_ACCESS_FINE_LOCATION;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_CONNECT;
+import static no.nordicsemi.android.nrfthingy.common.Utils.REQUEST_BLUETOOTH_SCAN;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsSandAbove;
 
 public class SecureDfuActivity extends AppCompatActivity implements
         ThingySdkManager.ServiceConnectionListener,
@@ -405,15 +408,15 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         mCustomFirmware.setOnClickListener(v -> {
             mIsNordicFw = false;
-            mCustomFirmware.setSelected(!mIsNordicFw);
-            mNordicFirmware.setSelected(mIsNordicFw);
+            mCustomFirmware.setSelected(false);
+            mNordicFirmware.setSelected(true);
             importCustomFirmwareFiles();
         });
 
         mNordicFirmware.setOnClickListener(v -> {
             mIsNordicFw = true;
-            mCustomFirmware.setSelected(!mIsNordicFw);
-            mNordicFirmware.setSelected(mIsNordicFw);
+            mCustomFirmware.setSelected(false);
+            mNordicFirmware.setSelected(true);
             mFileName = DfuHelper.getCurrentFwFileName(SecureDfuActivity.this, false);
             mFileNameView.setText(mFileName);
             mFileStreamUri = null;
@@ -619,8 +622,8 @@ public class SecureDfuActivity extends AppCompatActivity implements
             case Utils.SELECT_FILE_REQ: {
                 if (resultCode == RESULT_CANCELED) {
                     mIsNordicFw = true;
-                    mCustomFirmware.setSelected(!mIsNordicFw);
-                    mNordicFirmware.setSelected(mIsNordicFw);
+                    mCustomFirmware.setSelected(false);
+                    mNordicFirmware.setSelected(true);
                     break;
                 }
                 // clear previous data
@@ -701,9 +704,12 @@ public class SecureDfuActivity extends AppCompatActivity implements
     /**
      * Tries to start Bluetooth adapter.
      */
+    @SuppressLint("MissingPermission")
     private void enableBle() {
-        final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(enableIntent, Utils.REQUEST_ENABLE_BT);
+        if (checkIfRequiredPermissionsGranted()) {
+            final Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableIntent, Utils.REQUEST_ENABLE_BT);
+        }
     }
 
     private void importCustomFirmwareFiles() {
@@ -777,7 +783,21 @@ public class SecureDfuActivity extends AppCompatActivity implements
     }
 
     private boolean checkIfRequiredPermissionsGranted() {
-        if (checkIfVersionIsQ()) {
+        if (checkIfVersionIsSandAbove()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    return true;
+                } else {
+                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+                    dialog.show(getSupportFragmentManager(), null);
+                    return false;
+                }
+            } else {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
+                dialog.show(getSupportFragmentManager(), null);
+                return false;
+            }
+        } else if (checkIfVersionIsQ()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 return true;
             } else {
@@ -829,7 +849,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         }
     }
 
-    final Runnable mBleScannerTimeoutRunnable = () -> stopScan();
+    final Runnable mBleScannerTimeoutRunnable = this::stopScan;
 
     private final ScanCallback scanCallback = new ScanCallback() {
 
@@ -899,15 +919,22 @@ public class SecureDfuActivity extends AppCompatActivity implements
             if (!TextUtils.isEmpty(filePath)) {
                 mFilePath = filePath;
             }
-            final String fileName = data.getString(data.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME));
-            if (!fileName.isEmpty()) {
-                mFileName = fileName;
-                mFileNameView.setText(mFileName);
+            dataIndex = data.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME);
+            if(dataIndex != -1) {
+                final String fileName = data.getString(dataIndex);
+                if (!fileName.isEmpty()) {
+                    mFileName = fileName;
+                    mFileNameView.setText(mFileName);
+                }
+
             }
-            final String size = data.getString(data.getColumnIndex(MediaStore.Files.FileColumns.SIZE));
-            if (!size.isEmpty()) {
-                mFileSize = Utils.humanReadableByteCount(Long.parseLong(size), true);
-                mFileSizeView.setText(mFileSize);
+            dataIndex = data.getColumnIndex(MediaStore.Files.FileColumns.SIZE);
+            if(dataIndex != -1){
+                final String size = data.getString(dataIndex);
+                if (!size.isEmpty()) {
+                    mFileSize = Utils.humanReadableByteCount(Long.parseLong(size), true);
+                    mFileSizeView.setText(mFileSize);
+                }
             }
         }
     }
@@ -1001,7 +1028,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
             // let's wait a bit until we cancel the notification. When canceled immediately it will be recreated by service again.
             new Handler().postDelayed(() -> {
                 onUploadCanceled(getString(R.string.dfu_status_aborted));
-                // if this activity is still open and upload procoress was completed, cancel the notification
+                // if this activity is still open and upload process was completed, cancel the notification
                 final NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 manager.cancel(DfuService.NOTIFICATION_ID);
             }, 200);
@@ -1214,7 +1241,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
 
         enablePedometerNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER));
 
-        enableRawdataNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA));
+        enableRawDataNotifications(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA));
     }
 
     public void enableSoundNotifications(final BluetoothDevice device, final boolean flag) {
@@ -1253,7 +1280,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), flag, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR);
     }
 
-    public void enableRawdataNotifications(final boolean flag) {
+    public void enableRawDataNotifications(final boolean flag) {
         mThingySdkManager.enableRawDataNotifications(mDevice, flag);
         mDatabaseHelper.updateNotificationsState(mDevice.getAddress(), flag, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_RAW_DATA);
     }
@@ -1272,7 +1299,7 @@ public class SecureDfuActivity extends AppCompatActivity implements
     /**
      * Since Marshmallow location services must be enabled in order to scan.
      *
-     * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmellow.
+     * @return true on Android 6.0+ if location mode is different than LOCATION_MODE_OFF. It always returns true on Android versions prior to Marshmallow.
      */
     public boolean isLocationEnabled() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

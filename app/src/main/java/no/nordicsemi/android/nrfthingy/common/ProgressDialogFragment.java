@@ -41,13 +41,12 @@ package no.nordicsemi.android.nrfthingy.common;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class ProgressDialogFragment extends DialogFragment {
@@ -75,7 +74,7 @@ public class ProgressDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.progress_layout, null);
+        final View view = getLayoutInflater().inflate(R.layout.progress_layout, null);
         mSummary = view.findViewById(R.id.progress_bar_summary);
         mSummary.setText(mMessage);
         if (savedInstanceState != null) {

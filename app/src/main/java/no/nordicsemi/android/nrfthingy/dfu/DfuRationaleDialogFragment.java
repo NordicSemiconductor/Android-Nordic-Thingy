@@ -40,13 +40,12 @@ package no.nordicsemi.android.nrfthingy.dfu;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
-
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class DfuRationaleDialogFragment extends DialogFragment {
@@ -73,12 +72,7 @@ public class DfuRationaleDialogFragment extends DialogFragment {
                 .setView(R.layout.fragment_dialog_dfu_rationale)
                 .setTitle(R.string.dfu_title)
                 .setCancelable(false)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        mListener.onDfuAborted();
-                    }
-                })
+                .setPositiveButton(R.string.confirm, (dialog, which) -> mListener.onDfuAborted())
                 .setNegativeButton(R.string.cancel, null)
                 .create();
     }

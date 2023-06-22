@@ -39,9 +39,6 @@
 package no.nordicsemi.android.nrfthingy.widgets;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,16 +49,16 @@ import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecyclerAdapter.CustomViewHolder> {
-    private ArrayList<File> mAudioFileList;
-    private ArrayList<String> mAudioFileDisplayNameList;
+    private final ArrayList<File> mAudioFileList;
+    private final ArrayList<String> mAudioFileDisplayNameList;
     private final LayoutInflater inflater;
     private RadioButton lastCheckedRadioButton;
     private int mSelectedItemPosition = -1;
-    private int selectedItemPosition;
-    private boolean mOnClickEnabled = true;
 
     public AudioFileRecyclerAdapter(final Context context) {
         this.inflater = LayoutInflater.from(context);
@@ -92,18 +89,14 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
             lastCheckedRadioButton = customViewHolder.audioRadioButton;
         }
 
-        customViewHolder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mOnClickEnabled) {
-                    mSelectedItemPosition = position;
-                    customViewHolder.audioRadioButton.setChecked(true);
-                    if (lastCheckedRadioButton != null && lastCheckedRadioButton != customViewHolder.audioRadioButton) {
-                        lastCheckedRadioButton.setChecked(false);
-                    }
-                    lastCheckedRadioButton = customViewHolder.audioRadioButton;
-                }
+        customViewHolder.relativeLayout.setOnClickListener(v -> {
+
+            mSelectedItemPosition = position;
+            customViewHolder.audioRadioButton.setChecked(true);
+            if (lastCheckedRadioButton != null && lastCheckedRadioButton != customViewHolder.audioRadioButton) {
+                lastCheckedRadioButton.setChecked(false);
             }
+            lastCheckedRadioButton = customViewHolder.audioRadioButton;
         });
     }
 
@@ -125,27 +118,6 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         return false;
     }
 
-    public boolean addFiles(final File audioFile, final String mediaDisplayName) {
-        if (!mAudioFileDisplayNameList.contains(mediaDisplayName)) {
-            mAudioFileList.add(audioFile);
-            mAudioFileDisplayNameList.add(mediaDisplayName);
-            return true;
-        }
-        return false;
-    }
-
-    private void setSelection(CustomViewHolder viewHolder, int position) {
-
-    }
-
-    /**
-     * Enabled by default
-     */
-
-    public void enableOnClick(final boolean flag) {
-        mOnClickEnabled = flag;
-    }
-
     public File getSelectedItem() {
         if (mSelectedItemPosition > -1) {
             return mAudioFileList.get(mSelectedItemPosition);
@@ -159,7 +131,7 @@ public class AudioFileRecyclerAdapter extends RecyclerView.Adapter<AudioFileRecy
         notifyItemChanged(selectedItemPosition);
     }
 
-    class CustomViewHolder extends RecyclerView.ViewHolder {
+    static class CustomViewHolder extends RecyclerView.ViewHolder {
         LinearLayout relativeLayout;
         TextView audioFileNameView;
         RadioButton audioRadioButton;

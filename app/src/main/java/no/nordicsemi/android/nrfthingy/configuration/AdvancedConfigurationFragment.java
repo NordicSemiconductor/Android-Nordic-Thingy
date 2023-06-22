@@ -40,15 +40,15 @@ package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.bluetooth.BluetoothDevice;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.MessageDialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
@@ -120,143 +120,113 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingyAdv
         final DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         final String thingyName = databaseHelper.getDeviceName(mDevice.getAddress());
 
-        temperature.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 0;
-                    final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        temperature.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 0;
+                final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        pressure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 1;
-                    final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        pressure.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 1;
+                final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        humidity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 2;
-                    final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        humidity.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 2;
+                final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        colorIntensity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 3;
-                    final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        colorIntensity.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 3;
+                final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        gasMode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 4;
-                    final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        gasMode.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 4;
+                final EnvironmentConfigurationDialogFragment fragment = EnvironmentConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        pedometer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 0;
-                    final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        pedometer.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 0;
+                final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        temperatureMotion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 1;
-                    final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        temperatureMotion.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 1;
+                final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        compass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 2;
-                    final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        compass.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 2;
+                final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        motion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 3;
-                    final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        motion.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 3;
+                final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
-        wakeOnMotion.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
-                    mSettingsMode = 4;
-                    final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
-                    fragment.show(getChildFragmentManager(), null);
-                } else {
-                    MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
-                    fragment.show(getChildFragmentManager(), null);
-                }
+        wakeOnMotion.setOnClickListener(v -> {
+            if (mThingySdkManager != null && mThingySdkManager.isConnected(mDevice)) {
+                mSettingsMode = 4;
+                final MotionConfigurationDialogFragment fragment = MotionConfigurationDialogFragment.newInstance(mSettingsMode, mDevice);
+                fragment.show(getChildFragmentManager(), null);
+            } else {
+                MessageDialogFragment fragment = MessageDialogFragment.newInstance(getString(R.string.thingy_disconnected, thingyName), getString(R.string.no_thingy_connected_configuration, thingyName));
+                fragment.show(getChildFragmentManager(), null);
             }
         });
 
@@ -360,6 +330,6 @@ public class AdvancedConfigurationFragment extends Fragment implements ThingyAdv
 
     @Override
     public void updateWakeOnMotion() {
-        mWakeOnMotionSummary.setText(String.valueOf(mThingySdkManager.getWakeOnMotionState(mDevice) ? getString(R.string.on) : getString(R.string.off)));
+        mWakeOnMotionSummary.setText(mThingySdkManager.getWakeOnMotionState(mDevice) ? getString(R.string.on) : getString(R.string.off));
     }
 }

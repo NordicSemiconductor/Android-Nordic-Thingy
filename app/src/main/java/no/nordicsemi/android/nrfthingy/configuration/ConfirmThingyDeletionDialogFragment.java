@@ -41,7 +41,6 @@ package no.nordicsemi.android.nrfthingy.configuration;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -80,12 +79,7 @@ public class ConfirmThingyDeletionDialogFragment extends DialogFragment {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.delete_thingy_title))
                 .setMessage(getString(R.string.delete_thingy_message))
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ((ConfirmThingyDeletionListener) requireContext()).deleteThingy(mDevice);
-                    }
-                })
+                .setPositiveButton(getString(R.string.ok), (dialog, which) -> ((ConfirmThingyDeletionListener) requireContext()).deleteThingy(mDevice))
                 .setNegativeButton(getString(R.string.cancel), null);
         return alertDialogBuilder.create();
     }

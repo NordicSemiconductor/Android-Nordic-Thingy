@@ -40,20 +40,19 @@ package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -96,7 +95,7 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.cloud_token_settings));
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_cloud_token, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_cloud_token, null);
 
         mCloudTokenLayout = view.findViewById(R.id.layout_cloud_token);
         mCloudTokenView = view.findViewById(R.id.cloud_token_view);
@@ -124,17 +123,14 @@ public class CloudTokenConfigurationDialogFragment extends DialogFragment {
         });
 
        return alertDialogBuilder.setView(view)
-                .setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(final DialogInterface dialog, final int which) {
-                        if (mThingySdkManager != null) {
-                            if (validateInput()) {
-                                if (!mThingySdkManager.setCloudToken(mDevice, getValueFromView())) {
-                                    Utils.showToast(getActivity(), getString(R.string.error_cloud_token));
-                                    return;
-                                }
-                                ((ThingyBasicSettingsChangeListener) getParentFragment()).updateCloudToken();
+                .setPositiveButton(getString(R.string.confirm), (dialog, which) -> {
+                    if (mThingySdkManager != null) {
+                        if (validateInput()) {
+                            if (!mThingySdkManager.setCloudToken(mDevice, getValueFromView())) {
+                                Utils.showToast(getActivity(), getString(R.string.error_cloud_token));
+                                return;
                             }
+                            ((ThingyBasicSettingsChangeListener) getParentFragment()).updateCloudToken();
                         }
                     }
                 })
