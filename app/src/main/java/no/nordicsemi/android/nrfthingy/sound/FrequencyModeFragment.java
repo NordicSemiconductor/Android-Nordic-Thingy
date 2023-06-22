@@ -141,45 +141,42 @@ public class FrequencyModeFragment extends Fragment implements View.OnTouchListe
         int frequency;
         final int duration = 0xFFFF;
         final int volume = mSeekbar.getProgress();
-        switch (id) {
-            case R.id.label_1:
-                frequency = 261;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_2:
-                frequency = 293;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_3:
-                frequency = 329;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_4:
-                frequency = 349;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_5:
-                frequency = 391;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_6:
-                frequency = 440;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_7:
-                frequency = 493;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_8:
-                frequency = 277;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_9:
-                frequency = 311;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_10:
-                frequency = 369;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_11:
-                frequency = 415;
-                return handleEvent(frequency, duration, volume, event, view);
-            case R.id.label_12:
-                frequency = 466;
-                return handleEvent(frequency, duration, volume, event, view);
-            default:
-                break;
+        if (id == R.id.label_1) {
+            frequency = 261;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_2) {
+            frequency = 293;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_3) {
+            frequency = 329;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_4) {
+            frequency = 349;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_5) {
+            frequency = 391;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_6) {
+            frequency = 440;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_7) {
+            frequency = 493;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_8) {
+            frequency = 277;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_9) {
+            frequency = 311;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_10) {
+            frequency = 369;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_11) {
+            frequency = 415;
+            return handleEvent(frequency, duration, volume, event, view);
+        } else if (id == R.id.label_12) {
+            frequency = 466;
+            return handleEvent(frequency, duration, volume, event, view);
         }
         return false;
     }

@@ -50,12 +50,10 @@ import org.rajawali3d.math.Quaternion;
 import org.rajawali3d.renderer.RajawaliRenderer;
 
 import no.nordicsemi.android.nrfthingy.R;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 
 public class Renderer extends RajawaliRenderer {
 
-    private final DatabaseHelper mDatabaseHelper;
-    private Context mContext;
+    private final Context mContext;
 
     private Object3D mObjectModel;
 
@@ -68,7 +66,6 @@ public class Renderer extends RajawaliRenderer {
         super(context);
         this.mContext = context;
         setFrameRate(60);
-        mDatabaseHelper = new DatabaseHelper(context);
     }
 
     public void setConnectionState(final boolean flag) {

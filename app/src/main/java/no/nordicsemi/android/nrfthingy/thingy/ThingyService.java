@@ -38,6 +38,7 @@
 
 package no.nordicsemi.android.nrfthingy.thingy;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -56,23 +57,19 @@ import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.nrfthingy.MainActivity;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
-import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
 import no.nordicsemi.android.thingylib.BaseThingyService;
 import no.nordicsemi.android.thingylib.ThingyConnection;
 
 import static no.nordicsemi.android.nrfthingy.common.Utils.NOTIFICATION_ID;
 
 public class ThingyService extends BaseThingyService {
-    private static final String PRIMARY_GROUP = "Thingy:52 Connectivity Summary";
     private static final String PRIMARY_GROUP_ID = "no.nordicsemi.android.nrfthingy";
     private static final String PRIMARY_CHANNEL = "Thingy:52 Connectivity Status";
     private static final String PRIMARY_CHANNEL_ID = "no.nordicsemi.android.nrfthingy";
-    private DatabaseHelper mDatabaseHelper;
     private boolean mIsActivityFinishing = false;
     private Map<BluetoothDevice, Integer> mLastSelectedAudioTrack;
     private NotificationManager mNotificationManager;
@@ -193,7 +190,6 @@ public class ThingyService extends BaseThingyService {
         createNotificationPrerequisites();
         startForeground(NOTIFICATION_ID, createForegroundNotification());
         mLastSelectedAudioTrack = new HashMap<>();
-        mDatabaseHelper = new DatabaseHelper(getApplicationContext());
         registerReceiver(mNotificationDisconnectReceiver, new IntentFilter(Utils.ACTION_DISCONNECT));
     }
 
@@ -214,23 +210,19 @@ public class ThingyService extends BaseThingyService {
         stopSelf();
     }
 
-    private BroadcastReceiver mNotificationDisconnectReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mNotificationDisconnectReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
-            switch (action) {
-                case Utils.ACTION_DISCONNECT:
-                    final BluetoothDevice device = intent.getExtras().getParcelable(Utils.EXTRA_DEVICE);
-                    if (device != null) {
-                        final ThingyConnection thingyConnection = mThingyConnections.get(device);
-                        if (thingyConnection != null) {
-                            thingyConnection.disconnect();
-                            if (mDevices.contains(device)) {
-                                mDevices.remove(device);
-                            }
-                        }
+            if (Utils.ACTION_DISCONNECT.equals(action)) {
+                final BluetoothDevice device = intent.getExtras().getParcelable(Utils.EXTRA_DEVICE);
+                if (device != null) {
+                    final ThingyConnection thingyConnection = mThingyConnections.get(device);
+                    if (thingyConnection != null) {
+                        thingyConnection.disconnect();
+                        mDevices.remove(device);
                     }
-                    break;
+                }
             }
         }
     };
@@ -268,7 +260,7 @@ public class ThingyService extends BaseThingyService {
 
         final Intent disconnect = new Intent(Utils.ACTION_DISCONNECT);
         disconnect.putExtra(Utils.EXTRA_DEVICE, device);
-        final PendingIntent disconnectAction = PendingIntent.getBroadcast(this, Utils.DISCONNECT_REQ + device.hashCode(), disconnect, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent disconnectAction = PendingIntent.getBroadcast(this, Utils.DISCONNECT_REQ + device.hashCode(), disconnect, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         builder.addAction(new NotificationCompat.Action(R.drawable.ic_thingy_white, getString(R.string.thingy_action_disconnect), disconnectAction));
         builder.setSortKey(deviceName + device.getAddress()); // This will keep the same order of notification even after an action was clicked on one of them
 
@@ -284,7 +276,7 @@ public class ThingyService extends BaseThingyService {
         parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
-        final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL);
         builder.setContentIntent(pendingIntent).setAutoCancel(true);
@@ -294,109 +286,11 @@ public class ThingyService extends BaseThingyService {
     }
 
     /**
-     * Returns a notification builder
-     */
-    private NotificationCompat.Builder getSummaryNotifcationBuilder() {
-        final Intent parentIntent = new Intent(this, getNotificationTarget()/*MainActivity.class*/);
-        parentIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        // Both activities above have launchMode="singleTask" in the AndroidManifest.xml file, so if the task is already running, it will be resumed
-        final PendingIntent pendingIntent = PendingIntent.getActivities(this, Utils.OPEN_ACTIVITY_REQ, new Intent[]{parentIntent}, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        if (Utils.checkIfVersionIsOreoOrAbove()) {
-            final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), PRIMARY_CHANNEL);
-            builder.setContentIntent(pendingIntent).setAutoCancel(true);
-            builder.setSmallIcon(R.drawable.ic_thingy_white);
-            if (mNotificationChannel == null) {
-                mNotificationChannel = new NotificationChannel(PRIMARY_CHANNEL_ID, PRIMARY_CHANNEL, NotificationManager.IMPORTANCE_LOW);
-                builder.setChannelId(PRIMARY_CHANNEL_ID);
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.createNotificationChannel(mNotificationChannel);
-            }
-            return builder;
-        } else {
-            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            builder.setContentIntent(pendingIntent).setAutoCancel(true);
-            builder.setSmallIcon(R.drawable.ic_thingy_white);
-            return builder;
-        }
-    }
-
-    /**
-     * Creates a summary notifcation for devices
-     */
-    private void createSummaryNotification() {
-        final NotificationCompat.Builder builder = getBackgroundNotificationBuilder();
-        builder.setColor(ContextCompat.getColor(this, R.color.nordicBlue));
-        builder.setShowWhen(false).setDefaults(0).setOngoing(false); // an ongoing notification will not be shown on Android Wear
-        builder.setGroup(Utils.THINGY_GROUP_ID).setGroupSummary(true);
-
-        final ArrayList<Thingy> managedDevices = mDatabaseHelper.getSavedDevices();
-        final ArrayList<BluetoothDevice> connectedDevices = mDevices;
-        if (connectedDevices != null && connectedDevices.isEmpty()) {
-            // No connected devices
-            final int numberOfManagedDevices = managedDevices.size();
-            if (numberOfManagedDevices == 1) {
-                final String name = managedDevices.get(0).getDeviceName();
-                builder.setContentTitle(getString(R.string.one_disconnected, name));
-            } else {
-                builder.setContentTitle(getString(R.string.two_disconnected, numberOfManagedDevices));
-            }
-        } else {
-            // There are some proximity tags connected
-            final int numberOfConnectedDevices = connectedDevices.size();
-            if (numberOfConnectedDevices == 1) {
-                final String name = getDeviceName(connectedDevices.get(0));
-                builder.setContentTitle(getString(R.string.one_connected, name));
-            } else {
-                builder.setContentTitle(getString(R.string.two_connected, numberOfConnectedDevices));
-            }
-            builder.setNumber(numberOfConnectedDevices);
-
-            // If there are some disconnected devices, also print them
-            final int numberOfDisconnectedDevices = managedDevices.size() - numberOfConnectedDevices;
-            if (numberOfDisconnectedDevices == 1) {
-                // Find the single disconnected device to get its name
-                for (final Thingy thingy : managedDevices) {
-                    if (!isConnected(thingy, connectedDevices)) {
-                        final String name = thingy.getDeviceName();
-                        builder.setContentText(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfDisconnectedDevices, name));
-                        break;
-                    }
-                }
-            } else if (numberOfConnectedDevices > 1) {
-                // If there are more, just write number of them
-                builder.setContentText(getResources().getQuantityString(R.plurals.thingy_notification_text_nothing_connected, numberOfDisconnectedDevices, numberOfDisconnectedDevices));
-            }
-        }
-
-        final Notification notification = builder.build();
-        final NotificationManagerCompat nm = NotificationManagerCompat.from(this);
-        nm.notify(NOTIFICATION_ID, notification);
-    }
-
-    /**
-     * Checks if the device is among the connected devices list.
-     *
-     * @param thingy           device to be checked
-     * @param connectedDevices list of connected devices
-     */
-    private boolean isConnected(Thingy thingy, ArrayList<BluetoothDevice> connectedDevices) {
-        for (BluetoothDevice device : connectedDevices) {
-            if (thingy.getDeviceAddress().equals(device.getAddress())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Returns the name of a device
      */
+    @SuppressLint("MissingPermission")
     private String getDeviceName(final BluetoothDevice device) {
-        if (device != null) {
-            final String deviceName = device.getName();
+        if (device != null) {final String deviceName = device.getName();
             if (!TextUtils.isEmpty(deviceName)) {
                 return deviceName;
             }
@@ -439,8 +333,6 @@ public class ThingyService extends BaseThingyService {
     }
 
     private void removeLastSelectedAudioTracks(final BluetoothDevice device) {
-        if (mLastSelectedAudioTrack.containsKey(device)) {
-            mLastSelectedAudioTrack.remove(device);
-        }
+        mLastSelectedAudioTrack.remove(device);
     }
 }

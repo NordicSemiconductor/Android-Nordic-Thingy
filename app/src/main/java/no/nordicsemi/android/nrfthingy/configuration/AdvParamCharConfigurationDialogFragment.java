@@ -40,21 +40,20 @@ package no.nordicsemi.android.nrfthingy.configuration;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -101,7 +100,7 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.adv_param_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_adv_param, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_adv_param, null);
 
         mAdvertisingIntervalLayout = view.findViewById(R.id.layout_adv_interval);
         mAdvertisingTimeoutLayout = view.findViewById(R.id.layout_adv_timeout);
@@ -163,28 +162,20 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    if (mThingySdkManager != null) {
-                        final int advertisingInterval = Integer.parseInt(mAdvertisingIntervalView.getText().toString().trim());
-                        final int advertisingTimeout = Integer.parseInt(mAdvertisingTimeoutView.getText().toString().trim());
-                        if (mThingySdkManager.setAdvertisingParameters(mDevice, advertisingInterval, advertisingTimeout)) {
-                            dismiss();
-                        } else
-                            Utils.showToast(getActivity(), getString(R.string.error_configuring_char));
-                    }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput()) {
+                if (mThingySdkManager != null) {
+                    final int advertisingInterval1 = Integer.parseInt(mAdvertisingIntervalView.getText().toString().trim());
+                    final int advertisingTimeout = Integer.parseInt(mAdvertisingTimeoutView.getText().toString().trim());
+                    if (mThingySdkManager.setAdvertisingParameters(mDevice, advertisingInterval1, advertisingTimeout)) {
+                        dismiss();
+                    } else
+                        Utils.showToast(getActivity(), getString(R.string.error_configuring_char));
                 }
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> dismiss());
 
         return alertDialog;
     }
@@ -237,17 +228,5 @@ public class AdvParamCharConfigurationDialogFragment extends DialogFragment {
         }
 
         return true;
-    }
-
-    private byte[] getValueFromView() {
-        final byte[] data = new byte[3];
-
-        final String advertisingInterval = mAdvertisingIntervalView.getText().toString().trim();
-        Utils.setValue(data, 0, Integer.parseInt(advertisingInterval), BluetoothGattCharacteristic.FORMAT_UINT16);
-
-        final String advertisingTimeout = mAdvertisingTimeoutView.getText().toString().trim();
-        Utils.setValue(data, 2, Integer.parseInt(advertisingTimeout), BluetoothGattCharacteristic.FORMAT_UINT8);
-
-        return data;
     }
 }

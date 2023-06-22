@@ -47,7 +47,6 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -115,9 +114,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
     private boolean mIsFragmentAttached = false;
     private Renderer mRenderer;
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
         float mCurrentDegree = 0.0f;
-        private float mHeadingDegrees;
         private RotateAnimation mHeadingAnimation;
 
         @Override
@@ -280,36 +278,35 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         @Override
         public void onHeadingValueChangedEvent(BluetoothDevice bluetoothDevice, float heading) {
             if (mIsFragmentAttached) {
-                mHeadingDegrees = heading;
                 if (mHeadingAnimation != null) {
                     mHeadingAnimation.reset();
                 }
 
-                if (mHeadingDegrees >= 0 && mHeadingDegrees <= 10) {
+                if (heading >= 0 && heading <= 10) {
                     mHeadingDirection.setText(R.string.north);
-                } else if (mHeadingDegrees >= 35 && mHeadingDegrees <= 55) {
+                } else if (heading >= 35 && heading <= 55) {
                     mHeadingDirection.setText(R.string.north_east);
-                } else if (mHeadingDegrees >= 80 && mHeadingDegrees <= 100) {
+                } else if (heading >= 80 && heading <= 100) {
                     mHeadingDirection.setText(R.string.east);
-                } else if (mHeadingDegrees >= 125 && mHeadingDegrees <= 145) {
+                } else if (heading >= 125 && heading <= 145) {
                     mHeadingDirection.setText(R.string.south_east);
-                } else if (mHeadingDegrees >= 170 && mHeadingDegrees <= 190) {
+                } else if (heading >= 170 && heading <= 190) {
                     mHeadingDirection.setText(R.string.south);
-                } else if (mHeadingDegrees >= 215 && mHeadingDegrees <= 235) {
+                } else if (heading >= 215 && heading <= 235) {
                     mHeadingDirection.setText(R.string.south_west);
-                } else if (mHeadingDegrees >= 260 && mHeadingDegrees <= 280) {
+                } else if (heading >= 260 && heading <= 280) {
                     mHeadingDirection.setText(R.string.west);
-                } else if (mHeadingDegrees >= 305 && mHeadingDegrees <= 325) {
+                } else if (heading >= 305 && heading <= 325) {
                     mHeadingDirection.setText(R.string.north_west);
-                } else if (mHeadingDegrees >= 350 && mHeadingDegrees <= 359) {
+                } else if (heading >= 350 && heading <= 359) {
                     mHeadingDirection.setText(R.string.north);
                 }
 
-                mHeadingAnimation = new RotateAnimation(mCurrentDegree, -mHeadingDegrees, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                mHeadingAnimation = new RotateAnimation(mCurrentDegree, -heading, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
                 mHeadingAnimation.setFillAfter(true);
                 mHeadingImage.startAnimation(mHeadingAnimation);
-                mHeading.setText(getString(R.string.degrees_2, mHeadingDegrees));
-                mCurrentDegree = -mHeadingDegrees;
+                mHeading.setText(getString(R.string.degrees_2, heading));
+                mCurrentDegree = -heading;
             }
         }
 
@@ -387,22 +384,13 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 updateQuaternionCardOptionsMenu(mQuaternionToolbar.getMenu());
             }
 
-            mQuaternionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    final int id = item.getItemId();
-                    switch (id) {
-                        case R.id.action_quaternion_angles_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enableQuaternionNotifications(item.isChecked());
-                            break;
-                    }
-                    return true;
+            mQuaternionToolbar.setOnMenuItemClickListener(item -> {
+                final int id = item.getItemId();
+                if (id == R.id.action_quaternion_angles_notification) {
+                    item.setChecked(!item.isChecked());
+                    enableQuaternionNotifications(item.isChecked());
                 }
+                return true;
             });
             loadFeatureDiscoverySequence();
         }
@@ -415,50 +403,25 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 updateMotionCardOptionsMenu(motionToolbar.getMenu());
             }
 
-            motionToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    final int id = item.getItemId();
-                    switch (id) {
-                        case R.id.action_about:
-                            final MotionServiceInfoDialogFragment info = MotionServiceInfoDialogFragment.newInstance();
-                            info.show(getChildFragmentManager(), null);
-                            break;
-                        case R.id.action_pedometer_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enablePedometerNotifications(item.isChecked());
-                            break;
-                        case R.id.action_tap_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enableTapNotifications(item.isChecked());
-                            break;
-                        case R.id.action_heading_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enableHeadingNotifications(item.isChecked());
-                            break;
-                        case R.id.action_orientation_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enableOrientationNotifications(item.isChecked());
-                            break;
-                    }
-                    return true;
+            motionToolbar.setOnMenuItemClickListener(item -> {
+                final int id = item.getItemId();
+                if (id == R.id.action_about) {
+                    final MotionServiceInfoDialogFragment info = MotionServiceInfoDialogFragment.newInstance();
+                    info.show(getChildFragmentManager(), null);
+                } else if (id == R.id.action_pedometer_notification) {
+                    item.setChecked(!item.isChecked());
+                    enablePedometerNotifications(item.isChecked());
+                } else if (id == R.id.action_tap_notification) {
+                    item.setChecked(!item.isChecked());
+                    enableTapNotifications(item.isChecked());
+                } else if (id == R.id.action_heading_notification) {
+                    item.setChecked(!item.isChecked());
+                    enableHeadingNotifications(item.isChecked());
+                } else if (id == R.id.action_orientation_notification) {
+                    item.setChecked(!item.isChecked());
+                    enableOrientationNotifications(item.isChecked());
                 }
+                return true;
             });
         }
 
@@ -470,22 +433,13 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
                 updateGravityCardOptionsMenu(gravityToolbar.getMenu());
             }
 
-            gravityToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    final int id = item.getItemId();
-                    switch (id) {
-                        case R.id.action_gravity_vector_notification:
-                            if (item.isChecked()) {
-                                item.setChecked(false);
-                            } else {
-                                item.setChecked(true);
-                            }
-                            enableGravityVectorNotifications(item.isChecked());
-                            break;
-                    }
-                    return true;
+            gravityToolbar.setOnMenuItemClickListener(item -> {
+                final int id = item.getItemId();
+                if (id == R.id.action_gravity_vector_notification) {
+                    item.setChecked(!item.isChecked());
+                    enableGravityVectorNotifications(item.isChecked());
                 }
+                return true;
             });
         }
 
@@ -569,8 +523,6 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         mLineChartGravityVector.setAutoScaleMinMaxEnabled(true);
         mLineChartGravityVector.setDrawGridBackground(false);
         mLineChartGravityVector.setBackgroundColor(Color.WHITE);
-        /*final ChartMarker marker = new ChartMarker(getActivity(), R.layout.marker_layout_temperature);
-        mLineChartGravityVector.setMarkerView(marker);*/
 
         LineData data = new LineData();
         data.setValueFormatter(new GravityVectorChartValueFormatter());
@@ -668,8 +620,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    class GravityVectorYValueFormatter implements YAxisValueFormatter {
-        private DecimalFormat mFormat;
+    static class GravityVectorYValueFormatter implements YAxisValueFormatter {
+        private final DecimalFormat mFormat;
 
         GravityVectorYValueFormatter() {
             mFormat = new DecimalFormat("##,##,#0.00");
@@ -681,8 +633,8 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
         }
     }
 
-    class GravityVectorChartValueFormatter implements ValueFormatter {
-        private DecimalFormat mFormat;
+    static class GravityVectorChartValueFormatter implements ValueFormatter {
+        private final DecimalFormat mFormat;
 
         GravityVectorChartValueFormatter() {
             mFormat = new DecimalFormat("#0.00");
@@ -696,47 +648,23 @@ public class MotionServiceFragment extends Fragment implements ScannerFragmentLi
 
     private void updateQuaternionCardOptionsMenu(final Menu eulerCardMotion) {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION)) {
-            eulerCardMotion.findItem(R.id.action_quaternion_angles_notification).setChecked(true);
-        } else {
-            eulerCardMotion.findItem(R.id.action_quaternion_angles_notification).setChecked(false);
-        }
+        eulerCardMotion.findItem(R.id.action_quaternion_angles_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_QUATERNION));
     }
 
     private void updateMotionCardOptionsMenu(final Menu motionCardMenu) {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER)) {
-            motionCardMenu.findItem(R.id.action_pedometer_notification).setChecked(true);
-        } else {
-            motionCardMenu.findItem(R.id.action_pedometer_notification).setChecked(false);
-        }
+        motionCardMenu.findItem(R.id.action_pedometer_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_PEDOMETER));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP)) {
-            motionCardMenu.findItem(R.id.action_tap_notification).setChecked(true);
-        } else {
-            motionCardMenu.findItem(R.id.action_tap_notification).setChecked(false);
-        }
+        motionCardMenu.findItem(R.id.action_tap_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_TAP));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING)) {
-            motionCardMenu.findItem(R.id.action_heading_notification).setChecked(true);
-        } else {
-            motionCardMenu.findItem(R.id.action_heading_notification).setChecked(false);
-        }
+        motionCardMenu.findItem(R.id.action_heading_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_HEADING));
 
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION)) {
-            motionCardMenu.findItem(R.id.action_orientation_notification).setChecked(true);
-        } else {
-            motionCardMenu.findItem(R.id.action_orientation_notification).setChecked(false);
-        }
+        motionCardMenu.findItem(R.id.action_orientation_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_ORIENTATION));
     }
 
     private void updateGravityCardOptionsMenu(final Menu gravityCardMotion) {
         final String address = mDevice.getAddress();
-        if (mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR)) {
-            gravityCardMotion.findItem(R.id.action_gravity_vector_notification).setChecked(true);
-        } else {
-            gravityCardMotion.findItem(R.id.action_gravity_vector_notification).setChecked(false);
-        }
+        gravityCardMotion.findItem(R.id.action_gravity_vector_notification).setChecked(mDatabaseHelper.getNotificationsState(address, DatabaseContract.ThingyDbColumns.COLUMN_NOTIFICATION_GRAVITY_VECTOR));
     }
 
     @SuppressWarnings("unused")

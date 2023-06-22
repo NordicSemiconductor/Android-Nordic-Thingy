@@ -42,17 +42,17 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import androidx.core.content.ContextCompat;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callback {
-    private final int PRECISSION = 4;
-    private final float[] mPointsBuffer = new float[2 * 512 / PRECISSION]; // 512 samples, each has X and Y value, each point (but fist and last) must be doubled: A->B, B->C, C->D etc.
-    private final float[] mPointsBuffer2 = new float[2 * 512 / PRECISSION];
+    private final int PRECISION = 4;
+    private final float[] mPointsBuffer = new float[2 * 512 / PRECISION]; // 512 samples, each has X and Y value, each point (but fist and last) must be doubled: A->B, B->C, C->D etc.
+    private final float[] mPointsBuffer2 = new float[2 * 512 / PRECISION];
     private float[] mCurrentBuffer;
     private float[] mPoints;
     private final Object mLock = new Object();
@@ -60,7 +60,7 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
 
     private int mWidth, mHeight;
 
-    private Paint mLinePaint;
+    private final Paint mLinePaint;
     private SurfaceHolder mHolder;
     private Canvas mCanvas;
 
@@ -122,19 +122,19 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
             return;
 
         final float[] buffer = mCurrentBuffer;
-        final int length = pcm.length / PRECISSION;
+        final int length = pcm.length / PRECISION;
         final float stepHoriz = (float) mWidth / length;
         final float stepVert = (float) mHeight / Short.MAX_VALUE;
 
         int out = 0;
         for (int i = 0; i < length; i += 2) {
             buffer[out] = buffer[out + 2] = stepHoriz * i;
-            buffer[out + 1] = buffer[out + 3] = mHeight + stepVert * readShort(pcm, i * PRECISSION);
+            buffer[out + 1] = buffer[out + 3] = mHeight + stepVert * readShort(pcm, i * PRECISION);
             out += i > 0 ? 4 : 2;
         }
 
         buffer[out] = mWidth;
-        buffer[out + 1] = mHeight + stepVert * readShort(pcm, (length - 1) * PRECISSION);
+        buffer[out + 1] = mHeight + stepVert * readShort(pcm, (length - 1) * PRECISION);
 
         synchronized (mLock) {
             mPoints = buffer;
@@ -144,15 +144,12 @@ public class VoiceVisualizer extends SurfaceView implements SurfaceHolder.Callba
 
         if (!isDrawing) {
             isDrawing = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    while (isDrawing) {
-                        mCanvas = mHolder.lockCanvas();
-                        if (mCanvas != null) {
-                            doDraw(mCanvas);
-                            mHolder.unlockCanvasAndPost(mCanvas);
-                        }
+            new Thread(() -> {
+                while (isDrawing) {
+                    mCanvas = mHolder.lockCanvas();
+                    if (mCanvas != null) {
+                        doDraw(mCanvas);
+                        mHolder.unlockCanvasAndPost(mCanvas);
                     }
                 }
             }).start();

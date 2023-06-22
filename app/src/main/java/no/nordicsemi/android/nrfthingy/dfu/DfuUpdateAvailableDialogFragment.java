@@ -38,16 +38,16 @@
 
 package no.nordicsemi.android.nrfthingy.dfu;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
-
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
@@ -93,6 +93,7 @@ public class DfuUpdateAvailableDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
+    @SuppressLint("MissingPermission")
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         String deviceName = mDatabaseHelper.getDeviceName(mDevice.getAddress());
         if (deviceName.isEmpty()) {
@@ -103,12 +104,7 @@ public class DfuUpdateAvailableDialogFragment extends DialogFragment {
                 .setTitle(R.string.dfu_title)
                 .setMessage(getString(R.string.fw_update_available, deviceName, mFwFileVersion))
                 .setCancelable(false)
-                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mListener.onDfuRequested();
-                    }
-                })
+                .setPositiveButton(R.string.confirm, (dialog, which) -> mListener.onDfuRequested())
                 .setNegativeButton(R.string.later, null)
                 .create();
     }

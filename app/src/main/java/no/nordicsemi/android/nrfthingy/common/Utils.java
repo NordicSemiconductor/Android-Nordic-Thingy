@@ -38,7 +38,6 @@
 
 package no.nordicsemi.android.nrfthingy.common;
 
-import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -46,7 +45,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -62,9 +60,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
-import androidx.core.app.ActivityCompat;
 import no.nordicsemi.android.nrfthingy.thingy.Thingy;
 
+@SuppressWarnings("unused")
 public class Utils {
 
     public static final String TAG = "THINGY:52";
@@ -75,7 +73,6 @@ public class Utils {
     public static final String INITIAL_MOTION_TUTORIAL = "INITIAL_MOTION_TUTORIAL";
     public static final String INITIAL_SOUND_TUTORIAL = "INITIAL_SOUND_TUTORIAL";
     private static final String KEY_IFTTT_TOKEN = "KEY_IFTTT_TOKEN";
-    private static final String KEY_NFC_FEATURE_REQ = "KEY_NFC_FEATURE_REQ";
     public static final String INITIAL_DFU_TUTORIAL = "INITIAL_DFU_TUTORIAL";
 
     public static final String START_RECORDING = "START_RECORDING";
@@ -93,8 +90,6 @@ public class Utils {
     public static final String EXTRA_DEVICE_NAME = "EXTRA_DEVICE_NAME";
 
     public static final String EXTRA_DATA = "EXTRA_DATA";
-    public static final String EXTRA_DATA_TYPE = "EXTRA_DATA_TYPE";
-    public static final String EXTRA_DATA_URL = "EXTRA_DATA_URL";
 
     public static final String CURRENT_DEVICE = "CURRENT_DEVICE";
     public static final String SETTINGS_MODE = "SETTINGS_MODE";
@@ -104,7 +99,6 @@ public class Utils {
     //Notification constants
     public static final String ACTION_DISCONNECT = "ACTION_DISCONNECT";
     public static final int DISCONNECT_REQ = 501;
-    public static final String THINGY_GROUP_ID = "THINGY_GROUP_ID";
     public static final int NOTIFICATION_ID = 502;
     public static final int OPEN_ACTIVITY_REQ = 503;
 
@@ -135,16 +129,19 @@ public class Utils {
     public static final int BLE_GAP_ADV_TIMEOUT_MIN = 0;//ms
     public static final int BLE_GAP_ADV_TIMEOUT_MAX = 180;//ms
     static final String EXTRA_DATA_TITLE = "EXTRA_DATA_TITLE";
-    public static final String EXTRA_DATA_DESCRIPTION = "EXTRA_DATA_DESCRIPTION";
     public static final String EXTRA_DEVICE_CONNECTION_STATE = "EXTRA_DEVICE_CONNECTION_STATE";
     public static final String EXTRA_DEVICE_DFU_COMPLETED = "EXTRA_DEVICE_DFU_COMPLETED";
 
     public static final int REQUEST_ENABLE_BT = 1020;
     public static final int REQUEST_ACCESS_COARSE_LOCATION = 1021;
     public static final int REQUEST_ACCESS_FINE_LOCATION = 1022;
-    public static final int REQ_PERMISSION_WRITE_EXTERNAL_STORAGE = 1023;
-    public static final int REQ_PERMISSION_READ_EXTERNAL_STORAGE = 1024;
-    public static final int REQ_PERMISSION_RECORD_AUDIO = 1024;
+    public static final int REQUEST_BLUETOOTH_SCAN = 1023;
+    public static final int REQUEST_BLUETOOTH_CONNECT = 1024;
+
+    public static final int REQ_PERMISSION_READ_EXTERNAL_STORAGE = 1026;
+    public static final int REQ_PERMISSION_RECORD_AUDIO = 1027;
+
+    public static final int REQ_PERMISSION_POST_NOTIFICATIONS = 1028;
 
     //DFU Constants
     public static final String NORDIC_FW = "NORDIC_FW";
@@ -164,7 +161,6 @@ public class Utils {
     public static final String EXTRA_DATA_FILE_NAME = "EXTRA_DATA_FILE_NAME";
     public static final String EXTRA_DATA_FILE_SIZE = "EXTRA_DATA_FILE_SIZE";
     public static final int SELECT_FILE_REQ = 1;
-    public static final int SELECT_INIT_FILE_REQ = 2;
 
     public static final String EXTRA_URI = "uri";
 
@@ -503,16 +499,12 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
-    public static boolean checkIfVersionIsNougatOrAbove() {
-        return Build.VERSION.SDK_INT >= 25;
-    }
-
-    public static boolean checkIfVersionIsPie() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.P;
-    }
-
     public static boolean checkIfVersionIsQ() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.Q;
+    }
+
+    public static boolean checkIfVersionIsSandAbove() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 
     public static boolean isAppInitialisedBefore(Context context) {

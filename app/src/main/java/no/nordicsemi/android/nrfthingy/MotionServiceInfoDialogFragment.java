@@ -39,14 +39,13 @@
 package no.nordicsemi.android.nrfthingy;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.appcompat.app.AlertDialog;
-import android.view.LayoutInflater;
-import android.view.View;
+import androidx.fragment.app.DialogFragment;
 
 public class MotionServiceInfoDialogFragment extends DialogFragment {
 
@@ -64,13 +63,8 @@ public class MotionServiceInfoDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.motion_service_info));
-        final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_motion_service_info, null);
-        alertDialogBuilder.setView(rootView).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dismiss();
-            }
-        });
+        final View rootView = getLayoutInflater().inflate(R.layout.fragment_dialog_motion_service_info, null);
+        alertDialogBuilder.setView(rootView).setPositiveButton(getString(R.string.ok), (dialog, which) -> dismiss());
         return alertDialogBuilder.create();
     }
 }

@@ -43,20 +43,20 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -78,18 +78,10 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     private TextInputEditText mColorIntervalView;
     private TextInputEditText mHumidityIntervalView;
 
-    private RadioGroup mPressureModeView;
     private RadioGroup mGasModeView;
 
     private RadioButton mGasModeOne;
     private RadioButton mGasModeTwo;
-    private RadioButton mGasModeThree;
-
-    private String mTemperatureInterval;
-    private String mPressureInterval;
-    private String mHumidityInterval;
-    private String mColorInterval;
-    private String mGasMode;
 
     private BluetoothDevice mDevice;
     private int mSettingsMode;
@@ -121,7 +113,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_weather_configuration, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_weather_configuration, null);
 
         updateUi(view, alertDialogBuilder);
 
@@ -130,21 +122,13 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
                 .setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    configureThingy();
-                }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput()) {
+                configureThingy();
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> dismiss());
 
         return alertDialog;
     }
@@ -241,21 +225,18 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
             mThingySdkManager.setGasMode(mDevice, mode);
         }
         //added a delay to update the ui to support Samsung S3 on dismissing
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                dismiss();
-                updateParentFragmentUi();
-            }
+        new Handler().post(() -> {
+            dismiss();
+            updateParentFragmentUi();
         });
     }
 
     private void updateUi(final View view, final AlertDialog.Builder alertDialog) {
-        mTemperatureInterval = String.valueOf(mThingySdkManager.getEnvironmentTemperatureInterval(mDevice));
-        mPressureInterval = String.valueOf(mThingySdkManager.getPressureInterval(mDevice));
-        mHumidityInterval = String.valueOf(mThingySdkManager.getHumidityInterval(mDevice));
-        mColorInterval = String.valueOf(mThingySdkManager.getColorIntensityInterval(mDevice));
-        mGasMode = String.valueOf(mThingySdkManager.getGasMode(mDevice));
+        String mTemperatureInterval = String.valueOf(mThingySdkManager.getEnvironmentTemperatureInterval(mDevice));
+        String mPressureInterval = String.valueOf(mThingySdkManager.getPressureInterval(mDevice));
+        String mHumidityInterval = String.valueOf(mThingySdkManager.getHumidityInterval(mDevice));
+        String mColorInterval = String.valueOf(mThingySdkManager.getColorIntensityInterval(mDevice));
+        String mGasMode = String.valueOf(mThingySdkManager.getGasMode(mDevice));
 
         switch (mSettingsMode) {
             case 0:
@@ -403,7 +384,7 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
 
                 mGasModeOne = view.findViewById(R.id.rb_gas_one);
                 mGasModeTwo = view.findViewById(R.id.rb_gas_two);
-                mGasModeThree = view.findViewById(R.id.rb_gas_three);
+                RadioButton mGasModeThree = view.findViewById(R.id.rb_gas_three);
 
                 final int gMode = Integer.parseInt(mGasMode);
                 if (gMode == 1) {
@@ -418,22 +399,25 @@ public class EnvironmentConfigurationDialogFragment extends DialogFragment {
     }
 
     private void updateParentFragmentUi() {
-        switch (mSettingsMode) {
-            case 0:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateTemperatureInterval();
-                break;
-            case 1:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updatePressureInterval();
-                break;
-            case 2:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateHumidityInterval();
-                break;
-            case 3:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateColorIntensityInterval();
-                break;
-            case 4:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateGasMode();
-                break;
+        final ThingyAdvancedSettingsChangeListener listener = ((ThingyAdvancedSettingsChangeListener) getParentFragment());
+        if(listener != null) {
+            switch (mSettingsMode) {
+                case 0:
+                    listener.updateTemperatureInterval();
+                    break;
+                case 1:
+                    listener.updatePressureInterval();
+                    break;
+                case 2:
+                    listener.updateHumidityInterval();
+                    break;
+                case 3:
+                    listener.updateColorIntensityInterval();
+                    break;
+                case 4:
+                    listener.updateGasMode();
+                    break;
+            }
         }
     }
 }

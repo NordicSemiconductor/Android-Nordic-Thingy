@@ -43,27 +43,19 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -80,6 +72,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -126,7 +123,7 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.physical_web_url_title));
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_eddystone_url, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_eddystone_url, null);
 
         mShortUrlContainer = view.findViewById(R.id.short_url_container);
         mEddystoneUrlLayout = view.findViewById(R.id.layout_url_data);
@@ -153,16 +150,13 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
             }
         });
 
-        mSwitchPhysicalWeb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked) {
-                    mEddystoneUrlView.setEnabled(false);
-                    mEddystoneUrlTypesView.setEnabled(false);
-                } else {
-                    mEddystoneUrlTypesView.setEnabled(true);
-                    mEddystoneUrlView.setEnabled(true);
-                }
+        mSwitchPhysicalWeb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (!isChecked) {
+                mEddystoneUrlView.setEnabled(false);
+                mEddystoneUrlTypesView.setEnabled(false);
+            } else {
+                mEddystoneUrlTypesView.setEnabled(true);
+                mEddystoneUrlView.setEnabled(true);
             }
         });
 
@@ -173,47 +167,36 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                 setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
-                if (Patterns.WEB_URL.matcher(url).matches()) {
-                    shortenUrl(url);
-                    //shortenUrl(url);
-                } else {
-                    Utils.showToast(getActivity(), getString(R.string.error_empty_url_text));
-                }
+        alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v -> {
+            final String url = mEddystoneUrlTypesView.getSelectedItem().toString().trim() + mEddystoneUrlView.getText().toString().trim();
+            if (Patterns.WEB_URL.matcher(url).matches()) {
+                shortenUrl(url);
+                //shortenUrl(url);
+            } else {
+                Utils.showToast(getActivity(), getString(R.string.error_empty_url_text));
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mThingySdkManager != null) {
-                    if (mSwitchPhysicalWeb.isChecked()) {
-                        if (validateInput()) {
-                            if (mThingySdkManager.setEddystoneUrl(mDevice, getValueFromView())) {
-                                dismiss();
-                                ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
-                            } else {
-                                Utils.showToast(getActivity(), getString(R.string.error_configuring_char));
-                            }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (mThingySdkManager != null) {
+                if (mSwitchPhysicalWeb.isChecked()) {
+                    if (validateInput()) {
+                        if (mThingySdkManager.setEddystoneUrl(mDevice, getValueFromView())) {
+                            dismiss();
+                            ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
+                        } else {
+                            Utils.showToast(getActivity(), getString(R.string.error_configuring_char));
                         }
-                    } else {
-                        mThingySdkManager.disableEddystoneUrl(mDevice);
-                        dismiss();
-                        ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
                     }
+                } else {
+                    mThingySdkManager.disableEddystoneUrl(mDevice);
+                    dismiss();
+                    ((ThingyBasicSettingsChangeListener) getParentFragment()).updatePhysicalWebUrl();
                 }
             }
         });
 
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> dismiss());
 
         return alertDialog;
     }
@@ -308,24 +291,16 @@ public class EddystoneUrlConfigurationDialogFragment extends DialogFragment {
                             errorMessage = "Unknown error";
                         }
 
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Utils.showToast(getActivity(), errorMessage);
-                            }
-                        });
+                        requireActivity().runOnUiThread(() -> Utils.showToast(getActivity(), errorMessage));
                         break;
                     }
                 } else {
                     final String newUrl = jsonResponse.getString("id");
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mShortUrlContainer.setVisibility(View.VISIBLE);
-                            final SpannableString urlAttachment = new SpannableString(newUrl);
-                            urlAttachment.setSpan(new UnderlineSpan(), 0, newUrl.length(), 0);
-                            mShortUrl.setText(urlAttachment);
-                        }
+                    requireActivity().runOnUiThread(() -> {
+                        mShortUrlContainer.setVisibility(View.VISIBLE);
+                        final SpannableString urlAttachment = new SpannableString(newUrl);
+                        urlAttachment.setSpan(new UnderlineSpan(), 0, newUrl.length(), 0);
+                        mShortUrl.setText(urlAttachment);
                     });
                 }
             } catch (JSONException e) {

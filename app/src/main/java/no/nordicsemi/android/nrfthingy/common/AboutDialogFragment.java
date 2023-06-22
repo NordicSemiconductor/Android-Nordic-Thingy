@@ -44,16 +44,15 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 
 public class AboutDialogFragment extends DialogFragment {
@@ -66,61 +65,46 @@ public class AboutDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_about, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_about, null);
 
         final AlertDialog alertDialog = alertDialogBuilder.setView(view)
                 .setPositiveButton(R.string.ok, null)
                 .create();
 
-        view.findViewById(R.id.action_facebook).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/227282803964174"));
-                final PackageManager packageManager = v.getContext().getPackageManager();
-                final List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                if (list.isEmpty()) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/nordicsemiconductor"));
-                }
-                startActivity(intent);
-                alertDialog.dismiss();
+        view.findViewById(R.id.action_facebook).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/227282803964174"));
+            final PackageManager packageManager = v.getContext().getPackageManager();
+            final List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (list.isEmpty()) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/nordicsemiconductor"));
             }
+            startActivity(intent);
+            alertDialog.dismiss();
         });
-        view.findViewById(R.id.action_twitter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/NordicTweets"));
-                startActivity(intent);
-                alertDialog.dismiss();
-            }
+        view.findViewById(R.id.action_twitter).setOnClickListener(v -> {
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/NordicTweets"));
+            startActivity(intent);
+            alertDialog.dismiss();
         });
-        view.findViewById(R.id.action_linkedin).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://company/23302")); // This does not work in LinkedIn 3.3.3 (the current until now)
-                final PackageManager packageManager = v.getContext().getPackageManager();
-                final List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                if (list.isEmpty()) {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://touch.www.linkedin.com/?dl=no#company/23302"));
-                }
-                startActivity(intent);
-                alertDialog.dismiss();
+        view.findViewById(R.id.action_linkedin).setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("linkedin://company/23302")); // This does not work in LinkedIn 3.3.3 (the current until now)
+            final PackageManager packageManager = v.getContext().getPackageManager();
+            final List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (list.isEmpty()) {
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://touch.www.linkedin.com/?dl=no#company/23302"));
             }
+            startActivity(intent);
+            alertDialog.dismiss();
         });
-        view.findViewById(R.id.action_youtube).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/user/NordicSemi"));
-                startActivity(intent);
-                alertDialog.dismiss();
-            }
+        view.findViewById(R.id.action_youtube).setOnClickListener(v -> {
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/user/NordicSemi"));
+            startActivity(intent);
+            alertDialog.dismiss();
         });
-        view.findViewById(R.id.action_devzone).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://devzone.nordicsemi.com/questions/"));
-                startActivity(intent);
-                alertDialog.dismiss();
-            }
+        view.findViewById(R.id.action_devzone).setOnClickListener(v -> {
+            final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://devzone.nordicsemi.com/questions/"));
+            startActivity(intent);
+            alertDialog.dismiss();
         });
 
         // Obtain version number

@@ -90,68 +90,23 @@ public class SampleModeFragment extends Fragment {
         final TextView sample8 = rootView.findViewById(R.id.sound_sample_8);
         final TextView sample9 = rootView.findViewById(R.id.sound_sample_9);
 
-        sample1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_1);
-            }
-        });
+        sample1.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_1));
 
-        sample2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_2);
-            }
-        });
+        sample2.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_2));
 
-        sample3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_3);
-            }
-        });
+        sample3.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_3));
 
-        sample4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_4);
-            }
-        });
+        sample4.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_4));
 
-        sample5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_5);
-            }
-        });
+        sample5.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_5));
 
-        sample6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_6);
-            }
-        });
+        sample6.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_6));
 
-        sample7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_7);
-            }
-        });
+        sample7.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_7));
 
-        sample8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_8);
-            }
-        });
+        sample8.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_8));
 
-        sample9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_9);
-            }
-        });
+        sample9.setOnClickListener(v -> mThingySdkManager.playSoundSample(getActivity(), mDevice, ThingyUtils.SAMPLE_9));
         return rootView;
     }
 }

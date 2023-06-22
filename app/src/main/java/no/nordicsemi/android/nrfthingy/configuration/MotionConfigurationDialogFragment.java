@@ -43,28 +43,26 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
 
 public class MotionConfigurationDialogFragment extends DialogFragment {
-    private static final String CONFIGURATION_DATA = "CONFIGURATION_DATA";
 
     private ViewGroup mPedometerContainer = null;
     private ViewGroup mTemperatureContainer = null;
@@ -84,13 +82,6 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     private RadioGroup mWakeOnMotionView;
 
     private RadioButton mOn;
-    private RadioButton mOff;
-
-    private String mPedometerInterval;
-    private String mMotionTemperatureInterval;
-    private String mCompassInterval;
-    private String mMpuFrequency;
-    private int mWakeOnMotion;
 
     private BluetoothDevice mDevice;
     private int mSettingsMode;
@@ -123,7 +114,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_motion_configuration, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_motion_configuration, null);
 
         updateUi(view, alertDialogBuilder);
 
@@ -132,20 +123,14 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 .setNegativeButton(getString(R.string.cancel), null);
 
         final AlertDialog alertDialog = alertDialogBuilder.show();
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    configureMotionService();
-                    //added a delay to update the ui to support Samsung S3 on dismissing
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            dismiss();
-                            updateParentFragmentUi();
-                        }
-                    }, 200);
-                }
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput()) {
+                configureMotionService();
+                //added a delay to update the ui to support Samsung S3 on dismissing
+                new Handler().postDelayed(() -> {
+                    dismiss();
+                    updateParentFragmentUi();
+                }, 200);
             }
         });
 
@@ -237,11 +222,11 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     }
 
     private void updateUi(final View view, final AlertDialog.Builder alertDialog) {
-        mPedometerInterval = String.valueOf(mThingySdkManager.getPedometerInterval(mDevice));
-        mMotionTemperatureInterval = String.valueOf(mThingySdkManager.getMotionTemperatureInterval(mDevice));
-        mCompassInterval = String.valueOf(mThingySdkManager.getCompassInterval(mDevice));
-        mMpuFrequency = String.valueOf(mThingySdkManager.getMotionInterval(mDevice));
-        mWakeOnMotion = mThingySdkManager.getWakeOnMotionState(mDevice) ? 1 : 0;
+        String pedometerInterval = String.valueOf(mThingySdkManager.getPedometerInterval(mDevice));
+        String motionTemperatureInterval = String.valueOf(mThingySdkManager.getMotionTemperatureInterval(mDevice));
+        String compassInterval = String.valueOf(mThingySdkManager.getCompassInterval(mDevice));
+        String mpuFrequency = String.valueOf(mThingySdkManager.getMotionInterval(mDevice));
+        int wakeOnMotion = mThingySdkManager.getWakeOnMotionState(mDevice) ? 1 : 0;
 
         switch (mSettingsMode) {
             case 0:
@@ -250,7 +235,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 mPedometerIntervalLayout = view.findViewById(R.id.layout_pedometer);
                 mPedometerIntervalView = view.findViewById(R.id.interval_pedometer);
                 mPedometerContainer.setVisibility(View.VISIBLE);
-                mPedometerIntervalView.setText(mPedometerInterval);
+                mPedometerIntervalView.setText(pedometerInterval);
 
                 mPedometerIntervalView.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -285,7 +270,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 mTemperatureIntervalLayout = view.findViewById(R.id.layout_temperature);
                 mTemperatureIntervalView = view.findViewById(R.id.interval_temperature);
                 mTemperatureContainer.setVisibility(View.VISIBLE);
-                mTemperatureIntervalView.setText(mMotionTemperatureInterval);
+                mTemperatureIntervalView.setText(motionTemperatureInterval);
 
                 mTemperatureIntervalView.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -320,7 +305,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 mCompassIntervalLayout = view.findViewById(R.id.layout_compass);
                 mCompassIntervalView = view.findViewById(R.id.interval_compass);
                 mCompassContainer.setVisibility(View.VISIBLE);
-                mCompassIntervalView.setText(mCompassInterval);
+                mCompassIntervalView.setText(compassInterval);
 
                 mCompassIntervalView.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -355,7 +340,7 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 mMotionIntervalLayout = view.findViewById(R.id.layout_motion);
                 mMotionIntervalView = view.findViewById(R.id.interval_motion);
                 mMotionContainer.setVisibility(View.VISIBLE);
-                mMotionIntervalView.setText(mMpuFrequency);
+                mMotionIntervalView.setText(mpuFrequency);
 
                 mMotionIntervalView.addTextChangedListener(new TextWatcher() {
                     @Override
@@ -390,8 +375,8 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
                 mWakeOnMotionView.setVisibility(View.VISIBLE);
 
                 mOn = view.findViewById(R.id.rb_motion_wake_on);
-                mOff = view.findViewById(R.id.rb_motion_wake_off);
-                final int pMode = mWakeOnMotion;
+                RadioButton mOff = view.findViewById(R.id.rb_motion_wake_off);
+                final int pMode = wakeOnMotion;
                 if (pMode == 1) {
                     mOn.setChecked(true);
                 } else {
@@ -402,22 +387,25 @@ public class MotionConfigurationDialogFragment extends DialogFragment {
     }
 
     private void updateParentFragmentUi() {
-        switch (mSettingsMode) {
-            case 0:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updatePedometerInterval();
-                break;
-            case 1:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateMotionTemperatureInterval();
-                break;
-            case 2:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateCompassInterval();
-                break;
-            case 3:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateMotionInterval();
-                break;
-            case 4:
-                ((ThingyAdvancedSettingsChangeListener) getParentFragment()).updateWakeOnMotion();
-                break;
+        final ThingyAdvancedSettingsChangeListener listener = ((ThingyAdvancedSettingsChangeListener) getParentFragment());
+        if(listener != null) {
+            switch (mSettingsMode) {
+                case 0:
+                    listener.updatePedometerInterval();
+                    break;
+                case 1:
+                    listener.updateMotionTemperatureInterval();
+                    break;
+                case 2:
+                    listener.updateCompassInterval();
+                    break;
+                case 3:
+                    listener.updateMotionInterval();
+                    break;
+                case 4:
+                    listener.updateWakeOnMotion();
+                    break;
+            }
         }
     }
 }

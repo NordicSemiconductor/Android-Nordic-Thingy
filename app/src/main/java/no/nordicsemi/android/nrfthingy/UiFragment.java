@@ -53,7 +53,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -96,7 +95,6 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     private Button mOff;
     private TextView mLedRgbView;
 
-    private ImageView mLedRgb;
     private ImageView mLedRed;
     private ImageView mLedGreen;
     private ImageView mLedYellow;
@@ -116,7 +114,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     private Drawable mSwatchSelected;
     private GradientDrawable mRgbDrawable;
 
-    private ThingyListener mThingyListener = new ThingyListener() {
+    private final ThingyListener mThingyListener = new ThingyListener() {
 
         @Override
         public void onDeviceConnected(BluetoothDevice device, int connectionState) {
@@ -268,7 +266,7 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mRgbIntensityControllerContainer = rootView.findViewById(R.id.led_rgb_container);
         mColorContainer = rootView.findViewById(R.id.led_color_container);
 
-        mLedRgb = rootView.findViewById(R.id.img_led_rgb);
+        ImageView mLedRgb = rootView.findViewById(R.id.img_led_rgb);
         mLedRed = rootView.findViewById(R.id.img_led_red);
         mLedGreen = rootView.findViewById(R.id.img_led_green);
         mLedYellow = rootView.findViewById(R.id.img_led_yellow);
@@ -301,95 +299,62 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
         mIntensity.setText(getString(R.string.led_percentage, ThingyUtils.DEFAULT_LED_INTENSITY));
         mDelay.setText(getString(R.string.interval_ms, ThingyUtils.DEFAULT_BREATHE_INTERVAL));
 
-        mLedRed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_RED);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedRed.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_RED);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedGreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_GREEN);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedGreen.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_GREEN);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedYellow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_YELLOW);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedYellow.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_YELLOW);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedBlue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_BLUE);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedBlue.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_BLUE);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedPurple.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_PURPLE);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedPurple.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_PURPLE);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedCyan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_CYAN);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedCyan.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_CYAN);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mLedWhite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedColor(ThingyUtils.LED_WHITE);
-                updateSelectedImageView((ImageView) view);
-            }
+        mLedWhite.setOnClickListener(view -> {
+            setupLedColor(ThingyUtils.LED_WHITE);
+            updateSelectedImageView((ImageView) view);
         });
 
-        mOneShot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedMode(ThingyUtils.ONE_SHOT);
-                final int ledIntensity = mCurrentIntensity;
-                updateLedOneShotModeUI(ledIntensity);
-            }
+        mOneShot.setOnClickListener(view -> {
+            setupLedMode(ThingyUtils.ONE_SHOT);
+            final int ledIntensity = mCurrentIntensity;
+            updateLedOneShotModeUI(ledIntensity);
         });
 
-        mConstant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedMode(ThingyUtils.CONSTANT);
-                updateLedConstantModeUI();
-            }
+        mConstant.setOnClickListener(view -> {
+            setupLedMode(ThingyUtils.CONSTANT);
+            updateLedConstantModeUI();
         });
 
-        mBreathe.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedMode(ThingyUtils.BREATHE);
-                final int ledIntensity = mCurrentIntensity;
-                final int delay = mCurrentDelay;
-                updateLedBreatheModeUI(ledIntensity, delay);
-            }
+        mBreathe.setOnClickListener(view -> {
+            setupLedMode(ThingyUtils.BREATHE);
+            final int ledIntensity = mCurrentIntensity;
+            final int delay = mCurrentDelay;
+            updateLedBreatheModeUI(ledIntensity, delay);
         });
 
-        mOff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupLedMode(ThingyUtils.OFF);
-                updateLedOffModeUI();
-            }
+        mOff.setOnClickListener(view -> {
+            setupLedMode(ThingyUtils.OFF);
+            updateLedOffModeUI();
         });
 
         final SeekBar.OnSeekBarChangeListener colorListener = new SeekBar.OnSeekBarChangeListener() {
@@ -817,70 +782,62 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
 
     private void updateSelectedImageView(final ImageView view) {
         final int id = view.getId();
-        switch (id) {
-            case R.id.img_led_red:
-                mLedRed.setImageDrawable(mSwatchSelected);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_green:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(mSwatchSelected);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_yellow:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(mSwatchSelected);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_blue:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(mSwatchSelected);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_purple:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(mSwatchSelected);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_cyan:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(mSwatchSelected);
-                mLedWhite.setImageDrawable(null);
-                break;
-            case R.id.img_led_white:
-                mLedRed.setImageDrawable(null);
-                mLedGreen.setImageDrawable(null);
-                mLedYellow.setImageDrawable(null);
-                mLedBlue.setImageDrawable(null);
-                mLedPurple.setImageDrawable(null);
-                mLedCyan.setImageDrawable(null);
-                mLedWhite.setImageDrawable(mSwatchSelected);
-                break;
+        if (id == R.id.img_led_red) {
+            mLedRed.setImageDrawable(mSwatchSelected);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_green) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(mSwatchSelected);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_yellow) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(mSwatchSelected);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_blue) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(mSwatchSelected);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_purple) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(mSwatchSelected);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_cyan) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(mSwatchSelected);
+            mLedWhite.setImageDrawable(null);
+        } else if (id == R.id.img_led_white) {
+            mLedRed.setImageDrawable(null);
+            mLedGreen.setImageDrawable(null);
+            mLedYellow.setImageDrawable(null);
+            mLedBlue.setImageDrawable(null);
+            mLedPurple.setImageDrawable(null);
+            mLedCyan.setImageDrawable(null);
+            mLedWhite.setImageDrawable(mSwatchSelected);
         }
     }
 
@@ -983,23 +940,21 @@ public class UiFragment extends Fragment implements ScannerFragmentListener {
     }
 
     private int getIndexFromColor(final int color) {
-        switch (color) {
-            case Color.RED:
-                return ThingyUtils.LED_RED;
-            case Color.GREEN:
-                return ThingyUtils.LED_GREEN;
-            case Color.YELLOW:
-                return ThingyUtils.LED_YELLOW;
-            case Color.BLUE:
-                return ThingyUtils.LED_BLUE;
-            case Color.MAGENTA:
-                return ThingyUtils.LED_PURPLE;
-            case Color.CYAN:
-                return ThingyUtils.LED_CYAN;
-            case Color.WHITE:
-                return ThingyUtils.LED_WHITE;
-            default:
-                return ThingyUtils.LED_CYAN;
+        if (color == Color.RED) {
+            return ThingyUtils.LED_RED;
+        } else if (color == Color.GREEN) {
+            return ThingyUtils.LED_GREEN;
+        } else if (color == Color.YELLOW) {
+            return ThingyUtils.LED_YELLOW;
+        } else if (color == Color.BLUE) {
+            return ThingyUtils.LED_BLUE;
+        } else if (color == Color.MAGENTA) {
+            return ThingyUtils.LED_PURPLE;
+        } else if (color == Color.CYAN) {
+            return ThingyUtils.LED_CYAN;
+        } else if (color == Color.WHITE) {
+            return ThingyUtils.LED_WHITE;
         }
+        return ThingyUtils.LED_CYAN;
     }
 }

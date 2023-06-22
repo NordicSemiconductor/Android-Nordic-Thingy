@@ -41,16 +41,15 @@ package no.nordicsemi.android.nrfthingy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 
+import androidx.appcompat.app.AppCompatActivity;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.thingy.ThingyService;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 
 public class SplashScreenActivity extends AppCompatActivity implements ThingySdkManager.ServiceConnectionListener {
-    private static final String TAG = "SplashScreenActivity";
     private static final int DURATION = 1000;
     private ThingySdkManager mThingySdkManager;
 
@@ -92,18 +91,8 @@ public class SplashScreenActivity extends AppCompatActivity implements ThingySdk
         alpha.setDuration(200);
         final View view = findViewById(R.id.relative_splash);
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                view.setAnimation(alpha);
-            }
-        }, 700);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                goToNextActivity(activityClass);
-            }
-        }, DURATION);
+        handler.postDelayed(() -> view.setAnimation(alpha), 700);
+        handler.postDelayed(() -> goToNextActivity(activityClass), DURATION);
     }
 
     @Override

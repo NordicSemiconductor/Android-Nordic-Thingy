@@ -38,16 +38,19 @@
 
 package no.nordicsemi.android.nrfthingy.thingy;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+@SuppressWarnings("unused")
 public class Thingy implements Parcelable {
 
     private String deviceAddress;
     private String deviceId;
     private String deviceName;
 
+    @SuppressLint("MissingPermission")
     public Thingy(BluetoothDevice device) {
         this.deviceAddress = device.getAddress();
         this.deviceName = device.getName();

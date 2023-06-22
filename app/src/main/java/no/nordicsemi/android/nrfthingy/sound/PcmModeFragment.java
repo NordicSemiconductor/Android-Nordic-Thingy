@@ -42,7 +42,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -60,11 +59,6 @@ import android.widget.ListView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -92,7 +86,6 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
 
     private RecyclerView mAudioRecyclerView;
     private FloatingActionButton mFabPlay;
-    private FloatingActionButton mFabImport;
 
     private boolean mIsPlaying = false;
 
@@ -105,7 +98,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     private AudioFileRecyclerAdapter mAudioFileAdapter;
     private ThingySdkManager mThingySdkManager;
 
-    private BroadcastReceiver mConnectionBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mConnectionBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final BluetoothDevice device = intent.getParcelableExtra(ThingyUtils.EXTRA_DEVICE);
@@ -115,18 +108,14 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                     mFabPlay.setImageResource(R.drawable.ic_play_white);
                     mIsPlaying = false;
                 }
-            } else if (action.startsWith(ThingyUtils.ACTION_SERVICE_DISCOVERY_COMPLETED)) {
-
             } else if (action.startsWith(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION)) {
                 final int mode = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_MODE);
-                switch (mode) {
-                    case ThingyUtils.PCM_MODE:
-                        final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
-                        if (ThingyUtils.SPEAKER_STATUS_FINISHED == status) {
-                            mIsPlaying = false;
-                            mFabPlay.setImageResource(R.drawable.ic_play_white);
-                        }
-                        break;
+                if (mode == ThingyUtils.PCM_MODE) {
+                    final int status = intent.getExtras().getInt(ThingyUtils.EXTRA_DATA_SPEAKER_STATUS_NOTIFICATION);
+                    if (ThingyUtils.SPEAKER_STATUS_FINISHED == status) {
+                        mIsPlaying = false;
+                        mFabPlay.setImageResource(R.drawable.ic_play_white);
+                    }
                 }
             }
         }
@@ -156,7 +145,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                              @Nullable final Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_pcm_mode, container, false);
         mFabPlay = rootView.findViewById(R.id.fab_play);
-        mFabImport = rootView.findViewById(R.id.fab_import);
+        FloatingActionButton mFabImport = rootView.findViewById(R.id.fab_import);
         mAudioRecyclerView = rootView.findViewById(R.id.audio_recycler_view);
         mAudioFileAdapter = new AudioFileRecyclerAdapter(getActivity());
         mAudioRecyclerView.setAdapter(mAudioFileAdapter);
@@ -167,44 +156,36 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         mAudioFileAdapter.notifyDataSetChanged();
         listFiles();
 
-        mFabPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (Utils.isConnected(mDevice, mThingySdkManager.getConnectedDevices())) {
-                    if (!mIsPlaying) {
-                        final File file = mAudioFileAdapter.getSelectedItem();
-                        if (file != null) {
-                            //parseFile(file);
-                            //mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
-                            if (mThingySdkManager != null) {
-                                if (!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
-                                    mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
-                                    mFabPlay.setImageResource(R.drawable.ic_stop_white);
-                                    mIsPlaying = true;
-                                } else {
-                                    ThingyUtils.showToast(getActivity(), getString(R.string.already_streaming));
-                                }
+        mFabPlay.setOnClickListener(view -> {
+            if (Utils.isConnected(mDevice, mThingySdkManager.getConnectedDevices())) {
+                if (!mIsPlaying) {
+                    final File file = mAudioFileAdapter.getSelectedItem();
+                    if (file != null) {
+                        //parseFile(file);
+                        //mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
+                        if (mThingySdkManager != null) {
+                            if (!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
+                                mThingySdkManager.playPcmSample(getActivity(), mDevice, file);
+                                mFabPlay.setImageResource(R.drawable.ic_stop_white);
+                                mIsPlaying = true;
+                            } else {
+                                ThingyUtils.showToast(getActivity(), getString(R.string.already_streaming));
                             }
-                        } else {
-                            Utils.showToast(getActivity(), getString(R.string.no_audio_selected));
                         }
                     } else {
-                        mThingySdkManager.stopPcmSample(mDevice);
-                        mFabPlay.setImageResource(R.drawable.ic_play_white);
-                        mIsPlaying = false;
+                        Utils.showToast(getActivity(), getString(R.string.no_audio_selected));
                     }
                 } else {
-                    Utils.showToast(getActivity(), getString(R.string.thingy_not_connected));
+                    mThingySdkManager.stopPcmSample(mDevice);
+                    mFabPlay.setImageResource(R.drawable.ic_play_white);
+                    mIsPlaying = false;
                 }
+            } else {
+                Utils.showToast(getActivity(), getString(R.string.thingy_not_connected));
             }
         });
 
-        mFabImport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFileChooser();
-            }
-        });
+        mFabImport.setOnClickListener(v -> openFileChooser());
 
         if (mThingySdkManager != null && mThingySdkManager.isThingyStreamingAudio(mDevice)) {
             mFabPlay.setImageResource(R.drawable.ic_stop_white);
@@ -212,7 +193,7 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             final int selectedAudioTrackPosition = ((ThingyService.ThingyBinder) (mThingySdkManager.getThingyBinder())).getLastSelectedAudioTrack(mDevice);
             mAudioFileAdapter.setSelectedItemPosition(selectedAudioTrackPosition);
         }
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mConnectionBroadcastReceiver, ThingyUtils.createSpeakerStatusChangeReceiver(mDevice.getAddress()));
+        LocalBroadcastManager.getInstance(requireActivity()).registerReceiver(mConnectionBroadcastReceiver, ThingyUtils.createSpeakerStatusChangeReceiver(mDevice.getAddress()));
         return rootView;
     }
 
@@ -243,47 +224,43 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case Utils.SELECT_FILE_REQ: {
-                // clear previous data
-                mFilePath = null;
-                mFileStreamUri = null;
-                Uri uri;
-                // and read new one
-                if (data != null) {
-                    uri = data.getData();
-                    if (uri == null) {
-                        Utils.showToast(getActivity(), getString(R.string.audio_file_import_aborted));
-                        break;
-                    }
-                } else {
+        if (requestCode == Utils.SELECT_FILE_REQ) {// clear previous data
+            mFilePath = null;
+            mFileStreamUri = null;
+            Uri uri;
+            // and read new one
+            if (data != null) {
+                uri = data.getData();
+                if (uri == null) {
                     Utils.showToast(getActivity(), getString(R.string.audio_file_import_aborted));
-                    break;
+                    return;
                 }
-                /*
-                 * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
-                 * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
-                 */
-                if (uri.getScheme().equals("file")) {
-                    // the direct path to the file has been returned
-                    mFilePath = uri.getPath();
+            } else {
+                Utils.showToast(getActivity(), getString(R.string.audio_file_import_aborted));
+                return;
+            }
+            /*
+             * The URI returned from application may be in 'file' or 'content' schema. 'File' schema allows us to create a File object and read details from if
+             * directly. Data from 'Content' schema must be read by Content Provider. To do that we are using a Loader.
+             */
+            if (uri.getScheme().equals("file")) {
+                // the direct path to the file has been returned
+                mFilePath = uri.getPath();
 
-                    //updateFileInfo(file.getName(), file.length(), mFileType);
-                } else if (uri.getScheme().equals("content")) {
-                    // an Uri has been returned
-                    mFileStreamUri = uri;
-                    // if application returned Uri for streaming, let's us it. Does it works?
-                    // FIXME both Uris works with Google Drive app. Why both? What's the difference? How about other apps like DropBox?
-                    final Bundle extras = data.getExtras();
-                    if (extras != null && extras.containsKey(Intent.EXTRA_STREAM))
-                        mFileStreamUri = extras.getParcelable(Intent.EXTRA_STREAM);
+                //updateFileInfo(file.getName(), file.length(), mFileType);
+            } else if (uri.getScheme().equals("content")) {
+                // an Uri has been returned
+                mFileStreamUri = uri;
+                // if application returned Uri for streaming, let's us it. Does it works?
+                // FIXME both Uris works with Google Drive app. Why both? What's the difference? How about other apps like DropBox?
+                final Bundle extras = data.getExtras();
+                if (extras != null && extras.containsKey(Intent.EXTRA_STREAM))
+                    mFileStreamUri = extras.getParcelable(Intent.EXTRA_STREAM);
 
-                    // file name and size must be obtained from Content Provider
-                    final Bundle bundle = new Bundle();
-                    bundle.putParcelable(Utils.EXTRA_URI, uri);
-                    getLoaderManager().restartLoader(Utils.SELECT_FILE_REQ, bundle, this);
-                }
-                break;
+                // file name and size must be obtained from Content Provider
+                final Bundle bundle = new Bundle();
+                bundle.putParcelable(Utils.EXTRA_URI, uri);
+                getLoaderManager().restartLoader(Utils.SELECT_FILE_REQ, bundle, this);
             }
         }
     }
@@ -303,13 +280,12 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case Utils.REQ_PERMISSION_READ_EXTERNAL_STORAGE:
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Utils.showToast(getActivity(), getString(R.string.rationale_permission_denied));
-                } else {
-                    openFileChooser();
-                }
+        if (requestCode == Utils.REQ_PERMISSION_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Utils.showToast(getActivity(), getString(R.string.rationale_permission_denied));
+            } else {
+                openFileChooser();
+            }
         }
     }
 
@@ -349,8 +325,8 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
                 final String type = mime.getExtensionFromMimeType(cR.getType(mFileStreamUri));
                 Log.v("Tag", "stream: " + mFileStreamUri.toString());
                 if (type != null && type.equalsIgnoreCase("wav")) {
-                    if (FileHelper.copyAudioFilesToLocalAppStorage(getContext(), mFileStreamUri, fileName)) {
-                        file = new File(String.valueOf(getContext().getFilesDir()), fileName);
+                    if (FileHelper.copyAudioFilesToLocalAppStorage(requireContext(), mFileStreamUri, fileName)) {
+                        file = new File(String.valueOf(requireContext().getFilesDir()), fileName);
                         mAudioFileAdapter.addFiles(file);
                         mAudioFileAdapter.notifyDataSetChanged();
                         mAudioRecyclerView.scrollToPosition(mAudioFileAdapter.getItemCount() - 1);
@@ -387,52 +363,6 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
         mAudioFileAdapter.notifyDataSetChanged();
     }
 
-    private void parseFile(final File file) {
-        InputStream is = null;
-        try {
-            if (!file.getPath().startsWith("content")) {
-                is = new FileInputStream(file);
-            } else {
-                Uri uri = Uri.parse(file.getPath());
-                is = getActivity().getContentResolver().openInputStream(uri);
-            }
-
-            is.skip(44);
-            int size = is.available();
-
-            byte[] output = new byte[size / 2];
-            byte[] bytes = new byte[1024];
-            int length, offset = 0;
-            while ((length = is.read(bytes)) > 0) {
-                ByteBuffer bb = ByteBuffer.wrap(bytes);
-                bb.order(ByteOrder.LITTLE_ENDIAN);
-                for (int i = 0; i < length; i += 2) {
-                    output[offset + i / 2] = (byte) (((bb.getShort() * 128.0) / 32768.0) + 128.0);
-                }
-                offset += length / 2;
-            }
-            if (mThingySdkManager != null) {
-                if (!mThingySdkManager.isAnotherThingyIsStreamingAudio(mDevice)) {
-                    mThingySdkManager.playPcmSample(getActivity(), mDevice, output);
-                    mFabPlay.setImageResource(R.drawable.ic_stop_white);
-                    mIsPlaying = true;
-                } else {
-                    ThingyUtils.showToast(getActivity(), getString(R.string.already_streaming));
-                }
-            }
-        } catch (Exception e) {
-            Utils.showToast(getActivity(), "Unable to stream audio");
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     private void openFileChooser() {
         final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("*/*");
@@ -448,22 +378,14 @@ public class PcmModeFragment extends Fragment implements PermissionRationaleDial
             appsList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
             appsList.setItemChecked(0, true);
             new AlertDialog.Builder(getActivity()).setTitle(R.string.dfu_alert_no_file_browser_title).setView(customView)
-                    .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, final int which) {
-                            dialog.dismiss();
+                    .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss()).setPositiveButton(R.string.ok, (dialog, which) -> {
+                        final int pos = appsList.getCheckedItemPosition();
+                        if (pos >= 0) {
+                            final String query = getResources().getStringArray(R.array.dfu_app_file_browser_action)[pos];
+                            final Intent storeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(query));
+                            startActivity(storeIntent);
                         }
-                    }).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(final DialogInterface dialog, final int which) {
-                    final int pos = appsList.getCheckedItemPosition();
-                    if (pos >= 0) {
-                        final String query = getResources().getStringArray(R.array.dfu_app_file_browser_action)[pos];
-                        final Intent storeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(query));
-                        startActivity(storeIntent);
-                    }
-                }
-            }).show();
+                    }).show();
         }
     }
 }

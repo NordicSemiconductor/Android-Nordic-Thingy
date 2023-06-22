@@ -42,18 +42,18 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Spinner;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
 import no.nordicsemi.android.thingylib.utils.ThingyUtils;
@@ -97,7 +97,7 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.environment_settings_title));
-        final View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_dialog_environment_settings, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_environment_settings, null);
 
         mTemperatureIntervalLayout = view.findViewById(R.id.layout_temperature);
         mPressureIntervalLayout = view.findViewById(R.id.layout_pressure);
@@ -219,22 +219,14 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
         alertDialogBuilder.setView(view).setPositiveButton(getString(R.string.confirm), null).setNegativeButton(getString(R.string.cancel), null);
         final AlertDialog alertDialog = alertDialogBuilder.show();
 
-        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (validateInput()) {
-                    configureEnvironmentService();
-                    dismiss();
-                }
-            }
-        });
-
-        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(v -> {
+            if (validateInput()) {
+                configureEnvironmentService();
                 dismiss();
             }
         });
+
+        alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE).setOnClickListener(v -> dismiss());
 
         updateUi();
 
@@ -320,6 +312,6 @@ public class EnvironmentServiceSettingsFragment extends DialogFragment {
         mColorIntensityIntervalView.setText(mColorIntensityInterval);
 
         final String mGasMode = String.valueOf(mThingySdkManager.getGasMode(mDevice));
-        mGasModeView.setSelection(Integer.valueOf(mGasMode) - 1);
+        mGasModeView.setSelection(Integer.parseInt(mGasMode) - 1);
     }
 }

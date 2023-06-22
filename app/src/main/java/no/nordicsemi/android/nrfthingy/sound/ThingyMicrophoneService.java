@@ -38,6 +38,7 @@
 
 package no.nordicsemi.android.nrfthingy.sound;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -47,12 +48,12 @@ import android.content.IntentFilter;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
-import androidx.annotation.Nullable;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.thingylib.ThingyConnection;
 import no.nordicsemi.android.thingylib.ThingySdkManager;
@@ -65,7 +66,7 @@ public class ThingyMicrophoneService extends IntentService {
     private BluetoothDevice mDevice;
     private ThingySdkManager mThingySdkManager;
 
-    private BroadcastReceiver mAudioBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mAudioBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
@@ -109,6 +110,7 @@ public class ThingyMicrophoneService extends IntentService {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mAudioBroadcastReceiver);
     }
 
+    @SuppressLint("MissingPermission")
     public void startRecordingAudio(final BluetoothDevice device) {
         if (mStartRecordingAudio) {
             return;
@@ -118,7 +120,7 @@ public class ThingyMicrophoneService extends IntentService {
         final ThingyConnection thingyConnection = mThingySdkManager.getThingyConnection(device);
         final AudioRecord audioRecorder = new AudioRecord(MediaRecorder.AudioSource.MIC, 8000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, AUDIO_BUFFER);
         if (audioRecorder.getState() != AudioRecord.STATE_UNINITIALIZED) {
-            byte audioData[] = new byte[AUDIO_BUFFER];
+            byte[] audioData = new byte[AUDIO_BUFFER];
             audioRecorder.startRecording();
             while (mStartRecordingAudio) {
                 int status = audioRecorder.read(audioData, 0, AUDIO_BUFFER);

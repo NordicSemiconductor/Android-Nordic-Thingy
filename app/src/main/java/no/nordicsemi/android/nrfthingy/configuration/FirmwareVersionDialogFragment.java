@@ -38,18 +38,17 @@
 
 package no.nordicsemi.android.nrfthingy.configuration;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.bluetooth.BluetoothDevice;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.appcompat.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import no.nordicsemi.android.nrfthingy.R;
 import no.nordicsemi.android.nrfthingy.common.Utils;
 import no.nordicsemi.android.nrfthingy.database.DatabaseHelper;
@@ -84,12 +83,13 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
         mThingySdkManager = ThingySdkManager.getInstance();
     }
 
+    @SuppressLint("MissingPermission")
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable final Bundle savedInstanceState) {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
         alertDialogBuilder.setTitle(getString(R.string.settings_fw_version_title));
-        final View view = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_dialog_firmware_version, null);
+        final View view = getLayoutInflater().inflate(R.layout.fragment_dialog_firmware_version, null);
 
         final TextView fwVersion = view.findViewById(R.id.fw_version);
         final String currentVersion = mThingySdkManager.getFirmwareVersion(mDevice);
@@ -104,28 +104,13 @@ public class FirmwareVersionDialogFragment extends DialogFragment {
             final String newestVersion = DfuHelper.getCurrentFwVersion(requireContext());
             fwVersion.setText(getString(R.string.fw_update_available, deviceName, newestVersion));
             alertDialogBuilder.setView(view)
-                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
-                        }
-                    })
-                    .setNegativeButton(getString(R.string.later), null).setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
-                }
-            });
+                    .setPositiveButton(getString(R.string.ok), (dialog, which) -> ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener())
+                    .setNegativeButton(getString(R.string.later), null).setNeutralButton(getString(R.string.update_custom_firmware), (dialog, which) -> ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener());
         } else {
             fwVersion.setText(R.string.thingy_fw_version_summary);
             alertDialogBuilder.setView(view)
                     .setPositiveButton(getString(R.string.ok), null)
-                    .setNeutralButton(getString(R.string.update_custom_firmware), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener();
-                        }
-                    });
+                    .setNeutralButton(getString(R.string.update_custom_firmware), (dialog, which) -> ((FirmwareVersionDialogFragmentListener) getParentFragment()).onUpdateFirmwareClickListener());
         }
 
         return alertDialogBuilder.create();
