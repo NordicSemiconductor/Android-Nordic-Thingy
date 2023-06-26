@@ -507,6 +507,10 @@ public class Utils {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S;
     }
 
+    public static boolean checkIfVersionIsT() {
+        return Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU;
+    }
+
     public static boolean isAppInitialisedBefore(Context context) {
         SharedPreferences sp = context.getSharedPreferences(PREFS_INITIAL_SETUP, Context.MODE_PRIVATE);
         return sp.getBoolean(INITIAL_CONFIG_STATE, false);

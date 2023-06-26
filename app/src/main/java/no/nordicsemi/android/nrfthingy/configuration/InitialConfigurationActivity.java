@@ -125,6 +125,7 @@ import static no.nordicsemi.android.nrfthingy.common.Utils.TAG;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsMarshmallowOrAbove;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsQ;
 import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsSandAbove;
+import static no.nordicsemi.android.nrfthingy.common.Utils.checkIfVersionIsT;
 import static no.nordicsemi.android.nrfthingy.common.Utils.getBluetoothDevice;
 import static no.nordicsemi.android.nrfthingy.common.Utils.isAppInitialisedBefore;
 import static no.nordicsemi.android.nrfthingy.common.Utils.isConnected;
@@ -502,19 +503,17 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
     protected void onStart() {
         super.onStart();
         if (!isBleEnabled()) {
-            enableBle();
+            if (checkIfVersionIsSandAbove()) {
+                checkIfRequiredPermissionsGranted();
+            } else {
+                enableBle();
+            }
         }
 
         updateNfcUi(isNfcEnabled());
 
         if (!isLocationEnabled()) {
             mLocationServicesContainer.setVisibility(View.VISIBLE);
-        }
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.POST_NOTIFICATIONS, REQ_PERMISSION_POST_NOTIFICATIONS, getString(R.string.rationale_message_post_notifications));
-                dialog.show(getSupportFragmentManager(), null);
-            }
         }
         mThingySdkManager.bindService(this, ThingyService.class);
         ThingyListenerHelper.registerThingyListener(this, mThingyListener);
@@ -1218,9 +1217,12 @@ public class InitialConfigurationActivity extends AppCompatActivity implements S
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
                 final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_SCAN, REQUEST_BLUETOOTH_SCAN, getString(R.string.rationale_message_bluetooth_scan));
                 dialog.show(getSupportFragmentManager(), null);
-            } else {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+            } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                final PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.BLUETOOTH_CONNECT, REQUEST_BLUETOOTH_CONNECT, getString(R.string.rationale_message_bluetooth_connect));
+                dialog.show(getSupportFragmentManager(), null);
+            } else if (checkIfVersionIsT()) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    PermissionRationaleDialogFragment dialog = PermissionRationaleDialogFragment.getInstance(Manifest.permission.POST_NOTIFICATIONS, REQ_PERMISSION_POST_NOTIFICATIONS, getString(R.string.rationale_message_post_notifications));
                     dialog.show(getSupportFragmentManager(), null);
                 }
             }

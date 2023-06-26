@@ -164,13 +164,13 @@ public class ThingyConnection extends BluetoothGattCallback {
 
     private ADPCMDecoder mAdpcmDecoder;
 
-    private LinkedHashMap<String, String> mTemperatureData;
-    private LinkedHashMap<String, String> mPressureData;
-    private LinkedHashMap<String, Integer> mHumidityData;
+    private final LinkedHashMap<String, String> mTemperatureData;
+    private final LinkedHashMap<String, String> mPressureData;
+    private final LinkedHashMap<String, Integer> mHumidityData;
 
     private BluetoothGattService mThingyConfigurationService;
     private BluetoothGattService mButtonLessDfuService;
-    private ThingyConnectionGattCallbacks mListener;
+    private final ThingyConnectionGattCallbacks mListener;
     private boolean mInitialServiceDiscoveryCompleted = false;
     private BluetoothGattCharacteristic mLastCharacteristic;
 
@@ -181,7 +181,7 @@ public class ThingyConnection extends BluetoothGattCallback {
     private byte[] mPcmSample;
     private boolean mWait = false;
 
-    private int mtu = ThingyUtils.MAX_MTU_SIZE_THINGY;
+    private final int mtu = ThingyUtils.MAX_MTU_SIZE_THINGY;
     private int mNumOfAudioChunks = 0;
     private boolean mBufferWarningReceived = false;
 
@@ -253,12 +253,7 @@ public class ThingyConnection extends BluetoothGattCallback {
             mListener.onDeviceConnected(mBluetoothDevice, newState);
             Log.v(TAG, "Starting service discovery");
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    gatt.discoverServices();
-                }
-            }, 200);
+            mHandler.postDelayed(gatt::discoverServices, 200);
         } else if (newState == BluetoothGatt.STATE_DISCONNECTED) {
             isConnected = false;
             Log.v(TAG, "Disconnected " + status);
@@ -362,11 +357,11 @@ public class ThingyConnection extends BluetoothGattCallback {
             final int mTemperatureInt = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_SINT8, 0);
             final int mTemperatureDec = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT8, 1);
             final String mTemperatureTimestamp = ThingyUtils.TIME_FORMAT.format(System.currentTimeMillis());
-            mTemperatureData.put(mTemperatureTimestamp, String.valueOf(mTemperatureInt) + "." + String.valueOf(mTemperatureDec));
+            mTemperatureData.put(mTemperatureTimestamp, mTemperatureInt + "." + mTemperatureDec);
 
             final Intent intent = new Intent(ThingyUtils.TEMPERATURE_NOTIFICATION);
             intent.putExtra(ThingyUtils.EXTRA_DEVICE, mBluetoothDevice);
-            intent.putExtra(ThingyUtils.EXTRA_DATA, String.valueOf(mTemperatureInt) + "." + String.valueOf(mTemperatureDec));
+            intent.putExtra(ThingyUtils.EXTRA_DATA, mTemperatureInt + "." + mTemperatureDec);
             LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 
             ThingyUtils.removeOldDataForGraphs(mTemperatureData);
@@ -2596,30 +2591,27 @@ public class ThingyConnection extends BluetoothGattCallback {
             return;
         }
         mStartPlaying = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (mPlayPcmRequested) {
-                    while (mPacketCounter < mNumOfAudioChunks) {
-                        if (!mWait && !mBufferWarningReceived) {
-                            mWait = true;
-                            mHandler.post(mProcessNextTask);
-                            mPacketCounter++;
-                            if (mPacketCounter == 1) {
-                                try {
-                                    //This sleep is added for Google pixel because the first packet was splitted in to 3 small packets
-                                    //until data length extension request was agreed with the device.
-                                    Thread.sleep(70);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        } else {
+        new Thread(() -> {
+            if (mPlayPcmRequested) {
+                while (mPacketCounter < mNumOfAudioChunks) {
+                    if (!mWait && !mBufferWarningReceived) {
+                        mWait = true;
+                        mHandler.post(mProcessNextTask);
+                        mPacketCounter++;
+                        if (mPacketCounter == 1) {
                             try {
-                                Thread.sleep(10);
+                                //This sleep is added for Google pixel because the first packet was splitted in to 3 small packets
+                                //until data length extension request was agreed with the device.
+                                Thread.sleep(70);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                        }
+                    } else {
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -2730,20 +2722,17 @@ public class ThingyConnection extends BluetoothGattCallback {
      */
     @SuppressLint("MissingPermission")
     public void requestMtu() {
-        mMtuHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mBluetoothGatt != null) {
-                    if (ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
-                        if (mMtu != mtu) {
-                            boolean isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
-                            if (!isMtuRequestSuccess) {
-                                Log.v(ThingyUtils.TAG, "MTU request failed");
-                            }
+        mMtuHandler.postDelayed(() -> {
+            if (mBluetoothGatt != null) {
+                if (ThingyUtils.checkIfVersionIsLollipopOrAbove()) {
+                    if (mMtu != mtu) {
+                        boolean isMtuRequestSuccess = mBluetoothGatt.requestMtu(mtu);
+                        if (!isMtuRequestSuccess) {
+                            Log.v(ThingyUtils.TAG, "MTU request failed");
                         }
-                    } else {
-                        mMtu = ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP;
                     }
+                } else {
+                    mMtu = ThingyUtils.MAX_MTU_SIZE_PRE_LOLLIPOP;
                 }
             }
         }, 1000);
@@ -2798,29 +2787,26 @@ public class ThingyConnection extends BluetoothGattCallback {
             mAudioTrack.play();
 
             mAdpcmDecoder = new ADPCMDecoder(mContext, false);
-            mAdpcmDecoder.setListener(new ADPCMDecoder.DecoderListener() {
-                @Override
-                public void onFrameDecoded(byte[] pcm, int frameNumber) {
-                    if (mEnableThingyMicrophone && mAudioTrack != null) {
-                        final int status = mAudioTrack.write(pcm, 0, pcm.length/*, AudioTrack.WRITE_NON_BLOCKING*/);
+            mAdpcmDecoder.setListener((pcm, frameNumber) -> {
+                if (mEnableThingyMicrophone && mAudioTrack != null) {
+                    final int status = mAudioTrack.write(pcm, 0, pcm.length/*, AudioTrack.WRITE_NON_BLOCKING*/);
 
-                        if (status == AudioTrack.ERROR_INVALID_OPERATION || status == AudioTrack.ERROR_BAD_VALUE
-                                || status == AudioTrack.ERROR_DEAD_OBJECT || status == AudioTrack.ERROR) {
-                            ThingyUtils.showToast(mContext, "Error: " + status);
-                            mEnableThingyMicrophone = false;
-                            mAudioTrack.stop();
-                            mAudioTrack.release();
-                            mAudioTrack = null;
-                            mAdpcmDecoder = null;
-                        } else {
-                            sendMicrophoneBroadcast(pcm, status);
-                        }
-                    } else {
+                    if (status == AudioTrack.ERROR_INVALID_OPERATION || status == AudioTrack.ERROR_BAD_VALUE
+                            || status == AudioTrack.ERROR_DEAD_OBJECT || status == AudioTrack.ERROR) {
+                        ThingyUtils.showToast(mContext, "Error: " + status);
+                        mEnableThingyMicrophone = false;
                         mAudioTrack.stop();
                         mAudioTrack.release();
                         mAudioTrack = null;
                         mAdpcmDecoder = null;
+                    } else {
+                        sendMicrophoneBroadcast(pcm, status);
                     }
+                } else {
+                    mAudioTrack.stop();
+                    mAudioTrack.release();
+                    mAudioTrack = null;
+                    mAdpcmDecoder = null;
                 }
             });
         }
@@ -2872,12 +2858,7 @@ public class ThingyConnection extends BluetoothGattCallback {
      * This is due to samsung galaxy devices and HUAWEI nexus 6P had a synchronizing issue
      * when process next was called from the same thread as the callbacks which was noticed during audio streaming
      */
-    private Runnable mProcessNextTask = new Runnable() {
-        @Override
-        public void run() {
-            processNext();
-        }
-    };
+    private final Runnable mProcessNextTask = this::processNext;
 
     /**
      * BluetoothGatt request types.
